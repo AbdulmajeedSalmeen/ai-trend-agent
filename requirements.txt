@@ -3,4 +3,6 @@ requests
 streamlit
 langgraph
 pytest
-anthropic
+scikit-learn
+sentence-transformers
+python-dotenv
