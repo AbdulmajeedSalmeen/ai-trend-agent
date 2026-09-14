@@ -1,0 +1,6 @@
+pydantic>=2
+requests
+streamlit
+langgraph
+pytest
+anthropic
