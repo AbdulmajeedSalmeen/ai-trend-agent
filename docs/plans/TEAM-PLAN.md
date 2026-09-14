@@ -16,7 +16,9 @@ The selling point is verification: our agent says "confirmed, here is the releas
  [Stage 3  SCORE]    src/stages/stage3_score.py     -> scores.json           (Member D)
  [Stage 4  ACT]      src/stages/stage4_act.py       -> recommendations.json  (Lead)
  [PIPELINE]          src/pipeline.py  (LangGraph wires all stages)           (Lead)
- [DASHBOARD]         built last, Lead + Claude, reads the JSON files only
+ [WEBSITE]           built last by Claude (Sep 23-24), reads the JSON files only.
+                     No member builds frontend. Team's only job: stable artifacts
+                     + one cached real run by Sep 22 evening.
 ```
 
 Every stage is a file with one entry function:
