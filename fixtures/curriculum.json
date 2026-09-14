@@ -136,7 +136,12 @@
       "duration_hours": 8
     },
     {
-      "chapter_id": "C9",
+      "chapter_id" : "C9" ,
+      "title" : "Week 4 - Agentic AI Foundations & tool Use"
+
+    } ,
+    {
+      "chapter_id": "C10",
       "title": "Capstone - project and presentations",
       "level": "capstone",
       "topics_covered": [
