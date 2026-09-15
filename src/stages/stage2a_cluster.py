@@ -15,3 +15,16 @@ def extract_version(text: str) -> str | None:
 
 def signal_text(s) -> str:
     return f"{s.subject or ''} {s.title} {s.body[:500]}"
+
+
+def group_known_subjects(signals):
+    groups = {}
+    unknown = []
+
+    for signal in signals:
+        if signal.subject:
+            groups.setdefault(signal.subject, []).append(signal)
+        else:
+            unknown.append(signal)
+
+    return list(groups.values()), unknown
