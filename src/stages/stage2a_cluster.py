@@ -11,3 +11,7 @@ def extract_version(text: str) -> str | None:
         return None
 
     return match.group(1)
+
+
+def signal_text(s) -> str:
+    return f"{s.subject or ''} {s.title} {s.body[:500]}"

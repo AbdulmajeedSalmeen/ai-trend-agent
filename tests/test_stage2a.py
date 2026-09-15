@@ -1,7 +1,7 @@
 import json
 from pathlib import Path
-
-from src.stages.stage2a_cluster import extract_version
+from types import SimpleNamespace
+from src.stages.stage2a_cluster import extract_version, signal_text
 
 
 def test_extract_version_three_parts():
@@ -24,3 +24,29 @@ def test_signals_fixture_has_12_signals():
     signals = json.loads(path.read_text(encoding="utf-8"))
 
     assert len(signals) == 12
+
+
+def test_signal_text_combines_subject_title_and_body():
+    signal = SimpleNamespace(
+        subject="langgraph",
+        title="LangGraph 2.0 released",
+        body="Durable execution improvements",
+    )
+
+    text = signal_text(signal)
+
+    assert "langgraph" in text
+    assert "LangGraph 2.0 released" in text
+    assert "Durable execution improvements" in text
+
+
+def test_signal_text_handles_empty_body():
+    signal = SimpleNamespace(
+        subject=None,
+        title="New LangGraph release",
+        body="",
+    )
+
+    text = signal_text(signal)
+
+    assert "New LangGraph release" in text
