@@ -7,6 +7,8 @@ from src.stages.stage2a_cluster import (
     signal_text,
     group_known_subjects,
     cluster_signals,
+    make_claims,
+
 )
 
 def load_fixture_signals() -> list[Signal]:
@@ -186,3 +188,41 @@ def test_cluster_signals_keeps_unrelated_signals_as_singletons():
 
         assert len(matching_groups) == 1
         assert len(matching_groups[0]) == 1
+
+
+def test_make_claims_prefers_tier1_version():
+    signals = load_fixture_signals()
+
+    langgraph_group = [
+        signal
+        for signal in signals
+        if "langgraph" in signal_text(signal).lower()
+    ]
+
+    claims = make_claims(langgraph_group)
+
+    assert len(claims) == 1
+    assert claims[0].subject == "langgraph"
+    assert claims[0].version == "2.0.0"
+    assert claims[0].verdict == "unverified"
+    assert claims[0].evidence_url is None
+    assert claims[0].confidence == 0.2
+
+
+def test_make_claims_removes_duplicate_subject_version():
+    signals = load_fixture_signals()
+
+    langgraph_group = [
+        signal
+        for signal in signals
+        if "langgraph" in signal_text(signal).lower()
+    ]
+
+    claims = make_claims(langgraph_group)
+
+    pairs = [
+        (claim.subject, claim.version)
+        for claim in claims
+    ]
+
+    assert len(pairs) == len(set(pairs))

@@ -5,7 +5,7 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_distances
 
 
-from src.schema import Signal
+from src.schema import Claim, Signal
 
 VERSION_RE = re.compile(r"\bv?(\d+\.\d+(?:\.\d+)?)\b")
 
@@ -78,3 +78,53 @@ def cluster_signals(
         clusters.setdefault(int(label), []).extend(group)
 
     return list(clusters.values())
+
+
+
+def make_claims(group: list[Signal]) -> list[Claim]:
+    if not group:
+        return []
+
+    subject = next(
+        (signal.subject for signal in group if signal.subject),
+        None,
+    )
+
+    if subject is None:
+        return []
+
+    tier1_version = None
+
+    for signal in group:
+        if signal.tier == 1:
+            tier1_version = extract_version(
+                f"{signal.title} {signal.body}"
+            )
+
+            if tier1_version is not None:
+                break
+
+    version = tier1_version
+
+    if version is None:
+        for signal in group:
+            version = extract_version(
+                f"{signal.title} {signal.body}"
+            )
+
+            if version is not None:
+                break
+
+    if version is None:
+        return []
+
+    claim = Claim(
+        text=f"{subject} version {version} was released",
+        subject=subject,
+        version=version,
+        verdict="unverified",
+        evidence_url=None,
+        confidence=0.2,
+    )
+
+    return [claim]
