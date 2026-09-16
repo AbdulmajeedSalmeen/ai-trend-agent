@@ -1,11 +1,21 @@
 import json
 from pathlib import Path
+from src.schema import Signal
 from types import SimpleNamespace
 from src.stages.stage2a_cluster import (
     extract_version,
     signal_text,
     group_known_subjects,
+    cluster_signals,
+    make_claims,
+
 )
+
+def load_fixture_signals() -> list[Signal]:
+    path = Path("fixtures/samples/signals_fixture.json")
+    data = json.loads(path.read_text(encoding="utf-8"))
+
+    return [Signal.model_validate(item) for item in data]
 
 
 def test_extract_version_three_parts():
@@ -22,6 +32,7 @@ def test_extract_version_returns_none_without_version():
 
 def test_extract_version_uses_first_version():
     assert extract_version("upgrade 5.6 to 5.6.1") == "5.6"
+
 
 def test_signals_fixture_has_12_signals():
     path = Path("fixtures/samples/signals_fixture.json")
@@ -55,6 +66,7 @@ def test_signal_text_handles_empty_body():
 
     assert "New LangGraph release" in text
 
+
 def test_group_known_subjects_groups_same_subject():
     signals = [
         SimpleNamespace(subject="langgraph", id="gh_1"),
@@ -82,3 +94,135 @@ def test_group_known_subjects_separates_unknown_subjects():
 
     assert len(groups) == 1
     assert [signal.id for signal in unknown] == ["hn_1", "hn_2"]
+
+
+def test_cluster_signals_empty():
+    assert cluster_signals([]) == []
+
+
+def test_cluster_signals_one_signal():
+    signal = Signal(
+        id="test_1",
+        source="hackernews",
+        tier=2,
+        subject=None,
+        title="LangGraph release",
+        url="https://example.com/1",
+        published_at="2026-09-16T08:00:00+00:00",
+        body="",
+    )
+
+    groups = cluster_signals([signal])
+
+    assert groups == [[signal]]
+
+
+
+def test_cluster_signals_groups_all_langgraph_signals_together():
+    signals = load_fixture_signals()
+
+    groups = cluster_signals(signals)
+
+    langgraph_ids = {
+        signal.id
+        for signal in signals
+        if "langgraph" in signal_text(signal).lower()
+    }
+
+    matching_groups = [
+        group
+        for group in groups
+        if langgraph_ids.issubset({signal.id for signal in group})
+    ]
+
+    assert len(langgraph_ids) == 4
+    assert len(matching_groups) == 1
+
+
+
+def test_cluster_signals_keeps_transformers_and_openai_separate():
+    signals = load_fixture_signals()
+
+    groups = cluster_signals(signals)
+
+    transformers_ids = {
+        signal.id
+        for signal in signals
+        if "transformers" in signal_text(signal).lower()
+    }
+
+    openai_ids = {
+        signal.id
+        for signal in signals
+        if "openai" in signal_text(signal).lower()
+    }
+
+    assert len(transformers_ids) == 3
+    assert len(openai_ids) == 2
+
+    for group in groups:
+        group_ids = {signal.id for signal in group}
+
+        assert not (
+            transformers_ids & group_ids
+            and openai_ids & group_ids
+        )
+
+def test_cluster_signals_keeps_unrelated_signals_as_singletons():
+    signals = load_fixture_signals()
+
+    groups = cluster_signals(signals)
+
+    unrelated_ids = {
+        "hn_unrelated_001",
+        "hn_unrelated_002",
+        "hn_unrelated_003",
+    }
+
+    for unrelated_id in unrelated_ids:
+        matching_groups = [
+            group
+            for group in groups
+            if unrelated_id in {signal.id for signal in group}
+        ]
+
+        assert len(matching_groups) == 1
+        assert len(matching_groups[0]) == 1
+
+
+def test_make_claims_prefers_tier1_version():
+    signals = load_fixture_signals()
+
+    langgraph_group = [
+        signal
+        for signal in signals
+        if "langgraph" in signal_text(signal).lower()
+    ]
+
+    claims = make_claims(langgraph_group)
+
+    assert len(claims) == 1
+    assert claims[0].subject == "langgraph"
+    assert claims[0].version == "2.0.0"
+    assert claims[0].verdict == "unverified"
+    assert claims[0].evidence_url is None
+    assert claims[0].confidence == 0.2
+
+
+def test_make_claims_removes_duplicate_subject_version():
+    signals = load_fixture_signals()
+
+    langgraph_group = [
+        signal
+        for signal in signals
+        if "langgraph" in signal_text(signal).lower()
+    ]
+
+    claims = make_claims(langgraph_group)
+
+    pairs = [
+        (claim.subject, claim.version)
+        for claim in claims
+    ]
+
+    assert len(pairs) == len(set(pairs))
