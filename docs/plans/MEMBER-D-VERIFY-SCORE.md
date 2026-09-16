@@ -1,4 +1,4 @@
-# Member D — Stage 2b: Verification + Stage 3: Scoring
+# Member D (Naif) — Stage 2b: Verification + Stage 3: Scoring
 
 **Mission:** you build the project's soul. Every competing team will show an agent that
 collects news. Ours is the one that CHECKS: a claim becomes `confirmed` only when an

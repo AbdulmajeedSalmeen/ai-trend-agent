@@ -1,4 +1,4 @@
-# Member C — Stage 2a: Clustering + Claim Extraction
+# Member C (ABDULRHMAN) — Stage 2a: Clustering + Claim Extraction
 
 **Mission:** Stage 1 hands you a pile of 100+ mixed signals. You group the ones talking
 about the same thing into **trends**, and turn each trend into checkable **claims**

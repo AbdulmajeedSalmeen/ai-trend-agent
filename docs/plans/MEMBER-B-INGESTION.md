@@ -1,4 +1,4 @@
-# Member B — Stage 1: Ingestion
+# Member B (Ali) — Stage 1: Ingestion
 
 **Mission:** everything downstream is only as good as what you pull in. You fetch AI news
 from two real APIs, normalize it into `Signal` objects, cache every raw response, and
