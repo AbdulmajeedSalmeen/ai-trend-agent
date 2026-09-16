@@ -2,7 +2,6 @@ import re
 
 from sklearn.cluster import AgglomerativeClustering
 from sklearn.feature_extraction.text import TfidfVectorizer
-from sklearn.metrics.pairwise import cosine_distances
 
 
 from src.schema import Claim, Signal
@@ -50,35 +49,57 @@ def cluster_signals(
 
     known_groups, unknown = group_known_subjects(signals)
 
-    units: list[list[Signal]] = known_groups + [[signal] for signal in unknown]
+    if not unknown:
+        return known_groups
 
-    if len(units) == 1:
-        return units
+    if len(unknown) == 1:
+        unknown_groups = [[unknown[0]]]
+    else:
+        texts = [signal_text(signal) for signal in unknown]
 
-    texts = [
-        " ".join(signal_text(signal) for signal in group)
-        for group in units
-    ]
+        vectors = TfidfVectorizer().fit_transform(texts)
 
-    vectors = TfidfVectorizer().fit_transform(texts)
-    distances = cosine_distances(vectors)
+        labels = AgglomerativeClustering(
+            n_clusters=None,
+            distance_threshold=distance_threshold,
+            metric="cosine",
+            linkage="average",
+        ).fit_predict(vectors.toarray())
 
-    model = AgglomerativeClustering(
-        n_clusters=None,
-        distance_threshold=distance_threshold,
-        metric="precomputed",
-        linkage="average",
-    )
+        clusters: dict[int, list[Signal]] = {}
 
-    labels = model.fit_predict(distances)
+        for label, signal in zip(labels, unknown):
+            clusters.setdefault(int(label), []).append(signal)
 
-    clusters: dict[int, list[Signal]] = {}
+        unknown_groups = list(clusters.values())
 
-    for label, group in zip(labels, units):
-        clusters.setdefault(int(label), []).extend(group)
+    remaining_unknown_groups: list[list[Signal]] = []
 
-    return list(clusters.values())
+    for unknown_group in unknown_groups:
+        attached = False
 
+        for known_group in known_groups:
+            subject = known_group[0].subject
+
+            if subject is None:
+                continue
+
+            subject_words = subject.lower().replace("-", " ").replace("_", " ").split()
+
+            group_titles = " ".join(
+                signal.title.lower()
+                for signal in unknown_group
+            )
+
+            if all(word in group_titles for word in subject_words):
+                known_group.extend(unknown_group)
+                attached = True
+                break
+
+        if not attached:
+            remaining_unknown_groups.append(unknown_group)
+
+    return known_groups + remaining_unknown_groups
 
 
 def make_claims(group: list[Signal]) -> list[Claim]:
