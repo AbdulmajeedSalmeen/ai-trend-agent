@@ -1,5 +1,5 @@
 import re
-
+from src.schema import Signal
 
 VERSION_RE = re.compile(r"\bv?(\d+\.\d+(?:\.\d+)?)\b")
 
@@ -13,13 +13,15 @@ def extract_version(text: str) -> str | None:
     return match.group(1)
 
 
-def signal_text(s) -> str:
+def signal_text(s: Signal) -> str:
     return f"{s.subject or ''} {s.title} {s.body[:500]}"
 
 
-def group_known_subjects(signals):
-    groups = {}
-    unknown = []
+def group_known_subjects(
+    signals: list[Signal],
+) -> tuple[list[list[Signal]], list[Signal]]:
+    groups: dict[str, list[Signal]] = {}
+    unknown: list[Signal] = []
 
     for signal in signals:
         if signal.subject:
