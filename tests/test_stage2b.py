@@ -53,15 +53,15 @@ def test_forum_post_never_confirms():
     
 def test_version_mismatch_stays_unverified():
     claim = Claim(
-        text="LangGraph 0.6.0 was released",
+        text="LangGraph 5.6 was released",
         subject="langgraph",
-        version="0.6.0",
+        version="5.6",
     )
 
     signal = make_signal(
         subject="langgraph",
         tier=1,
-        title="LangGraph 0.6.1 released",
+        title="LangGraph 5.6.1 released",
     )
 
     evidence = find_evidence(claim, [signal])
