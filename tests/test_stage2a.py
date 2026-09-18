@@ -202,12 +202,29 @@ def test_make_claims_prefers_tier1_version():
 
     claims = make_claims(langgraph_group)
 
-    assert len(claims) == 1
+    # The release claim comes first; a discussion claim may follow it.
     assert claims[0].subject == "langgraph"
     assert claims[0].version == "2.0.0"
     assert claims[0].verdict == "unverified"
     assert claims[0].evidence_url is None
     assert claims[0].confidence == 0.2
+    assert claims[0].source_signal_id is not None
+
+
+def test_make_claims_also_reports_what_the_discussion_says():
+    signals = load_fixture_signals()
+
+    langgraph_group = [
+        signal
+        for signal in signals
+        if "langgraph" in signal_text(signal).lower()
+    ]
+
+    claims = make_claims(langgraph_group)
+    discussion = [claim for claim in claims if claim.source_signal_id.startswith("hn_")]
+
+    assert len(discussion) == 1
+    assert discussion[0].verdict == "unverified"
 
 
 def test_make_claims_removes_duplicate_subject_version():

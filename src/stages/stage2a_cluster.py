@@ -119,6 +119,34 @@ def infer_subject(
 
     return None
 
+def _first_version(signals: list[Signal]) -> tuple[str | None, Signal | None]:
+    """First signal in the list that states a version, and the version itself."""
+    for signal in signals:
+        version = extract_version(f"{signal.title} {signal.body}")
+
+        if version is not None:
+            return version, signal
+
+    return None, None
+
+
+def _first_discussion_signal(
+    group: list[Signal],
+    subject: str,
+) -> Signal | None:
+    """First tier-2 signal in the group that names the subject in its title."""
+    pattern = rf"\b{re.escape(subject)}\b"
+
+    for signal in group:
+        if signal.tier != 2:
+            continue
+
+        if re.search(pattern, signal.title, flags=re.IGNORECASE):
+            return signal
+
+    return None
+
+
 def make_claims(
     group: list[Signal],
     subject_override: str | None = None,
@@ -127,50 +155,62 @@ def make_claims(
         return []
 
     subject = subject_override or next(
-    (signal.subject for signal in group if signal.subject),
-    None,
-)
+        (signal.subject for signal in group if signal.subject),
+        None,
+    )
 
     if subject is None:
         return []
 
-    tier1_version = None
-
-    for signal in group:
-        if signal.tier == 1:
-            tier1_version = extract_version(
-                f"{signal.title} {signal.body}"
-            )
-
-            if tier1_version is not None:
-                break
-
-    version = tier1_version
+    # Official releases state versions precisely, so read the claim from one when
+    # the cluster has it. Stage 2b uses source_signal_id to know that such a claim
+    # is a primary report rather than an independent check.
+    tier1 = [signal for signal in group if signal.tier == 1]
+    version, source = _first_version(tier1)
 
     if version is None:
-        for signal in group:
-            version = extract_version(
-                f"{signal.title} {signal.body}"
-            )
+        version, source = _first_version(group)
 
-            if version is not None:
-                break
+    if source is None:
+        source = group[0]
 
     if version is None:
         claim_text = group[0].title
     else:
         claim_text = f"{subject} version {version} was released"
 
-    claim = Claim(
-        text=claim_text,
-        subject=subject,
-        version=version,
-        verdict="unverified",
-        evidence_url=None,
-        confidence=0.2,
-    )
+    claims = [
+        Claim(
+            text=claim_text,
+            subject=subject,
+            version=version,
+            verdict="unverified",
+            evidence_url=None,
+            confidence=0.2,
+            source_signal_id=source.id,
+        )
+    ]
 
-    return [claim]
+    # What the community says about the subject is a claim of its own. Without
+    # this the release always wins the cluster and the discussion is invisible,
+    # even though an unverifiable discussion is exactly what the agent should
+    # be able to report.
+    discussion = _first_discussion_signal(group, subject)
+
+    if discussion is not None and discussion.id != source.id:
+        claims.append(
+            Claim(
+                text=discussion.title,
+                subject=subject,
+                version=extract_version(discussion.title),
+                verdict="unverified",
+                evidence_url=None,
+                confidence=0.2,
+                source_signal_id=discussion.id,
+            )
+        )
+
+    return claims
 
 
 def run(run_dir: Path) -> None:

@@ -29,6 +29,13 @@ class Claim(BaseModel):
     verdict: Literal['confirmed', 'unverified'] = 'unverified'
     evidence_url:Optional[str] = None
     confidence: float = Field(0.2, ge=0.0, le=1.0)
+    # Which signal this claim was read from. Stage 2b needs it to tell a real
+    # check from a document that agrees with itself.
+    source_signal_id: Optional[str] = None
+    # primary_report = the official release the claim was read from is also the
+    # evidence. cross_source = a different official source backs a claim read
+    # somewhere else. None = nothing backs it.
+    evidence_kind: Optional[Literal['primary_report', 'cross_source']] = None
 
 
 class Trend(BaseModel):

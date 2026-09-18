@@ -138,3 +138,51 @@ def test_same_version_different_subject_never_confirms():
     evidence = find_evidence(claim, [signal])
 
     assert evidence is None
+
+def make_claim(**overrides):
+    data = dict(text="langgraph version 1.2.11 was released", subject="langgraph", version="1.2.11")
+    data.update(overrides)
+    return Claim(**data)
+
+
+def test_claim_read_from_a_release_is_a_primary_report():
+    release = make_signal("langgraph", 1, "langgraph 1.2.11")
+    claim = make_claim(source_signal_id=release.id)
+
+    verified = verify_claim(claim, [release])
+
+    assert verified.verdict == "confirmed"
+    assert verified.evidence_kind == "primary_report"
+    assert verified.confidence == 0.7
+
+
+def test_claim_read_elsewhere_and_backed_by_a_release_is_cross_source():
+    release = make_signal("langgraph", 1, "langgraph 1.2.11")
+    claim = make_claim(source_signal_id="hn_999")
+
+    verified = verify_claim(claim, [release])
+
+    assert verified.verdict == "confirmed"
+    assert verified.evidence_kind == "cross_source"
+    assert verified.confidence == 0.9
+
+
+def test_evidence_from_another_document_wins_over_the_claims_own_document():
+    own = make_signal("langgraph", 1, "langgraph 1.2.11", url="https://example.com/own")
+    other = make_signal("langgraph", 1, "langgraph 1.2.11", url="https://example.com/other")
+    other = other.model_copy(update={"id": "gh_other"})
+    claim = make_claim(source_signal_id=own.id)
+
+    verified = verify_claim(claim, [own, other])
+
+    assert verified.evidence_kind == "cross_source"
+    assert verified.evidence_url == "https://example.com/other"
+
+
+def test_unverified_claim_carries_no_evidence_kind():
+    claim = make_claim(version=None, source_signal_id="hn_1")
+
+    verified = verify_claim(claim, [])
+
+    assert verified.verdict == "unverified"
+    assert verified.evidence_kind is None
