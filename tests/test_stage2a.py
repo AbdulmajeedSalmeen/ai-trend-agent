@@ -412,3 +412,37 @@ def test_make_claims_returns_unique_tier1_versions_newest_first():
         "1.2.10",
         "1.2.9",
     ]
+
+
+def test_make_claims_deduplicates_discussion_with_same_subject_version():
+    signals = [
+        Signal(
+            id="gh_langgraph_1_2_10",
+            source="github",
+            tier=1,
+            subject="langgraph",
+            title="LangGraph 1.2.10 released",
+            url="https://example.com/github",
+            published_at="2026-09-18T08:00:00+00:00",
+            body="",
+        ),
+        Signal(
+            id="hn_langgraph_1_2_10",
+            source="hackernews",
+            tier=2,
+            subject=None,
+            title="LangGraph 1.2.10 discussion",
+            url="https://example.com/hn",
+            published_at="2026-09-18T09:00:00+00:00",
+            body="",
+        ),
+    ]
+
+    claims = make_claims(signals)
+
+    pairs = [
+        (claim.subject, claim.version)
+        for claim in claims
+    ]
+
+    assert pairs.count(("langgraph", "1.2.10")) == 1

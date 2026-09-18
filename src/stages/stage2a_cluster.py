@@ -237,18 +237,26 @@ def make_claims(
 
     discussion = _first_discussion_signal(group, subject)
 
-    if discussion is not None and discussion.id != source.id:
-        claims.append(
-            Claim(
-                text=discussion.title,
-                subject=subject,
-                version=extract_version(discussion.title),
-                verdict="unverified",
-                evidence_url=None,
-                confidence=0.2,
-                source_signal_id=discussion.id,
+    if discussion is not None:
+        discussion_version = extract_version(discussion.title)
+
+        existing_pairs = {
+            (claim.subject, claim.version)
+            for claim in claims
+        }
+
+        if (subject, discussion_version) not in existing_pairs:
+            claims.append(
+                Claim(
+                    text=discussion.title,
+                    subject=subject,
+                    version=discussion_version,
+                    verdict="unverified",
+                    evidence_url=None,
+                    confidence=0.2,
+                    source_signal_id=discussion.id,
+                )
             )
-        )
 
     return claims
 
