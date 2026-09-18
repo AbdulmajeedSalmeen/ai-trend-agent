@@ -44,3 +44,17 @@ def test_github_plain_version_release_gets_repo_subject():
     core_release = next(r for r in releases if r["tag_name"] == "1.2.11")
     s = parse_release("langchain-ai/langgraph", core_release)
     assert s.subject == "langgraph"
+
+
+def test_already_qualified_package_is_not_prefixed_twice():
+    release = {
+        "tag_name": "langchain-core==1.6.3",
+        "published_at": "2026-09-16T00:00:00Z",
+        "html_url": "https://example.com/r",
+        "name": "langchain-core==1.6.3",
+        "body": "",
+    }
+
+    signal = parse_release("langchain-ai/langchain", release)
+
+    assert signal.subject == "langchain-core"

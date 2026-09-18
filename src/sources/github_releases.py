@@ -30,11 +30,18 @@ def parse_release(repo: str, release: dict) -> Signal:
     id = 'gh_<subject>_<tag_name>'. published_at: datetime.fromisoformat works on
     GitHub's format after replacing the trailing 'Z' with '+00:00'."""
     tag_name = release["tag_name"]
-    subject = repo.split("/")[-1].lower()
+    repo_name = repo.split("/")[-1].lower()
+    subject = repo_name
 
     if "==" in tag_name:
         package, _, _version = tag_name.partition("==")
-        subject = f"{subject}-{package}"
+        package = package.lower()
+        # A package named 'langchain-core' inside repo 'langchain' already names
+        # its repo; 'sdk' inside repo 'langgraph' does not.
+        if package.startswith(repo_name):
+            subject = package
+        else:
+            subject = f"{repo_name}-{package}"
 
     published_at = datetime.fromisoformat(release["published_at"].replace("Z", "+00:00"))
 
