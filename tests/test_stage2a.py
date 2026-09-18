@@ -280,3 +280,30 @@ def test_make_claims_without_version_uses_title():
     assert claims[0].verdict == "unverified"
     assert claims[0].evidence_url is None
     assert claims[0].confidence == 0.2
+
+
+
+def test_make_claims_uses_subject_override_for_subjectless_group():
+    signals = load_fixture_signals()
+
+    group = [
+        signal
+        for signal in signals
+        if signal.subject is None
+        and "langgraph" in signal.title.lower()
+    ]
+
+    subject = infer_subject(group, signals)
+
+    claims = make_claims(
+        group,
+        subject_override=subject,
+    )
+
+    assert subject == "langgraph"
+    assert len(claims) == 1
+    assert claims[0].subject == "langgraph"
+    assert claims[0].version == "2.0"
+    assert claims[0].verdict == "unverified"
+    assert claims[0].evidence_url is None
+    assert claims[0].confidence == 0.2

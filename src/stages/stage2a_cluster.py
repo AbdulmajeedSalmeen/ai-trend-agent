@@ -117,14 +117,17 @@ def infer_subject(
 
     return None
 
-def make_claims(group: list[Signal]) -> list[Claim]:
+def make_claims(
+    group: list[Signal],
+    subject_override: str | None = None,
+) -> list[Claim]:
     if not group:
         return []
 
-    subject = next(
-        (signal.subject for signal in group if signal.subject),
-        None,
-    )
+    subject = subject_override or next(
+    (signal.subject for signal in group if signal.subject),
+    None,
+)
 
     if subject is None:
         return []
