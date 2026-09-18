@@ -83,30 +83,33 @@ TBD
 ## Experiment 3 — Hugging Face Embeddings
 
 Date:
-TBD
+2026-09-18
 
 Method:
 Sentence Transformers — all-MiniLM-L6-v2
 
 Distance threshold:
-TBD
+0.5
 
 Dataset:
-Same dataset used for the TF-IDF comparison.
+fixtures/samples/signals_fixture.json
 
 Number of trends:
-TBD
+6
 
 Number of singleton clusters:
-TBD
+3
 
 Example groups:
-1. TBD
-2. TBD
-3. TBD
+1. LangGraph — 4 signals
+2. Transformers — 3 signals
+3. OpenAI Python — 2 signals
 
 Observation:
-TBD
+Thresholds 0.3, 0.4, and 0.5 produced the expected six logical clusters.
+At 0.6, unrelated signals began to merge.
+At 0.7, an OpenAI signal was incorrectly attached to LangGraph.
+0.5 was selected as the embedding baseline threshold.
 
 ---
 
@@ -114,18 +117,34 @@ TBD
 
 | Metric | TF-IDF | Embeddings |
 |---|---:|---:|
-| Number of trends | TBD | TBD |
-| Singleton clusters | TBD | TBD |
-| LangGraph grouping quality | TBD | TBD |
-| Transformers grouping quality | TBD | TBD |
-| OpenAI Python grouping quality | TBD | TBD |
-| Overall logical grouping | TBD | TBD |
+| Number of trends | 6 | 6 |
+| Singleton clusters | 3 | 3 |
+| LangGraph grouping quality | Correct | Correct |
+| Transformers grouping quality | Correct | Correct |
+| OpenAI Python grouping quality | Correct | Correct |
+| Overall logical grouping | Correct on fixture | Correct on fixture |
+
+### Real Stage 1 comparison
+
+| Metric | TF-IDF | Embeddings |
+|---|---:|---:|
+| Number of clusters | 192 | 163 |
+| Singleton clusters | 141 | 118 |
+| Largest cluster | 46 | 57 |
+| Subject specificity | Better | More over-merging |
+| Preferred for pipeline | Yes | No |
 
 Preferred method:
-TBD
+TF-IDF
 
 Reason:
-TBD
+On the real Stage 1 dataset, TF-IDF produced more conservative and
+subject-specific clustering. The embedding approach reduced singleton
+clusters, but it also over-merged semantically related generic AI-agent
+discussions into LangGraph and LangChain groups. For this pipeline,
+avoiding false topic attachment is more important than aggressively
+reducing singleton clusters, so TF-IDF remains the preferred baseline
+and fallback method.
 
 ---
 

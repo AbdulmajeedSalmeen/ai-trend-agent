@@ -7,6 +7,22 @@ from src import runio
 from src.schema import Claim, Signal, Trend
 from src.versions import extract_version 
 
+_EMBEDDING_MODEL = None
+
+
+def _get_embedding_model():
+    global _EMBEDDING_MODEL
+
+    if _EMBEDDING_MODEL is None:
+        from sentence_transformers import SentenceTransformer
+
+        _EMBEDDING_MODEL = SentenceTransformer(
+            "sentence-transformers/all-MiniLM-L6-v2"
+        )
+
+    return _EMBEDDING_MODEL
+
+
 def signal_text(s: Signal) -> str:
     return f"{s.subject or ''} {s.title} {s.body[:500]}"
 
@@ -25,10 +41,10 @@ def group_known_subjects(
 
     return list(groups.values()), unknown
 
-
 def cluster_signals(
     signals: list[Signal],
-    distance_threshold: float = 0.8,
+    distance_threshold: float | None = None,
+    method: str = "tfidf",
 ) -> list[list[Signal]]:
     if not signals:
         return []
@@ -36,24 +52,42 @@ def cluster_signals(
     if len(signals) == 1:
         return [signals]
 
-    known_groups, unknown = group_known_subjects(signals)
+    if distance_threshold is None:
+        if method == "tfidf":
+            distance_threshold = 0.8
+        elif method == "embeddings":
+            distance_threshold = 0.5
 
+    known_groups, unknown = group_known_subjects(signals)
     if not unknown:
         return known_groups
 
-    if len(unknown) == 1:
-        unknown_groups = [[unknown[0]]]
+        if len(unknown) == 1:
+            unknown_groups = [[unknown[0]]]
     else:
         texts = [signal_text(signal) for signal in unknown]
 
-        vectors = TfidfVectorizer().fit_transform(texts)
+        if method == "tfidf":
+            vectors = TfidfVectorizer().fit_transform(texts).toarray()
+
+        elif method == "embeddings":
+            model = _get_embedding_model()
+            vectors = model.encode(
+                texts,
+                normalize_embeddings=True,
+            )
+
+        else:
+            raise ValueError(
+                "method must be 'tfidf' or 'embeddings'"
+            )
 
         labels = AgglomerativeClustering(
             n_clusters=None,
             distance_threshold=distance_threshold,
             metric="cosine",
             linkage="average",
-        ).fit_predict(vectors.toarray())
+        ).fit_predict(vectors)
 
         clusters: dict[int, list[Signal]] = {}
 
@@ -61,6 +95,13 @@ def cluster_signals(
             clusters.setdefault(int(label), []).append(signal)
 
         unknown_groups = list(clusters.values())
+
+    clusters: dict[int, list[Signal]] = {}
+
+    for label, signal in zip(labels, unknown):
+                clusters.setdefault(int(label), []).append(signal)
+
+    unknown_groups = list(clusters.values())
 
     remaining_unknown_groups: list[list[Signal]] = []
 
