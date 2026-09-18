@@ -28,40 +28,29 @@ because TF-IDF depends on the full corpus.
 ---
 
 ## Experiment 1 — TF-IDF Baseline
+- Date: 2026-09-16
+- Method: TF-IDF + Cosine Distance + Agglomerative Clustering
+- Distance threshold: 0.8
+- Dataset: fixtures/samples/signals_fixture.json
+- Total signals: 12
+- Number of clusters: 6
+- Singleton clusters: 3
+- Status: Passed baseline evaluation
 
-Date: 2026-09-15
+### Observed groups
 
-Method:
-TF-IDF + Cosine Distance + Agglomerative Clustering
+1. LangGraph — 4 signals
+2. Transformers — 3 signals
+3. OpenAI Python — 2 signals
+4. PostgreSQL — 1 signal
+5. Linux Kernel — 1 signal
+6. SQLite — 1 signal
 
-Status:
-Not evaluated yet
+### Observation
 
-Planned distance threshold:
-0.8
-
-Dataset:
-`fixtures/samples/signals_fixture.json`
-
-Number of signals:
-12
-
-Number of trends:
-TBD
-
-Number of singleton clusters:
-TBD
-
-Example groups:
-1. TBD
-2. TBD
-3. TBD
-
-Observation:
-Baseline experiment has not been run yet. The initial threshold of 0.8
-will be evaluated against the 12-signal fixture and adjusted based on
-grouping quality.
-
+The 0.8 threshold correctly grouped the three expected AI topics while keeping
+the three unrelated signals as singleton clusters on the fixture dataset.
+This threshold is a baseline and must be re-evaluated on real Stage 1 data.
 ---
 
 ## Experiment 2 — TF-IDF Tuned
