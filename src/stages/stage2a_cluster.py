@@ -2,7 +2,9 @@ import re
 
 from sklearn.cluster import AgglomerativeClustering
 from sklearn.feature_extraction.text import TfidfVectorizer
-from src.schema import Claim, Signal
+from pathlib import Path
+from src import runio
+from src.schema import Claim, Signal, Trend
 from src.versions import extract_version 
 
 def signal_text(s: Signal) -> str:
@@ -169,3 +171,47 @@ def make_claims(
     )
 
     return [claim]
+
+
+def run(run_dir: Path) -> None:
+    signals = runio.load_artifact(
+        run_dir,
+        "signals",
+        Signal,
+    )
+
+    groups = cluster_signals(signals)
+
+    trends: list[Trend] = []
+    skipped = 0
+
+    for group in groups:
+        subject = infer_subject(group, signals)
+
+        if subject is None:
+            skipped += 1
+            continue
+
+        claims = make_claims(
+            group,
+            subject_override=subject,
+        )
+
+        trend = Trend(
+            id=f"trend_{len(trends) + 1:03d}",
+            subject=subject,
+            signal_ids=[signal.id for signal in group],
+            claims=claims,
+        )
+
+        trends.append(trend)
+
+    print(
+        f"skipped {skipped} clusters with no identifiable subject"
+    )
+
+    runio.save_artifact(
+        run_dir,
+        "trends",
+        trends,
+    )

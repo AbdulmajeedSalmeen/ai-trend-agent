@@ -9,7 +9,7 @@ from src.stages.stage2a_cluster import (
     cluster_signals,
     make_claims,
     infer_subject,
-
+    run,
 )
 
 def load_fixture_signals() -> list[Signal]:
@@ -307,3 +307,42 @@ def test_make_claims_uses_subject_override_for_subjectless_group():
     assert claims[0].verdict == "unverified"
     assert claims[0].evidence_url is None
     assert claims[0].confidence == 0.2
+
+
+def test_run_writes_trends_and_skips_unknown_subjects(tmp_path, capsys):
+    source = Path("fixtures/samples/signals_fixture.json")
+    destination = tmp_path / "signals.json"
+    destination.write_text(
+        source.read_text(encoding="utf-8"),
+        encoding="utf-8",
+    )
+
+    run(tmp_path)
+
+    trends_path = tmp_path / "trends.json"
+
+    assert trends_path.exists()
+
+    trends = json.loads(
+        trends_path.read_text(encoding="utf-8")
+    )
+
+    assert len(trends) == 3
+
+    subjects = {trend["subject"] for trend in trends}
+
+    assert subjects == {
+        "langgraph",
+        "transformers",
+        "openai-python",
+    }
+
+    assert [trend["id"] for trend in trends] == [
+        "trend_001",
+        "trend_002",
+        "trend_003",
+    ]
+
+    output = capsys.readouterr().out
+
+    assert "skipped 3 clusters with no identifiable subject" in output
