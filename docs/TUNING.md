@@ -136,3 +136,9 @@ TBD
 - Embedding model loading must be lazy and must not happen during import.
 - Threshold changes must be recorded in this document.
 - Both methods should be compared using the same dataset.
+- Decision (2026-09-18): A Trend represents one subject, not one version.
+- Multiple distinct Tier-1 versions for the same subject are emitted as separate Claims inside the same Trend.
+- Duplicate release Claims are deduplicated by `(subject, version)`.
+- Release Claims are ordered newest version first.
+- The discussion Claim remains in the Trend alongside release Claims.
+- Clustering threshold tuning is deferred for now; the current priority is claim coverage and accuracy rather than reducing subject-group size.

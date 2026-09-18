@@ -146,6 +146,13 @@ def _first_discussion_signal(
 
     return None
 
+def _version_sort_key(version: str) -> tuple[int, ...]:
+    return tuple(
+        int(part)
+        for part in re.findall(r"\d+", version)
+    )
+
+
 
 def make_claims(
     group: list[Signal],
@@ -162,33 +169,71 @@ def make_claims(
     if subject is None:
         return []
 
-
-    tier1 = [signal for signal in group if signal.tier == 1]
-    version, source = _first_version(tier1)
-
-    if version is None:
-        version, source = _first_version(group)
-
-    if source is None:
-        source = group[0]
-
-    if version is None:
-        claim_text = group[0].title
-    else:
-        claim_text = f"{subject} version {version} was released"
-
-    claims = [
-        Claim(
-            text=claim_text,
-            subject=subject,
-            version=version,
-            verdict="unverified",
-            evidence_url=None,
-            confidence=0.2,
-            source_signal_id=source.id,
-        )
+    tier1 = [
+        signal
+        for signal in group
+        if signal.tier == 1
     ]
 
+    version_sources: dict[str, Signal] = {}
+
+    for signal in tier1:
+        version = extract_version(
+            f"{signal.title} {signal.body}"
+        )
+
+        if version is None:
+            continue
+
+        if version not in version_sources:
+            version_sources[version] = signal
+
+    claims: list[Claim] = []
+
+    if version_sources:
+        versions = sorted(
+            version_sources,
+            key=_version_sort_key,
+            reverse=True,
+        )
+
+        for version in versions:
+            source = version_sources[version]
+
+            claims.append(
+                Claim(
+                    text=f"{subject} version {version} was released",
+                    subject=subject,
+                    version=version,
+                    verdict="unverified",
+                    evidence_url=None,
+                    confidence=0.2,
+                    source_signal_id=source.id,
+                )
+            )
+
+    else:
+        version, source = _first_version(group)
+
+        if source is None:
+            source = group[0]
+
+        if version is None:
+            claim_text = group[0].title
+        else:
+            claim_text = f"{subject} version {version} was released"
+
+        claims.append(
+            Claim(
+                text=claim_text,
+                subject=subject,
+                version=version,
+                verdict="unverified",
+                evidence_url=None,
+                confidence=0.2,
+                source_signal_id=source.id,
+            )
+        )
 
     discussion = _first_discussion_signal(group, subject)
 

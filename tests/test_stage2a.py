@@ -363,3 +363,52 @@ def test_run_writes_trends_and_skips_unknown_subjects(tmp_path, capsys):
     output = capsys.readouterr().out
 
     assert "skipped 3 clusters with no identifiable subject" in output
+
+
+def test_make_claims_returns_unique_tier1_versions_newest_first():
+    signals = [
+        Signal(
+            id="gh_langgraph_1_2_9",
+            source="github",
+            tier=1,
+            subject="langgraph",
+            title="LangGraph 1.2.9 released",
+            url="https://example.com/1.2.9",
+            published_at="2026-09-16T08:00:00+00:00",
+            body="",
+        ),
+        Signal(
+            id="gh_langgraph_1_2_10",
+            source="github",
+            tier=1,
+            subject="langgraph",
+            title="LangGraph 1.2.10 released",
+            url="https://example.com/1.2.10",
+            published_at="2026-09-17T08:00:00+00:00",
+            body="",
+        ),
+        Signal(
+            id="gh_langgraph_1_2_9_duplicate",
+            source="github",
+            tier=1,
+            subject="langgraph",
+            title="LangGraph 1.2.9 released again",
+            url="https://example.com/1.2.9-duplicate",
+            published_at="2026-09-18T08:00:00+00:00",
+            body="",
+        ),
+    ]
+
+
+    claims = make_claims(signals)
+
+    release_claims = [
+        claim
+        for claim in claims
+        if claim.source_signal_id.startswith("gh_")
+    ]
+
+    assert [claim.version for claim in release_claims] == [
+        "1.2.10",
+        "1.2.9",
+    ]
