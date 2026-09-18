@@ -123,7 +123,12 @@ WATCHLIST = [
 
 
 def parse_release(repo: str, release: dict) -> Signal:
-    """tier=1, source='github', subject = repo name after the slash, lowercased.
+    """tier=1, source='github'.
+    subject comes from the repo name after the slash, lowercased, EXCEPT when the
+    repo holds several packages (monorepo). Check tag_name:
+      'sdk==0.4.4'  -> subject 'langgraph-sdk'  (part before '==' joined to repo name)
+      '1.2.11'      -> subject 'langgraph'      (plain version = the main package)
+    Without this, a claim about langgraph 4.2.0 gets confirmed by checkpoint==4.2.0.
     id = 'gh_<subject>_<tag_name>'. published_at: datetime.fromisoformat works on
     GitHub's format after replacing the trailing 'Z' with '+00:00'."""
     ...
