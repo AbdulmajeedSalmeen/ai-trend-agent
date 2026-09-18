@@ -138,3 +138,37 @@ def test_same_version_different_subject_never_confirms():
     evidence = find_evidence(claim, [signal])
 
     assert evidence is None
+    
+def test_partial_version_does_not_match_patch_version():
+    claim = Claim(
+        text="LangGraph 1.5 was released",
+        subject="langgraph",
+        version="1.5",
+    )
+
+    signal = make_signal(
+        subject="langgraph",
+        tier=1,
+        title="LangGraph v1.5.2 released",
+    )
+
+    evidence = find_evidence(claim, [signal])
+
+    assert evidence is None
+
+def test_partial_version_does_not_match_different_major_version():
+    claim = Claim(
+        text="LangGraph 1.5 was released",
+        subject="langgraph",
+        version="1.5",
+    )
+
+    signal = make_signal(
+        subject="langgraph",
+        tier=1,
+        title="LangGraph v11.5.0 released",
+    )
+
+    evidence = find_evidence(claim, [signal])
+
+    assert evidence is None    

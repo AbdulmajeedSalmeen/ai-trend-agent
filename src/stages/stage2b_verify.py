@@ -1,10 +1,9 @@
-import re
+from src.versions import extract_version
 from pathlib import Path
 
 from src import runio
 from src.schema import Claim, Signal, Trend
 
-VERSION_RE = re.compile(r"\bv?(\d+\.\d+(?:\.\d+)?)\b")
 
 def find_evidence(claim: Claim, signals: list[Signal]) -> Signal | None:
     if claim.version is None:
@@ -17,12 +16,7 @@ def find_evidence(claim: Claim, signals: list[Signal]) -> Signal | None:
         if signal.subject != claim.subject:
             continue
 
-        version_match = VERSION_RE.search(signal.title)
-
-        if version_match is None:
-            continue
-
-        signal_version = version_match.group(1)
+        signal_version = extract_version(signal.title)
 
         if signal_version != claim.version:
             continue
