@@ -1,3 +1,5 @@
+import re
+
 from sklearn.cluster import AgglomerativeClustering
 from sklearn.feature_extraction.text import TfidfVectorizer
 from src.schema import Claim, Signal
@@ -87,6 +89,34 @@ def cluster_signals(
     return known_groups + remaining_unknown_groups
 
 
+def infer_subject(
+    group: list[Signal],
+    all_signals: list[Signal],
+) -> str | None:
+    direct_subject = next(
+        (signal.subject for signal in group if signal.subject),
+        None,
+    )
+
+    if direct_subject is not None:
+        return direct_subject
+
+    known_subjects = {
+        signal.subject
+        for signal in all_signals
+        if signal.tier == 1 and signal.subject is not None
+    }
+
+    group_titles = " ".join(signal.title for signal in group)
+
+    for subject in known_subjects:
+        pattern = rf"\b{re.escape(subject)}\b"
+
+        if re.search(pattern, group_titles, flags=re.IGNORECASE):
+            return subject
+
+    return None
+
 def make_claims(group: list[Signal]) -> list[Claim]:
     if not group:
         return []
@@ -122,10 +152,12 @@ def make_claims(group: list[Signal]) -> list[Claim]:
                 break
 
     if version is None:
-        return []
+        claim_text = group[0].title
+    else:
+        claim_text = f"{subject} version {version} was released"
 
     claim = Claim(
-        text=f"{subject} version {version} was released",
+        text=claim_text,
         subject=subject,
         version=version,
         verdict="unverified",

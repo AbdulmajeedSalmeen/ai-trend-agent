@@ -8,6 +8,7 @@ from src.stages.stage2a_cluster import (
     group_known_subjects,
     cluster_signals,
     make_claims,
+    infer_subject,
 
 )
 
@@ -226,3 +227,56 @@ def test_make_claims_removes_duplicate_subject_version():
     ]
 
     assert len(pairs) == len(set(pairs))
+
+
+def test_infer_subject_from_tier1_dictionary():
+    signals = load_fixture_signals()
+
+    group = [
+        signal
+        for signal in signals
+        if signal.subject is None
+        and "langgraph" in signal.title.lower()
+    ]
+
+    subject = infer_subject(group, signals)
+
+    assert subject == "langgraph"
+
+
+def test_infer_subject_returns_none_for_unrelated_group():
+    signals = load_fixture_signals()
+
+    group = [
+        signal
+        for signal in signals
+        if signal.id == "hn_unrelated_001"
+    ]
+
+    subject = infer_subject(group, signals)
+
+    assert subject is None
+
+
+
+def test_make_claims_without_version_uses_title():
+    signal = Signal(
+        id="gh_langgraph_no_version",
+        source="github",
+        tier=1,
+        subject="langgraph",
+        title="LangGraph improves durable execution",
+        url="https://example.com/langgraph",
+        published_at="2026-09-18T08:00:00+00:00",
+        body="No version number in this release note.",
+    )
+
+    claims = make_claims([signal])
+
+    assert len(claims) == 1
+    assert claims[0].subject == "langgraph"
+    assert claims[0].version is None
+    assert claims[0].text == "LangGraph improves durable execution"
+    assert claims[0].verdict == "unverified"
+    assert claims[0].evidence_url is None
+    assert claims[0].confidence == 0.2
