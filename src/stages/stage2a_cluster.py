@@ -162,9 +162,7 @@ def make_claims(
     if subject is None:
         return []
 
-    # Official releases state versions precisely, so read the claim from one when
-    # the cluster has it. Stage 2b uses source_signal_id to know that such a claim
-    # is a primary report rather than an independent check.
+
     tier1 = [signal for signal in group if signal.tier == 1]
     version, source = _first_version(tier1)
 
@@ -191,10 +189,7 @@ def make_claims(
         )
     ]
 
-    # What the community says about the subject is a claim of its own. Without
-    # this the release always wins the cluster and the discussion is invisible,
-    # even though an unverifiable discussion is exactly what the agent should
-    # be able to report.
+
     discussion = _first_discussion_signal(group, subject)
 
     if discussion is not None and discussion.id != source.id:

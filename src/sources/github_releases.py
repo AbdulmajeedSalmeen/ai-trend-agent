@@ -36,8 +36,6 @@ def parse_release(repo: str, release: dict) -> Signal:
     if "==" in tag_name:
         package, _, _version = tag_name.partition("==")
         package = package.lower()
-        # A package named 'langchain-core' inside repo 'langchain' already names
-        # its repo; 'sdk' inside repo 'langgraph' does not.
         if package.startswith(repo_name):
             subject = package
         else:
