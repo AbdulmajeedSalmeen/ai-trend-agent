@@ -112,9 +112,12 @@ not a verdict.
 
 ## "What happens if the wifi dies during the demo?"
 
-Two fallbacks:
+Two fallbacks. Both were run with the network and the model switched off, on 2026-09-19:
 
-1. **Re-analyse** in the web app replays the saved signals of any past run. No network.
+1. **Re-analyse** in the web app replays the saved signals of any past run. Replaying the
+   frozen run with no model and no network produced the same 17 recommendations and the same
+   4 chapter updates, with the reasons intact. Without a model the sentences come from the
+   rules instead of being rewritten, and the page says which.
 2. `web/dist/site.html` is a single file with the run and the fonts embedded. It opens on any
    machine with no server and no network.
 
