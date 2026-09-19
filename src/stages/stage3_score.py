@@ -27,37 +27,44 @@ def word_set(text: str) -> set[str]:
     return set(re.findall(r"[a-z0-9]+", text.lower()))
 
 
-def load_package_chapters() -> dict[str, str]:
-    path = Path("fixtures/package_chapters.json")
-    return json.loads(path.read_text(encoding="utf-8"))
+def chapter_vocabulary(chapter: dict) -> set[str]:
+    text = " ".join(chapter["topics_covered"] + chapter.get("tools_covered", []))
+    return word_set(text)
 
 
-def chapter_for_package(subject: str, packages: dict[str, str]) -> str | None:
-    if subject in packages:
-        return packages[subject]
-
-    parent, _, _ = subject.partition("-")
-
-    return packages.get(parent)
+def primary_name(subject: str) -> str:
+    return subject.replace("_", "-").split("-")[0]
 
 
 def match_chapter(trend: Trend, chapters: list[dict]) -> str | None:
-    mapped = chapter_for_package(trend.subject, load_package_chapters())
-
-    if mapped is not None:
-        return mapped
-
-    trend_text = " ".join(
-        [trend.subject] + [claim.text for claim in trend.claims]
-    )
-    trend_words = word_set(trend_text) - STOP_WORDS
+    subject_words = word_set(trend.subject)
+    primary = primary_name(trend.subject)
 
     best_chapter_id = None
+    best_named = 0
+
+    for chapter in chapters:
+        chapter_words = chapter_vocabulary(chapter)
+
+        if primary not in chapter_words:
+            continue
+
+        named = len(subject_words & chapter_words)
+
+        if named > best_named:
+            best_named = named
+            best_chapter_id = chapter["chapter_id"]
+
+    if best_chapter_id is not None:
+        return best_chapter_id
+
+    trend_text = " ".join([trend.subject] + [claim.text for claim in trend.claims])
+    trend_words = word_set(trend_text) - STOP_WORDS
+
     best_overlap = 0
 
     for chapter in chapters:
-        topics_text = " ".join(chapter["topics_covered"])
-        chapter_words = word_set(topics_text) - STOP_WORDS
+        chapter_words = chapter_vocabulary(chapter) - STOP_WORDS
         overlap = len(trend_words & chapter_words)
 
         if overlap > best_overlap:

@@ -1,204 +1,410 @@
 {
-  "name": "WeCloudData Applied Generative AI Bootcamp — Weeks 1-6 and Capstone",
+  "name": "SDA Agentic AI Bootcamp - Aug 2026 - Online 02",
   "version": "2026-09-19",
+  "sources": [
+    "https://sda.weclouddata.com/my-learning/course/cmsjgfjwj00d801munmq192xx/chapters",
+    "SDA Agentic AI Bootcamp - Bootcamp Syllabus, Saudi Digital Academy 2026"
+  ],
   "chapters": [
     {
       "chapter_id": "C1",
-      "title": "Week 1 - Welcome, course overview and environment setup",
+      "week": 1,
+      "title": "Week 1 - Welcome and course overview",
       "level": "foundation",
-      "topics_covered": ["bootcamp syllabus", "welcome session", "VS Code", "Google Colab", "OpenAI account and API key", "GitHub account and personal access token", "environment setup"],
+      "topics_covered": [
+        "bootcamp syllabus",
+        "welcome session",
+        "bootcamp orientation"
+      ],
+      "tools_covered": [],
       "prerequisites": [],
-      "last_updated": "2026-09-16",
-      "duration_hours": 8
+      "last_updated": "2026-08-20"
     },
     {
       "chapter_id": "C2",
-      "title": "Week 2 - Generative AI, LLM foundations and Hugging Face",
-      "level": "core",
-      "topics_covered": ["generative AI", "introduction to LLMs", "AI ethics", "transformers", "BERT and Hugging Face workflows", "BERT text classification", "BERT use cases", "word similarity", "fine-tuning BERT for sentiment analysis"],
+      "week": 1,
+      "title": "Week 1 - Environment setup",
+      "level": "foundation",
+      "topics_covered": [
+        "tools and account setup",
+        "Visual Studio Code installation",
+        "Google Colab usage",
+        "OpenAI account and API key setup",
+        "GitHub account and personal access token setup"
+      ],
+      "tools_covered": ["VS Code", "Google Colab", "GitHub"],
       "prerequisites": ["C1"],
-      "last_updated": "2026-09-16",
-      "duration_hours": 10
+      "last_updated": "2026-08-20"
     },
     {
       "chapter_id": "C3",
-      "title": "Week 2 - Prompt engineering and optimisation",
+      "week": 2,
+      "title": "Week 2 - Generative AI, AI ethics and transformer foundations",
       "level": "core",
-      "topics_covered": ["prompt engineering", "prompt optimisation", "OpenAI API", "prompt chaining", "DSPy", "DSPy facility support analyzer", "DSPy-GEPA structured information extraction", "LLM-as-a-judge prompt optimisation"],
-      "prerequisites": ["C1"],
-      "last_updated": "2026-09-16",
-      "duration_hours": 10
+      "topics_covered": [
+        "introduction to LLM",
+        "AI ethics",
+        "introduction to transformer",
+        "transformer explainer"
+      ],
+      "tools_covered": [],
+      "prerequisites": ["C2"],
+      "last_updated": "2026-08-27"
     },
     {
       "chapter_id": "C4",
-      "title": "Week 2 - Retrieval-augmented generation",
+      "week": 2,
+      "title": "Week 2 - BERT and Hugging Face workflows",
       "level": "core",
-      "topics_covered": ["RAG fundamentals", "embeddings", "vector databases", "building a RAG system from scratch", "FAISS indexing", "research paper assistant using RAG", "RAG evaluation", "RAG evaluation with Ragas", "RAG evaluation with Evidently", "LLM-as-a-jury"],
-      "prerequisites": ["C1"],
-      "last_updated": "2026-09-16",
-      "duration_hours": 10
+      "topics_covered": [
+        "Hugging Face quick introduction",
+        "BERT example output",
+        "BERT for text classification",
+        "BERT use cases",
+        "BERT word similarity",
+        "fine-tuning BERT for sentiment analysis"
+      ],
+      "tools_covered": ["Hugging Face", "transformers", "BERT"],
+      "prerequisites": ["C3"],
+      "last_updated": "2026-08-27"
     },
     {
       "chapter_id": "C5",
-      "title": "Week 3 - LLM applications with LangChain",
+      "week": 2,
+      "title": "Week 2 - Prompt engineering and LLM prompt optimization",
       "level": "core",
-      "topics_covered": ["LangChain introduction", "LangChain for document QA", "FAISS with LangChain", "document splitters", "document chat", "LangChain QA", "Wikipedia with LangChain"],
-      "prerequisites": ["C4"],
-      "last_updated": "2026-09-16",
-      "duration_hours": 8
+      "topics_covered": [
+        "OpenAI API quickstart",
+        "prompt engineering",
+        "story writing with prompt chaining",
+        "DSPy facility support analyzer",
+        "DSPy-GEPA for structured information extraction",
+        "prompt engineering coding challenge",
+        "optimizing LLM as a judge prompts"
+      ],
+      "tools_covered": ["OpenAI API", "openai-python", "DSPy"],
+      "prerequisites": ["C3"],
+      "last_updated": "2026-08-27"
     },
     {
       "chapter_id": "C6",
-      "title": "Week 3 - Evaluation and fine-tuning",
-      "level": "advanced",
-      "topics_covered": ["LLM evaluation", "basic evaluation metrics", "fine-tuning overview", "PEFT", "LoRA", "PEFT LoRA with Qwen", "BERT fine-tuning"],
-      "prerequisites": ["C2", "C4"],
-      "last_updated": "2026-09-16",
-      "duration_hours": 8
+      "week": 2,
+      "title": "Week 2 - RAG fundamentals, embeddings and vector databases",
+      "level": "core",
+      "topics_covered": [
+        "RAG introduction",
+        "building a simple RAG system from scratch",
+        "indexing FAISS basics",
+        "build a research paper assistant using RAG"
+      ],
+      "tools_covered": ["FAISS"],
+      "prerequisites": ["C5"],
+      "last_updated": "2026-08-27"
     },
     {
       "chapter_id": "C7",
-      "title": "Week 3 - Deployment foundations",
+      "week": 2,
+      "title": "Week 2 - RAG evaluation and checkpoint",
       "level": "core",
-      "topics_covered": ["FastAPI", "FastAPI basics", "Streamlit", "AI application deployment"],
-      "prerequisites": ["C1"],
-      "last_updated": "2026-09-16",
-      "duration_hours": 6
+      "topics_covered": [
+        "RAG evaluation",
+        "RAG evaluation with Ragas",
+        "RAG evaluation with Evidently",
+        "LLM as a jury with Evidently"
+      ],
+      "tools_covered": ["Ragas", "Evidently"],
+      "prerequisites": ["C6"],
+      "last_updated": "2026-08-27"
     },
     {
       "chapter_id": "C8",
-      "title": "Week 3 - Agents and tools",
-      "level": "advanced",
-      "topics_covered": ["introduction to agents", "building a first agent", "converting a RAG pipeline into an agent", "minimal tool agents", "building agent tools", "adding tools"],
-      "prerequisites": ["C5"],
-      "last_updated": "2026-09-16",
-      "duration_hours": 8
+      "week": 3,
+      "title": "Week 3 - LangChain implementation for document QA workflows",
+      "level": "core",
+      "topics_covered": [
+        "LangChain introduction",
+        "LangChain overview",
+        "LangChain FAISS",
+        "LangChain splitter",
+        "LangChain document chat",
+        "endgame QA LangChain",
+        "LangChain QA",
+        "Wikipedia LangChain"
+      ],
+      "tools_covered": ["LangChain", "langchain", "FAISS"],
+      "prerequisites": ["C6"],
+      "last_updated": "2026-09-03"
     },
     {
       "chapter_id": "C9",
-      "title": "Week 4 - Debugging and controlling agents",
-      "level": "advanced",
-      "topics_covered": ["debugging and controlling agents", "reason-act-observe loop", "agent failure examples", "multi-step agents", "fixing broken agents"],
-      "prerequisites": ["C8"],
-      "last_updated": "2026-09-19",
-      "duration_hours": null
+      "week": 3,
+      "title": "Week 3 - LLM evaluation and fine-tuning overview",
+      "level": "core",
+      "topics_covered": [
+        "LLM evals",
+        "evals basic metrics",
+        "fine-tuning introduction",
+        "fine-tuning PEFT",
+        "PEFT LoRA Qwen",
+        "BERT fine-tune practical guide"
+      ],
+      "tools_covered": ["PEFT", "LoRA"],
+      "prerequisites": ["C4"],
+      "last_updated": "2026-09-03"
     },
     {
       "chapter_id": "C10",
-      "title": "Week 4 - Designing tool systems for agents",
-      "level": "advanced",
-      "topics_covered": ["designing tool systems for agents", "tool schemas and structured arguments", "tool dispatcher architecture", "building agent tools", "tool error handling"],
-      "prerequisites": ["C9"],
-      "last_updated": "2026-09-19",
-      "duration_hours": null
+      "week": 3,
+      "title": "Week 3 - FastAPI and Streamlit for AI applications",
+      "level": "core",
+      "topics_covered": [
+        "FastAPI",
+        "FastAPI basics",
+        "Streamlit",
+        "Streamlit demo",
+        "AI application deployment"
+      ],
+      "tools_covered": ["FastAPI", "Streamlit"],
+      "prerequisites": ["C8"],
+      "last_updated": "2026-09-03"
     },
     {
       "chapter_id": "C11",
-      "title": "Week 4 - Agents for real-world tasks",
-      "level": "advanced",
-      "topics_covered": ["agents for real-world tasks", "task-oriented agent workflows", "autonomy limits and guardrails", "task agents", "adding guardrails"],
-      "prerequisites": ["C10"],
-      "last_updated": "2026-09-19",
-      "duration_hours": null
+      "week": 3,
+      "title": "Week 3 - Building your first agent",
+      "level": "core",
+      "topics_covered": [
+        "introduction to agent",
+        "converting a RAG pipeline into an agent",
+        "building a minimal tool agent",
+        "build your first tool agent",
+        "add a third tool"
+      ],
+      "tools_covered": [],
+      "prerequisites": ["C8"],
+      "last_updated": "2026-09-03"
     },
     {
       "chapter_id": "C12",
-      "title": "Week 4 - Introduction to multi-agent systems",
+      "week": 4,
+      "title": "Week 4 - Debugging and controlling agents",
       "level": "advanced",
-      "topics_covered": ["introduction to multi-agent systems", "single-agent to multi-agent workflows", "role-based agent design", "two-agent systems", "multi-agent workflow extension"],
+      "topics_covered": [
+        "debugging and controlling agents",
+        "reason-act-observe loop",
+        "agent failure examples",
+        "implement a multi-step agent",
+        "fix a broken agent"
+      ],
+      "tools_covered": [],
       "prerequisites": ["C11"],
-      "last_updated": "2026-09-19",
-      "duration_hours": null
+      "last_updated": "2026-09-10"
     },
     {
       "chapter_id": "C13",
-      "title": "Week 4 - Mini Project",
+      "week": 4,
+      "title": "Week 4 - Designing tool systems for agents",
       "level": "advanced",
-      "topics_covered": ["mini project", "reference agent system walkthrough", "evaluating agent behavior", "documenting system behavior"],
+      "topics_covered": [
+        "designing tool systems",
+        "tool schema and structured arguments",
+        "tool dispatcher architecture",
+        "build three agent tools",
+        "implement tool error handling"
+      ],
+      "tools_covered": [],
       "prerequisites": ["C12"],
-      "last_updated": "2026-09-19",
-      "duration_hours": null
+      "last_updated": "2026-09-10"
     },
     {
       "chapter_id": "C14",
-      "title": "Week 5 - Agent memory systems",
+      "week": 4,
+      "title": "Week 4 - Agents for real-world tasks",
       "level": "advanced",
-      "topics_covered": ["agent memory systems", "conversation memory", "long-term memory with vector stores", "adding memory to an agent", "memory retrieval"],
+      "topics_covered": [
+        "agents for real tasks",
+        "task-oriented agent workflow",
+        "autonomy limits and guardrails",
+        "build a task agent",
+        "add guardrails"
+      ],
+      "tools_covered": [],
       "prerequisites": ["C13"],
-      "last_updated": "2026-09-19",
-      "duration_hours": null
+      "last_updated": "2026-09-10"
     },
     {
       "chapter_id": "C15",
-      "title": "Week 5 - Planning and task decomposition",
+      "week": 4,
+      "title": "Week 4 - Introduction to multi-agent systems",
       "level": "advanced",
-      "topics_covered": ["planning and task decomposition", "task planning agents", "execution tracking", "planning agents", "loop prevention"],
+      "topics_covered": [
+        "introduction to multi-agent systems",
+        "from single agent to multi-agent workflow",
+        "role-based agent design",
+        "build a two-agent system",
+        "extend the workflow"
+      ],
+      "tools_covered": [],
       "prerequisites": ["C14"],
-      "last_updated": "2026-09-19",
-      "duration_hours": null
+      "last_updated": "2026-09-10"
     },
     {
       "chapter_id": "C16",
-      "title": "Week 5 - Agentic frameworks and orchestration",
+      "week": 4,
+      "title": "Week 4 - Mini project",
       "level": "advanced",
-      "topics_covered": ["agentic frameworks and orchestration", "graph-based agent workflows", "multi-agent conversation patterns", "multi-agent workflows", "review agents"],
+      "topics_covered": [
+        "reference agent system walkthrough",
+        "evaluating agent behavior",
+        "document system behavior"
+      ],
+      "tools_covered": [],
       "prerequisites": ["C15"],
-      "last_updated": "2026-09-19",
-      "duration_hours": null
+      "last_updated": "2026-09-10"
     },
     {
       "chapter_id": "C17",
-      "title": "Week 5 - Agent failure modes",
+      "week": 5,
+      "title": "Week 5 - Agent memory systems",
       "level": "advanced",
-      "topics_covered": ["agent failure modes", "common agent failure cases", "failure diagnosis workflows", "diagnosing agent failures", "fixing agent failure cases"],
-      "prerequisites": ["C16"],
-      "last_updated": "2026-09-19",
-      "duration_hours": null
+      "topics_covered": [
+        "agent memory systems",
+        "conversation memory",
+        "long-term memory with vector store",
+        "add memory to an agent",
+        "memory retrieval test"
+      ],
+      "tools_covered": [],
+      "prerequisites": ["C15"],
+      "last_updated": "2026-09-17"
     },
     {
       "chapter_id": "C18",
-      "title": "Week 5 - Checkpoint",
+      "week": 5,
+      "title": "Week 5 - Planning and task decomposition",
       "level": "advanced",
-      "topics_covered": ["multi-agent system walkthrough", "diagnosing coordination failures", "multi-agent system upgrades", "documenting system architecture"],
+      "topics_covered": [
+        "planning and task decomposition",
+        "task planning agent",
+        "execution tracking",
+        "implement a planning agent",
+        "loop prevention"
+      ],
+      "tools_covered": [],
       "prerequisites": ["C17"],
-      "last_updated": "2026-09-19",
-      "duration_hours": null
+      "last_updated": "2026-09-17"
     },
     {
       "chapter_id": "C19",
-      "title": "Week 6 - Agent evaluation",
+      "week": 5,
+      "title": "Week 5 - Agentic frameworks and orchestration",
       "level": "advanced",
-      "topics_covered": ["agent evaluation", "designing evaluation tasks", "automated evaluation workflows", "end-to-end agent evaluation", "building an evaluation set", "simple automated evaluator"],
+      "topics_covered": [
+        "agentic frameworks and orchestration",
+        "graph-based agent workflow",
+        "multi-agent conversation patterns",
+        "implement a multi-agent workflow",
+        "add a review agent"
+      ],
+      "tools_covered": ["LangGraph", "langgraph", "n8n"],
       "prerequisites": ["C18"],
-      "last_updated": "2026-09-19",
-      "duration_hours": null
+      "last_updated": "2026-09-17"
     },
     {
       "chapter_id": "C20",
-      "title": "Week 6 - Guardrails and safety",
+      "week": 5,
+      "title": "Week 5 - Agent failure modes",
       "level": "advanced",
-      "topics_covered": ["guardrails and safety", "guardrail design patterns", "human-in-the-loop control", "implementing guardrails", "testing guardrails"],
+      "topics_covered": [
+        "agent failure modes",
+        "common agent failure cases",
+        "failure diagnosis workflow",
+        "diagnose agent failures",
+        "fix failure cases"
+      ],
+      "tools_covered": [],
       "prerequisites": ["C19"],
-      "last_updated": "2026-09-19",
-      "duration_hours": null
+      "last_updated": "2026-09-17"
     },
     {
       "chapter_id": "C21",
-      "title": "Week 6 - Agent observability and monitoring",
+      "week": 5,
+      "title": "Week 5 - Multi-agent checkpoint",
       "level": "advanced",
-      "topics_covered": ["agent observability and monitoring", "agent execution logging", "monitoring agent performance", "analyzing system logs"],
+      "topics_covered": [
+        "multi-agent system walkthrough",
+        "diagnosing coordination failures",
+        "complete multi-agent upgrade",
+        "document system architecture"
+      ],
+      "tools_covered": [],
       "prerequisites": ["C20"],
-      "last_updated": "2026-09-19",
-      "duration_hours": null
+      "last_updated": "2026-09-17"
     },
     {
       "chapter_id": "C22",
-      "title": "Capstone - Project and Presentations",
-      "level": "capstone",
-      "topics_covered": ["project overview and proposal", "agentic AI project selection", "project instructions", "requirements breakdown", "user validation", "proposal presentation", "presentation skills", "sample proposal presentations", "sample final presentations"],
-      "prerequisites": ["C6", "C7", "C8", "C9", "C10", "C11", "C12", "C13", "C14", "C15", "C16", "C17", "C18", "C19", "C20", "C21"],
-      "last_updated": "2026-09-19",
-      "duration_hours": 20
+      "week": 6,
+      "title": "Week 6 - Agent evaluation",
+      "level": "advanced",
+      "topics_covered": [
+        "agent evaluation",
+        "designing evaluation tasks",
+        "automated evaluation workflow",
+        "end-to-end agent evaluation",
+        "build an evaluation set",
+        "build a simple automated evaluator"
+      ],
+      "tools_covered": [],
+      "prerequisites": ["C21"],
+      "last_updated": null
+    },
+    {
+      "chapter_id": "C23",
+      "week": 6,
+      "title": "Week 6 - Guardrails and safety",
+      "level": "advanced",
+      "topics_covered": [
+        "guardrails and safety",
+        "guardrail design patterns",
+        "human-in-the-loop control",
+        "implement guardrails",
+        "test guardrails"
+      ],
+      "tools_covered": [],
+      "prerequisites": ["C22"],
+      "last_updated": null
+    },
+    {
+      "chapter_id": "C24",
+      "week": 6,
+      "title": "Week 6 - Agent observability and monitoring",
+      "level": "advanced",
+      "topics_covered": [
+        "agent observability and monitoring",
+        "agent execution logging",
+        "monitoring agent performance",
+        "implement agent logging",
+        "analyze system logs"
+      ],
+      "tools_covered": [],
+      "prerequisites": ["C23"],
+      "last_updated": null
+    },
+    {
+      "chapter_id": "C25",
+      "week": 7,
+      "title": "Capstone - Project and presentations",
+      "level": "advanced",
+      "topics_covered": [
+        "agentic AI project selection",
+        "how to break down project requirements",
+        "how to do user validation",
+        "how to do presentation",
+        "capstone project proposal presentation"
+      ],
+      "tools_covered": [],
+      "prerequisites": ["C24"],
+      "last_updated": null
     }
   ]
 }

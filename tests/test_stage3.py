@@ -38,7 +38,7 @@ def test_langgraph_orchestration_matches_c16():
 
     chapter_id = match_chapter(trend, load_chapters())
 
-    assert chapter_id == "C16"
+    assert chapter_id == "C19"
 
 def test_unknown_trend_has_no_chapter():
     trend = Trend(
@@ -142,7 +142,7 @@ def test_score_trend_uses_the_v1_rules():
 
     score = score_trend(trend, load_chapters(), signals)
 
-    assert score.chapter_id == "C7"
+    assert score.chapter_id == "C10"
     assert score.confidence == 0.9
     assert score.dimensions == {
         "relevance": 5,
@@ -182,7 +182,7 @@ def test_run_writes_scores_json(tmp_path):
 
     assert len(scores) == 1
     assert scores[0].trend_id == "trend_005"
-    assert scores[0].chapter_id == "C7"
+    assert scores[0].chapter_id == "C10"
 
 def test_sub_package_inherits_the_parent_chapter():
     trend = Trend(
@@ -198,7 +198,7 @@ def test_sub_package_inherits_the_parent_chapter():
         ],
     )
 
-    assert match_chapter(trend, load_chapters()) == "C16"
+    assert match_chapter(trend, load_chapters()) == "C19"
 
 
 def test_stop_words_alone_do_not_match_a_chapter():
