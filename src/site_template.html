@@ -1,0 +1,691 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AI Trend Agent</title>
+<style>
+__FONTS__
+__STYLE__
+</style>
+</head>
+<body dir="ltr">
+<header>
+  <div class="head-inner">
+    <div class="brandline">
+      <span class="mark" aria-hidden="true"><i></i><i></i><i></i></span>
+      <h1>AI Trend Agent</h1>
+      <span class="runid" id="runid"></span>
+      <span class="spacer"></span>
+      <span class="controls" id="controls" hidden>
+        <select id="runPicker" aria-label="run"></select>
+        <button type="button" class="runbtn" id="btnReplay" data-i18n="btn_replay"></button>
+        <button type="button" class="runbtn primary" id="btnRun" data-i18n="btn_run"></button>
+      </span>
+      <span class="lang" role="group" aria-label="Language">
+        <button type="button" data-lang="en" aria-pressed="true">EN</button>
+        <button type="button" data-lang="ar" aria-pressed="false">عربي</button>
+      </span>
+    </div>
+    <p class="headline" id="headline"></p>
+    <p class="sub" data-i18n="sub"></p>
+  </div>
+</header>
+
+<div class="tabbar">
+  <div class="tabbar-inner">
+    <nav class="tabs" role="tablist">
+      <button role="tab" data-tab="act" aria-selected="true"><span data-i18n="tab_act"></span><span class="count" id="c_act"></span></button>
+      <button role="tab" data-tab="map" aria-selected="false"><span data-i18n="tab_map"></span><span class="count" id="c_map"></span></button>
+      <button role="tab" data-tab="ev" aria-selected="false"><span data-i18n="tab_ev"></span><span class="count" id="c_ev"></span></button>
+      <button role="tab" data-tab="run" aria-selected="false"><span data-i18n="tab_run"></span></button>
+    </nav>
+  </div>
+</div>
+
+<main class="wrap">
+  <section class="runpanel" id="runpanel" hidden aria-live="polite">
+    <div class="runhead">
+      <span class="runtitle" id="runtitle"></span>
+      <span class="runmodel" id="runmodel"></span>
+      <span class="runtime" id="runtime"></span>
+    </div>
+    <ol class="track" id="track"></ol>
+    <div class="thoughts" id="thoughts"></div>
+    <code class="runlog" id="runlog"></code>
+  </section>
+
+  <section class="panel" data-panel="act" data-open>
+    <div class="stats" id="stats"></div>
+    <div id="actViz"></div>
+    <h2 data-i18n="h_act"></h2>
+    <div class="filters" id="actFilters"></div>
+    <div id="actList"></div>
+  </section>
+
+  <section class="panel" data-panel="map">
+    <div id="mapViz"></div>
+    <h2 data-i18n="h_map"></h2>
+    <p class="sub" data-i18n="map_sub"></p>
+    <div id="mapList"></div>
+  </section>
+
+  <section class="panel" data-panel="ev">
+    <h2 data-i18n="h_ev"></h2>
+    <div class="filters" id="evFilters"></div>
+    <div id="evList"></div>
+  </section>
+
+  <section class="panel" data-panel="run">
+    <h2 data-i18n="h_run"></h2>
+    <div id="runNotes"></div>
+  </section>
+
+  <footer id="foot"></footer>
+</main>
+
+<div class="tip" id="tip" role="status" aria-live="polite"></div>
+<script id="payload" type="application/json">__DATA__</script>
+<script>
+const EMBEDDED = JSON.parse(document.getElementById("payload").textContent);
+const LIVE = EMBEDDED === null;
+let DATA = EMBEDDED;
+
+const T = {
+  en: {
+    sub: "Confirmed means an official release says the same thing. Everything else stays unverified.",
+    tab_act: "What to do", tab_map: "Curriculum map", tab_ev: "Evidence", tab_run: "About this run",
+    h_act: "Ordered by priority", h_map: "Where this week lands in the course", h_ev: "Every claim, and what backs it", h_run: "What this run can and cannot show",
+    map_sub: "Chapters with a teal edge have something new this week. Packages with no chapter are curriculum gaps.",
+    s_signals: "signals collected", s_trends: "subjects tracked", s_update: "chapters to update", s_gaps: "not in the curriculum", s_claims: "checkable claims",
+    f_all: "All", f_update: "Update a chapter", f_add: "New lesson", f_watch: "Watch only",
+    v_all: "All claims", v_confirmed: "Confirmed", v_unverified: "Unverified",
+    update_existing_material: "Update a chapter", add_new_lesson: "New lesson", watch: "Watch only",
+    priority: "priority", confidence: "confidence", signals: "signals", claims: "claims", packages: "packages",
+    th_verdict: "Verdict", th_claim: "Claim", th_version: "Version", th_evidence: "Evidence",
+    confirmed: "confirmed", unverified: "unverified",
+    cross_source: "independent source", primary_report: "the release itself",
+    no_evidence: "nothing backs it", gap: "no chapter covers this", read_from: "read from",
+    open_evidence: "open", nothing: "Nothing in this run touches this chapter.",
+    stale: "last updated", never: "not taught yet",
+    empty_t: "No recommendations under this filter", empty_b: "Switch the filter above to see the rest of the run.",
+    btn_run: "Run now", btn_replay: "Re-analyse", loading: "Loading the latest run",
+    p_live: "Collecting and checking", p_replay: "Re-analysing saved signals", p_done: "Run finished",
+    p_failed: "Run failed", s_ingest: "collect", s_cluster: "group", s_verify: "check", s_score: "score", s_act: "decide",
+    r_signals: "signals", r_skipped: "clusters skipped", r_primary: "primary", r_unverified: "unverified", r_recs: "recommendations",
+    p_waiting: "starting", p_elapsed: "s", m_reading: "reading with", m_none: "rules only, no model", e_running: "A run is already going.", e_budget: "GitHub requests are used up for this hour. Re-analyse a saved run instead.",
+    e_locked: "Another run holds the lock.", e_nosignals: "That run has no saved signals to re-analyse.",
+    e_offline: "Cannot reach GitHub right now.", no_runs: "No run yet. Press Run now to collect this week.",
+    viz_ev_t: "What backs the 82 claims", viz_ev_c: "A claim is only confirmed when an official release states the same version.",
+    viz_src_t: "What was collected", viz_src_c: "Discussion is never evidence on its own; official releases are.",
+    viz_map_t: "Course coverage this week", viz_map_c: "One cell per chapter, in course order.",
+    l_cross: "independent check", l_primary: "primary report", l_unverified: "unverified",
+    l_touched: "has something new", l_gapc: "not covered", l_quiet: "quiet this week", l_outside: "outside the course",
+    n1_t: "Where confirmations come from", n1_b: "Of {claims} claims, {primary} are primary reports: the official release states its own version, and we cite that release. {cross} are independent cross-source checks, where something said elsewhere was confirmed by an official release. {unv} are unverified.",
+    n2_t: "Why cross-source checks are rare", n2_b: "Of {hn} discussion signals, only a handful name a package we track, and almost none state a version number. A claim with no version has nothing to check, so it stays unverified. This is a property of the data, not a gap in the checker.",
+    n3_t: "What was collected", n3_b: "{signals} signals in this run: {breakdown}. Official releases are tier 1 and can serve as evidence; discussion is tier 2 and never confirms anything on its own.",
+    n4_t: "Curriculum source", n4_b: "The {chapters} chapters come from the live SDA course, not from a file we wrote. {touched} of them have something new this week.",
+    foot: "Generated from run {run}. Open this file on any machine; it needs no server and no network."
+  },
+  ar: {
+    sub: "المؤكد يعني أن إصداراً رسمياً قال الشيء نفسه. وما عداه يبقى غير مؤكد.",
+    tab_act: "ماذا نفعل", tab_map: "خريطة المنهج", tab_ev: "الأدلة", tab_run: "عن هذه التشغيلة",
+    h_act: "مرتّبة حسب الأولوية", h_map: "أين يقع جديد هذا الأسبوع من المقرر", h_ev: "كل ادّعاء، وما يسنده", h_run: "ما تستطيع هذه التشغيلة إثباته وما لا تستطيع",
+    map_sub: "الفصول ذات الحافة الخضراء فيها جديد هذا الأسبوع. والحزم بلا فصل هي فجوات في المنهج.",
+    s_signals: "إشارة مجمّعة", s_trends: "موضوعاً متتبَّعاً", s_update: "فصلاً يحتاج تحديثاً", s_gaps: "خارج المنهج", s_claims: "ادّعاءً قابلاً للفحص",
+    f_all: "الكل", f_update: "تحديث فصل", f_add: "درس جديد", f_watch: "مراقبة فقط",
+    v_all: "كل الادّعاءات", v_confirmed: "مؤكد", v_unverified: "غير مؤكد",
+    update_existing_material: "تحديث فصل", add_new_lesson: "درس جديد", watch: "مراقبة فقط",
+    priority: "الأولوية", confidence: "الثقة", signals: "إشارة", claims: "ادّعاء", packages: "حزم",
+    th_verdict: "الحكم", th_claim: "الادّعاء", th_version: "النسخة", th_evidence: "الدليل",
+    confirmed: "مؤكد", unverified: "غير مؤكد",
+    cross_source: "مصدر مستقل", primary_report: "الإصدار نفسه",
+    no_evidence: "لا دليل يسنده", gap: "لا يغطيه أي فصل", read_from: "قُرئ من",
+    open_evidence: "فتح", nothing: "لا جديد يمسّ هذا الفصل في هذه التشغيلة.",
+    stale: "آخر تحديث", never: "لم يُدرَّس بعد",
+    empty_t: "لا توصيات تحت هذا الفلتر", empty_b: "بدّل الفلتر أعلاه لرؤية بقية التشغيلة.",
+    btn_run: "تشغيل الآن", btn_replay: "إعادة تحليل", loading: "جارٍ تحميل آخر تشغيلة",
+    p_live: "جمع وتحقق", p_replay: "إعادة تحليل الإشارات المحفوظة", p_done: "انتهت التشغيلة",
+    p_failed: "فشلت التشغيلة", s_ingest: "جمع", s_cluster: "تجميع", s_verify: "تحقق", s_score: "تقييم", s_act: "قرار",
+    r_signals: "إشارة", r_skipped: "مجموعة متجاهَلة", r_primary: "تقرير رسمي", r_unverified: "غير مؤكد", r_recs: "توصية",
+    p_waiting: "بدء", p_elapsed: "ث", m_reading: "يقرأ بـ", m_none: "قواعد فقط، بلا نموذج", e_running: "فيه تشغيلة جارية الآن.", e_budget: "حصة طلبات GitHub انتهت لهذه الساعة. أعد تحليل تشغيلة محفوظة بدلاً منها.",
+    e_locked: "تشغيلة أخرى ممسكة بالقفل.", e_nosignals: "هذه التشغيلة ما فيها إشارات محفوظة لإعادة تحليلها.",
+    e_offline: "تعذّر الوصول إلى GitHub الآن.", no_runs: "ما فيه تشغيلة بعد. اضغط تشغيل الآن لجمع هذا الأسبوع.",
+    viz_ev_t: "ما الذي يسند الـ82 ادّعاء", viz_ev_c: "لا يُعتمد الادّعاء إلا إذا ذكر إصدارٌ رسمي النسخة نفسها.",
+    viz_src_t: "ما الذي جُمع", viz_src_c: "النقاش وحده ليس دليلاً، والإصدارات الرسمية هي الدليل.",
+    viz_map_t: "تغطية المقرر هذا الأسبوع", viz_map_c: "خلية لكل فصل، بترتيب المقرر.",
+    l_cross: "تحقق مستقل", l_primary: "تقرير رسمي", l_unverified: "غير مؤكد",
+    l_touched: "فيه جديد", l_gapc: "غير مغطّى", l_quiet: "هادئ هذا الأسبوع", l_outside: "خارج المقرر",
+    n1_t: "من أين تأتي التأكيدات", n1_b: "من أصل {claims} ادّعاء، {primary} منها تقارير رسمية: الإصدار يذكر نسخته بنفسه ونستشهد به. و{cross} تحقق متقاطع مستقل، حيث أكّد إصدارٌ رسمي كلاماً قيل في مكان آخر. و{unv} غير مؤكدة.",
+    n2_t: "لماذا التحقق المتقاطع نادر", n2_b: "من أصل {hn} إشارة نقاش، قليل منها يذكر حزمة نتتبعها، وتكاد لا توجد واحدة تذكر رقم نسخة. والادّعاء بلا رقم نسخة لا يوجد فيه شيء قابل للفحص، فيبقى غير مؤكد. هذه خاصية في البيانات لا نقص في أداة التحقق.",
+    n3_t: "ما الذي جُمع", n3_b: "{signals} إشارة في هذه التشغيلة: {breakdown}. الإصدارات الرسمية من الفئة الأولى وتصلح أدلة، والنقاش من الفئة الثانية ولا يؤكد شيئاً بمفرده.",
+    n4_t: "مصدر المنهج", n4_b: "الفصول الـ{chapters} مأخوذة من منصة SDA نفسها، لا من ملف كتبناه. و{touched} منها فيها جديد هذا الأسبوع.",
+    foot: "مولَّدة من التشغيلة {run}. افتح هذا الملف على أي جهاز؛ لا يحتاج خادماً ولا إنترنت."
+  }
+};
+
+let lang = "en";
+try { lang = localStorage.getItem("ata_lang") || "en"; } catch (e) {}
+let actFilter = "all";
+let evFilter = "all";
+
+const t = (k) => T[lang][k] || k;
+const esc = (s) => String(s == null ? "" : s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+const fill = (s, vars) => s.replace(/\{(\w+)\}/g, (_, k) => vars[k]);
+const actionClass = (a) => a === "update_existing_material" ? "update" : a === "add_new_lesson" ? "add" : "watch";
+
+function renderStats() {
+  const c = DATA.counts;
+  const cards = [
+    { n: c.signals, l: t("s_signals") },
+    { n: c.trends, l: t("s_trends") },
+    { n: c.update, l: t("s_update"), cls: "good" },
+    { n: c.new_lesson, l: t("s_gaps"), cls: "gap" },
+    { n: c.claims, l: t("s_claims") }
+  ];
+  document.getElementById("stats").innerHTML = cards.map((s) =>
+    `<div class="stat ${s.cls || ""}"><div class="n">${s.n}</div><div class="l">${esc(s.l)}</div></div>`).join("");
+}
+
+function claimsTable(item) {
+  const rows = item.claims.map((c) => {
+    const kind = c.verdict === "confirmed" ? t(c.kind || "primary_report") : t("no_evidence");
+    const evidence = c.evidence_url
+      ? `<a href="${esc(c.evidence_url)}" target="_blank" rel="noopener">${esc(t("open_evidence"))}</a>`
+      : "—";
+    const origin = c.origin_title
+      ? `<div class="origin">${esc(t("read_from"))}: ${c.origin_url ? `<a href="${esc(c.origin_url)}" target="_blank" rel="noopener">${esc(c.origin_title.slice(0, 64))}</a>` : esc(c.origin_title.slice(0, 64))}</div>`
+      : "";
+    return `<tr>
+      <td><span class="verdict"><span class="dot ${c.verdict}"></span>${esc(t(c.verdict))}</span><div class="kind">${esc(kind)}</div></td>
+      <td><div class="claimtext">${esc(c.text)}</div>${origin}</td>
+      <td class="ver">${esc(c.version || "—")}</td>
+      <td>${evidence}</td>
+    </tr>`;
+  }).join("");
+  return `<table class="claims"><thead><tr>
+      <th>${esc(t("th_verdict"))}</th><th>${esc(t("th_claim"))}</th><th>${esc(t("th_version"))}</th><th>${esc(t("th_evidence"))}</th>
+    </tr></thead><tbody>${rows}</tbody></table>`;
+}
+
+function groupFamilies(items) {
+  const map = new Map();
+  items.forEach((i) => {
+    if (!map.has(i.family)) map.set(i.family, []);
+    map.get(i.family).push(i);
+  });
+  return [...map.values()]
+    .map((members) => {
+      members.sort((a, b) => b.priority - a.priority);
+      const lead = members[0];
+      return {
+        family: members.length > 1 ? lead.family : lead.subject,
+        lead,
+        members,
+        confirmed: members.reduce((n, m) => n + m.confirmed, 0),
+        unverified: members.reduce((n, m) => n + m.unverified, 0),
+        signals: members.reduce((n, m) => n + m.signal_count, 0)
+      };
+    })
+    .sort((a, b) => b.lead.priority - a.lead.priority);
+}
+
+function memberBlock(item, showName) {
+  const name = showName
+    ? `<div class="member"><span class="subject">${esc(item.subject)}</span>
+       <span class="chip ${actionClass(item.action)}">${esc(t(item.action))}</span>
+       <span class="mprio">${esc(t("priority"))} ${item.priority.toFixed(2)}</span></div>`
+    : "";
+  return `${name}<p class="reason">${esc(item.rationale)}</p>${claimsTable(item)}`;
+}
+
+function renderAct() {
+  const filters = [["all", "f_all"], ["update_existing_material", "f_update"], ["add_new_lesson", "f_add"], ["watch", "f_watch"]];
+  document.getElementById("actFilters").innerHTML = filters.map(([v, k]) =>
+    `<button type="button" data-act="${v}" aria-pressed="${actFilter === v}">${esc(t(k))}</button>`).join("");
+
+  const items = DATA.items.filter((i) => actFilter === "all" || i.action === actFilter);
+  const groups = groupFamilies(items);
+
+  document.getElementById("actList").innerHTML = groups.length ? groups.map((g) => {
+    const lead = g.lead;
+    const chapter = lead.chapter_id
+      ? `<span class="chip chapter">${esc(lead.chapter_id)}</span>`
+      : `<span class="chip gap">${esc(t("gap"))}</span>`;
+    const extra = g.members.length > 1
+      ? `<span class="chip pkgs">${g.members.length} ${esc(t("packages"))}</span>` : "";
+    return `<details class="card">
+      <summary>
+        <div class="row1">
+          <span class="chip ${actionClass(lead.action)}">${esc(t(lead.action))}</span>
+          <span class="subject">${esc(g.family)}</span>
+          ${chapter}${extra}
+        </div>
+        <div class="meta">
+          <span>${esc(t("priority"))} <b>${lead.priority.toFixed(2)}</b></span>
+          <span class="bar" aria-hidden="true"><i style="width:${Math.min(100, lead.priority / 5 * 100)}%"></i></span>
+          <span>${esc(t("confidence"))} <b>${lead.confidence.toFixed(2)}</b></span>
+          <span><b>${g.confirmed}</b> ${esc(t("confirmed"))} · <b>${g.unverified}</b> ${esc(t("unverified"))}</span>
+          <span><b>${g.signals}</b> ${esc(t("signals"))}</span>
+        </div>
+      </summary>
+      <div class="body">${g.members.map((m) => memberBlock(m, g.members.length > 1)).join("")}</div>
+    </details>`;
+  }).join("") : `<p class="empty"><strong>${esc(t("empty_t"))}</strong><span>${esc(t("empty_b"))}</span></p>`;
+}
+
+function renderMap() {
+  const byChapter = {};
+  DATA.items.forEach((i) => {
+    if (!i.chapter_id) return;
+    (byChapter[i.chapter_id] = byChapter[i.chapter_id] || []).push(i);
+  });
+
+  let html = "";
+  let week = null;
+  DATA.chapters.forEach((ch) => {
+    if (ch.week !== week) {
+      week = ch.week;
+      html += `<div class="weekhead">${lang === "ar" ? "الأسبوع" : "Week"} ${week}</div>`;
+    }
+    const touched = byChapter[ch.chapter_id] || [];
+    const tools = ch.tools.length ? `<div class="tools">${ch.tools.map((x) => `<span class="tool">${esc(x)}</span>`).join("")}</div>` : "";
+    const list = touched.length
+      ? `<div class="touchlist">${touched.map((i) => `<span class="chip ${actionClass(i.action)}">${esc(i.subject)}</span>`).join("")}</div>`
+      : `<div class="stale">${esc(t("nothing"))}</div>`;
+    const updated = ch.last_updated ? `${esc(t("stale"))} <span dir="ltr">${esc(ch.last_updated)}</span>` : esc(t("never"));
+    html += `<div class="chapter ${touched.length ? "touched" : ""}">
+        <div class="ctitle"><span class="cid">${esc(ch.chapter_id)}</span><h3>${esc(ch.title)}</h3></div>
+        ${tools}${list}
+        <div class="stale">${updated}</div>
+      </div>`;
+  });
+
+  const gaps = DATA.items.filter((i) => !i.chapter_id);
+  if (gaps.length) {
+    html += `<div class="weekhead">${lang === "ar" ? "فجوات" : "Gaps"}</div>` + gaps.map((i) =>
+      `<div class="chapter gapcard">
+        <div class="ctitle"><span class="cid">—</span><h3>${esc(i.subject)}</h3></div>
+        <div class="stale">${esc(i.rationale)}</div>
+      </div>`).join("");
+  }
+  document.getElementById("mapList").innerHTML = html;
+}
+
+function renderEvidence() {
+  const filters = [["all", "v_all"], ["confirmed", "v_confirmed"], ["unverified", "v_unverified"]];
+  document.getElementById("evFilters").innerHTML = filters.map(([v, k]) =>
+    `<button type="button" data-ev="${v}" aria-pressed="${evFilter === v}">${esc(t(k))}</button>`).join("");
+
+  const items = DATA.items
+    .map((i) => ({ ...i, claims: i.claims.filter((c) => evFilter === "all" || c.verdict === evFilter) }))
+    .filter((i) => i.claims.length);
+
+  document.getElementById("evList").innerHTML = items.length ? items.map((i) =>
+    `<details class="card" open>
+      <summary><div class="row1"><span class="subject">${esc(i.subject)}</span>
+      ${i.chapter_id ? `<span class="chip chapter">${esc(i.chapter_id)}</span>` : `<span class="chip gap">${esc(t("gap"))}</span>`}
+      <span class="meta"><span><b>${i.claims.length}</b> ${esc(t("claims"))}</span></span></div></summary>
+      <div class="body">${claimsTable(i)}</div>
+    </details>`).join("") : `<p class="empty"><strong>${esc(t("empty_t"))}</strong><span>${esc(t("empty_b"))}</span></p>`;
+}
+
+function renderRun() {
+  const c = DATA.counts;
+  const breakdown = Object.entries(c.sources).map(([k, v]) => `${v} ${k}`).join(" · ");
+  const notes = [
+    { t: t("n1_t"), b: fill(t("n1_b"), { claims: c.claims, primary: c.kinds.primary_report, cross: c.kinds.cross_source, unv: c.kinds.unverified }) },
+    { t: t("n2_t"), b: fill(t("n2_b"), { hn: c.sources.hackernews || 0 }), warn: true },
+    { t: t("n3_t"), b: fill(t("n3_b"), { signals: c.signals, breakdown }) },
+    { t: t("n4_t"), b: fill(t("n4_b"), { chapters: c.chapters, touched: c.chapters_touched }) }
+  ];
+  document.getElementById("runNotes").innerHTML = notes.map((n) =>
+    `<div class="note ${n.warn ? "warn" : ""}"><h3>${esc(n.t)}</h3><p>${esc(n.b)}</p></div>`).join("") +
+    `<div class="note"><dl class="kv">
+      <dt>run</dt><dd>${esc(DATA.run_id)}</dd>
+      <dt>curriculum</dt><dd>${esc(DATA.curriculum_name)}</dd>
+      ${DATA.curriculum_sources.map((s) => `<dt>source</dt><dd>${esc(s)}</dd>`).join("")}
+    </dl></div>`;
+}
+
+
+const VIZ = { cross: "#127a52", primary: "#0b6fb0", unverified: "#b06a10", hn: "#0b6fb0", gh: "#127a52" };
+
+function stacked(parts, total) {
+  const segs = parts.filter((p) => p.n > 0).map((p) =>
+    `<span style="width:${(p.n / total * 100).toFixed(2)}%;background:${p.color}" title="${esc(p.label)}: ${p.n}"></span>`).join("");
+  const legend = parts.map((p) =>
+    `<li><span class="sw" style="background:${p.color}"></span>${esc(p.label)} <b class="${p.n ? "" : "zero"}">${p.n}</b></li>`).join("");
+  return `<div class="stack" role="img" aria-label="${esc(parts.map((p) => p.label + " " + p.n).join(", "))}">${segs}</div><ul class="legend">${legend}</ul>`;
+}
+
+function figure(title, caption, inner) {
+  return `<figure class="viz reveal"><figcaption>${esc(title)}</figcaption><div class="cap">${esc(caption)}</div>${inner}</figure>`;
+}
+
+function renderActViz() {
+  const c = DATA.counts;
+  const evidence = stacked([
+    { label: t("l_cross"), n: c.kinds.cross_source, color: VIZ.cross },
+    { label: t("l_primary"), n: c.kinds.primary_report, color: VIZ.primary },
+    { label: t("l_unverified"), n: c.kinds.unverified, color: VIZ.unverified }
+  ], Math.max(1, c.claims));
+  const src = Object.entries(c.sources);
+  const srcTotal = Math.max(1, src.reduce((a, [, v]) => a + v, 0));
+  const sources = stacked(src.map(([k, v], i) => ({ label: k, n: v, color: i === 0 ? VIZ.hn : VIZ.gh })), srcTotal);
+  document.getElementById("actViz").innerHTML =
+    figure(t("viz_ev_t").replace("82", c.claims), t("viz_ev_c"), evidence) +
+    figure(t("viz_src_t"), t("viz_src_c"), sources);
+}
+
+function renderMapViz() {
+  const touched = {};
+  DATA.items.forEach((i) => { if (i.chapter_id) touched[i.chapter_id] = (touched[i.chapter_id] || 0) + 1; });
+  const gaps = DATA.items.filter((i) => !i.chapter_id).length;
+  const cells = DATA.chapters.map((ch) => {
+    const n = touched[ch.chapter_id] || 0;
+    const state = n ? "touched" : "";
+    const label = `${ch.chapter_id} · ${ch.title}`;
+    const note = n ? `${n} ${t("claims")}` : t("l_quiet");
+    return `<span class="cell ${state}" data-tip="${esc(label)}" data-note="${esc(note)}"></span>`;
+  }).join("");
+  const legend = [
+    { label: t("l_touched"), n: Object.keys(touched).length, color: VIZ.cross },
+    { label: t("l_quiet"), n: DATA.chapters.length - Object.keys(touched).length, color: "#d9dad3" },
+    { label: t("l_gapc"), n: gaps, color: VIZ.unverified }
+  ].map((p) => `<li><span class="sw" style="background:${p.color}"></span>${esc(p.label)} <b>${p.n}</b></li>`).join("");
+  const gapCells = DATA.items.filter((i) => !i.chapter_id)
+    .map((i) => `<span class="cell gap" data-tip="${esc(i.subject)}" data-note="${esc(t("l_gapc"))}"></span>`).join("");
+  const outside = gapCells ? `<div class="outside"><span class="outside-l">${esc(t("l_outside"))}</span><div class="strip gapstrip">${gapCells}</div></div>` : "";
+  document.getElementById("mapViz").innerHTML =
+    figure(t("viz_map_t"), t("viz_map_c"), `<div class="strip">${cells}</div>${outside}<ul class="legend">${legend}</ul>`);
+}
+
+const tip = document.getElementById("tip");
+document.addEventListener("pointerover", (e) => {
+  const cell = e.target.closest(".cell[data-tip]");
+  if (!cell) return;
+  tip.innerHTML = `<b>${esc(cell.dataset.tip)}</b>${esc(cell.dataset.note)}`;
+  const r = cell.getBoundingClientRect();
+  tip.setAttribute("data-show", "");
+  const w = tip.offsetWidth;
+  tip.style.top = `${Math.max(8, r.top - tip.offsetHeight - 10)}px`;
+  tip.style.left = `${Math.min(window.innerWidth - w - 10, Math.max(10, r.left + r.width / 2 - w / 2))}px`;
+});
+document.addEventListener("pointerout", (e) => {
+  if (e.target.closest(".cell[data-tip]")) tip.removeAttribute("data-show");
+});
+
+let observer = null;
+function revealOnScroll() {
+  if (observer) observer.disconnect();
+  if (!("IntersectionObserver" in window)) {
+    document.querySelectorAll(".reveal").forEach((el) => el.classList.add("in"));
+    return;
+  }
+  observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry, index) => {
+      if (!entry.isIntersecting) return;
+      entry.target.style.setProperty("--d", `${Math.min(index * 60, 240)}ms`);
+      entry.target.classList.add("in");
+      observer.unobserve(entry.target);
+    });
+  }, { rootMargin: "0px 0px -8% 0px" });
+  document.querySelectorAll(".reveal:not(.in)").forEach((el) => observer.observe(el));
+}
+
+
+
+const REASONS = {
+  already_running: "e_running", github_budget: "e_budget", locked: "e_locked",
+  no_saved_signals: "e_nosignals"
+};
+
+async function api(path, options) {
+  const response = await fetch(path, options);
+  const body = await response.json().catch(() => ({}));
+  if (!response.ok && response.status !== 409) throw new Error(body.detail || path);
+  return body;
+}
+
+const STAGE_KEYS = ["ingest", "cluster", "verify", "score", "act"];
+
+function stageResults(log) {
+  const text = (log || []).join("\n");
+  const out = {};
+  const dedupe = text.match(/after dedupe: (\d+)/);
+  if (dedupe) out.ingest = `${dedupe[1]} ${t("r_signals")}`;
+  const skipped = text.match(/skipped (\d+) clusters/);
+  if (skipped) out.cluster = `${skipped[1]} ${t("r_skipped")}`;
+  const verdicts = text.match(/(\d+) cross-source, (\d+) primary report, (\d+) unverified/);
+  if (verdicts) out.verify = `${verdicts[2]} ${t("r_primary")} · ${verdicts[3]} ${t("r_unverified")}`;
+  const recs = text.match(/(\d+) recommendations/);
+  if (recs) out.act = `${recs[1]} ${t("r_recs")}`;
+  return out;
+}
+
+let elapsedTimer = null;
+let runStartedAt = 0;
+let shownThoughts = 0;
+
+function appendThoughts(thoughts) {
+  const box = document.getElementById("thoughts");
+  if (!thoughts || !thoughts.length) { if (!shownThoughts) box.innerHTML = ""; return; }
+  for (let i = shownThoughts; i < thoughts.length; i += 1) {
+    const line = document.createElement("p");
+    line.className = "thought";
+    line.textContent = thoughts[i];
+    box.appendChild(line);
+  }
+  shownThoughts = thoughts.length;
+  while (box.children.length > 6) box.removeChild(box.firstElementChild);
+}
+
+function renderTrack(state) {
+  const results = stageResults(state.log);
+  const done = state.state === "done";
+  const stages = state.mode === "replay" ? STAGE_KEYS.slice(1) : STAGE_KEYS;
+  document.getElementById("track").innerHTML = stages.map((key, index) => {
+    const position = index + 1;
+    const nodeState = done || position < state.stage_index ? "done"
+      : position === state.stage_index && state.state === "running" ? "active"
+      : state.state === "failed" && position === state.stage_index ? "failed" : "pending";
+    return `<li class="node" data-state="${nodeState}">
+      <span class="pip" aria-hidden="true"></span>
+      <span class="nlabel">${esc(t("s_" + key))}</span>
+      <span class="nres">${esc(results[key] || "")}</span>
+    </li>`;
+  }).join("");
+}
+
+function setProgress(state) {
+  const panel = document.getElementById("runpanel");
+  if (!state || state.state === "idle") { panel.hidden = true; return; }
+
+  const wasHidden = panel.hidden;
+  panel.hidden = false;
+  panel.dataset.state = state.state;
+  if (wasHidden) {
+    panel.classList.remove("leaving");
+    runStartedAt = Date.now();
+    shownThoughts = 0;
+    document.getElementById("thoughts").innerHTML = "";
+  }
+  const modelLabel = document.getElementById("runmodel");
+  modelLabel.textContent = state.model && state.model !== "no model configured"
+    ? `${t("m_reading")} ${state.model}` : t("m_none");
+  modelLabel.dataset.off = String(!state.model || state.model === "no model configured");
+
+  document.getElementById("runtitle").textContent = state.state === "running"
+    ? (state.mode === "replay" ? t("p_replay") : t("p_live"))
+    : state.state === "done" ? t("p_done") : t("p_failed");
+
+  renderTrack(state);
+  appendThoughts(state.thoughts);
+  document.getElementById("runlog").textContent = (state.log || []).slice(-1)[0] || t("p_waiting");
+
+  clearInterval(elapsedTimer);
+  const tick = () => {
+    document.getElementById("runtime").textContent =
+      `${Math.max(0, Math.round((Date.now() - runStartedAt) / 1000))}${t("p_elapsed")}`;
+  };
+  tick();
+  if (state.state === "running") elapsedTimer = setInterval(tick, 1000);
+}
+
+function dismissProgress(delay) {
+  setTimeout(() => {
+    const panel = document.getElementById("runpanel");
+    panel.classList.add("leaving");
+    setTimeout(() => { panel.hidden = true; panel.classList.remove("leaving"); }, 340);
+  }, delay);
+}
+
+function setBusy(busy) {
+  document.getElementById("btnRun").disabled = busy;
+  document.getElementById("btnReplay").disabled = busy;
+  document.getElementById("btnRun").classList.toggle("busy", busy);
+}
+
+async function loadRuns(preferred) {
+  const { runs } = await api("/api/runs");
+  const picker = document.getElementById("runPicker");
+  picker.innerHTML = runs.map((r) =>
+    `<option value="${esc(r.run_id)}"${r.complete ? "" : " disabled"}>${esc(r.run_id)}${r.complete ? "" : " · partial"}</option>`).join("");
+  const target = preferred && runs.some((r) => r.run_id === preferred && r.complete)
+    ? preferred
+    : (runs.find((r) => r.complete) || {}).run_id;
+  if (!target) { document.getElementById("headline").textContent = t("no_runs"); return; }
+  picker.value = target;
+  await loadRun(target);
+}
+
+async function loadRun(runId) {
+  DATA = await api(`/api/run/${runId}`);
+  const main = document.querySelector("main.wrap");
+  main.classList.add("swapping");
+  renderAll();
+  requestAnimationFrame(() => main.classList.remove("swapping"));
+}
+
+let polling = false;
+async function pollStatus() {
+  if (polling) return;
+  polling = true;
+  while (true) {
+    const state = await api("/api/status");
+    setProgress(state);
+    if (state.state !== "running") {
+      if (state.state === "done") await loadRuns(state.run_id);
+      setProgress(state);
+      setBusy(false);
+      dismissProgress(state.state === "done" ? 5200 : 8000);
+      break;
+    }
+    await new Promise((resolve) => setTimeout(resolve, 900));
+  }
+  polling = false;
+}
+
+async function startRun(replay) {
+  setBusy(true);
+  const picker = document.getElementById("runPicker");
+  const payload = { replay_run_id: replay ? picker.value : null };
+  const result = await api("/api/run", {
+    method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload)
+  });
+  if (!result.ok) {
+    const key = REASONS[result.reason] || "e_offline";
+    setProgress({ state: "failed", mode: replay ? "replay" : "live", log: [t(key)], stage_count: 0, stage_index: 0 });
+    setBusy(false);
+    dismissProgress(7000);
+    return;
+  }
+  setBusy(true);
+  setProgress({ state: "running", mode: result.mode, stage_count: 5, stage_index: 1, log: [] });
+  pollStatus();
+}
+
+async function boot() {
+  document.getElementById("controls").hidden = false;
+  document.getElementById("btnRun").addEventListener("click", () => startRun(false));
+  document.getElementById("btnReplay").addEventListener("click", () => startRun(true));
+  document.getElementById("runPicker").addEventListener("change", (e) => loadRun(e.target.value));
+  document.getElementById("headline").textContent = t("loading");
+  document.getElementById("actList").innerHTML =
+    '<div class="skeleton"></div><div class="skeleton"></div><div class="skeleton"></div>';
+  await loadRuns();
+  const state = await api("/api/status");
+  if (state.state === "running") { setBusy(true); setProgress(state); pollStatus(); }
+}
+
+function applyStrings() {
+  document.documentElement.lang = lang;
+  document.documentElement.dir = lang === "ar" ? "rtl" : "ltr";
+  document.body.dir = lang === "ar" ? "rtl" : "ltr";
+  document.querySelectorAll("[data-i18n]").forEach((el) => { el.textContent = t(el.dataset.i18n); });
+  document.querySelectorAll(".lang button").forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.lang === lang)));
+}
+
+function renderAll() {
+  if (!DATA) return;
+  document.documentElement.lang = lang;
+  document.documentElement.dir = lang === "ar" ? "rtl" : "ltr";
+  document.body.dir = lang === "ar" ? "rtl" : "ltr";
+  document.querySelectorAll("[data-i18n]").forEach((el) => { el.textContent = t(el.dataset.i18n); });
+  document.querySelectorAll(".lang button").forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.lang === lang)));
+
+  const c = DATA.counts;
+  document.getElementById("runid").textContent = DATA.run_id;
+  document.getElementById("headline").innerHTML = lang === "ar"
+    ? `${c.trends} موضوعاً هذا الأسبوع، منها <b>${c.update}</b> تستدعي تحديث فصل، و<span class="warn">${c.new_lesson}</span> أدوات لا يغطيها المنهج.`
+    : `${c.trends} subjects this week: <b>${c.update}</b> call for a chapter update and <span class="warn">${c.new_lesson}</span> are not in the curriculum at all.`;
+  document.getElementById("c_act").textContent = groupFamilies(DATA.items).length;
+  document.getElementById("c_map").textContent = c.chapters;
+  document.getElementById("c_ev").textContent = c.claims;
+  document.getElementById("foot").textContent = fill(t("foot"), { run: DATA.run_id });
+
+  renderStats(); renderActViz(); renderAct(); renderMapViz(); renderMap(); renderEvidence(); renderRun();
+  requestAnimationFrame(revealOnScroll);
+}
+
+document.querySelector(".lang").addEventListener("click", (e) => {
+  const b = e.target.closest("button[data-lang]");
+  if (!b) return;
+  lang = b.dataset.lang;
+  try { localStorage.setItem("ata_lang", lang); } catch (err) {}
+  if (DATA) renderAll(); else applyStrings();
+});
+
+document.querySelector("nav.tabs").addEventListener("click", (e) => {
+  const b = e.target.closest("button[data-tab]");
+  if (!b) return;
+  document.querySelectorAll("nav.tabs button").forEach((x) => x.setAttribute("aria-selected", String(x === b)));
+  document.querySelectorAll(".panel").forEach((p) => {
+    if (p.dataset.panel === b.dataset.tab) p.setAttribute("data-open", ""); else p.removeAttribute("data-open");
+  });
+  requestAnimationFrame(revealOnScroll);
+  const top = document.querySelector("main.wrap").offsetTop - 12;
+  if (window.scrollY > top) window.scrollTo({ top, behavior: "smooth" });
+});
+
+document.getElementById("actFilters").addEventListener("click", (e) => {
+  const b = e.target.closest("button[data-act]");
+  if (!b) return;
+  actFilter = b.dataset.act;
+  renderAct();
+  requestAnimationFrame(revealOnScroll);
+});
+
+document.getElementById("evFilters").addEventListener("click", (e) => {
+  const b = e.target.closest("button[data-ev]");
+  if (!b) return;
+  evFilter = b.dataset.ev;
+  renderEvidence();
+  requestAnimationFrame(revealOnScroll);
+});
+
+if (LIVE) { applyStrings(); boot(); } else { renderAll(); }
+</script>
+</body>
+</html>
