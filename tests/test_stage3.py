@@ -183,3 +183,36 @@ def test_run_writes_scores_json(tmp_path):
     assert len(scores) == 1
     assert scores[0].trend_id == "trend_005"
     assert scores[0].chapter_id == "C7"
+
+def test_sub_package_inherits_the_parent_chapter():
+    trend = Trend(
+        id="trend_003",
+        subject="langgraph-checkpointpostgres",
+        signal_ids=[],
+        claims=[
+            Claim(
+                text="langgraph-checkpointpostgres version 3.1.2 was released",
+                subject="langgraph-checkpointpostgres",
+                version="3.1.2",
+            )
+        ],
+    )
+
+    assert match_chapter(trend, load_chapters()) == "C16"
+
+
+def test_stop_words_alone_do_not_match_a_chapter():
+    trend = Trend(
+        id="trend_004",
+        subject="novelpackage",
+        signal_ids=[],
+        claims=[
+            Claim(
+                text="A deep dive into novelpackage with a new release",
+                subject="novelpackage",
+                version=None,
+            )
+        ],
+    )
+
+    assert match_chapter(trend, load_chapters()) is None

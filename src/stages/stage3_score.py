@@ -15,32 +15,60 @@ WEIGHTS = {
 
 assert abs(sum(WEIGHTS.values()) - 1.0) < 1e-9
 
+STOP_WORDS = {
+    "a", "an", "the", "and", "or", "to", "of", "in", "on", "for", "with",
+    "into", "from", "by", "at", "as", "is", "was", "were", "be", "it", "its",
+    "this", "that", "these", "those", "new", "using", "use", "build",
+    "building", "release", "released", "version", "first", "basic", "simple",
+}
+
+
 def word_set(text: str) -> set[str]:
     return set(re.findall(r"[a-z0-9]+", text.lower()))
 
 
+def load_package_chapters() -> dict[str, str]:
+    path = Path("fixtures/package_chapters.json")
+    return json.loads(path.read_text(encoding="utf-8"))
+
+
+def chapter_for_package(subject: str, packages: dict[str, str]) -> str | None:
+    if subject in packages:
+        return packages[subject]
+
+    parent, _, _ = subject.partition("-")
+
+    return packages.get(parent)
+
+
 def match_chapter(trend: Trend, chapters: list[dict]) -> str | None:
+    mapped = chapter_for_package(trend.subject, load_package_chapters())
+
+    if mapped is not None:
+        return mapped
+
     trend_text = " ".join(
         [trend.subject] + [claim.text for claim in trend.claims]
     )
-    trend_words = word_set(trend_text)
+    trend_words = word_set(trend_text) - STOP_WORDS
 
     best_chapter_id = None
     best_overlap = 0
 
     for chapter in chapters:
         topics_text = " ".join(chapter["topics_covered"])
-        chapter_words = word_set(topics_text)
+        chapter_words = word_set(topics_text) - STOP_WORDS
         overlap = len(trend_words & chapter_words)
 
         if overlap > best_overlap:
             best_overlap = overlap
             best_chapter_id = chapter["chapter_id"]
 
-    if best_overlap >= 2:
+    if best_overlap >= 3:
         return best_chapter_id
 
     return None
+
 
 def calculate_priority(dimensions: dict[str, int]) -> float:
     return sum(

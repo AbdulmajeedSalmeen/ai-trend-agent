@@ -1,0 +1,10 @@
+{
+  "langgraph": "C16",
+  "langchain": "C5",
+  "transformers": "C2",
+  "openai-python": "C3",
+  "anthropic-sdk-python": "C3",
+  "crewai": "C12",
+  "llama_index": "C4",
+  "pydantic-ai": "C10"
+}
