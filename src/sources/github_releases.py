@@ -60,6 +60,9 @@ def fetch_github_releases(
 ) -> tuple[list[dict], list[Signal]]:
     """Header: {'Authorization': f'Bearer {token}'} if token else {}.
     Prints X-RateLimit-Remaining after each repo. Stops with a warning if < 5.
+    A 403 response (rate limited or forbidden) stops the loop and returns
+    whatever signals were already collected instead of crashing - partial
+    data beats a crash.
     If raw_dir is given, each repo's raw response is saved to disk BEFORE it is
     parsed, so a parse crash never loses data that was already fetched."""
     headers = {"Authorization": f"Bearer {token}"} if token else {}
@@ -75,6 +78,10 @@ def fetch_github_releases(
         )
         remaining = response.headers.get("X-RateLimit-Remaining")
         print(f"{repo}: X-RateLimit-Remaining={remaining}")
+
+        if response.status_code == 403:
+            print(f"WARNING: {repo} returned 403 (rate limited or forbidden), stopping early")
+            break
 
         releases = response.json()
         entry = {"repo": repo, "releases": releases}

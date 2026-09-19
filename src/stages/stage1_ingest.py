@@ -4,9 +4,23 @@ from pathlib import Path
 from dotenv import load_dotenv
 
 from src import runio
+from src.schema import Signal
 from src.sources import github_releases, hackernews
 
 HN_QUERIES = ["langgraph", "langchain", "openai", "claude", "hugging face", "ai agent"]
+
+
+def dedupe_by_url(signals: list[Signal]) -> list[Signal]:
+    """Two HN queries (or an HN post and its own GitHub release) can point at the
+    same url. Keep the first signal seen for each url, drop the rest."""
+    seen_urls: set[str] = set()
+    deduped = []
+    for signal in signals:
+        if signal.url in seen_urls:
+            continue
+        seen_urls.add(signal.url)
+        deduped.append(signal)
+    return deduped
 
 
 def run(run_dir: Path) -> None:
@@ -17,13 +31,7 @@ def run(run_dir: Path) -> None:
     _hn_raw, hn_signals = hackernews.fetch_hackernews(HN_QUERIES, raw_dir=raw_dir)
     _gh_raw, gh_signals = github_releases.fetch_github_releases(token, raw_dir=raw_dir)
 
-    seen_urls: set[str] = set()
-    signals = []
-    for signal in hn_signals + gh_signals:
-        if signal.url in seen_urls:
-            continue
-        seen_urls.add(signal.url)
-        signals.append(signal)
+    signals = dedupe_by_url(hn_signals + gh_signals)
 
     print(
         f"hackernews: {len(hn_signals)} signals, "
