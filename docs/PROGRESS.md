@@ -1,9 +1,10 @@
 # Progress
 
-**Last updated:** 2026-09-19 · **Tests:** 95 passing · **Demo:** Sep 26–27
+**Last updated:** 2026-09-19 · **Tests:** 124 passing · **Demo:** Sep 26–27
 
 The pipeline runs end to end, live, from a web app. A model reads, judges and writes;
-rules still decide what counts as confirmed.
+rules still decide what counts as confirmed, and every recommendation now carries the reason
+behind it: what the chapter teaches, which version it runs, and how far the release has moved.
 
 ## Next actions
 
@@ -11,7 +12,11 @@ rules still decide what counts as confirmed.
 2. **Lead:** add the team names to `README.md`.
 3. **Everyone:** `pip install -r requirements.txt` (fastapi, uvicorn, httpx are new) and create a
    `.env` with `OPENAI_API_KEY=...` — without it the stages fall back to rules and say so.
-4. **Whole team:** Sep 23–24 pick the demo run and freeze it; Sep 25–26 rehearse twice.
+4. **Everyone, before the demo:** open the chapter notebooks you know and record the version each
+   one installs, so the agent can measure the distance instead of admitting it cannot:
+   `python -m src.pin C8 langchain 0.1.16`. Run `python -m src.pin` to see what is still missing.
+   Four are open: C4 transformers, C5 openai-python, C8 langchain, C19 langgraph.
+5. **Whole team:** Sep 23–24 pick the demo run and freeze it; Sep 25–26 rehearse twice.
 
 ## Owners
 
@@ -32,6 +37,13 @@ rules still decide what counts as confirmed.
   `primary_report`.
 - One trend per subject; versions are claims inside it, not separate trends.
 - Chapters are matched from the curriculum text (tool names included), not a hand-written map.
+- A recommendation must carry its reason. The action comes from the distance between the version a
+  chapter runs and the newest confirmed release: a major or minor jump is worth rewriting, patch
+  releases never are. When the chapter's version is not recorded, the agent says exactly that
+  instead of asserting the chapter is stale, and falls back to how many releases landed after the
+  chapter was last updated.
+- The curriculum records what each chapter teaches (`teaches`) and what it runs (`pins`), so the
+  gap is measurable rather than asserted.
 - The curriculum is the real SDA course, read from the LMS: 25 chapters, weeks 1–7.
 - `dev` is the working branch; `main` only on integration days.
 - No test may call a model or the network (`tests/conftest.py` disables the model).
@@ -62,6 +74,7 @@ rules still decide what counts as confirmed.
 - [x] `src/server.py` — FastAPI: runs list, payload, status, start run
 - [x] `src/site.py` + template — bilingual dashboard, four sections, charts, offline export
 - [x] `src/adapters/model.py` + `src/reading.py` — provider-agnostic model, three thinking points
+- [x] `src/gap.py` + `src/pin.py` — version distance, staleness by date, and a way to record pins
 
 ## Not done
 
@@ -70,9 +83,16 @@ rules still decide what counts as confirmed.
 - [ ] Demo run chosen and frozen
 - [ ] Two timed rehearsals, and the offline fallback drill
 - [ ] Prepared answers: why one agent, why the gate is rules, what `unverified` means
+- [ ] Four chapter pins recorded (`python -m src.pin`) — until then no chapter can be called stale
 - [ ] Optional: GitHub token per member (60 requests/hour without one)
 
 ## Standup log
+
+### 2026-09-19 (evening)
+- The dashboard said "update chapter C8" with no reason, on three patch releases of the same
+  minor line. Fixed at the root: the curriculum now records what a chapter teaches and the version
+  it runs, `src/gap.py` measures the distance, and patch-only movement can no longer call for a
+  rewrite. Every card shows that distance next to the sentence.
 
 ### 2026-09-19
 - Lead: Stage 4, `--run-id` replay, FastAPI server, the bilingual site, the run experience,

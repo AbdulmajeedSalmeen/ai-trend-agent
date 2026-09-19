@@ -17,6 +17,8 @@
         "bootcamp orientation"
       ],
       "tools_covered": [],
+      "teaches": "Orientation only: the syllabus and how the bootcamp runs. No tools.",
+      "pins": {},
       "prerequisites": [],
       "last_updated": "2026-08-20"
     },
@@ -32,8 +34,16 @@
         "OpenAI account and API key setup",
         "GitHub account and personal access token setup"
       ],
-      "tools_covered": ["VS Code", "Google Colab", "GitHub"],
-      "prerequisites": ["C1"],
+      "tools_covered": [
+        "VS Code",
+        "Google Colab",
+        "GitHub"
+      ],
+      "teaches": "Set up the local toolchain: VS Code, Colab, and API keys for OpenAI and GitHub.",
+      "pins": {},
+      "prerequisites": [
+        "C1"
+      ],
       "last_updated": "2026-08-20"
     },
     {
@@ -48,7 +58,11 @@
         "transformer explainer"
       ],
       "tools_covered": [],
-      "prerequisites": ["C2"],
+      "teaches": "Concepts only: how LLMs and transformers work, and the ethics around them.",
+      "pins": {},
+      "prerequisites": [
+        "C2"
+      ],
       "last_updated": "2026-08-27"
     },
     {
@@ -64,8 +78,18 @@
         "BERT word similarity",
         "fine-tuning BERT for sentiment analysis"
       ],
-      "tools_covered": ["Hugging Face", "transformers", "BERT"],
-      "prerequisites": ["C3"],
+      "tools_covered": [
+        "Hugging Face",
+        "transformers",
+        "BERT"
+      ],
+      "teaches": "Classify and compare text with BERT through Hugging Face transformers, then fine-tune it.",
+      "pins": {
+        "transformers": null
+      },
+      "prerequisites": [
+        "C3"
+      ],
       "last_updated": "2026-08-27"
     },
     {
@@ -82,8 +106,18 @@
         "prompt engineering coding challenge",
         "optimizing LLM as a judge prompts"
       ],
-      "tools_covered": ["OpenAI API", "openai-python", "DSPy"],
-      "prerequisites": ["C3"],
+      "tools_covered": [
+        "OpenAI API",
+        "openai-python",
+        "DSPy"
+      ],
+      "teaches": "Call the OpenAI API directly and shape answers by prompt engineering and chaining, with DSPy shown for optimization.",
+      "pins": {
+        "openai-python": null
+      },
+      "prerequisites": [
+        "C3"
+      ],
       "last_updated": "2026-08-27"
     },
     {
@@ -97,8 +131,14 @@
         "indexing FAISS basics",
         "build a research paper assistant using RAG"
       ],
-      "tools_covered": ["FAISS"],
-      "prerequisites": ["C5"],
+      "tools_covered": [
+        "FAISS"
+      ],
+      "teaches": "Build RAG from scratch: chunk, embed, index with FAISS, retrieve, then answer.",
+      "pins": {},
+      "prerequisites": [
+        "C5"
+      ],
       "last_updated": "2026-08-27"
     },
     {
@@ -112,8 +152,15 @@
         "RAG evaluation with Evidently",
         "LLM as a jury with Evidently"
       ],
-      "tools_covered": ["Ragas", "Evidently"],
-      "prerequisites": ["C6"],
+      "tools_covered": [
+        "Ragas",
+        "Evidently"
+      ],
+      "teaches": "Measure a RAG system with Ragas and Evidently, including LLM-as-jury scoring.",
+      "pins": {},
+      "prerequisites": [
+        "C6"
+      ],
       "last_updated": "2026-08-27"
     },
     {
@@ -131,8 +178,18 @@
         "LangChain QA",
         "Wikipedia LangChain"
       ],
-      "tools_covered": ["LangChain", "langchain", "FAISS"],
-      "prerequisites": ["C6"],
+      "tools_covered": [
+        "LangChain",
+        "langchain",
+        "FAISS"
+      ],
+      "teaches": "Rebuild document QA on LangChain: splitters, a FAISS vector store, and chains over documents and Wikipedia.",
+      "pins": {
+        "langchain": null
+      },
+      "prerequisites": [
+        "C6"
+      ],
       "last_updated": "2026-09-03"
     },
     {
@@ -148,8 +205,15 @@
         "PEFT LoRA Qwen",
         "BERT fine-tune practical guide"
       ],
-      "tools_covered": ["PEFT", "LoRA"],
-      "prerequisites": ["C4"],
+      "tools_covered": [
+        "PEFT",
+        "LoRA"
+      ],
+      "teaches": "Evaluate an LLM with basic metrics, then fine-tune with PEFT and LoRA.",
+      "pins": {},
+      "prerequisites": [
+        "C4"
+      ],
       "last_updated": "2026-09-03"
     },
     {
@@ -164,8 +228,15 @@
         "Streamlit demo",
         "AI application deployment"
       ],
-      "tools_covered": ["FastAPI", "Streamlit"],
-      "prerequisites": ["C8"],
+      "tools_covered": [
+        "FastAPI",
+        "Streamlit"
+      ],
+      "teaches": "Serve an AI application: a FastAPI backend and a Streamlit interface.",
+      "pins": {},
+      "prerequisites": [
+        "C8"
+      ],
       "last_updated": "2026-09-03"
     },
     {
@@ -181,7 +252,11 @@
         "add a third tool"
       ],
       "tools_covered": [],
-      "prerequisites": ["C8"],
+      "teaches": "Turn a RAG pipeline into an agent that chooses and calls its own tools.",
+      "pins": {},
+      "prerequisites": [
+        "C8"
+      ],
       "last_updated": "2026-09-03"
     },
     {
@@ -197,7 +272,11 @@
         "fix a broken agent"
       ],
       "tools_covered": [],
-      "prerequisites": ["C11"],
+      "teaches": "Control an agent with an explicit reason-act-observe loop, and debug one that misbehaves.",
+      "pins": {},
+      "prerequisites": [
+        "C11"
+      ],
       "last_updated": "2026-09-10"
     },
     {
@@ -213,7 +292,11 @@
         "implement tool error handling"
       ],
       "tools_covered": [],
-      "prerequisites": ["C12"],
+      "teaches": "Design tool systems: schemas for arguments, a dispatcher, and error handling.",
+      "pins": {},
+      "prerequisites": [
+        "C12"
+      ],
       "last_updated": "2026-09-10"
     },
     {
@@ -229,7 +312,11 @@
         "add guardrails"
       ],
       "tools_covered": [],
-      "prerequisites": ["C13"],
+      "teaches": "Build a task-oriented agent and bound its autonomy with guardrails.",
+      "pins": {},
+      "prerequisites": [
+        "C13"
+      ],
       "last_updated": "2026-09-10"
     },
     {
@@ -245,7 +332,11 @@
         "extend the workflow"
       ],
       "tools_covered": [],
-      "prerequisites": ["C14"],
+      "teaches": "Move from one agent to several with role-based design and a shared workflow.",
+      "pins": {},
+      "prerequisites": [
+        "C14"
+      ],
       "last_updated": "2026-09-10"
     },
     {
@@ -259,7 +350,11 @@
         "document system behavior"
       ],
       "tools_covered": [],
-      "prerequisites": ["C15"],
+      "teaches": "Walk through a reference agent system, evaluate its behavior, and document it.",
+      "pins": {},
+      "prerequisites": [
+        "C15"
+      ],
       "last_updated": "2026-09-10"
     },
     {
@@ -275,7 +370,11 @@
         "memory retrieval test"
       ],
       "tools_covered": [],
-      "prerequisites": ["C15"],
+      "teaches": "Give an agent memory: conversation history plus long-term recall from a vector store.",
+      "pins": {},
+      "prerequisites": [
+        "C15"
+      ],
       "last_updated": "2026-09-17"
     },
     {
@@ -291,7 +390,11 @@
         "loop prevention"
       ],
       "tools_covered": [],
-      "prerequisites": ["C17"],
+      "teaches": "Make an agent plan: decompose a task, track execution, and prevent loops.",
+      "pins": {},
+      "prerequisites": [
+        "C17"
+      ],
       "last_updated": "2026-09-17"
     },
     {
@@ -306,8 +409,18 @@
         "implement a multi-agent workflow",
         "add a review agent"
       ],
-      "tools_covered": ["LangGraph", "langgraph", "n8n"],
-      "prerequisites": ["C18"],
+      "tools_covered": [
+        "LangGraph",
+        "langgraph",
+        "n8n"
+      ],
+      "teaches": "Orchestrate agents as a graph with LangGraph, including multi-agent conversation and a review agent, with n8n shown as a no-code alternative.",
+      "pins": {
+        "langgraph": null
+      },
+      "prerequisites": [
+        "C18"
+      ],
       "last_updated": "2026-09-17"
     },
     {
@@ -323,7 +436,11 @@
         "fix failure cases"
       ],
       "tools_covered": [],
-      "prerequisites": ["C19"],
+      "teaches": "Name the ways agents fail, diagnose a failure, and fix it.",
+      "pins": {},
+      "prerequisites": [
+        "C19"
+      ],
       "last_updated": "2026-09-17"
     },
     {
@@ -338,7 +455,11 @@
         "document system architecture"
       ],
       "tools_covered": [],
-      "prerequisites": ["C20"],
+      "teaches": "Diagnose coordination failures in a multi-agent system and document its architecture.",
+      "pins": {},
+      "prerequisites": [
+        "C20"
+      ],
       "last_updated": "2026-09-17"
     },
     {
@@ -355,7 +476,11 @@
         "build a simple automated evaluator"
       ],
       "tools_covered": [],
-      "prerequisites": ["C21"],
+      "teaches": "Build an evaluation set and an automated evaluator for agent behavior.",
+      "pins": {},
+      "prerequisites": [
+        "C21"
+      ],
       "last_updated": null
     },
     {
@@ -371,7 +496,11 @@
         "test guardrails"
       ],
       "tools_covered": [],
-      "prerequisites": ["C22"],
+      "teaches": "Apply guardrail patterns and human-in-the-loop control, then test them.",
+      "pins": {},
+      "prerequisites": [
+        "C22"
+      ],
       "last_updated": null
     },
     {
@@ -387,7 +516,11 @@
         "analyze system logs"
       ],
       "tools_covered": [],
-      "prerequisites": ["C23"],
+      "teaches": "Log agent execution, monitor performance, and analyze the logs.",
+      "pins": {},
+      "prerequisites": [
+        "C23"
+      ],
       "last_updated": null
     },
     {
@@ -403,8 +536,13 @@
         "capstone project proposal presentation"
       ],
       "tools_covered": [],
-      "prerequisites": ["C24"],
+      "teaches": "Capstone: scope a project, validate it with users, and present it.",
+      "pins": {},
+      "prerequisites": [
+        "C24"
+      ],
       "last_updated": null
     }
-  ]
+  ],
+  "pins_note": "pins records the package version a chapter's own notebooks install. A null value means nobody has read that chapter's notebook yet, and the agent will say so instead of guessing how far behind the chapter is."
 }

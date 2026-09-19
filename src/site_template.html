@@ -108,6 +108,10 @@ const T = {
     no_evidence: "nothing backs it", gap: "no chapter covers this", read_from: "read from",
     open_evidence: "open", nothing: "Nothing in this run touches this chapter.",
     stale: "last updated", never: "not taught yet",
+    g_teaches: "teaches", g_pinned: "chapter runs", g_unrecorded: "chapter version not recorded",
+    g_since: "released since the chapter was updated", g_unset: "not recorded",
+    gk_behind_major: "major jump", gk_behind_minor: "minor jump", gk_patch_only: "patches only",
+    gk_current: "same version", gk_ahead: "ahead of this run", gk_unknown: "not measurable",
     empty_t: "No recommendations under this filter", empty_b: "Switch the filter above to see the rest of the run.",
     btn_run: "Run now", btn_replay: "Re-analyse", loading: "Loading the latest run",
     p_live: "Collecting and checking", p_replay: "Re-analysing saved signals", p_done: "Run finished",
@@ -143,6 +147,10 @@ const T = {
     no_evidence: "لا دليل يسنده", gap: "لا يغطيه أي فصل", read_from: "قُرئ من",
     open_evidence: "فتح", nothing: "لا جديد يمسّ هذا الفصل في هذه التشغيلة.",
     stale: "آخر تحديث", never: "لم يُدرَّس بعد",
+    g_teaches: "يُدرّس", g_pinned: "الفصل يشتغل على", g_unrecorded: "نسخة الفصل غير مسجّلة",
+    g_since: "صدرت بعد آخر تحديث للفصل", g_unset: "غير مسجّلة",
+    gk_behind_major: "قفزة كبرى", gk_behind_minor: "قفزة صغرى", gk_patch_only: "ترقيعات فقط",
+    gk_current: "النسخة نفسها", gk_ahead: "أحدث من هذه التشغيلة", gk_unknown: "غير قابل للقياس",
     empty_t: "لا توصيات تحت هذا الفلتر", empty_b: "بدّل الفلتر أعلاه لرؤية بقية التشغيلة.",
     btn_run: "تشغيل الآن", btn_replay: "إعادة تحليل", loading: "جارٍ تحميل آخر تشغيلة",
     p_live: "جمع وتحقق", p_replay: "إعادة تحليل الإشارات المحفوظة", p_done: "انتهت التشغيلة",
@@ -230,13 +238,26 @@ function groupFamilies(items) {
     .sort((a, b) => b.lead.priority - a.lead.priority);
 }
 
+function gapLine(item) {
+  if (!item.latest_version) return "";
+  const kind = item.gap_kind || "unknown";
+  const known = item.chapter_version !== null && item.chapter_version !== undefined;
+  const move = known
+    ? `<span class="vpair" dir="ltr">${esc(item.chapter_version)} &rarr; ${esc(item.latest_version)}</span>`
+    : `<span class="vpair unknown">${esc(t("g_unrecorded"))} &middot; <span dir="ltr">${esc(item.latest_version)}</span></span>`;
+  const since = item.releases_since
+    ? `<span class="vsince"><b>${item.releases_since}</b> ${esc(t("g_since"))}</span>` : "";
+  return `<div class="gapline" data-kind="${esc(kind)}">${move}
+      <span class="vkind">${esc(t("gk_" + kind))}</span>${since}</div>`;
+}
+
 function memberBlock(item, showName) {
   const name = showName
     ? `<div class="member"><span class="subject">${esc(item.subject)}</span>
        <span class="chip ${actionClass(item.action)}">${esc(t(item.action))}</span>
        <span class="mprio">${esc(t("priority"))} ${item.priority.toFixed(2)}</span></div>`
     : "";
-  return `${name}<p class="reason">${esc(item.rationale)}</p>${claimsTable(item)}`;
+  return `${name}${gapLine(item)}<p class="reason">${esc(item.rationale)}</p>${claimsTable(item)}`;
 }
 
 function renderAct() {
@@ -290,13 +311,19 @@ function renderMap() {
     }
     const touched = byChapter[ch.chapter_id] || [];
     const tools = ch.tools.length ? `<div class="tools">${ch.tools.map((x) => `<span class="tool">${esc(x)}</span>`).join("")}</div>` : "";
+    const teaches = ch.teaches ? `<p class="teaches">${esc(ch.teaches)}</p>` : "";
+    const pinned = Object.entries(ch.pins || {});
+    const pins = pinned.length
+      ? `<div class="pins"><span class="pinlabel">${esc(t("g_pinned"))}</span>${pinned.map(([pkg, v]) =>
+          `<span class="pin ${v ? "" : "empty"}">${esc(pkg)} <b dir="ltr">${v ? esc(v) : esc(t("g_unset"))}</b></span>`).join("")}</div>`
+      : "";
     const list = touched.length
       ? `<div class="touchlist">${touched.map((i) => `<span class="chip ${actionClass(i.action)}">${esc(i.subject)}</span>`).join("")}</div>`
       : `<div class="stale">${esc(t("nothing"))}</div>`;
     const updated = ch.last_updated ? `${esc(t("stale"))} <span dir="ltr">${esc(ch.last_updated)}</span>` : esc(t("never"));
     html += `<div class="chapter ${touched.length ? "touched" : ""}">
         <div class="ctitle"><span class="cid">${esc(ch.chapter_id)}</span><h3>${esc(ch.title)}</h3></div>
-        ${tools}${list}
+        ${teaches}${tools}${pins}${list}
         <div class="stale">${updated}</div>
       </div>`;
   });

@@ -391,3 +391,22 @@ main.wrap.swapping { opacity: .45; }
 }
 @keyframes thoughtIn { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: none; } }
 @media (prefers-reduced-motion: reduce) { .thought { animation: none; } }
+
+.gapline {
+  display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+  margin: 0 0 10px; padding: 7px 10px; border-radius: 10px;
+  background: var(--gray-soft); font: 500 11.5px/1.4 var(--mono); color: var(--ink-soft);
+}
+.gapline[data-kind="behind_major"], .gapline[data-kind="behind_minor"] { background: var(--amber-soft); color: var(--amber); }
+.vpair { color: var(--ink); font-weight: 600; }
+.gapline[data-kind="behind_major"] .vpair, .gapline[data-kind="behind_minor"] .vpair { color: inherit; }
+.vpair.unknown { color: var(--ink-faint); font-weight: 500; }
+.vkind { padding: 3px 7px; border-radius: 7px; background: var(--surface); }
+.vsince { color: var(--ink-faint); }
+.gapline[data-kind="behind_major"] .vsince, .gapline[data-kind="behind_minor"] .vsince { color: inherit; opacity: .85; }
+.teaches { margin: 0 0 10px; font-size: 12.5px; line-height: 1.55; color: var(--ink-soft); }
+.pins { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 8px; }
+.pin { font: 500 10.5px/1 var(--mono); background: var(--teal-soft); color: var(--teal); padding: 5px 8px; border-radius: 8px; }
+.pin b { font-weight: 600; }
+.pin.empty { background: var(--gray-soft); color: var(--ink-faint); }
+.pinlabel { font-size: 11px; color: var(--ink-faint); align-self: center; }

@@ -68,6 +68,10 @@ def build_payload(run_dir: Path) -> dict:
                 "action": rec.action,
                 "chapter_id": rec.chapter_id,
                 "rationale": rec.rationale,
+                "chapter_version": rec.chapter_version,
+                "latest_version": rec.latest_version,
+                "gap_kind": rec.gap_kind,
+                "releases_since": rec.releases_since,
                 "priority": round(score.priority, 2),
                 "confidence": round(score.confidence, 2),
                 "dimensions": score.dimensions,
@@ -95,6 +99,8 @@ def build_payload(run_dir: Path) -> dict:
                 "week": chapter.get("week"),
                 "topics": chapter.get("topics_covered", []),
                 "tools": chapter.get("tools_covered", []),
+                "teaches": chapter.get("teaches", ""),
+                "pins": chapter.get("pins", {}),
                 "last_updated": chapter.get("last_updated"),
             }
         )

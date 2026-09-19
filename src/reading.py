@@ -21,9 +21,15 @@ JUDGE_SYSTEM = (
 )
 
 WRITE_SYSTEM = (
-    "You write one sentence telling a curriculum owner what to do and why. "
-    "Use only the facts given. Never add numbers or claims that are not in the input. "
-    'Answer with one JSON object: {"sentence": <one sentence, under 30 words>}.'
+    "You tell a curriculum owner what to do and, above all, why. "
+    "The reason must name what changed and what it means for the chapter's material - "
+    "never restate the decision as its own reason, and never write 'due to N confirmed claims'. "
+    "Use only the facts given. Never add numbers, versions or claims that are not in the input, "
+    "and never count anything yourself: if you mention how many releases landed, copy the "
+    "number from the Staleness line exactly. "
+    "If the input says the version the chapter teaches is not recorded, say that instead of "
+    "asserting the chapter is outdated. "
+    'Answer with one JSON object: {"sentence": <two sentences at most, under 45 words>}.'
 )
 
 
@@ -83,16 +89,25 @@ def judge_educational_value(subject: str, claim_texts: list[str], chapter_title:
 
 
 def write_recommendation(subject: str, action: str, chapter: str | None, confirmed: int,
-                         unverified: int, priority: float) -> str | None:
+                         unverified: int, priority: float, teaches: str | None = None,
+                         gap_sentence: str = "", staleness: str = "",
+                         claim_texts: list[str] | None = None) -> str | None:
     if not model.available():
         return None
 
+    changes = "\n- ".join((claim_texts or [])[:5]) or "nothing specific"
     answer = model.ask_json(
         WRITE_SYSTEM,
-        f"Package: {subject}\nAction decided by our rules: {action}\n"
+        f"Package: {subject}\n"
+        f"Action decided by our rules: {action}\n"
         f"Chapter: {chapter or 'none, this is a curriculum gap'}\n"
-        f"Evidence: {confirmed} confirmed claims, {unverified} unverified\nPriority score: {priority:.2f}",
-        max_tokens=120,
+        f"What that chapter teaches: {teaches or 'not recorded'}\n"
+        f"Version distance: {gap_sentence or 'not measured'}\n"
+        f"Staleness: {staleness or 'the chapter is not measurably behind'}\n"
+        f"What changed:\n- {changes}\n"
+        f"Evidence: {confirmed} confirmed claims, {unverified} unverified\n"
+        f"Priority score: {priority:.2f}",
+        max_tokens=200,
     )
     sentence = (answer or {}).get("sentence")
     return sentence.strip() if isinstance(sentence, str) and sentence.strip() else None

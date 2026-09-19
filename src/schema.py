@@ -54,3 +54,7 @@ class Recommendation(BaseModel):
     action: Literal['update_existing_material', 'add_new_lesson', 'watch']
     chapter_id: Optional[str] = None
     rationale: str
+    chapter_version: Optional[str] = None
+    latest_version: Optional[str] = None
+    gap_kind: Optional[str] = None
+    releases_since: int = 0
