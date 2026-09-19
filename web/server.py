@@ -4,7 +4,8 @@ from fastapi import FastAPI, HTTPException
 from fastapi.responses import HTMLResponse, JSONResponse
 from pydantic import BaseModel
 
-from src import runio, runner, site
+from src import runio
+from web import runner, site
 
 app = FastAPI(title="AI Trend Agent")
 

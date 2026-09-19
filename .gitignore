@@ -6,3 +6,6 @@ fixtures/runs/
 .agents/
 .claude/skills/
 .pytest_cache/
+
+# course notebooks, read locally, never published
+notebooks/

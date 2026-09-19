@@ -4,8 +4,26 @@
     {
       "name": "site",
       "runtimeExecutable": "D:\\SDA2\\trend-agent\\.venv\\Scripts\\python.exe",
-      "runtimeArgs": ["-m", "http.server", "8777", "--directory", "web"],
+      "runtimeArgs": [
+        "-m",
+        "http.server",
+        "8777",
+        "--directory",
+        "web/dist"
+      ],
       "port": 8777
+    },
+    {
+      "name": "server",
+      "runtimeExecutable": "D:\\SDA2\\trend-agent\\.venv\\Scripts\\python.exe",
+      "runtimeArgs": [
+        "-m",
+        "uvicorn",
+        "web.server:app",
+        "--port",
+        "8800"
+      ],
+      "port": 8800
     }
   ]
 }

@@ -6,9 +6,9 @@ from src import runio
 from src.schema import Recommendation, Score, Signal, Trend
 
 CURRICULUM_PATH = Path("fixtures/curriculum.json")
-TEMPLATE_PATH = Path("src/site_template.html")
-FONTS_PATH = Path("src/site_fonts.css")
-STYLE_PATH = Path("src/site_style.css")
+TEMPLATE_PATH = Path("web/template.html")
+FONTS_PATH = Path("web/fonts.css")
+STYLE_PATH = Path("web/style.css")
 
 
 def read_run(run_dir: Path) -> dict:
@@ -137,7 +137,7 @@ def latest_run() -> Path:
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--run-id", default=None)
-    parser.add_argument("--out", default="web/site.html")
+    parser.add_argument("--out", default="web/dist/site.html")
     args = parser.parse_args()
 
     run_dir = runio.RUNS_DIR / args.run_id if args.run_id else latest_run()

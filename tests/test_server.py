@@ -2,7 +2,8 @@ from datetime import datetime, timezone
 
 from fastapi.testclient import TestClient
 
-from src import runio, runner, server
+from src import runio
+from web import runner, server
 from src.schema import Claim, Recommendation, Score, Signal, Trend
 
 

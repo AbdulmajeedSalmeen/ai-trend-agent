@@ -70,9 +70,9 @@ behind it: what the chapter teaches, which version it runs, and how far the rele
 - [x] Stage 3 scoring (Naif) — chapter matching, five dimensions, weights assert to 1.0
 - [x] Stage 4 recommendations (Lead) — decision table, rationale
 - [x] `src/pipeline.py` — one command, `--run-id` replays a saved run with no network
-- [x] `src/runner.py` — lock file, background thread, progress, GitHub budget check
-- [x] `src/server.py` — FastAPI: runs list, payload, status, start run
-- [x] `src/site.py` + template — bilingual dashboard, four sections, charts, offline export
+- [x] `web/runner.py` — lock file, background thread, progress, GitHub budget check
+- [x] `web/server.py` — FastAPI: runs list, payload, status, start run
+- [x] `web/site.py` + template — bilingual dashboard, four sections, charts, offline export
 - [x] `src/adapters/model.py` + `src/reading.py` — provider-agnostic model, three thinking points
 - [x] `src/gap.py` + `src/pin.py` — version distance, staleness by date, and a way to record pins
 

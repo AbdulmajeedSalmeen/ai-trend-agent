@@ -2,7 +2,7 @@ from datetime import datetime, timezone
 
 from src import runio
 from src.schema import Claim, Recommendation, Score, Signal, Trend
-from src.site import build_payload
+from web.site import build_payload
 
 
 def build_run(path):
