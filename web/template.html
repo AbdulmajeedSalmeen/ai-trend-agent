@@ -110,8 +110,11 @@ const T = {
     stale: "last updated", never: "not taught yet",
     g_teaches: "teaches", g_pinned: "chapter runs", g_unrecorded: "chapter version not recorded",
     g_since: "released since the chapter was updated", g_unset: "not recorded",
+    g_unpinned: "installed with no version bound", g_legacy: "still calls",
+    g_notebooks: "notebooks read", g_reads: "read from the course notebooks",
     gk_behind_major: "major jump", gk_behind_minor: "minor jump", gk_patch_only: "patches only",
     gk_current: "same version", gk_ahead: "ahead of this run", gk_unknown: "not measurable",
+    gk_unpinned: "no version bound",
     empty_t: "No recommendations under this filter", empty_b: "Switch the filter above to see the rest of the run.",
     btn_run: "Run now", btn_replay: "Re-analyse", loading: "Loading the latest run",
     p_live: "Collecting and checking", p_replay: "Re-analysing saved signals", p_done: "Run finished",
@@ -149,8 +152,11 @@ const T = {
     stale: "آخر تحديث", never: "لم يُدرَّس بعد",
     g_teaches: "يُدرّس", g_pinned: "الفصل يشتغل على", g_unrecorded: "نسخة الفصل غير مسجّلة",
     g_since: "صدرت بعد آخر تحديث للفصل", g_unset: "غير مسجّلة",
+    g_unpinned: "تُثبَّت بلا تحديد نسخة", g_legacy: "لا يزال يستدعي",
+    g_notebooks: "نوتبوك مقروء", g_reads: "مقروءة من نوتبوكات الدورة",
     gk_behind_major: "قفزة كبرى", gk_behind_minor: "قفزة صغرى", gk_patch_only: "ترقيعات فقط",
     gk_current: "النسخة نفسها", gk_ahead: "أحدث من هذه التشغيلة", gk_unknown: "غير قابل للقياس",
+    gk_unpinned: "بلا تحديد نسخة",
     empty_t: "لا توصيات تحت هذا الفلتر", empty_b: "بدّل الفلتر أعلاه لرؤية بقية التشغيلة.",
     btn_run: "تشغيل الآن", btn_replay: "إعادة تحليل", loading: "جارٍ تحميل آخر تشغيلة",
     p_live: "جمع وتحقق", p_replay: "إعادة تحليل الإشارات المحفوظة", p_done: "انتهت التشغيلة",
@@ -242,13 +248,18 @@ function gapLine(item) {
   if (!item.latest_version) return "";
   const kind = item.gap_kind || "unknown";
   const known = item.chapter_version !== null && item.chapter_version !== undefined;
-  const move = known
-    ? `<span class="vpair" dir="ltr">${esc(item.chapter_version)} &rarr; ${esc(item.latest_version)}</span>`
-    : `<span class="vpair unknown">${esc(t("g_unrecorded"))} &middot; <span dir="ltr">${esc(item.latest_version)}</span></span>`;
+  const move = kind === "unpinned"
+    ? `<span class="vpair"><span dir="ltr">${esc(item.latest_version)}</span> &middot; ${esc(t("g_unpinned"))}</span>`
+    : known
+      ? `<span class="vpair" dir="ltr">${esc(item.chapter_version)} &rarr; ${esc(item.latest_version)}</span>`
+      : `<span class="vpair unknown">${esc(t("g_unrecorded"))} &middot; <span dir="ltr">${esc(item.latest_version)}</span></span>`;
   const since = item.releases_since
     ? `<span class="vsince"><b>${item.releases_since}</b> ${esc(t("g_since"))}</span>` : "";
-  return `<div class="gapline" data-kind="${esc(kind)}">${move}
-      <span class="vkind">${esc(t("gk_" + kind))}</span>${since}</div>`;
+  const legacy = (item.legacy_uses || []).length
+    ? `<div class="legacyline">${esc(t("g_legacy"))} ${item.legacy_uses.map((x) =>
+        `<code>${esc(x)}</code>`).join(" ")}</div>` : "";
+  const label = kind === "unpinned" ? "" : `<span class="vkind">${esc(t("gk_" + kind))}</span>`;
+  return `<div class="gapline" data-kind="${esc(kind)}">${move}${label}${since}</div>${legacy}`;
 }
 
 function memberBlock(item, showName) {
@@ -317,13 +328,24 @@ function renderMap() {
       ? `<div class="pins"><span class="pinlabel">${esc(t("g_pinned"))}</span>${pinned.map(([pkg, v]) =>
           `<span class="pin ${v ? "" : "empty"}">${esc(pkg)} <b dir="ltr">${v ? esc(v) : esc(t("g_unset"))}</b></span>`).join("")}</div>`
       : "";
+    const loose = (ch.unpinned || []).filter((x) => DATA.items.some((i) => i.subject === x));
+    const unbound = loose.length
+      ? `<div class="pins"><span class="pinlabel">${esc(t("g_unpinned"))}</span>${loose.map((x) =>
+          `<span class="pin loose">${esc(x)}</span>`).join("")}</div>`
+      : "";
+    const legacy = (ch.legacy_api || []).length
+      ? `<div class="pins"><span class="pinlabel">${esc(t("g_legacy"))}</span>${ch.legacy_api.map((m) =>
+          `<span class="pin legacy" title="${esc(m.note)}">${esc(m.uses)}</span>`).join("")}</div>`
+      : "";
+    const read = ch.notebooks
+      ? `<div class="stale">${ch.notebooks} ${esc(t("g_notebooks"))}</div>` : "";
     const list = touched.length
       ? `<div class="touchlist">${touched.map((i) => `<span class="chip ${actionClass(i.action)}">${esc(i.subject)}</span>`).join("")}</div>`
       : `<div class="stale">${esc(t("nothing"))}</div>`;
     const updated = ch.last_updated ? `${esc(t("stale"))} <span dir="ltr">${esc(ch.last_updated)}</span>` : esc(t("never"));
     html += `<div class="chapter ${touched.length ? "touched" : ""}">
         <div class="ctitle"><span class="cid">${esc(ch.chapter_id)}</span><h3>${esc(ch.title)}</h3></div>
-        ${teaches}${tools}${pins}${list}
+        ${teaches}${tools}${pins}${unbound}${legacy}${list}${read}
         <div class="stale">${updated}</div>
       </div>`;
   });

@@ -72,6 +72,7 @@ def build_payload(run_dir: Path) -> dict:
                 "latest_version": rec.latest_version,
                 "gap_kind": rec.gap_kind,
                 "releases_since": rec.releases_since,
+                "legacy_uses": rec.legacy_uses,
                 "priority": round(score.priority, 2),
                 "confidence": round(score.confidence, 2),
                 "dimensions": score.dimensions,
@@ -101,6 +102,9 @@ def build_payload(run_dir: Path) -> dict:
                 "tools": chapter.get("tools_covered", []),
                 "teaches": chapter.get("teaches", ""),
                 "pins": chapter.get("pins", {}),
+                "unpinned": chapter.get("installs_unpinned", []),
+                "legacy_api": chapter.get("legacy_api", []),
+                "notebooks": len(chapter.get("notebooks", [])),
                 "last_updated": chapter.get("last_updated"),
             }
         )

@@ -52,3 +52,25 @@ def test_a_judgement_inside_the_range_is_kept(monkeypatch):
     fake_model(monkeypatch, {"educational_value": 4, "reason": "students build graphs in week 5"})
 
     assert reading.judge_educational_value("langgraph", ["x"], "C19")["value"] == 4
+
+
+def test_a_sentence_that_keeps_the_facts_is_accepted(monkeypatch):
+    fake_model(monkeypatch, {"sentence": "The notebooks still call RetrievalQA, gone in 1.4.2."})
+
+    written = reading.write_recommendation(
+        "langchain", "update_existing_material", "C8", 3, 1, 4.3,
+        must_mention=["1.4.2", "RetrievalQA"],
+    )
+
+    assert written == "The notebooks still call RetrievalQA, gone in 1.4.2."
+
+
+def test_a_sentence_that_drops_the_facts_is_refused(monkeypatch):
+    fake_model(monkeypatch, {"sentence": "Update the chapter, there have been several releases."})
+
+    written = reading.write_recommendation(
+        "langchain", "update_existing_material", "C8", 3, 1, 4.3,
+        must_mention=["1.4.2", "RetrievalQA"],
+    )
+
+    assert written is None

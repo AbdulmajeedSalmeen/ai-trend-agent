@@ -11,6 +11,8 @@
   --blue: #0b6fb0;
   --amber: #b06a10;
   --amber-soft: #fbf3e4;
+  --red: #a8342a;
+  --red-soft: #fdeceb;
   --teal-soft: #e8f3ed;
   --cyan-soft: #e6f1f9;
   --gray-soft: #eeeeea;
@@ -397,16 +399,26 @@ main.wrap.swapping { opacity: .45; }
   margin: 0 0 10px; padding: 7px 10px; border-radius: 10px;
   background: var(--gray-soft); font: 500 11.5px/1.4 var(--mono); color: var(--ink-soft);
 }
-.gapline[data-kind="behind_major"], .gapline[data-kind="behind_minor"] { background: var(--amber-soft); color: var(--amber); }
+.gapline[data-kind="behind_major"], .gapline[data-kind="behind_minor"],
+.gapline[data-kind="unpinned"] { background: var(--amber-soft); color: var(--amber); }
 .vpair { color: var(--ink); font-weight: 600; }
-.gapline[data-kind="behind_major"] .vpair, .gapline[data-kind="behind_minor"] .vpair { color: inherit; }
+.gapline[data-kind="behind_major"] .vpair, .gapline[data-kind="behind_minor"] .vpair,
+.gapline[data-kind="unpinned"] .vpair { color: inherit; }
 .vpair.unknown { color: var(--ink-faint); font-weight: 500; }
 .vkind { padding: 3px 7px; border-radius: 7px; background: var(--surface); }
 .vsince { color: var(--ink-faint); }
-.gapline[data-kind="behind_major"] .vsince, .gapline[data-kind="behind_minor"] .vsince { color: inherit; opacity: .85; }
+.gapline[data-kind="behind_major"] .vsince, .gapline[data-kind="behind_minor"] .vsince,
+.gapline[data-kind="unpinned"] .vsince { color: inherit; opacity: .85; }
 .teaches { margin: 0 0 10px; font-size: 12.5px; line-height: 1.55; color: var(--ink-soft); }
 .pins { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 8px; }
 .pin { font: 500 10.5px/1 var(--mono); background: var(--teal-soft); color: var(--teal); padding: 5px 8px; border-radius: 8px; }
 .pin b { font-weight: 600; }
 .pin.empty { background: var(--gray-soft); color: var(--ink-faint); }
 .pinlabel { font-size: 11px; color: var(--ink-faint); align-self: center; }
+.pin.loose { background: var(--amber-soft); color: var(--amber); }
+.pin.legacy { background: var(--red-soft); color: var(--red); }
+.legacyline {
+  margin: -4px 0 10px; padding: 6px 10px; border-radius: 10px;
+  background: var(--red-soft); color: var(--red); font: 500 11.5px/1.5 var(--mono);
+}
+.legacyline code { font: inherit; background: rgba(168, 52, 42, .09); padding: 2px 5px; border-radius: 5px; }

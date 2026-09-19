@@ -42,11 +42,11 @@ def build_rationale(trend: Trend, score: Score, action: str,
                 f"Priority {score.priority:.2f}, Confidence {score.confidence:.2f}, {where}.{weak}")
 
     if score.chapter_id is None:
-        opening = f"No chapter covers {trend.subject}."
+        parts = [assessment["sentence"]]
     else:
         opening = f"Chapter {score.chapter_id} teaches: {chapter['teaches']}" if chapter else ""
-
-    parts = [opening, assessment["sentence"], gap.staleness_sentence(assessment)]
+        parts = [opening, assessment["sentence"], gap.legacy_sentence(assessment),
+                 gap.staleness_sentence(assessment)]
 
     if action == "watch" and score.confidence < 0.5:
         parts.append("Not acted on: the claims are too weak to trust.")
@@ -58,6 +58,15 @@ def build_rationale(trend: Trend, score: Score, action: str,
     return " ".join(part for part in parts if part)
 
 
+def required_facts(assessment: dict) -> list[str]:
+    facts = [assessment["latest"]]
+
+    if assessment["legacy"]:
+        facts.append(assessment["legacy"][0]["uses"])
+
+    return [fact for fact in facts if fact]
+
+
 def load_chapters() -> dict:
     data = json.loads(CURRICULUM_PATH.read_text(encoding="utf-8"))
     return {chapter["chapter_id"]: chapter for chapter in data["chapters"]}
@@ -65,14 +74,20 @@ def load_chapters() -> dict:
 
 def assess_trend(trend: Trend, chapter: dict | None, published: dict) -> dict:
     confirmed = [claim for claim in trend.claims if claim.verdict == "confirmed"]
-    pins = chapter.get("pins", {}) if chapter else {}
+    has_chapter = chapter is not None
+    chapter = chapter or {}
+    legacy = [marker for marker in chapter.get("legacy_api", [])
+              if marker["package"] == trend.subject]
 
     return gap.assess(
         trend.subject,
         [claim.version for claim in confirmed],
-        pins.get(trend.subject),
+        chapter.get("pins", {}).get(trend.subject),
         [published.get(claim.source_signal_id) for claim in confirmed],
-        chapter.get("last_updated") if chapter else None,
+        chapter.get("last_updated"),
+        unpinned=trend.subject in chapter.get("installs_unpinned", []),
+        legacy=legacy,
+        has_chapter=has_chapter,
     )
 
 
@@ -105,8 +120,10 @@ def run(run_dir: Path) -> None:
             confirmed, len(trend.claims) - confirmed, score.priority,
             teaches=chapter["teaches"] if chapter else None,
             gap_sentence=assessment["sentence"],
+            legacy=gap.legacy_sentence(assessment),
             staleness=gap.staleness_sentence(assessment),
             claim_texts=[claim.text for claim in trend.claims],
+            must_mention=required_facts(assessment),
         )
 
         recommendations.append(
@@ -119,6 +136,7 @@ def run(run_dir: Path) -> None:
                 latest_version=assessment["latest"],
                 gap_kind=assessment["kind"],
                 releases_since=assessment["released_since"],
+                legacy_uses=[marker["uses"] for marker in assessment["legacy"]],
             )
         )
 

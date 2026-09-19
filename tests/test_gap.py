@@ -50,7 +50,34 @@ def test_a_short_version_is_padded_before_comparing():
 
 
 def test_only_actionable_kinds_justify_a_rewrite():
-    assert gap.ACTIONABLE == {gap.BEHIND_MAJOR, gap.BEHIND_MINOR}
+    assert gap.ACTIONABLE == {gap.BEHIND_MAJOR, gap.BEHIND_MINOR, gap.UNPINNED}
+
+
+def test_an_unpinned_install_is_its_own_verdict():
+    assert gap.compare("0.3.*", "1.4.2", unpinned=True) == gap.UNPINNED
+
+
+def test_the_unpinned_sentence_names_what_a_student_gets_today():
+    sentence = gap.describe("langchain", None, "1.4.2", gap.UNPINNED)
+
+    assert "no version bound" in sentence and "1.4.2" in sentence
+
+
+def test_the_legacy_sentence_names_the_calls_and_the_source_of_the_claim():
+    assessment = gap.assess(
+        "langchain", ["1.4.2"], None, [], None, unpinned=True,
+        legacy=[{"package": "langchain", "uses": "RetrievalQA", "note": "removed in langchain 1.x"}],
+    )
+
+    sentence = gap.legacy_sentence(assessment)
+
+    assert "RetrievalQA" in sentence and "pattern table" in sentence
+
+
+def test_there_is_no_legacy_sentence_without_markers():
+    assessment = gap.assess("langchain", ["1.4.2"], "1.4.0", [], None)
+
+    assert gap.legacy_sentence(assessment) == ""
 
 
 def test_the_sentence_names_both_versions():
@@ -96,3 +123,28 @@ def test_the_staleness_sentence_counts_what_landed_after():
     assessment = gap.assess("langchain", ["1.4.2"], None, ["2026-09-18T00:00:00Z"], "2026-08-27")
 
     assert "1 of the confirmed releases in this run landed after" in gap.staleness_sentence(assessment)
+
+
+def test_one_legacy_call_carries_its_own_note():
+    assessment = gap.assess("langchain", ["1.4.2"], None, [], None, unpinned=True,
+                            legacy=[{"package": "langchain", "uses": "RetrievalQA",
+                                     "note": "removed in langchain 1.x"}])
+
+    assert gap.legacy_sentence(assessment).endswith("says removed in langchain 1.x.")
+
+
+def test_several_legacy_calls_are_listed_without_repeating_a_note():
+    markers = [{"package": "langchain", "uses": name, "note": "removed in langchain 1.x"}
+               for name in ("LLMChain", "RetrievalQA", "load_qa_chain")]
+    assessment = gap.assess("langchain", ["1.4.2"], None, [], None, unpinned=True, legacy=markers)
+
+    sentence = gap.legacy_sentence(assessment)
+
+    assert "LLMChain, RetrievalQA and load_qa_chain" in sentence
+
+
+def test_a_package_no_chapter_covers_is_described_as_a_gap():
+    sentence = gap.describe("crewai", None, "1.15.22", gap.UNKNOWN, has_chapter=False)
+
+    assert sentence.startswith("No chapter in the course installs or teaches crewai")
+    assert "1.15.22" in sentence

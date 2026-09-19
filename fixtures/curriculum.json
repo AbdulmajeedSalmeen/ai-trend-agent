@@ -85,12 +85,30 @@
       ],
       "teaches": "Classify and compare text with BERT through Hugging Face transformers, then fine-tune it.",
       "pins": {
-        "transformers": null
+        "torch": "2.5.1",
+        "torchaudio": "2.5.1",
+        "torchvision": "0.20.1"
       },
       "prerequisites": [
         "C3"
       ],
-      "last_updated": "2026-08-27"
+      "last_updated": "2026-08-27",
+      "installs_unpinned": [
+        "accelerate",
+        "datasets",
+        "evaluate",
+        "scikit-learn",
+        "transformers"
+      ],
+      "legacy_api": [],
+      "notebooks": [
+        "BERT Use Cases lab (solution).ipynb",
+        "BERT_Word_Similarity lab (solution).ipynb",
+        "BERT_for_Sentiment_Analysis(solution).ipynb",
+        "BERT_for_Text_Classification_Lab(solution).ipynb",
+        "HuggingFace_Intro_demo.ipynb",
+        "LLM_3_BERT_Example_Output_(demo).ipynb"
+      ]
     },
     {
       "chapter_id": "C5",
@@ -112,13 +130,22 @@
         "DSPy"
       ],
       "teaches": "Call the OpenAI API directly and shape answers by prompt engineering and chaining, with DSPy shown for optimization.",
-      "pins": {
-        "openai-python": null
-      },
+      "pins": {},
       "prerequisites": [
         "C3"
       ],
-      "last_updated": "2026-08-27"
+      "last_updated": "2026-08-27",
+      "installs_unpinned": [
+        "dspy",
+        "openai"
+      ],
+      "legacy_api": [],
+      "notebooks": [
+        "DSPy_Facility_Support_Analyzer_Demo.ipynb",
+        "Story_Writing_with_Prompt_Chaining_OpenAI.ipynb",
+        "openai_api_quickstart.ipynb",
+        "optimizing_llm_as_a_judge_prompts_explainer.ipynb"
+      ]
     },
     {
       "chapter_id": "C6",
@@ -135,11 +162,25 @@
         "FAISS"
       ],
       "teaches": "Build RAG from scratch: chunk, embed, index with FAISS, retrieve, then answer.",
-      "pins": {},
+      "pins": {
+        "datasets": "2.14.5"
+      },
       "prerequisites": [
         "C5"
       ],
-      "last_updated": "2026-08-27"
+      "last_updated": "2026-08-27",
+      "installs_unpinned": [
+        "faiss-cpu",
+        "faiss-gpu-cu12",
+        "sentence-transformers",
+        "transformers"
+      ],
+      "legacy_api": [],
+      "notebooks": [
+        "Build_a_Research_Paper_Assistant_using_RAG(lab_solution).ipynb",
+        "Building_a_Simple_RAG_System_from_Scratch_sol.ipynb",
+        "Indexing_Faiss_Basics_sol.ipynb"
+      ]
     },
     {
       "chapter_id": "C7",
@@ -157,11 +198,30 @@
         "Evidently"
       ],
       "teaches": "Measure a RAG system with Ragas and Evidently, including LLM-as-jury scoring.",
-      "pins": {},
+      "pins": {
+        "langchain-community": "<0.4.2"
+      },
       "prerequisites": [
         "C6"
       ],
-      "last_updated": "2026-08-27"
+      "last_updated": "2026-08-27",
+      "installs_unpinned": [
+        "evidently",
+        "faiss-cpu",
+        "langchain",
+        "langchain-openai",
+        "litellm",
+        "openai",
+        "ragas",
+        "rapidfuzz",
+        "sentence-transformers"
+      ],
+      "legacy_api": [],
+      "notebooks": [
+        "LLM_as_a_Jury_with_Evidently_AI_(demo).ipynb",
+        "RAG_Evaluation_Metrics_with_Ragas_sol.ipynb",
+        "RAG_Evaluation_with_Evidently_sol.ipynb"
+      ]
     },
     {
       "chapter_id": "C8",
@@ -185,12 +245,81 @@
       ],
       "teaches": "Rebuild document QA on LangChain: splitters, a FAISS vector store, and chains over documents and Wikipedia.",
       "pins": {
-        "langchain": null
+        "faiss-cpu": "1.7.4",
+        "ipykernel": "6.20.2",
+        "langchain": "0.0.352",
+        "openai": "0.28",
+        "rank-bm25": "0.2.2",
+        "tiktoken": "0.5.2",
+        "wikipedia": "1.4.0"
       },
       "prerequisites": [
         "C6"
       ],
-      "last_updated": "2026-09-03"
+      "last_updated": "2026-09-03",
+      "installs_unpinned": [
+        "accelerate",
+        "faiss-cpu",
+        "google-search-results",
+        "google-serp-api",
+        "langchain",
+        "langchain-chroma",
+        "langchain-classic",
+        "langchain-community",
+        "langchain-huggingface",
+        "langchain-openai",
+        "langchain-text-splitters",
+        "langchain-unstructured",
+        "langchainhub",
+        "langgraph",
+        "mypy-extensions",
+        "openai",
+        "pdf2image",
+        "pypdf",
+        "pytesseract",
+        "sentence-transformers",
+        "tiktoken",
+        "transformers",
+        "unstructured",
+        "wikipedia"
+      ],
+      "legacy_api": [
+        {
+          "package": "langchain",
+          "uses": "LLMChain",
+          "note": "removed in langchain 1.x, replaced by the LCEL pipe"
+        },
+        {
+          "package": "langchain",
+          "uses": "RetrievalQA",
+          "note": "removed in langchain 1.x, replaced by create_retrieval_chain"
+        },
+        {
+          "package": "langchain",
+          "uses": "langchain.chains imports",
+          "note": "most of it moved to langchain-classic in 1.x"
+        },
+        {
+          "package": "langchain",
+          "uses": "load_qa_chain",
+          "note": "removed in langchain 1.x"
+        },
+        {
+          "package": "openai",
+          "uses": "openai.ChatCompletion",
+          "note": "removed in openai 1.x"
+        }
+      ],
+      "notebooks": [
+        "Demo_LangChain_Document_Chat_using_OpenAI(solution).ipynb",
+        "Demo_LangChain_FAISS(solution).ipynb",
+        "Demo_LangChain_Intro(Solution).ipynb",
+        "Demo_LangChain_Splitter(solution).ipynb",
+        "Demo_Langchian_Overview(Solution).ipynb",
+        "Lab_Endgame_QA_LangChain(Solution).ipynb",
+        "Lab_LangChain_QA(solution).ipynb",
+        "Lab_LangChain_wikipedia(solution).ipynb"
+      ]
     },
     {
       "chapter_id": "C9",
@@ -210,11 +339,32 @@
         "LoRA"
       ],
       "teaches": "Evaluate an LLM with basic metrics, then fine-tune with PEFT and LoRA.",
-      "pins": {},
+      "pins": {
+        "datasets": "2.14.5"
+      },
       "prerequisites": [
         "C4"
       ],
-      "last_updated": "2026-09-03"
+      "last_updated": "2026-09-03",
+      "installs_unpinned": [
+        "accelerate",
+        "bert-score",
+        "bitsandbytes",
+        "datasets",
+        "evaluate",
+        "nltk",
+        "peft",
+        "rouge-score",
+        "scikit-learn",
+        "torch",
+        "transformers"
+      ],
+      "legacy_api": [],
+      "notebooks": [
+        "Demo_BERT_Finetune_Practical_Guide.ipynb",
+        "Demo_LLM_5_Evals_Basic_Metrics_(sol).ipynb",
+        "Demo_peft_lora_qwen_sol.ipynb"
+      ]
     },
     {
       "chapter_id": "C10",
@@ -237,7 +387,14 @@
       "prerequisites": [
         "C8"
       ],
-      "last_updated": "2026-09-03"
+      "last_updated": "2026-09-03",
+      "installs_unpinned": [
+        "streamlit"
+      ],
+      "legacy_api": [],
+      "notebooks": [
+        "Streamlit_Demo.ipynb"
+      ]
     },
     {
       "chapter_id": "C11",
@@ -257,7 +414,15 @@
       "prerequisites": [
         "C8"
       ],
-      "last_updated": "2026-09-03"
+      "last_updated": "2026-09-03",
+      "installs_unpinned": [],
+      "legacy_api": [],
+      "notebooks": [
+        "Building_a_Minimal_Tool_Agent_sol.ipynb",
+        "Exercise_Sol_Add_a_Third_Tool.ipynb",
+        "Exercise_Sol_Build_Your_First_Tool_Agent.ipynb",
+        "Rag_to_agent_demo_sol.ipynb"
+      ]
     },
     {
       "chapter_id": "C12",
@@ -273,11 +438,26 @@
       ],
       "tools_covered": [],
       "teaches": "Control an agent with an explicit reason-act-observe loop, and debug one that misbehaves.",
-      "pins": {},
+      "pins": {
+        "langchain": "0.3.*",
+        "langchain-community": "0.3.*",
+        "langchain-openai": "0.2.*"
+      },
       "prerequisites": [
         "C11"
       ],
-      "last_updated": "2026-09-10"
+      "last_updated": "2026-09-10",
+      "installs_unpinned": [
+        "beautifulsoup4",
+        "langchainhub",
+        "requests"
+      ],
+      "legacy_api": [],
+      "notebooks": [
+        "Agent_Failure_Examples_sol.ipynb",
+        "Exercise_Fix_a_Broken_Agent_Solution_ver.ipynb",
+        "Reason–Act–Observe_Loop_sol.ipynb"
+      ]
     },
     {
       "chapter_id": "C13",
@@ -293,11 +473,32 @@
       ],
       "tools_covered": [],
       "teaches": "Design tool systems: schemas for arguments, a dispatcher, and error handling.",
-      "pins": {},
+      "pins": {
+        "langchain": "0.3.*",
+        "langchain-community": "0.3.*",
+        "langchain-openai": "0.2.*"
+      },
       "prerequisites": [
         "C12"
       ],
-      "last_updated": "2026-09-10"
+      "last_updated": "2026-09-10",
+      "installs_unpinned": [
+        "beautifulsoup4",
+        "faiss-cpu",
+        "langchainhub",
+        "langsmith",
+        "requests",
+        "sentence-transformers",
+        "tenacity"
+      ],
+      "legacy_api": [],
+      "notebooks": [
+        "Demo_Tool_Dispatcher_Pattern_sol.ipynb",
+        "Demo_Tool_Schema_and_Structured_Arguments_sol.ipynb",
+        "Demo__Tool_Schema_and_Structured_Arguments.ipynb",
+        "Exercise_Build_Three_Agent_Tools_solution.ipynb",
+        "Exercise_Implement_Tool_Error_Handling__sol.ipynb"
+      ]
     },
     {
       "chapter_id": "C14",
@@ -313,11 +514,28 @@
       ],
       "tools_covered": [],
       "teaches": "Build a task-oriented agent and bound its autonomy with guardrails.",
-      "pins": {},
+      "pins": {
+        "langchain": "0.3.*",
+        "langchain-community": "0.3.*",
+        "langchain-openai": "0.2.*"
+      },
       "prerequisites": [
         "C13"
       ],
-      "last_updated": "2026-09-10"
+      "last_updated": "2026-09-10",
+      "installs_unpinned": [
+        "beautifulsoup4",
+        "ddgs",
+        "duckduckgo-search",
+        "requests"
+      ],
+      "legacy_api": [],
+      "notebooks": [
+        "Demo_Autonomy_Limits_and_Guardrails_sol.ipynb",
+        "Demo_Task_Oriented_Agent_Workflow_sol.ipynb",
+        "Exercise_Sol_Add_Guardrails.ipynb",
+        "Exercise_Sol_Build_a_Task_Agent.ipynb"
+      ]
     },
     {
       "chapter_id": "C15",
@@ -333,11 +551,32 @@
       ],
       "tools_covered": [],
       "teaches": "Move from one agent to several with role-based design and a shared workflow.",
-      "pins": {},
+      "pins": {
+        "langchain": ">=0.1.0,<1.0",
+        "langchain-community": "0.3.*",
+        "langchain-core": "0.3.*",
+        "langchain-openai": "0.2.*"
+      },
       "prerequisites": [
         "C14"
       ],
-      "last_updated": "2026-09-10"
+      "last_updated": "2026-09-10",
+      "installs_unpinned": [
+        "beautifulsoup4",
+        "ddgs",
+        "duckduckgo-search",
+        "faiss-cpu",
+        "langsmith",
+        "requests"
+      ],
+      "legacy_api": [],
+      "notebooks": [
+        "Demo_From_Single_Agent_to_Multi_Agent_Workflow_sol (1).ipynb",
+        "Demo_From_Single_Agent_to_Multi_Agent_Workflow_sol.ipynb",
+        "Demo_Role_Based_Agent_Design_sol.ipynb",
+        "Exercise_Sol_Build_a_Two_Agent_System.ipynb",
+        "Exercise_Sol_Extend_the_Workflow.ipynb"
+      ]
     },
     {
       "chapter_id": "C16",
@@ -351,11 +590,31 @@
       ],
       "tools_covered": [],
       "teaches": "Walk through a reference agent system, evaluate its behavior, and document it.",
-      "pins": {},
+      "pins": {
+        "langchain": ">=0.1.0,<1.0",
+        "langchain-community": "0.3.*",
+        "langchain-core": "0.3.*",
+        "langchain-openai": "0.2.*"
+      },
       "prerequisites": [
         "C15"
       ],
-      "last_updated": "2026-09-10"
+      "last_updated": "2026-09-10",
+      "installs_unpinned": [
+        "beautifulsoup4",
+        "ddgs",
+        "duckduckgo-search",
+        "faiss-cpu",
+        "langchainhub",
+        "langsmith",
+        "requests"
+      ],
+      "legacy_api": [],
+      "notebooks": [
+        "Demo_Evaluating_Agent_Behavior_(sol).ipynb",
+        "Demo_Reference_Agent_System_Walkthrough_sol.ipynb",
+        "Exercise_Document_System_Behavior_sol.ipynb"
+      ]
     },
     {
       "chapter_id": "C17",
@@ -371,11 +630,39 @@
       ],
       "tools_covered": [],
       "teaches": "Give an agent memory: conversation history plus long-term recall from a vector store.",
-      "pins": {},
+      "pins": {
+        "langchain": "0.3.*",
+        "langchain-community": "0.3.*",
+        "langchain-openai": "0.2.*"
+      },
       "prerequisites": [
         "C15"
       ],
-      "last_updated": "2026-09-17"
+      "last_updated": "2026-09-17",
+      "installs_unpinned": [
+        "beautifulsoup4",
+        "faiss-cpu",
+        "langchainhub",
+        "requests"
+      ],
+      "legacy_api": [
+        {
+          "package": "langchain",
+          "uses": "ConversationBufferMemory",
+          "note": "removed in langchain 1.x"
+        },
+        {
+          "package": "langchain",
+          "uses": "langchain.chains imports",
+          "note": "most of it moved to langchain-classic in 1.x"
+        }
+      ],
+      "notebooks": [
+        "Demo_Conversation_Memory_in_AI_Agents_sol.ipynb",
+        "Demo_Long_Term_Memory_with_Vector_Store(Solution).ipynb",
+        "Exercise_Integrate_Memory_into_Your_Agent_System_sol.ipynb",
+        "Exercise_Memory_Retrieval_Test_sol.ipynb"
+      ]
     },
     {
       "chapter_id": "C18",
@@ -391,11 +678,26 @@
       ],
       "tools_covered": [],
       "teaches": "Make an agent plan: decompose a task, track execution, and prevent loops.",
-      "pins": {},
+      "pins": {
+        "langchain": "0.3.*",
+        "langchain-community": "0.3.*",
+        "langchain-openai": "0.2.*"
+      },
       "prerequisites": [
         "C17"
       ],
-      "last_updated": "2026-09-17"
+      "last_updated": "2026-09-17",
+      "installs_unpinned": [
+        "ddgs",
+        "duckduckgo-search"
+      ],
+      "legacy_api": [],
+      "notebooks": [
+        "Demo_Execution_Tracking(Solution).ipynb",
+        "Demo_Task_Planning_Agent(Solution).ipynb",
+        "Exercise_Solution_Implement_a_Planning_Agent.ipynb",
+        "Exercise_Solution_Loop_Prevention.ipynb"
+      ]
     },
     {
       "chapter_id": "C19",
@@ -416,12 +718,25 @@
       ],
       "teaches": "Orchestrate agents as a graph with LangGraph, including multi-agent conversation and a review agent, with n8n shown as a no-code alternative.",
       "pins": {
-        "langgraph": null
+        "langchain": "0.3.*",
+        "langchain-community": "0.3.*",
+        "langchain-openai": "0.2.*"
       },
       "prerequisites": [
         "C18"
       ],
-      "last_updated": "2026-09-17"
+      "last_updated": "2026-09-17",
+      "installs_unpinned": [
+        "langchainhub",
+        "langgraph"
+      ],
+      "legacy_api": [],
+      "notebooks": [
+        "Demo_Graph_Based_Agent_Workflow_sol.ipynb",
+        "Demo_Multi_Agent_Conversation_Patterns_sol.ipynb",
+        "Exercise_Add_a_Review_Agent_sol.ipynb",
+        "Exercise_Implement_a_Multi_Agent_Workflow_sol_dynamic_looping.ipynb"
+      ]
     },
     {
       "chapter_id": "C20",
@@ -437,11 +752,31 @@
       ],
       "tools_covered": [],
       "teaches": "Name the ways agents fail, diagnose a failure, and fix it.",
-      "pins": {},
+      "pins": {
+        "langchain": "0.3.*",
+        "langchain-community": "0.3.*",
+        "langchain-openai": "0.2.*"
+      },
       "prerequisites": [
         "C19"
       ],
-      "last_updated": "2026-09-17"
+      "last_updated": "2026-09-17",
+      "installs_unpinned": [
+        "beautifulsoup4",
+        "langchainhub",
+        "requests"
+      ],
+      "legacy_api": [],
+      "notebooks": [
+        "Demo_Common_Agent_Failure_Cases(Solution) (1).ipynb",
+        "Demo_Common_Agent_Failure_Cases(Solution).ipynb",
+        "Demo_Failure_Diagnosis_Workflow(Solution) (1).ipynb",
+        "Demo_Failure_Diagnosis_Workflow(Solution).ipynb",
+        "Exercise_Diagnose_Agent_Failures (sample solution) (1).ipynb",
+        "Exercise_Diagnose_Agent_Failures (sample solution).ipynb",
+        "Exercise_Fix_Failure_Cases (sample solution) (1).ipynb",
+        "Exercise_Fix_Failure_Cases (sample solution).ipynb"
+      ]
     },
     {
       "chapter_id": "C21",
@@ -456,11 +791,28 @@
       ],
       "tools_covered": [],
       "teaches": "Diagnose coordination failures in a multi-agent system and document its architecture.",
-      "pins": {},
+      "pins": {
+        "langchain": "0.3.*",
+        "langchain-community": "0.3.*",
+        "langchain-openai": "0.2.*",
+        "langgraph": "0.2.*"
+      },
       "prerequisites": [
         "C20"
       ],
-      "last_updated": "2026-09-17"
+      "last_updated": "2026-09-17",
+      "installs_unpinned": [
+        "ddgs",
+        "duckduckgo-search",
+        "faiss-cpu"
+      ],
+      "legacy_api": [],
+      "notebooks": [
+        "Demo_Diagnosing_Coordination_Failures(Solution).ipynb",
+        "Demo_Multi_Agent_System_Walkthrough(Solution).ipynb",
+        "Exercise_Document_System_Architecture.ipynb",
+        "Exercise_Solution_Complete_Multi_Agent_Upgrade.ipynb"
+      ]
     },
     {
       "chapter_id": "C22",
@@ -477,11 +829,23 @@
       ],
       "tools_covered": [],
       "teaches": "Build an evaluation set and an automated evaluator for agent behavior.",
-      "pins": {},
+      "pins": {
+        "langchain": "0.3.*",
+        "langchain-openai": "0.2.*"
+      },
       "prerequisites": [
         "C21"
       ],
-      "last_updated": null
+      "last_updated": null,
+      "installs_unpinned": [],
+      "legacy_api": [],
+      "notebooks": [
+        "Demo_Automated_Evaluation_Workflow_Solution.ipynb",
+        "Demo_Designing_Evaluation_Tasks_for_Agent_Systems_Solution.ipynb",
+        "Demo_End_to_End_Agent_Evaluation_Solution.ipynb",
+        "Exercise_Build_a_Simple_Automated_Evaluator_Solution.ipynb",
+        "Exercise_Build_an_Evaluation_Set_Solution.ipynb"
+      ]
     },
     {
       "chapter_id": "C23",
@@ -497,11 +861,30 @@
       ],
       "tools_covered": [],
       "teaches": "Apply guardrail patterns and human-in-the-loop control, then test them.",
-      "pins": {},
+      "pins": {
+        "langchain": "0.3.*",
+        "langchain-community": "0.3.*",
+        "langchain-openai": "0.2.*",
+        "langgraph": "0.2.*"
+      },
       "prerequisites": [
         "C22"
       ],
-      "last_updated": null
+      "last_updated": null,
+      "installs_unpinned": [
+        "faiss-cpu",
+        "langchain",
+        "langchain-community",
+        "langchain-openai",
+        "langgraph"
+      ],
+      "legacy_api": [],
+      "notebooks": [
+        "Demo_Guardrail_Design_Patterns(Solution).ipynb",
+        "Demo_Human_in_the_Loop_Control(Solution).ipynb",
+        "Exercise_Sol_Implement_Guardrails.ipynb",
+        "Exercise_Solution_Test_Guardrails.ipynb"
+      ]
     },
     {
       "chapter_id": "C24",
@@ -521,7 +904,22 @@
       "prerequisites": [
         "C23"
       ],
-      "last_updated": null
+      "last_updated": null,
+      "installs_unpinned": [
+        "langchain",
+        "langchain-community",
+        "langchain-openai",
+        "langgraph",
+        "matplotlib",
+        "pandas"
+      ],
+      "legacy_api": [],
+      "notebooks": [
+        "Demo_Agent_Execution_Logging(Solution).ipynb",
+        "Demo_Monitoring_Agent_Performance(Solution).ipynb",
+        "Exercise_Analyze_System_Logs.ipynb",
+        "Exercise_Solution_Implement_Agent_Logging.ipynb"
+      ]
     },
     {
       "chapter_id": "C25",
@@ -544,5 +942,5 @@
       "last_updated": null
     }
   ],
-  "pins_note": "pins records the package version a chapter's own notebooks install. A null value means nobody has read that chapter's notebook yet, and the agent will say so instead of guessing how far behind the chapter is."
+  "pins_note": "pins, installs_unpinned and legacy_api are read from the course notebooks by `python -m src.curriculum`. A package under installs_unpinned has no version bound in the notebook, so a student installs whatever is newest on the day they run it."
 }

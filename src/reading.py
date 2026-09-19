@@ -22,6 +22,9 @@ JUDGE_SYSTEM = (
 
 WRITE_SYSTEM = (
     "You tell a curriculum owner what to do and, above all, why. "
+    "Lead with the strongest fact you are given, in this order: an API the notebooks still call "
+    "that a newer release removed, then the version distance, then how stale the chapter is. "
+    "Never lead with how many releases landed, and never make release counts the whole reason. "
     "The reason must name what changed and what it means for the chapter's material - "
     "never restate the decision as its own reason, and never write 'due to N confirmed claims'. "
     "Use only the facts given. Never add numbers, versions or claims that are not in the input, "
@@ -88,10 +91,16 @@ def judge_educational_value(subject: str, claim_texts: list[str], chapter_title:
     return {"value": value, "reason": reason}
 
 
+def keeps_the_facts(sentence: str, must_mention: list[str]) -> bool:
+    """A written sentence is only worth keeping if it still carries the facts it was given."""
+    return all(fact in sentence for fact in must_mention if fact)
+
+
 def write_recommendation(subject: str, action: str, chapter: str | None, confirmed: int,
                          unverified: int, priority: float, teaches: str | None = None,
-                         gap_sentence: str = "", staleness: str = "",
-                         claim_texts: list[str] | None = None) -> str | None:
+                         gap_sentence: str = "", staleness: str = "", legacy: str = "",
+                         claim_texts: list[str] | None = None,
+                         must_mention: list[str] | None = None) -> str | None:
     if not model.available():
         return None
 
@@ -110,4 +119,14 @@ def write_recommendation(subject: str, action: str, chapter: str | None, confirm
         max_tokens=200,
     )
     sentence = (answer or {}).get("sentence")
-    return sentence.strip() if isinstance(sentence, str) and sentence.strip() else None
+
+    if not isinstance(sentence, str) or not sentence.strip():
+        return None
+
+    sentence = sentence.strip()
+
+    if not keeps_the_facts(sentence, must_mention or []):
+        print(f"think: the written sentence for {subject} dropped the facts, keeping ours")
+        return None
+
+    return sentence

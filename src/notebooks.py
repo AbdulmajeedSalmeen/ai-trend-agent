@@ -1,110 +1,203 @@
 import argparse
 import json
 import re
+from collections import defaultdict
 from pathlib import Path
 
 NOTEBOOK_DIR = Path("notebooks")
 
-INSTALL_RE = re.compile(r"([A-Za-z0-9_.\-\[\]]+)\s*==\s*([0-9][A-Za-z0-9.\-]*)")
-PIP_LINE_RE = re.compile(r"^\s*[!%]?\s*(?:pip|pip3|uv pip|python -m pip)\s+install\b(.*)$", re.MULTILINE)
+PIP_LINE_RE = re.compile(r"^\s*[!%]?\s*(?:\S+\s+-m\s+)?(?:pip|pip3|uv pip)\s+install\b(.*)$")
+TOKEN_RE = re.compile(r"""["']([^"']+)["']|(\S+)""")
+REQUIREMENT_RE = re.compile(r"^([A-Za-z0-9_.\-]+)(?:\[[^\]]*\])?\s*(.*)$")
+BOUND_RE = re.compile(r"(\d+(?:\.\d+)*)")
+
+SKIP_TOKENS = {"install", "pip", "pip3", "-r", "requirements.txt", "/dev/null"}
 
 PATTERNS = {
     "langchain": [
-        ("RetrievalQA", "RetrievalQA chain", "replaced by LCEL and create_retrieval_chain in 0.2+"),
-        ("load_qa_chain", "load_qa_chain", "removed from langchain 1.x"),
-        ("initialize_agent", "initialize_agent", "replaced by the agent constructors in langgraph"),
-        ("LLMChain", "LLMChain", "replaced by the pipe operator in LCEL"),
-        ("ConversationBufferMemory", "ConversationBufferMemory", "replaced by message history objects"),
+        ("RetrievalQA", "RetrievalQA", "removed in langchain 1.x, replaced by create_retrieval_chain"),
+        ("load_qa_chain", "load_qa_chain", "removed in langchain 1.x"),
+        ("initialize_agent", "initialize_agent", "removed in langchain 1.x, replaced by langgraph agents"),
+        ("LLMChain", "LLMChain", "removed in langchain 1.x, replaced by the LCEL pipe"),
+        ("ConversationBufferMemory", "ConversationBufferMemory", "removed in langchain 1.x"),
+        ("langchain.chains", "langchain.chains imports", "most of it moved to langchain-classic in 1.x"),
         ("create_retrieval_chain", "create_retrieval_chain", "current"),
-        ("|", "LCEL pipes", "current"),
+        ("create_react_agent", "create_react_agent", "current"),
     ],
     "openai": [
         ("openai.ChatCompletion", "openai.ChatCompletion", "removed in openai 1.x"),
         ("openai.Completion", "openai.Completion", "removed in openai 1.x"),
-        ("OpenAI(", "the OpenAI client", "current"),
         ("client.chat.completions", "client.chat.completions", "current"),
     ],
     "transformers": [
-        ("pipeline(", "the pipeline helper", "current"),
-        ("Trainer(", "Trainer", "current"),
         ("AutoModelFor", "Auto classes", "current"),
+        ("Trainer(", "Trainer", "current"),
+        ("pipeline(", "the pipeline helper", "current"),
     ],
     "langgraph": [
+        ("MessageGraph", "MessageGraph", "removed in langgraph 0.3"),
         ("StateGraph", "StateGraph", "current"),
-        ("MessageGraph", "MessageGraph", "removed in langgraph 0.3+"),
-        ("create_react_agent", "create_react_agent", "current"),
     ],
 }
 
 
-def cells(notebook: dict) -> list[str]:
+def code_cells(notebook: dict) -> list[str]:
     sources = []
 
     for cell in notebook.get("cells", []):
+        if cell.get("cell_type") != "code":
+            continue
+
         source = cell.get("source", "")
         sources.append("".join(source) if isinstance(source, list) else source)
 
     return sources
 
 
-def find_pins(code: str) -> dict[str, str]:
-    pins = {}
+def requirements(line: str) -> list[tuple[str, str]]:
+    match = PIP_LINE_RE.match(line)
 
-    for arguments in PIP_LINE_RE.findall(code):
-        for package, version in INSTALL_RE.findall(arguments):
-            pins[package.split("[")[0].lower()] = version
+    if match is None:
+        return []
 
-    return pins
+    found = []
+    arguments = match.group(1).split("#")[0]
+
+    for quoted, bare in TOKEN_RE.findall(arguments):
+        token = quoted or bare
+
+        if token.startswith("-") or token in SKIP_TOKENS or token.startswith(">"):
+            continue
+
+        parsed = REQUIREMENT_RE.match(token)
+
+        if parsed is None:
+            continue
+
+        found.append((parsed.group(1).lower().replace("_", "-"), parsed.group(2).strip()))
+
+    return found
 
 
-def find_patterns(code: str) -> list[dict]:
+def clean_spec(spec: str) -> str | None:
+    """The version bound as the notebook writes it, with the equals sign dropped."""
+    if BOUND_RE.search(spec) is None:
+        return None
+
+    return spec.replace("==", "").strip()
+
+
+def read_installs(sources: list[str]) -> dict:
+    pinned: dict[str, str] = {}
+    unpinned: set[str] = set()
+
+    for source in sources:
+        for line in source.splitlines():
+            if line.lstrip().startswith("#"):
+                continue
+
+            for package, spec in requirements(line):
+                if not spec:
+                    unpinned.add(package)
+                    continue
+
+                bound = clean_spec(spec)
+
+                if bound is None:
+                    unpinned.add(package)
+                else:
+                    pinned[package] = bound
+                    unpinned.discard(package)
+
+    return {"pinned": pinned, "unpinned": sorted(unpinned - set(pinned))}
+
+
+def read_patterns(sources: list[str]) -> list[dict]:
+    code = "\n".join(sources)
     found = []
 
     for package, markers in PATTERNS.items():
         for needle, name, note in markers:
-            if needle == "|":
-                continue
             if needle in code:
-                found.append({"package": package, "uses": name, "note": note})
+                found.append({"package": package, "uses": name, "note": note, "legacy": note != "current"})
 
     return found
 
 
 def scan(notebook: dict) -> dict:
-    code = "\n".join(cells(notebook))
+    sources = code_cells(notebook)
+    installs = read_installs(sources)
 
-    return {"pins": find_pins(code), "patterns": find_patterns(code)}
+    return {
+        "pinned": installs["pinned"],
+        "unpinned": installs["unpinned"],
+        "patterns": read_patterns(sources),
+    }
 
 
 def scan_file(path: Path) -> dict:
-    result = scan(json.loads(path.read_text(encoding="utf-8")))
-    result["file"] = path.name
-    return result
+    report = scan(json.loads(path.read_text(encoding="utf-8")))
+    report["file"] = path.name
+    report["week"] = path.parent.name
+    return report
 
 
-def main() -> None:
-    parser = argparse.ArgumentParser(description="Read course notebooks and report what they install and use.")
-    parser.add_argument("path", nargs="?", default=str(NOTEBOOK_DIR))
-    args = parser.parse_args()
-
-    root = Path(args.path)
+def scan_all(root: Path) -> list[dict]:
     files = sorted(root.rglob("*.ipynb")) if root.is_dir() else [root]
 
     if not files:
         raise SystemExit(f"no notebooks under {root}")
 
-    for path in files:
-        report = scan_file(path)
-        print(f"\n{report['file']}")
+    return [scan_file(path) for path in files]
 
-        if report["pins"]:
-            for package, version in sorted(report["pins"].items()):
-                print(f"  installs  {package} {version}")
-        else:
-            print("  installs  nothing pinned")
+
+def summarise(reports: list[dict]) -> dict:
+    by_week = defaultdict(lambda: {"pinned": defaultdict(set), "unpinned": defaultdict(int), "legacy": defaultdict(int)})
+
+    for report in reports:
+        week = by_week[report["week"]]
+
+        for package, version in report["pinned"].items():
+            week["pinned"][package].add(version)
+
+        for package in report["unpinned"]:
+            week["unpinned"][package] += 1
 
         for pattern in report["patterns"]:
-            print(f"  uses      {pattern['uses']} ({pattern['note']})")
+            if pattern["legacy"]:
+                week["legacy"][pattern["uses"]] += 1
+
+    return by_week
+
+
+def main() -> None:
+    parser = argparse.ArgumentParser(description="Read course notebooks and report what they install and use.")
+    parser.add_argument("path", nargs="?", default=str(NOTEBOOK_DIR))
+    parser.add_argument("--by-week", action="store_true")
+    args = parser.parse_args()
+
+    reports = scan_all(Path(args.path))
+
+    if args.by_week:
+        for week, data in sorted(summarise(reports).items()):
+            print(f"\n{week}")
+            for package, versions in sorted(data["pinned"].items()):
+                print(f"  runs      {package} {', '.join(sorted(versions))}")
+            for package, count in sorted(data["unpinned"].items(), key=lambda i: -i[1])[:8]:
+                print(f"  unpinned  {package} ({count} notebooks)")
+            for name, count in sorted(data["legacy"].items(), key=lambda i: -i[1]):
+                print(f"  legacy    {name} ({count} notebooks)")
+        return
+
+    for report in reports:
+        print(f"\n{report['week']} / {report['file']}")
+        for package, version in sorted(report["pinned"].items()):
+            print(f"  runs      {package} {version}")
+        if report["unpinned"]:
+            print(f"  unpinned  {', '.join(report['unpinned'])}")
+        for pattern in report["patterns"]:
+            if pattern["legacy"]:
+                print(f"  legacy    {pattern['uses']} ({pattern['note']})")
 
 
 if __name__ == "__main__":

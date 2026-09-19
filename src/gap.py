@@ -3,13 +3,14 @@ import re
 NUMERIC_RE = re.compile(r"\d+")
 
 UNKNOWN = "unknown"
+UNPINNED = "unpinned"
 CURRENT = "current"
 AHEAD = "ahead"
 PATCH_ONLY = "patch_only"
 BEHIND_MINOR = "behind_minor"
 BEHIND_MAJOR = "behind_major"
 
-ACTIONABLE = {BEHIND_MAJOR, BEHIND_MINOR}
+ACTIONABLE = {BEHIND_MAJOR, BEHIND_MINOR, UNPINNED}
 
 
 def parts(version: str | None) -> tuple[int, ...] | None:
@@ -42,7 +43,10 @@ def newest(versions: list[str | None]) -> str | None:
     return max(ranked)[1]
 
 
-def compare(pinned: str | None, latest: str | None) -> str:
+def compare(pinned: str | None, latest: str | None, unpinned: bool = False) -> str:
+    if unpinned:
+        return UNPINNED
+
     taught = padded(pinned)
     released = padded(latest)
 
@@ -64,7 +68,19 @@ def compare(pinned: str | None, latest: str | None) -> str:
     return PATCH_ONLY
 
 
-def describe(subject: str, pinned: str | None, latest: str | None, kind: str) -> str:
+def describe(subject: str, pinned: str | None, latest: str | None, kind: str,
+             has_chapter: bool = True) -> str:
+    if not has_chapter:
+        if latest:
+            return f"No chapter in the course installs or teaches {subject}. The newest confirmed release is {latest}."
+        return f"No chapter in the course installs or teaches {subject}."
+
+    if kind == UNPINNED:
+        if latest:
+            return (f"The notebooks install {subject} with no version bound, so a student today gets "
+                    f"{latest} whatever the material was written against.")
+        return f"The notebooks install {subject} with no version bound."
+
     if kind == UNKNOWN:
         if latest:
             return f"The chapter does not record which {subject} version it teaches, so the distance to {latest} cannot be measured."
@@ -93,9 +109,10 @@ def count_after(published: list, since: str | None) -> int:
 
 
 def assess(subject: str, versions: list[str | None], pinned: str | None,
-           published: list, last_updated: str | None) -> dict:
+           published: list, last_updated: str | None, unpinned: bool = False,
+           legacy: list[dict] | None = None, has_chapter: bool = True) -> dict:
     latest = newest(versions)
-    kind = compare(pinned, latest)
+    kind = compare(pinned, latest, unpinned)
 
     return {
         "subject": subject,
@@ -104,8 +121,25 @@ def assess(subject: str, versions: list[str | None], pinned: str | None,
         "kind": kind,
         "chapter_updated": last_updated,
         "released_since": count_after(published, last_updated),
-        "sentence": describe(subject, pinned, latest, kind),
+        "sentence": describe(subject, pinned, latest, kind, has_chapter),
+        "legacy": legacy or [],
     }
+
+
+def legacy_sentence(assessment: dict) -> str:
+    markers = assessment["legacy"]
+
+    if not markers:
+        return ""
+
+    names = [marker["uses"] for marker in markers[:4]]
+    listed = names[0] if len(names) == 1 else ", ".join(names[:-1]) + f" and {names[-1]}"
+
+    if len(names) == 1:
+        return f"The notebooks still call {listed}, and our pattern table says {markers[0]['note']}."
+
+    return (f"The notebooks still call {listed} - calls our pattern table marks as removed or "
+            f"moved in a later major release.")
 
 
 def staleness_sentence(assessment: dict) -> str:

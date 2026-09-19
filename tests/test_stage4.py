@@ -47,7 +47,7 @@ def make_assessment(kind, released_since=0, pinned="1.4.0", latest="1.4.2"):
     return {
         "subject": "langchain", "pinned": pinned, "latest": latest, "kind": kind,
         "chapter_updated": "2026-08-27", "released_since": released_since,
-        "sentence": gap.describe("langchain", pinned, latest, kind),
+        "sentence": gap.describe("langchain", pinned, latest, kind), "legacy": [],
     }
 
 

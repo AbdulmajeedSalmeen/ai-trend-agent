@@ -58,3 +58,4 @@ class Recommendation(BaseModel):
     latest_version: Optional[str] = None
     gap_kind: Optional[str] = None
     releases_since: int = 0
+    legacy_uses: list[str] = []
