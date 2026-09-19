@@ -9,13 +9,13 @@ behind it: what the chapter teaches, which version it runs, and how far the rele
 ## Next actions
 
 1. **Lead:** push the day's work, then merge `dev` into `main` (it is ~50 commits behind).
-2. **Lead:** add the team names to `README.md`.
-3. **Everyone:** `pip install -r requirements.txt` (fastapi, uvicorn, httpx are new) and create a
+2. **Everyone:** `pip install -r requirements.txt` (fastapi, uvicorn, httpx are new) and create a
    `.env` with `OPENAI_API_KEY=...` — without it the stages fall back to rules and say so.
-4. **Everyone:** when a new week is published, drop its notebooks into `notebooks/<week n>/` and run
+3. **Everyone:** when a new week is published, drop its notebooks into `notebooks/<week n>/` and run
    `python -m src.curriculum`. That reads the pins, the unpinned installs and the old API calls
    straight out of the material. The folder is gitignored; the course files never leave the machine.
-5. **Whole team:** Sep 23–24 pick the demo run and freeze it; Sep 25–26 rehearse twice.
+4. **Whole team:** Sep 25–26, two timed rehearsals and one offline fallback drill. Read
+   `docs/DEMO-QA.md` first; every answer in it is backed by the frozen run.
 
 ## Owners
 
@@ -58,9 +58,9 @@ behind it: what the chapter teaches, which version it runs, and how far the rele
 
 - A run collects ~395 signals: ~315 Hacker News, ~80 GitHub releases.
 - 17 subjects, ~82 claims, 80 primary reports, 2 unverified, **0 cross-source**.
-- The model read 14 discussion posts that name a tracked package. **None stated anything a release
-  page could check.** That is why cross-source is zero — the community discusses tools, it does not
-  report versions.
+- The model reads every discussion post that names a tracked package. **None has yet stated
+  anything a release page could check.** That is why cross-source is zero — the community
+  discusses tools, it does not report versions. The per-run count is in the log.
 - Educational value is judged per trend (1–5 with a reason) and recorded as `judged`, never `measured`.
 - Four tracked packages are absent from the curriculum: anthropic-sdk-python, crewai, llama_index,
   pydantic-ai.
@@ -89,14 +89,15 @@ behind it: what the chapter teaches, which version it runs, and how far the rele
 - [x] `src/adapters/model.py` + `src/reading.py` — provider-agnostic model, three thinking points
 - [x] `src/gap.py` + `src/pin.py` — version distance, staleness by date, and a way to record pins
 - [x] `src/notebooks.py` + `src/curriculum.py` — read the course notebooks into the curriculum
+- [x] Team names in README, and how to run everything after the move to `web/`
+- [x] `docs/DEMO-QA.md` — the hard questions, each answered from the frozen run
+- [x] Demo run frozen: `run_20260919T152501Z` now travels with the repo, so anyone can
+      replay it offline
 
 ## Not done
 
 - [ ] `dev` merged into `main`
-- [ ] Team names in README
-- [ ] Demo run chosen and frozen
 - [ ] Two timed rehearsals, and the offline fallback drill
-- [ ] Prepared answers: why one agent, why the gate is rules, what `unverified` means
 - [ ] Optional: GitHub token per member (60 requests/hour without one)
 
 ## Standup log

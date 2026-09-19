@@ -1,0 +1,1105 @@
+[
+  {
+    "id": "trend_001",
+    "subject": "langgraph-sdk",
+    "signal_ids": [
+      "gh_langgraph-sdk_sdk==0.4.4",
+      "gh_langgraph-sdk_sdk==0.4.3",
+      "hn_48022411"
+    ],
+    "claims": [
+      {
+        "text": "langgraph-sdk version 0.4.4 was released",
+        "subject": "langgraph-sdk",
+        "version": "0.4.4",
+        "verdict": "confirmed",
+        "evidence_url": "https://github.com/langchain-ai/langgraph/releases/tag/sdk%3D%3D0.4.4",
+        "confidence": 0.7,
+        "source_signal_id": "gh_langgraph-sdk_sdk==0.4.4",
+        "evidence_kind": "primary_report"
+      },
+      {
+        "text": "langgraph-sdk version 0.4.3 was released",
+        "subject": "langgraph-sdk",
+        "version": "0.4.3",
+        "verdict": "confirmed",
+        "evidence_url": "https://github.com/langchain-ai/langgraph/releases/tag/sdk%3D%3D0.4.3",
+        "confidence": 0.7,
+        "source_signal_id": "gh_langgraph-sdk_sdk==0.4.3",
+        "evidence_kind": "primary_report"
+      }
+    ]
+  },
+  {
+    "id": "trend_002",
+    "subject": "langgraph",
+    "signal_ids": [
+      "gh_langgraph_1.2.11",
+      "gh_langgraph_1.2.10",
+      "gh_langgraph_1.2.9",
+      "hn_49657460",
+      "hn_49345619",
+      "hn_48769008",
+      "hn_49408247",
+      "hn_49275717",
+      "hn_47467676",
+      "hn_49332584",
+      "hn_49734345",
+      "hn_49130994",
+      "hn_47575696",
+      "hn_48987671",
+      "hn_48800652",
+      "hn_47925524",
+      "hn_48953085",
+      "hn_47906692",
+      "hn_48952432",
+      "hn_49664619",
+      "hn_48920715",
+      "hn_48343061",
+      "hn_48805437",
+      "hn_48185834",
+      "hn_47727255",
+      "hn_47510639",
+      "hn_48766154",
+      "hn_48147471",
+      "hn_48761132",
+      "hn_48721038",
+      "hn_48665660",
+      "hn_48550132",
+      "hn_49754791",
+      "hn_48512879",
+      "hn_49761145",
+      "hn_48346869",
+      "hn_48331106",
+      "hn_48316615",
+      "hn_48306369",
+      "hn_48026370",
+      "hn_49756160",
+      "hn_49755195",
+      "hn_47977127",
+      "hn_47937042",
+      "hn_47628609"
+    ],
+    "claims": [
+      {
+        "text": "langgraph version 1.2.11 was released",
+        "subject": "langgraph",
+        "version": "1.2.11",
+        "verdict": "confirmed",
+        "evidence_url": "https://github.com/langchain-ai/langgraph/releases/tag/1.2.11",
+        "confidence": 0.7,
+        "source_signal_id": "gh_langgraph_1.2.11",
+        "evidence_kind": "primary_report"
+      },
+      {
+        "text": "langgraph version 1.2.10 was released",
+        "subject": "langgraph",
+        "version": "1.2.10",
+        "verdict": "confirmed",
+        "evidence_url": "https://github.com/langchain-ai/langgraph/releases/tag/1.2.10",
+        "confidence": 0.7,
+        "source_signal_id": "gh_langgraph_1.2.10",
+        "evidence_kind": "primary_report"
+      },
+      {
+        "text": "langgraph version 1.2.9 was released",
+        "subject": "langgraph",
+        "version": "1.2.9",
+        "verdict": "confirmed",
+        "evidence_url": "https://github.com/langchain-ai/langgraph/releases/tag/1.2.9",
+        "confidence": 0.7,
+        "source_signal_id": "gh_langgraph_1.2.9",
+        "evidence_kind": "primary_report"
+      },
+      {
+        "text": "A deep dive into LangChain and LangGraph",
+        "subject": "langgraph",
+        "version": null,
+        "verdict": "unverified",
+        "evidence_url": null,
+        "confidence": 0.2,
+        "source_signal_id": "hn_49657460",
+        "evidence_kind": null
+      }
+    ]
+  },
+  {
+    "id": "trend_003",
+    "subject": "langgraph-checkpointpostgres",
+    "signal_ids": [
+      "gh_langgraph-checkpointpostgres_checkpointpostgres==3.1.2",
+      "gh_langgraph-checkpointpostgres_checkpointpostgres==3.1.1"
+    ],
+    "claims": [
+      {
+        "text": "langgraph-checkpointpostgres version 3.1.2 was released",
+        "subject": "langgraph-checkpointpostgres",
+        "version": "3.1.2",
+        "verdict": "confirmed",
+        "evidence_url": "https://github.com/langchain-ai/langgraph/releases/tag/checkpointpostgres%3D%3D3.1.2",
+        "confidence": 0.7,
+        "source_signal_id": "gh_langgraph-checkpointpostgres_checkpointpostgres==3.1.2",
+        "evidence_kind": "primary_report"
+      },
+      {
+        "text": "langgraph-checkpointpostgres version 3.1.1 was released",
+        "subject": "langgraph-checkpointpostgres",
+        "version": "3.1.1",
+        "verdict": "confirmed",
+        "evidence_url": "https://github.com/langchain-ai/langgraph/releases/tag/checkpointpostgres%3D%3D3.1.1",
+        "confidence": 0.7,
+        "source_signal_id": "gh_langgraph-checkpointpostgres_checkpointpostgres==3.1.1",
+        "evidence_kind": "primary_report"
+      }
+    ]
+  },
+  {
+    "id": "trend_004",
+    "subject": "langgraph-checkpoint",
+    "signal_ids": [
+      "gh_langgraph-checkpoint_checkpoint==4.2.0"
+    ],
+    "claims": [
+      {
+        "text": "langgraph-checkpoint version 4.2.0 was released",
+        "subject": "langgraph-checkpoint",
+        "version": "4.2.0",
+        "verdict": "confirmed",
+        "evidence_url": "https://github.com/langchain-ai/langgraph/releases/tag/checkpoint%3D%3D4.2.0",
+        "confidence": 0.7,
+        "source_signal_id": "gh_langgraph-checkpoint_checkpoint==4.2.0",
+        "evidence_kind": "primary_report"
+      }
+    ]
+  },
+  {
+    "id": "trend_005",
+    "subject": "langgraph-checkpointsqlite",
+    "signal_ids": [
+      "gh_langgraph-checkpointsqlite_checkpointsqlite==3.1.1"
+    ],
+    "claims": [
+      {
+        "text": "langgraph-checkpointsqlite version 3.1.1 was released",
+        "subject": "langgraph-checkpointsqlite",
+        "version": "3.1.1",
+        "verdict": "confirmed",
+        "evidence_url": "https://github.com/langchain-ai/langgraph/releases/tag/checkpointsqlite%3D%3D3.1.1",
+        "confidence": 0.7,
+        "source_signal_id": "gh_langgraph-checkpointsqlite_checkpointsqlite==3.1.1",
+        "evidence_kind": "primary_report"
+      }
+    ]
+  },
+  {
+    "id": "trend_006",
+    "subject": "langgraph-cli",
+    "signal_ids": [
+      "gh_langgraph-cli_cli==0.4.31"
+    ],
+    "claims": [
+      {
+        "text": "langgraph-cli version 0.4.31 was released",
+        "subject": "langgraph-cli",
+        "version": "0.4.31",
+        "verdict": "confirmed",
+        "evidence_url": "https://github.com/langchain-ai/langgraph/releases/tag/cli%3D%3D0.4.31",
+        "confidence": 0.7,
+        "source_signal_id": "gh_langgraph-cli_cli==0.4.31",
+        "evidence_kind": "primary_report"
+      }
+    ]
+  },
+  {
+    "id": "trend_007",
+    "subject": "langchain",
+    "signal_ids": [
+      "gh_langchain_langchain==1.4.2",
+      "gh_langchain_langchain==1.4.1",
+      "gh_langchain_langchain==1.4.0",
+      "hn_48727680",
+      "hn_48810399",
+      "hn_48594068",
+      "hn_49461911",
+      "hn_48588177",
+      "hn_48295920",
+      "hn_49744527",
+      "hn_49754080",
+      "hn_49702684",
+      "hn_49766795",
+      "hn_49573630",
+      "hn_49227511",
+      "hn_48794716",
+      "hn_48768491",
+      "hn_49761110",
+      "hn_48016483",
+      "hn_49621585",
+      "hn_48001123",
+      "hn_47928150",
+      "hn_47911058",
+      "hn_49757510",
+      "hn_47805170",
+      "hn_47790607",
+      "hn_47762953"
+    ],
+    "claims": [
+      {
+        "text": "langchain version 1.4.2 was released",
+        "subject": "langchain",
+        "version": "1.4.2",
+        "verdict": "confirmed",
+        "evidence_url": "https://github.com/langchain-ai/langchain/releases/tag/langchain%3D%3D1.4.2",
+        "confidence": 0.7,
+        "source_signal_id": "gh_langchain_langchain==1.4.2",
+        "evidence_kind": "primary_report"
+      },
+      {
+        "text": "langchain version 1.4.1 was released",
+        "subject": "langchain",
+        "version": "1.4.1",
+        "verdict": "confirmed",
+        "evidence_url": "https://github.com/langchain-ai/langchain/releases/tag/langchain%3D%3D1.4.1",
+        "confidence": 0.7,
+        "source_signal_id": "gh_langchain_langchain==1.4.1",
+        "evidence_kind": "primary_report"
+      },
+      {
+        "text": "langchain version 1.4.0 was released",
+        "subject": "langchain",
+        "version": "1.4.0",
+        "verdict": "confirmed",
+        "evidence_url": "https://github.com/langchain-ai/langchain/releases/tag/langchain%3D%3D1.4.0",
+        "confidence": 0.7,
+        "source_signal_id": "gh_langchain_langchain==1.4.0",
+        "evidence_kind": "primary_report"
+      },
+      {
+        "text": "Show HN: LangChain's OpenWiki agent based on PI.dev harness",
+        "subject": "langchain",
+        "version": null,
+        "verdict": "unverified",
+        "evidence_url": null,
+        "confidence": 0.2,
+        "source_signal_id": "hn_48810399",
+        "evidence_kind": null
+      }
+    ]
+  },
+  {
+    "id": "trend_008",
+    "subject": "langchain-typesafe",
+    "signal_ids": [
+      "gh_langchain-typesafe_langchain-typesafe==0.0.1a2",
+      "gh_langchain-typesafe_langchain-typesafe==0.0.1a1"
+    ],
+    "claims": [
+      {
+        "text": "langchain-typesafe version 0.0.1a2 was released",
+        "subject": "langchain-typesafe",
+        "version": "0.0.1a2",
+        "verdict": "confirmed",
+        "evidence_url": "https://github.com/langchain-ai/langchain/releases/tag/langchain-typesafe%3D%3D0.0.1a2",
+        "confidence": 0.7,
+        "source_signal_id": "gh_langchain-typesafe_langchain-typesafe==0.0.1a2",
+        "evidence_kind": "primary_report"
+      },
+      {
+        "text": "langchain-typesafe version 0.0.1a1 was released",
+        "subject": "langchain-typesafe",
+        "version": "0.0.1a1",
+        "verdict": "confirmed",
+        "evidence_url": "https://github.com/langchain-ai/langchain/releases/tag/langchain-typesafe%3D%3D0.0.1a1",
+        "confidence": 0.7,
+        "source_signal_id": "gh_langchain-typesafe_langchain-typesafe==0.0.1a1",
+        "evidence_kind": "primary_report"
+      }
+    ]
+  },
+  {
+    "id": "trend_009",
+    "subject": "langchain-core",
+    "signal_ids": [
+      "gh_langchain-core_langchain-core==1.6.3",
+      "gh_langchain-core_langchain-core==1.6.2"
+    ],
+    "claims": [
+      {
+        "text": "langchain-core version 1.6.3 was released",
+        "subject": "langchain-core",
+        "version": "1.6.3",
+        "verdict": "confirmed",
+        "evidence_url": "https://github.com/langchain-ai/langchain/releases/tag/langchain-core%3D%3D1.6.3",
+        "confidence": 0.7,
+        "source_signal_id": "gh_langchain-core_langchain-core==1.6.3",
+        "evidence_kind": "primary_report"
+      },
+      {
+        "text": "langchain-core version 1.6.2 was released",
+        "subject": "langchain-core",
+        "version": "1.6.2",
+        "verdict": "confirmed",
+        "evidence_url": "https://github.com/langchain-ai/langchain/releases/tag/langchain-core%3D%3D1.6.2",
+        "confidence": 0.7,
+        "source_signal_id": "gh_langchain-core_langchain-core==1.6.2",
+        "evidence_kind": "primary_report"
+      }
+    ]
+  },
+  {
+    "id": "trend_010",
+    "subject": "langchain-anthropic",
+    "signal_ids": [
+      "gh_langchain-anthropic_langchain-anthropic==1.7.2"
+    ],
+    "claims": [
+      {
+        "text": "langchain-anthropic version 1.7.2 was released",
+        "subject": "langchain-anthropic",
+        "version": "1.7.2",
+        "verdict": "confirmed",
+        "evidence_url": "https://github.com/langchain-ai/langchain/releases/tag/langchain-anthropic%3D%3D1.7.2",
+        "confidence": 0.7,
+        "source_signal_id": "gh_langchain-anthropic_langchain-anthropic==1.7.2",
+        "evidence_kind": "primary_report"
+      }
+    ]
+  },
+  {
+    "id": "trend_011",
+    "subject": "langchain-openai",
+    "signal_ids": [
+      "gh_langchain-openai_langchain-openai==1.6.2",
+      "gh_langchain-openai_langchain-openai==1.6.1"
+    ],
+    "claims": [
+      {
+        "text": "langchain-openai version 1.6.2 was released",
+        "subject": "langchain-openai",
+        "version": "1.6.2",
+        "verdict": "confirmed",
+        "evidence_url": "https://github.com/langchain-ai/langchain/releases/tag/langchain-openai%3D%3D1.6.2",
+        "confidence": 0.7,
+        "source_signal_id": "gh_langchain-openai_langchain-openai==1.6.2",
+        "evidence_kind": "primary_report"
+      },
+      {
+        "text": "langchain-openai version 1.6.1 was released",
+        "subject": "langchain-openai",
+        "version": "1.6.1",
+        "verdict": "confirmed",
+        "evidence_url": "https://github.com/langchain-ai/langchain/releases/tag/langchain-openai%3D%3D1.6.1",
+        "confidence": 0.7,
+        "source_signal_id": "gh_langchain-openai_langchain-openai==1.6.1",
+        "evidence_kind": "primary_report"
+      }
+    ]
+  },
+  {
+    "id": "trend_012",
+    "subject": "transformers",
+    "signal_ids": [
+      "gh_transformers_v5.17.0",
+      "gh_transformers_v5.16.1",
+      "gh_transformers_v5.16.0",
+      "gh_transformers_v5.15.1",
+      "gh_transformers_v5.15.0",
+      "gh_transformers_v5.14.1",
+      "gh_transformers_v5.14.0",
+      "gh_transformers_v5.13.1",
+      "gh_transformers_v5.13.0",
+      "gh_transformers_v5.12.1"
+    ],
+    "claims": [
+      {
+        "text": "transformers version 5.17.0 was released",
+        "subject": "transformers",
+        "version": "5.17.0",
+        "verdict": "confirmed",
+        "evidence_url": "https://github.com/huggingface/transformers/releases/tag/v5.17.0",
+        "confidence": 0.7,
+        "source_signal_id": "gh_transformers_v5.17.0",
+        "evidence_kind": "primary_report"
+      },
+      {
+        "text": "transformers version 5.16.1 was released",
+        "subject": "transformers",
+        "version": "5.16.1",
+        "verdict": "confirmed",
+        "evidence_url": "https://github.com/huggingface/transformers/releases/tag/v5.16.1",
+        "confidence": 0.7,
+        "source_signal_id": "gh_transformers_v5.16.1",
+        "evidence_kind": "primary_report"
+      },
+      {
+        "text": "transformers version 5.16.0 was released",
+        "subject": "transformers",
+        "version": "5.16.0",
+        "verdict": "confirmed",
+        "evidence_url": "https://github.com/huggingface/transformers/releases/tag/v5.16.0",
+        "confidence": 0.7,
+        "source_signal_id": "gh_transformers_v5.16.0",
+        "evidence_kind": "primary_report"
+      },
+      {
+        "text": "transformers version 5.15.1 was released",
+        "subject": "transformers",
+        "version": "5.15.1",
+        "verdict": "confirmed",
+        "evidence_url": "https://github.com/huggingface/transformers/releases/tag/v5.15.1",
+        "confidence": 0.7,
+        "source_signal_id": "gh_transformers_v5.15.1",
+        "evidence_kind": "primary_report"
+      },
+      {
+        "text": "transformers version 5.15.0 was released",
+        "subject": "transformers",
+        "version": "5.15.0",
+        "verdict": "confirmed",
+        "evidence_url": "https://github.com/huggingface/transformers/releases/tag/v5.15.0",
+        "confidence": 0.7,
+        "source_signal_id": "gh_transformers_v5.15.0",
+        "evidence_kind": "primary_report"
+      },
+      {
+        "text": "transformers version 5.14.1 was released",
+        "subject": "transformers",
+        "version": "5.14.1",
+        "verdict": "confirmed",
+        "evidence_url": "https://github.com/huggingface/transformers/releases/tag/v5.14.1",
+        "confidence": 0.7,
+        "source_signal_id": "gh_transformers_v5.14.1",
+        "evidence_kind": "primary_report"
+      },
+      {
+        "text": "transformers version 5.14.0 was released",
+        "subject": "transformers",
+        "version": "5.14.0",
+        "verdict": "confirmed",
+        "evidence_url": "https://github.com/huggingface/transformers/releases/tag/v5.14.0",
+        "confidence": 0.7,
+        "source_signal_id": "gh_transformers_v5.14.0",
+        "evidence_kind": "primary_report"
+      },
+      {
+        "text": "transformers version 5.13.1 was released",
+        "subject": "transformers",
+        "version": "5.13.1",
+        "verdict": "confirmed",
+        "evidence_url": "https://github.com/huggingface/transformers/releases/tag/v5.13.1",
+        "confidence": 0.7,
+        "source_signal_id": "gh_transformers_v5.13.1",
+        "evidence_kind": "primary_report"
+      },
+      {
+        "text": "transformers version 5.13.0 was released",
+        "subject": "transformers",
+        "version": "5.13.0",
+        "verdict": "confirmed",
+        "evidence_url": "https://github.com/huggingface/transformers/releases/tag/v5.13.0",
+        "confidence": 0.7,
+        "source_signal_id": "gh_transformers_v5.13.0",
+        "evidence_kind": "primary_report"
+      },
+      {
+        "text": "transformers version 5.12.1 was released",
+        "subject": "transformers",
+        "version": "5.12.1",
+        "verdict": "confirmed",
+        "evidence_url": "https://github.com/huggingface/transformers/releases/tag/v5.12.1",
+        "confidence": 0.7,
+        "source_signal_id": "gh_transformers_v5.12.1",
+        "evidence_kind": "primary_report"
+      }
+    ]
+  },
+  {
+    "id": "trend_013",
+    "subject": "openai-python",
+    "signal_ids": [
+      "gh_openai-python_v3.16.2",
+      "gh_openai-python_v3.16.1",
+      "gh_openai-python_v3.16.0",
+      "gh_openai-python_v3.15.0",
+      "gh_openai-python_v3.14.1",
+      "gh_openai-python_v3.14.0",
+      "gh_openai-python_v3.13.0",
+      "gh_openai-python_v3.12.0",
+      "gh_openai-python_v3.11.0",
+      "gh_openai-python_v3.10.0"
+    ],
+    "claims": [
+      {
+        "text": "openai-python version 3.16.2 was released",
+        "subject": "openai-python",
+        "version": "3.16.2",
+        "verdict": "confirmed",
+        "evidence_url": "https://github.com/openai/openai-python/releases/tag/v3.16.2",
+        "confidence": 0.7,
+        "source_signal_id": "gh_openai-python_v3.16.2",
+        "evidence_kind": "primary_report"
+      },
+      {
+        "text": "openai-python version 3.16.1 was released",
+        "subject": "openai-python",
+        "version": "3.16.1",
+        "verdict": "confirmed",
+        "evidence_url": "https://github.com/openai/openai-python/releases/tag/v3.16.1",
+        "confidence": 0.7,
+        "source_signal_id": "gh_openai-python_v3.16.1",
+        "evidence_kind": "primary_report"
+      },
+      {
+        "text": "openai-python version 3.16.0 was released",
+        "subject": "openai-python",
+        "version": "3.16.0",
+        "verdict": "confirmed",
+        "evidence_url": "https://github.com/openai/openai-python/releases/tag/v3.16.0",
+        "confidence": 0.7,
+        "source_signal_id": "gh_openai-python_v3.16.0",
+        "evidence_kind": "primary_report"
+      },
+      {
+        "text": "openai-python version 3.15.0 was released",
+        "subject": "openai-python",
+        "version": "3.15.0",
+        "verdict": "confirmed",
+        "evidence_url": "https://github.com/openai/openai-python/releases/tag/v3.15.0",
+        "confidence": 0.7,
+        "source_signal_id": "gh_openai-python_v3.15.0",
+        "evidence_kind": "primary_report"
+      },
+      {
+        "text": "openai-python version 3.14.1 was released",
+        "subject": "openai-python",
+        "version": "3.14.1",
+        "verdict": "confirmed",
+        "evidence_url": "https://github.com/openai/openai-python/releases/tag/v3.14.1",
+        "confidence": 0.7,
+        "source_signal_id": "gh_openai-python_v3.14.1",
+        "evidence_kind": "primary_report"
+      },
+      {
+        "text": "openai-python version 3.14.0 was released",
+        "subject": "openai-python",
+        "version": "3.14.0",
+        "verdict": "confirmed",
+        "evidence_url": "https://github.com/openai/openai-python/releases/tag/v3.14.0",
+        "confidence": 0.7,
+        "source_signal_id": "gh_openai-python_v3.14.0",
+        "evidence_kind": "primary_report"
+      },
+      {
+        "text": "openai-python version 3.13.0 was released",
+        "subject": "openai-python",
+        "version": "3.13.0",
+        "verdict": "confirmed",
+        "evidence_url": "https://github.com/openai/openai-python/releases/tag/v3.13.0",
+        "confidence": 0.7,
+        "source_signal_id": "gh_openai-python_v3.13.0",
+        "evidence_kind": "primary_report"
+      },
+      {
+        "text": "openai-python version 3.12.0 was released",
+        "subject": "openai-python",
+        "version": "3.12.0",
+        "verdict": "confirmed",
+        "evidence_url": "https://github.com/openai/openai-python/releases/tag/v3.12.0",
+        "confidence": 0.7,
+        "source_signal_id": "gh_openai-python_v3.12.0",
+        "evidence_kind": "primary_report"
+      },
+      {
+        "text": "openai-python version 3.11.0 was released",
+        "subject": "openai-python",
+        "version": "3.11.0",
+        "verdict": "confirmed",
+        "evidence_url": "https://github.com/openai/openai-python/releases/tag/v3.11.0",
+        "confidence": 0.7,
+        "source_signal_id": "gh_openai-python_v3.11.0",
+        "evidence_kind": "primary_report"
+      },
+      {
+        "text": "openai-python version 3.10.0 was released",
+        "subject": "openai-python",
+        "version": "3.10.0",
+        "verdict": "confirmed",
+        "evidence_url": "https://github.com/openai/openai-python/releases/tag/v3.10.0",
+        "confidence": 0.7,
+        "source_signal_id": "gh_openai-python_v3.10.0",
+        "evidence_kind": "primary_report"
+      }
+    ]
+  },
+  {
+    "id": "trend_014",
+    "subject": "anthropic-sdk-python",
+    "signal_ids": [
+      "gh_anthropic-sdk-python_v1.7.0",
+      "gh_anthropic-sdk-python_v1.6.0",
+      "gh_anthropic-sdk-python_v1.5.0",
+      "gh_anthropic-sdk-python_v1.4.0",
+      "gh_anthropic-sdk-python_v1.3.0",
+      "gh_anthropic-sdk-python_v1.2.0",
+      "gh_anthropic-sdk-python_v1.1.0",
+      "gh_anthropic-sdk-python_v1.0.0",
+      "gh_anthropic-sdk-python_v0.125.0",
+      "gh_anthropic-sdk-python_v0.124.0"
+    ],
+    "claims": [
+      {
+        "text": "anthropic-sdk-python version 1.7.0 was released",
+        "subject": "anthropic-sdk-python",
+        "version": "1.7.0",
+        "verdict": "confirmed",
+        "evidence_url": "https://github.com/anthropics/anthropic-sdk-python/releases/tag/v1.7.0",
+        "confidence": 0.7,
+        "source_signal_id": "gh_anthropic-sdk-python_v1.7.0",
+        "evidence_kind": "primary_report"
+      },
+      {
+        "text": "anthropic-sdk-python version 1.6.0 was released",
+        "subject": "anthropic-sdk-python",
+        "version": "1.6.0",
+        "verdict": "confirmed",
+        "evidence_url": "https://github.com/anthropics/anthropic-sdk-python/releases/tag/v1.6.0",
+        "confidence": 0.7,
+        "source_signal_id": "gh_anthropic-sdk-python_v1.6.0",
+        "evidence_kind": "primary_report"
+      },
+      {
+        "text": "anthropic-sdk-python version 1.5.0 was released",
+        "subject": "anthropic-sdk-python",
+        "version": "1.5.0",
+        "verdict": "confirmed",
+        "evidence_url": "https://github.com/anthropics/anthropic-sdk-python/releases/tag/v1.5.0",
+        "confidence": 0.7,
+        "source_signal_id": "gh_anthropic-sdk-python_v1.5.0",
+        "evidence_kind": "primary_report"
+      },
+      {
+        "text": "anthropic-sdk-python version 1.4.0 was released",
+        "subject": "anthropic-sdk-python",
+        "version": "1.4.0",
+        "verdict": "confirmed",
+        "evidence_url": "https://github.com/anthropics/anthropic-sdk-python/releases/tag/v1.4.0",
+        "confidence": 0.7,
+        "source_signal_id": "gh_anthropic-sdk-python_v1.4.0",
+        "evidence_kind": "primary_report"
+      },
+      {
+        "text": "anthropic-sdk-python version 1.3.0 was released",
+        "subject": "anthropic-sdk-python",
+        "version": "1.3.0",
+        "verdict": "confirmed",
+        "evidence_url": "https://github.com/anthropics/anthropic-sdk-python/releases/tag/v1.3.0",
+        "confidence": 0.7,
+        "source_signal_id": "gh_anthropic-sdk-python_v1.3.0",
+        "evidence_kind": "primary_report"
+      },
+      {
+        "text": "anthropic-sdk-python version 1.2.0 was released",
+        "subject": "anthropic-sdk-python",
+        "version": "1.2.0",
+        "verdict": "confirmed",
+        "evidence_url": "https://github.com/anthropics/anthropic-sdk-python/releases/tag/v1.2.0",
+        "confidence": 0.7,
+        "source_signal_id": "gh_anthropic-sdk-python_v1.2.0",
+        "evidence_kind": "primary_report"
+      },
+      {
+        "text": "anthropic-sdk-python version 1.1.0 was released",
+        "subject": "anthropic-sdk-python",
+        "version": "1.1.0",
+        "verdict": "confirmed",
+        "evidence_url": "https://github.com/anthropics/anthropic-sdk-python/releases/tag/v1.1.0",
+        "confidence": 0.7,
+        "source_signal_id": "gh_anthropic-sdk-python_v1.1.0",
+        "evidence_kind": "primary_report"
+      },
+      {
+        "text": "anthropic-sdk-python version 1.0.0 was released",
+        "subject": "anthropic-sdk-python",
+        "version": "1.0.0",
+        "verdict": "confirmed",
+        "evidence_url": "https://github.com/anthropics/anthropic-sdk-python/releases/tag/v1.0.0",
+        "confidence": 0.7,
+        "source_signal_id": "gh_anthropic-sdk-python_v1.0.0",
+        "evidence_kind": "primary_report"
+      },
+      {
+        "text": "anthropic-sdk-python version 0.125.0 was released",
+        "subject": "anthropic-sdk-python",
+        "version": "0.125.0",
+        "verdict": "confirmed",
+        "evidence_url": "https://github.com/anthropics/anthropic-sdk-python/releases/tag/v0.125.0",
+        "confidence": 0.7,
+        "source_signal_id": "gh_anthropic-sdk-python_v0.125.0",
+        "evidence_kind": "primary_report"
+      },
+      {
+        "text": "anthropic-sdk-python version 0.124.0 was released",
+        "subject": "anthropic-sdk-python",
+        "version": "0.124.0",
+        "verdict": "confirmed",
+        "evidence_url": "https://github.com/anthropics/anthropic-sdk-python/releases/tag/v0.124.0",
+        "confidence": 0.7,
+        "source_signal_id": "gh_anthropic-sdk-python_v0.124.0",
+        "evidence_kind": "primary_report"
+      }
+    ]
+  },
+  {
+    "id": "trend_015",
+    "subject": "pydantic-ai",
+    "signal_ids": [
+      "gh_pydantic-ai_v2.46.0",
+      "gh_pydantic-ai_v2.45.0",
+      "gh_pydantic-ai_v2.44.0",
+      "gh_pydantic-ai_v1.107.6",
+      "gh_pydantic-ai_v2.43.0",
+      "gh_pydantic-ai_v2.42.0",
+      "gh_pydantic-ai_v2.41.0",
+      "gh_pydantic-ai_v2.40.0",
+      "gh_pydantic-ai_v2.39.0",
+      "gh_pydantic-ai_v2.38.0"
+    ],
+    "claims": [
+      {
+        "text": "pydantic-ai version 2.46.0 was released",
+        "subject": "pydantic-ai",
+        "version": "2.46.0",
+        "verdict": "confirmed",
+        "evidence_url": "https://github.com/pydantic/pydantic-ai/releases/tag/v2.46.0",
+        "confidence": 0.7,
+        "source_signal_id": "gh_pydantic-ai_v2.46.0",
+        "evidence_kind": "primary_report"
+      },
+      {
+        "text": "pydantic-ai version 2.45.0 was released",
+        "subject": "pydantic-ai",
+        "version": "2.45.0",
+        "verdict": "confirmed",
+        "evidence_url": "https://github.com/pydantic/pydantic-ai/releases/tag/v2.45.0",
+        "confidence": 0.7,
+        "source_signal_id": "gh_pydantic-ai_v2.45.0",
+        "evidence_kind": "primary_report"
+      },
+      {
+        "text": "pydantic-ai version 2.44.0 was released",
+        "subject": "pydantic-ai",
+        "version": "2.44.0",
+        "verdict": "confirmed",
+        "evidence_url": "https://github.com/pydantic/pydantic-ai/releases/tag/v2.44.0",
+        "confidence": 0.7,
+        "source_signal_id": "gh_pydantic-ai_v2.44.0",
+        "evidence_kind": "primary_report"
+      },
+      {
+        "text": "pydantic-ai version 2.43.0 was released",
+        "subject": "pydantic-ai",
+        "version": "2.43.0",
+        "verdict": "confirmed",
+        "evidence_url": "https://github.com/pydantic/pydantic-ai/releases/tag/v2.43.0",
+        "confidence": 0.7,
+        "source_signal_id": "gh_pydantic-ai_v2.43.0",
+        "evidence_kind": "primary_report"
+      },
+      {
+        "text": "pydantic-ai version 2.42.0 was released",
+        "subject": "pydantic-ai",
+        "version": "2.42.0",
+        "verdict": "confirmed",
+        "evidence_url": "https://github.com/pydantic/pydantic-ai/releases/tag/v2.42.0",
+        "confidence": 0.7,
+        "source_signal_id": "gh_pydantic-ai_v2.42.0",
+        "evidence_kind": "primary_report"
+      },
+      {
+        "text": "pydantic-ai version 2.41.0 was released",
+        "subject": "pydantic-ai",
+        "version": "2.41.0",
+        "verdict": "confirmed",
+        "evidence_url": "https://github.com/pydantic/pydantic-ai/releases/tag/v2.41.0",
+        "confidence": 0.7,
+        "source_signal_id": "gh_pydantic-ai_v2.41.0",
+        "evidence_kind": "primary_report"
+      },
+      {
+        "text": "pydantic-ai version 2.40.0 was released",
+        "subject": "pydantic-ai",
+        "version": "2.40.0",
+        "verdict": "confirmed",
+        "evidence_url": "https://github.com/pydantic/pydantic-ai/releases/tag/v2.40.0",
+        "confidence": 0.7,
+        "source_signal_id": "gh_pydantic-ai_v2.40.0",
+        "evidence_kind": "primary_report"
+      },
+      {
+        "text": "pydantic-ai version 2.39.0 was released",
+        "subject": "pydantic-ai",
+        "version": "2.39.0",
+        "verdict": "confirmed",
+        "evidence_url": "https://github.com/pydantic/pydantic-ai/releases/tag/v2.39.0",
+        "confidence": 0.7,
+        "source_signal_id": "gh_pydantic-ai_v2.39.0",
+        "evidence_kind": "primary_report"
+      },
+      {
+        "text": "pydantic-ai version 2.38.0 was released",
+        "subject": "pydantic-ai",
+        "version": "2.38.0",
+        "verdict": "confirmed",
+        "evidence_url": "https://github.com/pydantic/pydantic-ai/releases/tag/v2.38.0",
+        "confidence": 0.7,
+        "source_signal_id": "gh_pydantic-ai_v2.38.0",
+        "evidence_kind": "primary_report"
+      },
+      {
+        "text": "pydantic-ai version 1.107.6 was released",
+        "subject": "pydantic-ai",
+        "version": "1.107.6",
+        "verdict": "confirmed",
+        "evidence_url": "https://github.com/pydantic/pydantic-ai/releases/tag/v1.107.6",
+        "confidence": 0.7,
+        "source_signal_id": "gh_pydantic-ai_v1.107.6",
+        "evidence_kind": "primary_report"
+      }
+    ]
+  },
+  {
+    "id": "trend_016",
+    "subject": "crewai",
+    "signal_ids": [
+      "gh_crewai_1.15.22",
+      "gh_crewai_1.15.21",
+      "gh_crewai_1.15.20",
+      "gh_crewai_1.15.19",
+      "gh_crewai_1.15.18",
+      "gh_crewai_1.15.17",
+      "gh_crewai_1.15.16",
+      "gh_crewai_1.15.15",
+      "gh_crewai_1.15.14",
+      "gh_crewai_1.15.13"
+    ],
+    "claims": [
+      {
+        "text": "crewai version 1.15.22 was released",
+        "subject": "crewai",
+        "version": "1.15.22",
+        "verdict": "confirmed",
+        "evidence_url": "https://github.com/crewAIInc/crewAI/releases/tag/1.15.22",
+        "confidence": 0.7,
+        "source_signal_id": "gh_crewai_1.15.22",
+        "evidence_kind": "primary_report"
+      },
+      {
+        "text": "crewai version 1.15.21 was released",
+        "subject": "crewai",
+        "version": "1.15.21",
+        "verdict": "confirmed",
+        "evidence_url": "https://github.com/crewAIInc/crewAI/releases/tag/1.15.21",
+        "confidence": 0.7,
+        "source_signal_id": "gh_crewai_1.15.21",
+        "evidence_kind": "primary_report"
+      },
+      {
+        "text": "crewai version 1.15.20 was released",
+        "subject": "crewai",
+        "version": "1.15.20",
+        "verdict": "confirmed",
+        "evidence_url": "https://github.com/crewAIInc/crewAI/releases/tag/1.15.20",
+        "confidence": 0.7,
+        "source_signal_id": "gh_crewai_1.15.20",
+        "evidence_kind": "primary_report"
+      },
+      {
+        "text": "crewai version 1.15.19 was released",
+        "subject": "crewai",
+        "version": "1.15.19",
+        "verdict": "confirmed",
+        "evidence_url": "https://github.com/crewAIInc/crewAI/releases/tag/1.15.19",
+        "confidence": 0.7,
+        "source_signal_id": "gh_crewai_1.15.19",
+        "evidence_kind": "primary_report"
+      },
+      {
+        "text": "crewai version 1.15.18 was released",
+        "subject": "crewai",
+        "version": "1.15.18",
+        "verdict": "confirmed",
+        "evidence_url": "https://github.com/crewAIInc/crewAI/releases/tag/1.15.18",
+        "confidence": 0.7,
+        "source_signal_id": "gh_crewai_1.15.18",
+        "evidence_kind": "primary_report"
+      },
+      {
+        "text": "crewai version 1.15.17 was released",
+        "subject": "crewai",
+        "version": "1.15.17",
+        "verdict": "confirmed",
+        "evidence_url": "https://github.com/crewAIInc/crewAI/releases/tag/1.15.17",
+        "confidence": 0.7,
+        "source_signal_id": "gh_crewai_1.15.17",
+        "evidence_kind": "primary_report"
+      },
+      {
+        "text": "crewai version 1.15.16 was released",
+        "subject": "crewai",
+        "version": "1.15.16",
+        "verdict": "confirmed",
+        "evidence_url": "https://github.com/crewAIInc/crewAI/releases/tag/1.15.16",
+        "confidence": 0.7,
+        "source_signal_id": "gh_crewai_1.15.16",
+        "evidence_kind": "primary_report"
+      },
+      {
+        "text": "crewai version 1.15.15 was released",
+        "subject": "crewai",
+        "version": "1.15.15",
+        "verdict": "confirmed",
+        "evidence_url": "https://github.com/crewAIInc/crewAI/releases/tag/1.15.15",
+        "confidence": 0.7,
+        "source_signal_id": "gh_crewai_1.15.15",
+        "evidence_kind": "primary_report"
+      },
+      {
+        "text": "crewai version 1.15.14 was released",
+        "subject": "crewai",
+        "version": "1.15.14",
+        "verdict": "confirmed",
+        "evidence_url": "https://github.com/crewAIInc/crewAI/releases/tag/1.15.14",
+        "confidence": 0.7,
+        "source_signal_id": "gh_crewai_1.15.14",
+        "evidence_kind": "primary_report"
+      },
+      {
+        "text": "crewai version 1.15.13 was released",
+        "subject": "crewai",
+        "version": "1.15.13",
+        "verdict": "confirmed",
+        "evidence_url": "https://github.com/crewAIInc/crewAI/releases/tag/1.15.13",
+        "confidence": 0.7,
+        "source_signal_id": "gh_crewai_1.15.13",
+        "evidence_kind": "primary_report"
+      }
+    ]
+  },
+  {
+    "id": "trend_017",
+    "subject": "llama_index",
+    "signal_ids": [
+      "gh_llama_index_v0.14.24",
+      "gh_llama_index_v0.14.23",
+      "gh_llama_index_v0.14.22",
+      "gh_llama_index_v0.14.21",
+      "gh_llama_index_v0.14.20",
+      "gh_llama_index_v0.14.19",
+      "gh_llama_index_v0.14.18",
+      "gh_llama_index_v0.14.16",
+      "gh_llama_index_v0.14.15",
+      "gh_llama_index_v0.14.14"
+    ],
+    "claims": [
+      {
+        "text": "llama_index version 0.14.24 was released",
+        "subject": "llama_index",
+        "version": "0.14.24",
+        "verdict": "confirmed",
+        "evidence_url": "https://github.com/run-llama/llama_index/releases/tag/v0.14.24",
+        "confidence": 0.7,
+        "source_signal_id": "gh_llama_index_v0.14.24",
+        "evidence_kind": "primary_report"
+      },
+      {
+        "text": "llama_index version 0.14.23 was released",
+        "subject": "llama_index",
+        "version": "0.14.23",
+        "verdict": "confirmed",
+        "evidence_url": "https://github.com/run-llama/llama_index/releases/tag/v0.14.23",
+        "confidence": 0.7,
+        "source_signal_id": "gh_llama_index_v0.14.23",
+        "evidence_kind": "primary_report"
+      },
+      {
+        "text": "llama_index version 0.14.22 was released",
+        "subject": "llama_index",
+        "version": "0.14.22",
+        "verdict": "confirmed",
+        "evidence_url": "https://github.com/run-llama/llama_index/releases/tag/v0.14.22",
+        "confidence": 0.7,
+        "source_signal_id": "gh_llama_index_v0.14.22",
+        "evidence_kind": "primary_report"
+      },
+      {
+        "text": "llama_index version 0.14.21 was released",
+        "subject": "llama_index",
+        "version": "0.14.21",
+        "verdict": "confirmed",
+        "evidence_url": "https://github.com/run-llama/llama_index/releases/tag/v0.14.21",
+        "confidence": 0.7,
+        "source_signal_id": "gh_llama_index_v0.14.21",
+        "evidence_kind": "primary_report"
+      },
+      {
+        "text": "llama_index version 0.14.20 was released",
+        "subject": "llama_index",
+        "version": "0.14.20",
+        "verdict": "confirmed",
+        "evidence_url": "https://github.com/run-llama/llama_index/releases/tag/v0.14.20",
+        "confidence": 0.7,
+        "source_signal_id": "gh_llama_index_v0.14.20",
+        "evidence_kind": "primary_report"
+      },
+      {
+        "text": "llama_index version 0.14.19 was released",
+        "subject": "llama_index",
+        "version": "0.14.19",
+        "verdict": "confirmed",
+        "evidence_url": "https://github.com/run-llama/llama_index/releases/tag/v0.14.19",
+        "confidence": 0.7,
+        "source_signal_id": "gh_llama_index_v0.14.19",
+        "evidence_kind": "primary_report"
+      },
+      {
+        "text": "llama_index version 0.14.18 was released",
+        "subject": "llama_index",
+        "version": "0.14.18",
+        "verdict": "confirmed",
+        "evidence_url": "https://github.com/run-llama/llama_index/releases/tag/v0.14.18",
+        "confidence": 0.7,
+        "source_signal_id": "gh_llama_index_v0.14.18",
+        "evidence_kind": "primary_report"
+      },
+      {
+        "text": "llama_index version 0.14.16 was released",
+        "subject": "llama_index",
+        "version": "0.14.16",
+        "verdict": "confirmed",
+        "evidence_url": "https://github.com/run-llama/llama_index/releases/tag/v0.14.16",
+        "confidence": 0.7,
+        "source_signal_id": "gh_llama_index_v0.14.16",
+        "evidence_kind": "primary_report"
+      },
+      {
+        "text": "llama_index version 0.14.15 was released",
+        "subject": "llama_index",
+        "version": "0.14.15",
+        "verdict": "confirmed",
+        "evidence_url": "https://github.com/run-llama/llama_index/releases/tag/v0.14.15",
+        "confidence": 0.7,
+        "source_signal_id": "gh_llama_index_v0.14.15",
+        "evidence_kind": "primary_report"
+      },
+      {
+        "text": "llama_index version 0.14.14 was released",
+        "subject": "llama_index",
+        "version": "0.14.14",
+        "verdict": "confirmed",
+        "evidence_url": "https://github.com/run-llama/llama_index/releases/tag/v0.14.14",
+        "confidence": 0.7,
+        "source_signal_id": "gh_llama_index_v0.14.14",
+        "evidence_kind": "primary_report"
+      }
+    ]
+  }
+]

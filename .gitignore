@@ -2,7 +2,10 @@
 __pycache__/
 *.pyc
 .env
-fixtures/runs/
+fixtures/runs/*
+# the frozen demo run travels with the repo so anyone can replay it offline
+!fixtures/runs/run_20260919T152501Z
+fixtures/runs/run_20260919T152501Z/raw
 .agents/
 .claude/skills/
 .pytest_cache/

@@ -1,0 +1,194 @@
+[
+  {
+    "trend_id": "trend_001",
+    "action": "watch",
+    "chapter_id": "C19",
+    "rationale": "Chapter C19 teaches: Orchestrate agents as a graph with LangGraph, including multi-agent conversation and a review agent, with n8n shown as a no-code alternative. The chapter does not record which langgraph-sdk version it teaches, so the distance to 0.4.4 cannot be measured. 2 confirmed, 0 unverified, priority 2.95.",
+    "chapter_version": null,
+    "latest_version": "0.4.4",
+    "gap_kind": "unknown",
+    "releases_since": 0,
+    "legacy_uses": []
+  },
+  {
+    "trend_id": "trend_002",
+    "action": "update_existing_material",
+    "chapter_id": "C19",
+    "rationale": "The chapter teaches using LangGraph with no version bound, meaning students may be using version 1.2.11, which includes significant updates. A deep dive into LangChain and LangGraph has been added, necessitating an update to the material.",
+    "chapter_version": null,
+    "latest_version": "1.2.11",
+    "gap_kind": "unpinned",
+    "releases_since": 0,
+    "legacy_uses": []
+  },
+  {
+    "trend_id": "trend_003",
+    "action": "watch",
+    "chapter_id": "C19",
+    "rationale": "Chapter C19 teaches: Orchestrate agents as a graph with LangGraph, including multi-agent conversation and a review agent, with n8n shown as a no-code alternative. The chapter does not record which langgraph-checkpointpostgres version it teaches, so the distance to 3.1.2 cannot be measured. 2 confirmed, 0 unverified, priority 2.30.",
+    "chapter_version": null,
+    "latest_version": "3.1.2",
+    "gap_kind": "unknown",
+    "releases_since": 0,
+    "legacy_uses": []
+  },
+  {
+    "trend_id": "trend_004",
+    "action": "watch",
+    "chapter_id": "C19",
+    "rationale": "The chapter does not record which langgraph-checkpoint version it teaches, making it difficult to assess its relevance to the latest release, version 4.2.0. However, it is not measurably behind, indicating it may still be applicable.",
+    "chapter_version": null,
+    "latest_version": "4.2.0",
+    "gap_kind": "unknown",
+    "releases_since": 0,
+    "legacy_uses": []
+  },
+  {
+    "trend_id": "trend_005",
+    "action": "watch",
+    "chapter_id": "C19",
+    "rationale": "Chapter C19 teaches: Orchestrate agents as a graph with LangGraph, including multi-agent conversation and a review agent, with n8n shown as a no-code alternative. The chapter does not record which langgraph-checkpointsqlite version it teaches, so the distance to 3.1.1 cannot be measured. 1 confirmed, 0 unverified, priority 2.25.",
+    "chapter_version": null,
+    "latest_version": "3.1.1",
+    "gap_kind": "unknown",
+    "releases_since": 0,
+    "legacy_uses": []
+  },
+  {
+    "trend_id": "trend_006",
+    "action": "watch",
+    "chapter_id": "C19",
+    "rationale": "The chapter does not record which langgraph-cli version it teaches, making it difficult to assess its relevance against the latest release, 0.4.31. However, it is not measurably behind, indicating it may still be useful.",
+    "chapter_version": null,
+    "latest_version": "0.4.31",
+    "gap_kind": "unknown",
+    "releases_since": 0,
+    "legacy_uses": []
+  },
+  {
+    "trend_id": "trend_007",
+    "action": "update_existing_material",
+    "chapter_id": "C8",
+    "rationale": "Chapter C8 teaches: Rebuild document QA on LangChain: splitters, a FAISS vector store, and chains over documents and Wikipedia. The notebooks install langchain with no version bound, so a student today gets 1.4.2 whatever the material was written against. The notebooks still call LLMChain, RetrievalQA, langchain.chains imports and load_qa_chain - calls our pattern table marks as removed or moved in a later major release. 2 of the confirmed releases in this run landed after the chapter was last updated on 2026-09-03. 3 confirmed, 1 unverified, priority 4.30.",
+    "chapter_version": "0.0.352",
+    "latest_version": "1.4.2",
+    "gap_kind": "unpinned",
+    "releases_since": 2,
+    "legacy_uses": [
+      "LLMChain",
+      "RetrievalQA",
+      "langchain.chains imports",
+      "load_qa_chain"
+    ]
+  },
+  {
+    "trend_id": "trend_008",
+    "action": "watch",
+    "chapter_id": "C8",
+    "rationale": "Chapter C8 teaches: Rebuild document QA on LangChain: splitters, a FAISS vector store, and chains over documents and Wikipedia. The chapter does not record which langchain-typesafe version it teaches, so the distance to 0.0.1a2 cannot be measured. 2 of the confirmed releases in this run landed after the chapter was last updated on 2026-09-03. 2 confirmed, 0 unverified, priority 2.50.",
+    "chapter_version": null,
+    "latest_version": "0.0.1a2",
+    "gap_kind": "unknown",
+    "releases_since": 2,
+    "legacy_uses": []
+  },
+  {
+    "trend_id": "trend_009",
+    "action": "watch",
+    "chapter_id": "C8",
+    "rationale": "Chapter C8 teaches: Rebuild document QA on LangChain: splitters, a FAISS vector store, and chains over documents and Wikipedia. The chapter does not record which langchain-core version it teaches, so the distance to 1.6.3 cannot be measured. 2 of the confirmed releases in this run landed after the chapter was last updated on 2026-09-03. 2 confirmed, 0 unverified, priority 2.50.",
+    "chapter_version": null,
+    "latest_version": "1.6.3",
+    "gap_kind": "unknown",
+    "releases_since": 2,
+    "legacy_uses": []
+  },
+  {
+    "trend_id": "trend_010",
+    "action": "watch",
+    "chapter_id": "C8",
+    "rationale": "The chapter does not record which langchain-anthropic version it teaches, making it difficult to assess its relevance. Additionally, a new version, 1.7.2, was released after the chapter's last update.",
+    "chapter_version": null,
+    "latest_version": "1.7.2",
+    "gap_kind": "unknown",
+    "releases_since": 1,
+    "legacy_uses": []
+  },
+  {
+    "trend_id": "trend_011",
+    "action": "update_existing_material",
+    "chapter_id": "C8",
+    "rationale": "Chapter C8 teaches: Rebuild document QA on LangChain: splitters, a FAISS vector store, and chains over documents and Wikipedia. The notebooks install langchain-openai with no version bound, so a student today gets 1.6.2 whatever the material was written against. 2 of the confirmed releases in this run landed after the chapter was last updated on 2026-09-03. 2 confirmed, 0 unverified, priority 2.50.",
+    "chapter_version": null,
+    "latest_version": "1.6.2",
+    "gap_kind": "unpinned",
+    "releases_since": 2,
+    "legacy_uses": []
+  },
+  {
+    "trend_id": "trend_012",
+    "action": "update_existing_material",
+    "chapter_id": "C4",
+    "rationale": "Chapter C4 teaches: Classify and compare text with BERT through Hugging Face transformers, then fine-tune it. The notebooks install transformers with no version bound, so a student today gets 5.17.0 whatever the material was written against. 1 of the confirmed releases in this run landed after the chapter was last updated on 2026-08-27. 10 confirmed, 0 unverified, priority 2.75.",
+    "chapter_version": null,
+    "latest_version": "5.17.0",
+    "gap_kind": "unpinned",
+    "releases_since": 1,
+    "legacy_uses": []
+  },
+  {
+    "trend_id": "trend_013",
+    "action": "watch",
+    "chapter_id": "C5",
+    "rationale": "The chapter does not record which openai-python version it teaches, making it difficult to assess its relevance against the latest release, 3.16.2. Additionally, 10 confirmed releases have landed since the chapter was last updated.",
+    "chapter_version": null,
+    "latest_version": "3.16.2",
+    "gap_kind": "unknown",
+    "releases_since": 10,
+    "legacy_uses": []
+  },
+  {
+    "trend_id": "trend_014",
+    "action": "add_new_lesson",
+    "chapter_id": null,
+    "rationale": "The curriculum currently lacks a chapter on anthropic-sdk-python, which is essential since the latest confirmed release is 1.7.0. This gap means learners are missing out on important updates and features introduced in recent versions.",
+    "chapter_version": null,
+    "latest_version": "1.7.0",
+    "gap_kind": "unknown",
+    "releases_since": 0,
+    "legacy_uses": []
+  },
+  {
+    "trend_id": "trend_015",
+    "action": "add_new_lesson",
+    "chapter_id": null,
+    "rationale": "A new chapter on pydantic-ai is needed as it is not currently included in the curriculum. The latest release, version 2.46.0, introduces updates that should be covered.",
+    "chapter_version": null,
+    "latest_version": "2.46.0",
+    "gap_kind": "unknown",
+    "releases_since": 0,
+    "legacy_uses": []
+  },
+  {
+    "trend_id": "trend_016",
+    "action": "add_new_lesson",
+    "chapter_id": null,
+    "rationale": "The curriculum currently lacks a chapter on crewai, which is essential since the latest release is 1.15.22. This gap means learners are missing out on the latest features and updates.",
+    "chapter_version": null,
+    "latest_version": "1.15.22",
+    "gap_kind": "unknown",
+    "releases_since": 0,
+    "legacy_uses": []
+  },
+  {
+    "trend_id": "trend_017",
+    "action": "add_new_lesson",
+    "chapter_id": null,
+    "rationale": "The curriculum currently lacks a chapter on llama_index, which is essential as the latest confirmed release is 0.14.24. This gap means learners are missing out on important updates and features introduced in recent versions.",
+    "chapter_version": null,
+    "latest_version": "0.14.24",
+    "gap_kind": "unknown",
+    "releases_since": 0,
+    "legacy_uses": []
+  }
+]
