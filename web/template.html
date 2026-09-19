@@ -96,7 +96,7 @@ const T = {
     sub: "Confirmed means an official release says the same thing. Everything else stays unverified.",
     tab_act: "What to do", tab_map: "Curriculum map", tab_ev: "Evidence", tab_run: "About this run",
     h_act: "Ordered by priority", h_map: "Where this week lands in the course", h_ev: "Every claim, and what backs it", h_run: "What this run can and cannot show",
-    map_sub: "Chapters with a teal edge have something new this week. Packages with no chapter are curriculum gaps.",
+    map_sub: "A highlighted chapter has something new this week. A package with no chapter is a gap in the course.",
     s_signals: "signals collected", s_trends: "subjects tracked", s_update: "chapters to update", s_gaps: "not in the curriculum", s_claims: "checkable claims",
     f_all: "All", f_update: "Update a chapter", f_add: "New lesson", f_watch: "Watch only",
     v_all: "All claims", v_confirmed: "Confirmed", v_unverified: "Unverified",
@@ -126,6 +126,9 @@ const T = {
     viz_ev_t: "What backs the 82 claims", viz_ev_c: "A claim is only confirmed when an official release states the same version.",
     viz_src_t: "What was collected", viz_src_c: "Discussion is never evidence on its own; official releases are.",
     viz_map_t: "Course coverage this week", viz_map_c: "One cell per chapter, in course order.",
+    viz_dist_t: "How far the course sits from today", viz_dist_c: "Read from the notebooks: the version each chapter installs against the newest confirmed release.",
+    d_majors: "major versions behind", d_major: "major version behind", d_same: "on the current major",
+    d_nobound: "no version bound in the notebook",
     l_cross: "independent check", l_primary: "primary report", l_unverified: "unverified",
     l_touched: "has something new", l_gapc: "not covered", l_quiet: "quiet this week", l_outside: "outside the course",
     n1_t: "Where confirmations come from", n1_b: "Of {claims} claims, {primary} are primary reports: the official release states its own version, and we cite that release. {cross} are independent cross-source checks, where something said elsewhere was confirmed by an official release. {unv} are unverified.",
@@ -138,7 +141,7 @@ const T = {
     sub: "المؤكد يعني أن إصداراً رسمياً قال الشيء نفسه. وما عداه يبقى غير مؤكد.",
     tab_act: "ماذا نفعل", tab_map: "خريطة المنهج", tab_ev: "الأدلة", tab_run: "عن هذه التشغيلة",
     h_act: "مرتّبة حسب الأولوية", h_map: "أين يقع جديد هذا الأسبوع من المقرر", h_ev: "كل ادّعاء، وما يسنده", h_run: "ما تستطيع هذه التشغيلة إثباته وما لا تستطيع",
-    map_sub: "الفصول ذات الحافة الخضراء فيها جديد هذا الأسبوع. والحزم بلا فصل هي فجوات في المنهج.",
+    map_sub: "الفصل المميّز فيه جديد هذا الأسبوع. والحزمة بلا فصل فجوة في المقرر.",
     s_signals: "إشارة مجمّعة", s_trends: "موضوعاً متتبَّعاً", s_update: "فصلاً يحتاج تحديثاً", s_gaps: "خارج المنهج", s_claims: "ادّعاءً قابلاً للفحص",
     f_all: "الكل", f_update: "تحديث فصل", f_add: "درس جديد", f_watch: "مراقبة فقط",
     v_all: "كل الادّعاءات", v_confirmed: "مؤكد", v_unverified: "غير مؤكد",
@@ -168,6 +171,9 @@ const T = {
     viz_ev_t: "ما الذي يسند الـ82 ادّعاء", viz_ev_c: "لا يُعتمد الادّعاء إلا إذا ذكر إصدارٌ رسمي النسخة نفسها.",
     viz_src_t: "ما الذي جُمع", viz_src_c: "النقاش وحده ليس دليلاً، والإصدارات الرسمية هي الدليل.",
     viz_map_t: "تغطية المقرر هذا الأسبوع", viz_map_c: "خلية لكل فصل، بترتيب المقرر.",
+    viz_dist_t: "كم يبعد المنهج عن اليوم", viz_dist_c: "مقروءة من النوتبوكات: النسخة التي يثبّتها كل فصل مقابل أحدث إصدار مؤكد.",
+    d_majors: "نسخة رئيسية للوراء", d_major: "نسخة رئيسية للوراء", d_same: "على النسخة الرئيسية نفسها",
+    d_nobound: "بلا تحديد نسخة في النوتبوك",
     l_cross: "تحقق مستقل", l_primary: "تقرير رسمي", l_unverified: "غير مؤكد",
     l_touched: "فيه جديد", l_gapc: "غير مغطّى", l_quiet: "هادئ هذا الأسبوع", l_outside: "خارج المقرر",
     n1_t: "من أين تأتي التأكيدات", n1_b: "من أصل {claims} ادّعاء، {primary} منها تقارير رسمية: الإصدار يذكر نسخته بنفسه ونستشهد به. و{cross} تحقق متقاطع مستقل، حيث أكّد إصدارٌ رسمي كلاماً قيل في مكان آخر. و{unv} غير مؤكدة.",
@@ -398,7 +404,12 @@ function renderRun() {
 }
 
 
-const VIZ = { cross: "#127a52", primary: "#0b6fb0", unverified: "#b06a10", hn: "#0b6fb0", gh: "#127a52" };
+const token = (name) => getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+const VIZ = {
+  get cross() { return token("--good"); }, get primary() { return token("--info"); },
+  get unverified() { return token("--warn"); }, get hn() { return token("--info"); },
+  get gh() { return token("--good"); }
+};
 
 function stacked(parts, total) {
   const segs = parts.filter((p) => p.n > 0).map((p) =>
@@ -427,6 +438,46 @@ function renderActViz() {
     figure(t("viz_src_t"), t("viz_src_c"), sources);
 }
 
+function majorOf(version) {
+  const found = String(version || "").match(/\d+/);
+  return found ? Number(found[0]) : null;
+}
+
+function renderDistance() {
+  const scored = DATA.items
+    .filter((i) => i.chapter_id && i.latest_version)
+    .map((i) => {
+      const course = majorOf(i.chapter_version);
+      const latest = majorOf(i.latest_version);
+      return { ...i, behind: course === null || latest === null ? null : Math.max(0, latest - course) };
+    });
+
+  const measured = scored.filter((r) => r.behind !== null).sort((a, b) => b.behind - a.behind);
+  const unbound = scored.filter((r) => r.behind === null).map((r) => r.subject).sort();
+
+  if (!measured.length && !unbound.length) return "";
+
+  const widest = Math.max(1, ...measured.map((r) => r.behind));
+  const bars = measured.map((r) => {
+    const label = r.behind === 0 ? t("d_same")
+      : `${r.behind} ${r.behind === 1 ? t("d_major") : t("d_majors")}`;
+    return `<li class="drow">
+      <span class="dname">${esc(r.subject)}</span>
+      <span class="dspec" dir="ltr">${esc(r.chapter_version)} &rarr; ${esc(r.latest_version)}</span>
+      <span class="dtrack"><i style="width:${Math.max(5, (r.behind / widest) * 100).toFixed(1)}%"></i></span>
+      <span class="dlabel">${esc(label)}</span>
+    </li>`;
+  }).join("");
+
+  const loose = unbound.length
+    ? `<div class="dloose"><span class="dloose-t">${esc(t("d_nobound"))}</span>
+        <div class="dloose-l">${unbound.map((x) => `<span class="pin loose">${esc(x)}</span>`).join("")}</div></div>`
+    : "";
+
+  return figure(t("viz_dist_t"), t("viz_dist_c"),
+    `${bars ? `<ul class="dlist">${bars}</ul>` : ""}${loose}`);
+}
+
 function renderMapViz() {
   const touched = {};
   DATA.items.forEach((i) => { if (i.chapter_id) touched[i.chapter_id] = (touched[i.chapter_id] || 0) + 1; });
@@ -447,6 +498,7 @@ function renderMapViz() {
     .map((i) => `<span class="cell gap" data-tip="${esc(i.subject)}" data-note="${esc(t("l_gapc"))}"></span>`).join("");
   const outside = gapCells ? `<div class="outside"><span class="outside-l">${esc(t("l_outside"))}</span><div class="strip gapstrip">${gapCells}</div></div>` : "";
   document.getElementById("mapViz").innerHTML =
+    renderDistance() +
     figure(t("viz_map_t"), t("viz_map_c"), `<div class="strip">${cells}</div>${outside}<ul class="legend">${legend}</ul>`);
 }
 

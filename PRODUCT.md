@@ -36,4 +36,9 @@ A weekly review, ten minutes, on a laptop. The reader wants the shortlist first,
 ## Assumptions (from the brief, not an interview)
 
 - Team lead specified: four sections, SDA colours, light theme, product name "AI Trend Agent", bilingual with a toggle.
-- SDA palette read from the official syllabus logo: navy #181848, cyan #0090d0, teal #28a0a0, green #38a888.
+- The page chrome is monochrome: navy-black ink #15172b on cool paper #f4f5f7, one radius scale,
+  no accent colour of its own. Colour on this page always means something.
+- Four reserved status colours, validated for colour-blind separation before shipping:
+  #1a7f47 confirmed by an independent source, #1f6fb2 the release reporting itself,
+  #8a7c0f unverified or drifting, #bd2b52 an API a newer release removed. Text uses a darker
+  step of the same hue so every label clears WCAG AA.
