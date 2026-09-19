@@ -3,6 +3,7 @@ from pathlib import Path
 import json
 
 from src import runio
+from src.reading import judge_educational_value
 from src.schema import Score, Signal, Trend
 
 WEIGHTS = {
@@ -108,10 +109,20 @@ def score_trend(
         if signal.id in trend.signal_ids
     )
 
+    chapter_title = next(
+        (c["title"] for c in chapters if c["chapter_id"] == chapter_id),
+        None,
+    )
+    judgement = judge_educational_value(
+        trend.subject,
+        [claim.text for claim in trend.claims],
+        chapter_title,
+    )
+
     dimensions = {
         "relevance": 5 if subject_in_curriculum else 2,
         "impact": 2 + min(3, len(trend.signal_ids)),
-        "educational_value": 3,
+        "educational_value": judgement["value"] if judgement else 3,
         "difficulty": 2,
         "market_relevance": 2 + min(3, tier2_count),
     }
@@ -119,7 +130,7 @@ def score_trend(
     provenance = {
         "relevance": "measured",
         "impact": "measured",
-        "educational_value": "default",
+        "educational_value": "judged" if judgement else "default",
         "difficulty": "default",
         "market_relevance": "measured",
     }

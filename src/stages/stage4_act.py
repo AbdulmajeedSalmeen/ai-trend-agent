@@ -1,6 +1,7 @@
 from pathlib import Path
 from src.schema import Recommendation, Score, Trend
 from src import runio
+from src.reading import write_recommendation
 
 def decide_action(score: Score) -> str:
     if score.confidence < 0.5:
@@ -57,11 +58,16 @@ def run(run_dir: Path) -> None:
             continue
 
         action = decide_action(score)
+        confirmed = sum(1 for claim in trend.claims if claim.verdict == "confirmed")
+        written = write_recommendation(
+            trend.subject, action, score.chapter_id,
+            confirmed, len(trend.claims) - confirmed, score.priority,
+        )
         recommendation = Recommendation(
             trend_id=trend.id,
             action=action,
             chapter_id=score.chapter_id,
-            rationale=build_rationale(trend, score, action),
+            rationale=written or build_rationale(trend, score, action),
         )
 
         recommendations.append(recommendation)   

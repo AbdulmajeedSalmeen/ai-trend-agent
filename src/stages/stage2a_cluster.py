@@ -1,3 +1,4 @@
+import os
 import re
 
 from sklearn.cluster import AgglomerativeClustering
@@ -5,6 +6,8 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 from pathlib import Path
 from src import runio
 from src.schema import Claim, Signal, Trend
+from src.adapters import model
+from src.reading import read_claim
 from src.versions import extract_version 
 
 _EMBEDDING_MODEL = None
@@ -302,45 +305,75 @@ def make_claims(
     return claims
 
 
-def run(run_dir: Path) -> None:
-    signals = runio.load_artifact(
-        run_dir,
-        "signals",
-        Signal,
-    )
+def known_subjects(signals: list[Signal]) -> list[str]:
+    return sorted({s.subject for s in signals if s.tier == 1 and s.subject})
 
+
+def read_discussion_claims(trends, signals, budget):
+    """Have the model read what the community says, and keep only what a release page could check."""
+    by_id = {signal.id: signal for signal in signals}
+    vocabulary = known_subjects(signals)
+    read = 0
+    checkable = 0
+
+    for trend in trends:
+        if budget <= 0:
+            break
+        posts = [by_id[i] for i in trend.signal_ids if i in by_id and by_id[i].tier == 2]
+
+        for post in posts[:3]:
+            if budget <= 0:
+                break
+            budget -= 1
+            read += 1
+            reading = read_claim(post, vocabulary)
+
+            if not reading or reading["subject"] != trend.subject or not reading["version"]:
+                continue
+
+            trend.claims.append(Claim(
+                text=reading["assertion"],
+                subject=trend.subject,
+                version=reading["version"],
+                verdict="unverified",
+                evidence_url=None,
+                confidence=0.2,
+                source_signal_id=post.id,
+            ))
+            checkable += 1
+
+    return read, checkable
+
+
+def run(run_dir: Path) -> None:
+    signals = runio.load_artifact(run_dir, "signals", Signal)
     groups = cluster_signals(signals)
 
     trends: list[Trend] = []
+    unnamed = []
     skipped = 0
 
     for group in groups:
         subject = infer_subject(group, signals)
 
         if subject is None:
-            skipped += 1
+            unnamed.append(group)
             continue
 
-        claims = make_claims(
-            group,
-            subject_override=subject,
-        )
-
-        trend = Trend(
+        trends.append(Trend(
             id=f"trend_{len(trends) + 1:03d}",
             subject=subject,
             signal_ids=[signal.id for signal in group],
-            claims=claims,
-        )
+            claims=make_claims(group, subject_override=subject),
+        ))
 
-        trends.append(trend)
+    skipped = len(unnamed)
+    print(f"skipped {skipped} clusters with no identifiable subject")
 
-    print(
-        f"skipped {skipped} clusters with no identifiable subject"
-    )
+    if model.available():
+        budget = int(os.environ.get("MODEL_READ_BUDGET", "20"))
+        print(f"think: reading discussion posts about our {len(known_subjects(signals))} packages")
+        read, checkable = read_discussion_claims(trends, signals, budget)
+        print(f"model read {read} discussion posts, {checkable} stated something a release page can check")
 
-    runio.save_artifact(
-        run_dir,
-        "trends",
-        trends,
-    )
+    runio.save_artifact(run_dir, "trends", trends)

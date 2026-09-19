@@ -5,3 +5,6 @@ pytest
 scikit-learn
 sentence-transformers
 python-dotenv
+fastapi
+uvicorn
+httpx
