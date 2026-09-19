@@ -1,7 +1,11 @@
 import json
 from datetime import datetime, timezone
 from pathlib import Path
+from typing import TypeVar
+
 from pydantic import BaseModel
+
+T = TypeVar("T", bound=BaseModel)
 
 RUNS_DIR = Path("fixtures/runs")
 
@@ -28,7 +32,7 @@ def save_artifact(run_path: Path, name: str, items: list[BaseModel]) -> None:
     # 4. نكتب النص في الملف
     path.write_text(text, encoding="utf-8")
 
-def load_artifact(run_path: Path, name: str, model: type[BaseModel]) -> list[BaseModel]:
+def load_artifact(run_path: Path, name: str, model: type[T]) -> list[T]:
     # 1. نركّب مسار الملف من run_path و name
     path = run_path / f"{name}.json"
     # 2. نقرأ النص من الملف
