@@ -10,14 +10,25 @@ STAGES = [("ingest", stage1_ingest.run),
           ("act", stage4_act.run),
 ]
 def main() -> None:
-    run_id = runio.new_run_id()
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--run-id", default=None, help="replay a saved run instead of fetching")
+    args = parser.parse_args()
+
+    run_id = args.run_id or runio.new_run_id()
     run_path = runio.run_dir(run_id)
 
-    for name, stage_run in STAGES:
-        print(f"[{run_id}] stage: {name}")
+    stages = STAGES
 
+    if args.run_id:
+        stages = [(name, stage_run) for name, stage_run in STAGES if name != "ingest"]
+        print(f"[{run_id}] replaying saved signals, ingest skipped")
+
+    for name, stage_run in stages:
+        print(f"[{run_id}] stage: {name}")
         stage_run(run_path)
 
     print(f"[{run_id}] done")
+
+
 if __name__ == "__main__":
     main()
