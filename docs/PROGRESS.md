@@ -1,129 +1,91 @@
 # Progress
 
-**Last updated:** 2026-09-16 · **Tests on dev:** 33 passing (local and CI)
-**Days left:** Integration 1 in 4 days (Sep 20) · demo-ready in 10 days (Sep 26)
+**Last updated:** 2026-09-19 · **Tests:** 95 passing · **Demo:** Sep 26–27
 
-Lead updates this file after every standup. If it is stale, nothing below is trustworthy.
+The pipeline runs end to end, live, from a web app. A model reads, judges and writes;
+rules still decide what counts as confirmed.
 
 ## Next actions
 
-1. **Ali (Stage 1):** push `hn_sample.json` and `github_sample.json` before tonight.
-2. **Naif (Stage 2b):** push the six verdict-rule tests before tonight, marked `skip` with a stub module, so `dev` stays green.
-3. **Lead:** start Stage 4, tests first.
-4. **ABDULRHMAN:** add `run()` to stage 2a, and switch tests from `SimpleNamespace` to real `Signal`.
+1. **Lead:** push the day's work, then merge `dev` into `main` (it is ~50 commits behind).
+2. **Lead:** add the team names to `README.md`.
+3. **Everyone:** `pip install -r requirements.txt` (fastapi, uvicorn, httpx are new) and create a
+   `.env` with `OPENAI_API_KEY=...` — without it the stages fall back to rules and say so.
+4. **Whole team:** Sep 23–24 pick the demo run and freeze it; Sep 25–26 rehearse twice.
 
 ## Owners
 
 | Area | Owner |
 |---|---|
-| Schema, runio, Stage 4, pipeline, repo | Abdulmajeed (Lead) |
-| Stage 2a clustering | ABDULRHMAN |
+| Schema, runio, versions, Stage 4, pipeline, server, site, repo | Abdulmajeed (Lead) |
 | Stage 1 ingestion | Ali |
-| Stage 2b verify + Stage 3 score | Naif |
-| Website | Claude with Lead, after Integration 2 |
+| Stage 2a clustering and claim extraction | ABDULRHMAN |
+| Stage 2b verification + Stage 3 scoring | Naif |
 
 ## Decisions made
 
-- One agent with four specialised stages, not one agent per stage.
-- No LLM inside the product. Hugging Face embeddings for clustering, LangGraph for orchestration.
-- No Streamlit. A website is built after Integration 2.
-- Everyone pushes directly to `dev`. `dev` merges to `main` only on integration days.
-- `main` requires passing tests. No review requirement.
-- The schema workshop was skipped; members read the contract on their own.
+- One agent, five stages. Not one agent per stage: the stages have no open decisions to negotiate.
+- The model reads, judges and writes. **The verification gate stays rules** — a claim is confirmed
+  only when a tier-1 release states the same subject and the exact same version.
+- A claim can never be confirmed by the document it was read from (`source_signal_id`).
+  Evidence from a different document is `cross_source`; the release speaking about itself is
+  `primary_report`.
+- One trend per subject; versions are claims inside it, not separate trends.
+- Chapters are matched from the curriculum text (tool names included), not a hand-written map.
+- The curriculum is the real SDA course, read from the LMS: 25 chapters, weeks 1–7.
+- `dev` is the working branch; `main` only on integration days.
+- No test may call a model or the network (`tests/conftest.py` disables the model).
 
----
+## Measured facts to quote at the demo
 
-## Setup and GitHub
+- A run collects ~395 signals: ~315 Hacker News, ~80 GitHub releases.
+- 17 subjects, ~82 claims, 80 primary reports, 2 unverified, **0 cross-source**.
+- The model read 14 discussion posts that name a tracked package. **None stated anything a release
+  page could check.** That is why cross-source is zero — the community discusses tools, it does not
+  report versions.
+- Educational value is judged per trend (1–5 with a reason) and recorded as `judged`, never `measured`.
+- Four tracked packages are absent from the curriculum: anthropic-sdk-python, crewai, llama_index,
+  pydantic-ai.
 
-- [x] Repository `ai-trend-agent` with `main` and `dev`
-- [x] CI runs pytest on every push
-- [x] `main` protected: tests must pass, no force push
-- [x] All four members accepted as collaborators
-- [x] Old feature branches deleted, early `dev → main` PR #3 closed
-- [ ] Each member adds their name to README (day-1 exercise)
-- [ ] Every member has the full `requirements.txt` installed
-  (Lead is missing `langgraph`, `requests`, `python-dotenv`, `sentence-transformers`)
-- [x] Stage owners confirmed: Ali = Stage 1, Naif = Stage 2b + 3
-- [ ] Ali has a GitHub token in `.env`
+## Done
 
-## Planning
+- [x] `src/schema.py` — five models, UTC guard, evidence fields
+- [x] `src/runio.py` — run folders, typed save/load
+- [x] `src/versions.py` — shared version extraction, pre-releases kept whole
+- [x] Stage 1 ingestion (Ali) — Hacker News + GitHub, raw caching, monorepo subjects
+- [x] Stage 2a clustering (ABDULRHMAN) — TF-IDF, subject inference, claims per version
+- [x] Stage 2b verification (Naif) — tier-1 only, exact version, no self-confirmation
+- [x] Stage 3 scoring (Naif) — chapter matching, five dimensions, weights assert to 1.0
+- [x] Stage 4 recommendations (Lead) — decision table, rationale
+- [x] `src/pipeline.py` — one command, `--run-id` replays a saved run with no network
+- [x] `src/runner.py` — lock file, background thread, progress, GitHub budget check
+- [x] `src/server.py` — FastAPI: runs list, payload, status, start run
+- [x] `src/site.py` + template — bilingual dashboard, four sections, charts, offline export
+- [x] `src/adapters/model.py` + `src/reading.py` — provider-agnostic model, three thinking points
 
-- [x] `docs/plans/TEAM-PLAN.md` and one plan per member
-- [x] Data contract written in TEAM-PLAN
-- [x] `docs/PROGRESS.md` started
-- [ ] Daily standup notes recorded here
+## Not done
 
-## Shared contract — Lead
-
-- [x] `src/schema.py`: Signal, Claim, Trend, Score, Recommendation, UTC guard — 10 tests
-- [x] `src/runio.py`: `new_run_id`, `run_dir`, `save_artifact`, `load_artifact` — 6 tests
-- [ ] Every member ran `python -m pytest` on their own machine after pulling
-
-## Stage 1 — Ingestion — Ali
-
-- [ ] Explore Hacker News and GitHub APIs by hand, save `hn_sample.json` and `github_sample.json`
-- [ ] GitHub token created, stored in `.env`, never committed
-- [ ] `parse_hn_hit` and `parse_release` with offline tests
-- [ ] `fetch_hackernews` and `fetch_github_releases` with timeouts, rate-limit and `TRUNCATED` logging
-- [ ] `stage1_ingest.run()` saves raw responses first, then `signals.json` through runio
-- [ ] One real run with 100+ signals from both sources
-
-## Stage 2a — Clustering — ABDULRHMAN
-
-- [x] `signals_fixture.json` with 12 signals
-- [x] `extract_version` keeps the full version and takes the first one
-- [x] `signal_text` and `group_known_subjects`
-- [x] `cluster_signals` with TF-IDF and agglomerative clustering
-- [x] `make_claims`
-- [x] `docs/TUNING.md` started
-- [x] 16 tests
-- [ ] `run()` that loads `signals.json` and saves `trends.json` through runio
-- [ ] Tests use real `Signal` objects instead of `SimpleNamespace`
-- [ ] Sep 21–22: Hugging Face embeddings, with a measured comparison against TF-IDF
-
-## Stage 2b + 3 — Verify and score — Naif
-
-- [ ] Six verdict-rule tests, written first and failing
-- [ ] `find_evidence`, `verify_claim`, `run()`
-- [ ] Test: same version, different subject, never confirms
-- [ ] `match_chapter` against `fixtures/curriculum.json`
-- [ ] `score_trend` with five dimensions, provenance, weights asserting to 1.0
-- [ ] Five scoring tests
-- [ ] Offline chain produces at least one `confirmed` and one `unverified` claim
-
-## Stage 4 + pipeline — Lead
-
-- [ ] Four decision-table tests, written first
-- [ ] `decide_action`, `build_rationale`, `run()`
-- [ ] `src/pipeline.py`: one command runs every stage (stubs allowed) — Sep 18
-- [ ] LangGraph graph, with a test that the plain sequential path gives identical files — Sep 19
-
-## Integration — whole team
-
-- [ ] **Sep 20 — Integration 1:** one command runs all stages on fixture data; then merge `dev → main`
-- [ ] Sep 21–22: live API data, Hugging Face embeddings, verdicts checked on real data
-- [ ] **Sep 23 — Integration 2:** full live run, cached, containing both `confirmed` and `unverified`
-
-## Website — Claude with Lead
-
-- [ ] Sep 23–24: website reads the JSON files of one cached run
-
-## Demo
-
-- [ ] Demo run chosen on purpose, not the newest by default
-- [ ] Sep 25: rehearsal 1, timed
-- [ ] Sep 26: rehearsal 2, code freeze, offline fallback drill
-- [ ] Prepared answers: why one agent and not many, why no LLM, what `unverified` means
+- [ ] `dev` merged into `main`
+- [ ] Team names in README
+- [ ] Demo run chosen and frozen
+- [ ] Two timed rehearsals, and the offline fallback drill
+- [ ] Prepared answers: why one agent, why the gate is rules, what `unverified` means
+- [ ] Optional: GitHub token per member (60 requests/hour without one)
 
 ## Standup log
 
-Newest first.
+### 2026-09-19
+- Lead: Stage 4, `--run-id` replay, FastAPI server, the bilingual site, the run experience,
+  and the model layer. The NVIDIA key turned out unusable (most models 404, the one that answers
+  takes 60s a call); switched to OpenAI via `.env`.
+- ABDULRHMAN: multi-version claims with dedupe, plus a measured TF-IDF vs embeddings comparison
+  in `docs/TUNING.md` — TF-IDF won on this data.
+- Naif: Stage 3 scoring, and the shared version extractor in Stage 2b.
+- Found and fixed: every claim was being confirmed by the document it came from; chapter matching
+  was landing on the words "a" and "into".
+
+### 2026-09-18
+- Pipeline chained end to end for the first time; stages 1, 2a, 2b complete.
 
 ### 2026-09-16
-- Lead: `runio.py` done with 6 tests. Found and fixed an early `return` inside a loop that loaded only the first item.
-- ABDULRHMAN: TF-IDF clustering and claim extraction pushed. Stage 2a is ahead of schedule.
-- Naif, Ali: no stage code pushed yet.
-
-### 2026-09-15
-- Lead: `schema.py` with 10 tests pushed.
-- ABDULRHMAN: fixture, version extraction, subject grouping pushed.
+- Schema and runio merged; CI green on every push.

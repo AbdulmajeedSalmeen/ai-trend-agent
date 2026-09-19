@@ -3,3 +3,6 @@ __pycache__/
 *.pyc
 .env
 fixtures/runs/
+.agents/
+.claude/skills/
+.pytest_cache/
