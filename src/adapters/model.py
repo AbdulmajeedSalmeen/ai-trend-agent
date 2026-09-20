@@ -234,8 +234,11 @@ def ask_json(system: str, user: str, max_tokens: int = 400, timeout: int = 40,
     candidates = providers()
 
     if not candidates:
-        if config() is not None:
-            trace.current.record(action, 0.0, ok=False, note=f"skipped, {halted()}")
+        reason = halted()
+
+        if reason:
+            trace.current.record(action, 0.0, ok=False, note=f"skipped, {reason}")
+
         return None
 
     if trace.current.over_budget():

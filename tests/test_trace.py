@@ -92,10 +92,8 @@ def test_starting_a_run_clears_the_previous_one():
 def test_the_model_refuses_to_spend_past_the_budget(monkeypatch):
     from src.adapters import model
 
-    monkeypatch.setattr(model, "config", lambda: {
-        "base_url": "https://example.test/v1", "model": "gpt-4o-mini",
-        "key": "test", "provider": "openai",
-    })
+    model.reset()
+    use(monkeypatch, only())
 
     def never_called(*args, **kwargs):
         raise AssertionError("no request may be sent once the budget is spent")
