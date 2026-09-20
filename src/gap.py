@@ -4,6 +4,7 @@ NUMERIC_RE = re.compile(r"\d+")
 
 UNKNOWN = "unknown"
 UNPINNED = "unpinned"
+DEPENDENCY = "dependency"
 CURRENT = "current"
 AHEAD = "ahead"
 PATCH_ONLY = "patch_only"
@@ -81,6 +82,10 @@ def describe(subject: str, pinned: str | None, latest: str | None, kind: str,
                     f"{latest} whatever the material was written against.")
         return f"The notebooks install {subject} with no version bound."
 
+    if kind == DEPENDENCY:
+        return (f"The chapter installs {subject} without a bound, but does not teach it. "
+                f"That is a dependency to pin, not material to rewrite.")
+
     if kind == UNKNOWN:
         if latest:
             return f"The chapter does not record which {subject} version it teaches, so the distance to {latest} cannot be measured."
@@ -110,9 +115,16 @@ def count_after(published: list, since: str | None) -> int:
 
 def assess(subject: str, versions: list[str | None], pinned: str | None,
            published: list, last_updated: str | None, unpinned: bool = False,
-           legacy: list[dict] | None = None, has_chapter: bool = True) -> dict:
+           legacy: list[dict] | None = None, has_chapter: bool = True,
+           taught: bool = True) -> dict:
     latest = newest(versions)
     kind = compare(pinned, latest, unpinned)
+
+    # Unbound is only a curriculum problem when the chapter teaches the package or
+    # still calls something a later release removed. Otherwise it is a dependency
+    # to pin, and saying "rewrite the chapter" would be noise.
+    if kind == UNPINNED and not taught and not legacy:
+        kind = DEPENDENCY
 
     return {
         "subject": subject,
@@ -123,6 +135,7 @@ def assess(subject: str, versions: list[str | None], pinned: str | None,
         "released_since": count_after(published, last_updated),
         "sentence": describe(subject, pinned, latest, kind, has_chapter),
         "legacy": legacy or [],
+        "taught": taught,
     }
 
 

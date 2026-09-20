@@ -1,4 +1,5 @@
 import json
+import re
 from pathlib import Path
 
 from src import gap, runio
@@ -72,6 +73,16 @@ def load_chapters() -> dict:
     return {chapter["chapter_id"]: chapter for chapter in data["chapters"]}
 
 
+def teaches_package(chapter: dict, subject: str) -> bool:
+    """Named in the chapter's own topics or tool list, rather than installed as a
+    dependency nobody talks about."""
+    text = " ".join(chapter.get("topics_covered", []) + chapter.get("tools_covered", [])
+                    + [chapter.get("title", "")]).lower()
+    root = subject.replace("_", "-").split("-")[0]
+
+    return root in re.findall(r"[a-z0-9]+", text)
+
+
 def assess_trend(trend: Trend, chapter: dict | None, published: dict) -> dict:
     confirmed = [claim for claim in trend.claims if claim.verdict == "confirmed"]
     has_chapter = chapter is not None
@@ -88,6 +99,7 @@ def assess_trend(trend: Trend, chapter: dict | None, published: dict) -> dict:
         unpinned=trend.subject in chapter.get("installs_unpinned", []),
         legacy=legacy,
         has_chapter=has_chapter,
+        taught=teaches_package(chapter, trend.subject) if has_chapter else True,
     )
 
 

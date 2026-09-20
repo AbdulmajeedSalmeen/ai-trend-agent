@@ -1,30 +1,33 @@
 # Demo answers
 
-Every number here comes from `run_20260919T152501Z`. Re-run `python -m src.pipeline --run-id
-run_20260919T152501Z` and they come back the same, because replay never touches the network.
+Every number here comes from `run_20260920T080135Z`. Re-run `python -m src.pipeline --run-id
+run_20260920T080135Z` and they come back the same, because replay never touches the network.
 
 ## The run, in numbers
 
 | | |
 |---|---|
-| Signals collected | 393 - 313 Hacker News, 80 GitHub releases |
-| Subjects tracked | 17 |
-| Checkable claims | 82 |
-| Confirmed by the release itself | 80 |
+| Signals collected | 486 - 316 Hacker News, 90 PyPI releases, 80 GitHub releases |
+| Packages followed | 53, every one the course notebooks install |
+| Subjects tracked | 37 |
+| Checkable claims | 157 |
+| Confirmed by the release itself | 139 |
+| Carried by a second registry | 14 |
 | Confirmed by an independent source | 0 |
-| Unverified | 2 |
-| Recommendations | 4 update a chapter, 4 new lesson, 9 watch |
+| Unverified | 4 |
+| Recommendations | 12 update a chapter, 4 new lesson, 21 watch |
+| Chapters with something to act on | 11 of 25 |
 | Course notebooks read | 89, across six weeks |
 | Chapters installing something with no version bound | 19 of 25 |
 | Removed APIs still called in the material | 7 |
-| Tests | 149, in 15 files. None calls a model or the network |
+| Tests | 174, in 17 files. None calls a model or the network |
 
 ---
 
 ## "Why is cross-source zero? Is the checker broken?"
 
-No. The model reads every discussion post that names a package we track and reports what each
-one actually claims. **None of them stated anything a release page could check.** People
+Still zero, with a second tier-1 source added. The model reads every discussion post that names
+a package we track and reports what each one actually claims. **None of them stated anything a release page could check.** People
 discuss tools; they do not report version numbers. The count for a given run is printed in the
 log as `model read N discussion posts, 0 stated something a release page can check`.
 
@@ -37,15 +40,26 @@ high number would be the suspicious one.
 
 ## "So what does 'confirmed' actually mean?"
 
-A tier-1 source - an official release - states the same subject at the exact same version.
-Three rules make it strict:
+A tier-1 source - an official release or the PyPI registry - states the same subject at the
+exact same version. Three rules make it strict:
 
 1. **Tier 1 only.** A Hacker News post never confirms anything.
 2. **Exact version equality.** We extract the version and compare with `==`. An early bug had
    `1.5` "confirmed" by `v11.5.0` because it used a substring test.
 3. **Never self-confirmation.** A claim cannot be confirmed by the document it was read from.
-   Every claim carries `source_signal_id`, and evidence from a different document is labelled
-   `cross_source` while the release speaking about itself is `primary_report`.
+   Every claim carries `source_signal_id`, and the verdict records what kind of check it was.
+
+There are three kinds, and they are not worth the same:
+
+| Verdict | What happened | Confidence |
+|---|---|---|
+| `primary_report` | The release states its own version and we cite that release | 0.70 |
+| `registry_match` | GitHub and PyPI both carry the version, two records from the same publisher | 0.80 |
+| `cross_source` | Something said elsewhere was confirmed by an official release | 0.90 |
+
+Adding PyPI could have made cross-source look non-zero overnight. It does not, because two
+registries run by the same project are not independent of each other, and calling that a
+cross-source check would have been us grading our own homework. It gets its own name.
 
 ## "You use an LLM. How do we know it isn't making this up?"
 
@@ -83,8 +97,13 @@ Then the verdict is arithmetic:
 |---|---|
 | Major or minor release since the pinned version | worth rewriting |
 | Only patch releases since | leave it alone |
-| No bound in the notebook at all | no guarantee - a student installs whatever shipped that day |
+| No bound, and the chapter teaches the package | no guarantee - a student installs whatever shipped that day |
+| No bound, but the package is only a dependency | a version to pin, not material to rewrite |
 | Nothing recorded | say so, do not call the chapter stale |
+
+That last distinction matters. Without it the run produced 24 chapter updates, including
+"update chapter C24" because pandas moved. Pandas moving is a dependency-hygiene problem;
+`RetrievalQA` disappearing is a curriculum problem. Twelve survive the distinction.
 
 Patch-only movement can no longer ask for a rewrite. That rule alone removed a recommendation
 that read "update chapter C19 due to three confirmed claims" - three patch releases of the
@@ -123,8 +142,7 @@ Two fallbacks. Both were run with the network and the model switched off, on 202
 
 ## "What would you do with another two weeks?"
 
-- Widen the collection window so cross-source has a chance to be non-zero, and track PyPI
-  release feeds directly rather than GitHub releases alone.
+- Widen the collection window so cross-source has a chance to be non-zero.
 - Replace the pattern table with a real check: read the release notes for removal notices
   instead of matching names we typed ourselves.
 - Difficulty is still a constant 2 in the score. Either measure it or drop the dimension.

@@ -4,7 +4,8 @@
 
 An agent that reads what shipped in the AI ecosystem this week, checks every claim against
 the official release that would have to confirm it, then compares the confirmed versions
-with what our own course notebooks install.
+with what our own course notebooks install. It follows every package the course installs,
+because that watchlist is read out of the material rather than typed by us.
 
 It does not report news. It reports what our material teaches that no longer exists.
 
@@ -26,7 +27,7 @@ The rest of the course pins `langchain==0.3.*`, `langchain-openai==0.2.*` and
 
 ```mermaid
 flowchart LR
-  A["1 collect<br/>Hacker News + GitHub"] --> B["2a cluster<br/>subjects and claims"]
+  A["1 collect<br/>Hacker News, GitHub, PyPI"] --> B["2a cluster<br/>subjects and claims"]
   B --> C["2b verify<br/>tier 1, exact version"]
   C --> D["3 score<br/>chapter match, 5 dimensions"]
   D --> E["4 decide<br/>action plus reason"]
@@ -41,11 +42,14 @@ offline from a saved run.
 **A claim is confirmed only when a tier-1 source states the same subject at the same exact
 version.** Three rules keep that honest:
 
-1. An official release can confirm. A discussion post never can.
+1. An official release or the PyPI registry can confirm. A discussion post never can.
 2. Versions are extracted and compared with `==`. An early bug let `1.5` be "confirmed" by
    `v11.5.0` because it used a substring test.
-3. A claim is never confirmed by the document it was read from. Evidence from a different
-   document is `cross_source`; the release speaking about itself is `primary_report`.
+3. A claim is never confirmed by the document it was read from, and the verdict records what
+   kind of check it was: `primary_report` when the release states its own version,
+   `registry_match` when GitHub and PyPI both carry it, and `cross_source` only when something
+   said elsewhere is confirmed by an official release. Two registries run by the same project
+   are not independent, so they do not get to count as a cross-source check.
 
 **A chapter is only called stale when the distance can be measured.** The verdict comes from
 what the notebooks actually install:
@@ -54,7 +58,8 @@ what the notebooks actually install:
 |---|---|
 | A major or minor release since the pinned version | worth rewriting |
 | Only patch releases since | leave it alone |
-| No version bound in the notebook | no guarantee, a student installs whatever shipped that day |
+| No bound, and the chapter teaches the package | no guarantee, a student installs whatever shipped that day |
+| No bound, but the package is only a dependency | a version to pin, not material to rewrite |
 | Nothing recorded | say so, do not call the chapter stale |
 
 ### Where the model is allowed to decide
@@ -69,24 +74,27 @@ instead. The run log says so when it happens.
 
 ## Numbers from the frozen run
 
-`run_20260919T152501Z` travels with the repo, so anyone can replay it with no network.
+`run_20260920T080135Z` travels with the repo, so anyone can replay it with no network.
 
 | | |
 |---|---|
-| Signals collected | 393, being 313 Hacker News and 80 GitHub releases |
-| Subjects tracked | 17 |
-| Checkable claims | 82 |
-| Confirmed by the release itself | 80 |
+| Signals collected | 486, being 316 Hacker News, 90 PyPI and 80 GitHub |
+| Packages followed | 53, every one the course notebooks install |
+| Subjects tracked | 37 |
+| Checkable claims | 157 |
+| Confirmed by the release itself | 139 |
+| Carried by a second registry | 14 |
 | Confirmed by an independent source | 0 |
-| Unverified | 2 |
-| Recommendations | 4 update a chapter, 4 new lesson, 9 watch |
-| Course notebooks read | 89, across six weeks |
-| Chapters installing something with no version bound | 19 of 25 |
-| Tests | 149, none of which calls a model or the network |
+| Unverified | 4 |
+| Recommendations | 12 update a chapter, 4 new lesson, 21 watch |
+| Chapters with something to act on | 11 of 25 |
+| Tests | 174, none of which calls a model or the network |
 
 Cross-source is zero because no discussion post this week stated anything a release page
 could check. That is a property of the data, not a gap in the checker, and the page prints
-the zero rather than folding it into the column next to it.
+the zero rather than folding it into the column beside it. Adding PyPI did not quietly fix
+it either: two registries run by the same project agreeing is recorded as `registry_match`,
+never passed off as independent support.
 
 ## Setup
 
@@ -154,7 +162,7 @@ files stay on your machine.
 | Member | Owns |
 |---|---|
 | Abdulmajeed Salmeen | Schema, run I/O, stage 4, pipeline, web server, dashboard, repo |
-| Ali Almufarriji | Stage 1, collecting signals from Hacker News and GitHub |
+| Ali Almufarriji | Stage 1, collecting signals from Hacker News, GitHub and PyPI |
 | Abdulrhman Almania | Stage 2a, clustering signals into subjects and extracting claims |
 | Naif Alasmari | Stage 2b verification, and stage 3 scoring |
 

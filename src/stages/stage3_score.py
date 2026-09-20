@@ -37,20 +37,25 @@ def primary_name(subject: str) -> str:
     return subject.replace("_", "-").split("-")[0]
 
 
+def installs(chapter: dict, subject: str) -> bool:
+    return subject in chapter.get("pins", {}) or subject in chapter.get("installs_unpinned", [])
+
+
 def match_chapter(trend: Trend, chapters: list[dict]) -> str | None:
     subject_words = word_set(trend.subject)
     primary = primary_name(trend.subject)
 
+    named_candidates = [c for c in chapters if primary in chapter_vocabulary(c)]
+
+    # A chapter that names the package AND installs it beats one that only mentions
+    # it in passing: C2 says "OpenAI API key setup", but C5 is where openai is used.
+    preferred = [c for c in named_candidates if installs(c, trend.subject)] or named_candidates
+
     best_chapter_id = None
     best_named = 0
 
-    for chapter in chapters:
-        chapter_words = chapter_vocabulary(chapter)
-
-        if primary not in chapter_words:
-            continue
-
-        named = len(subject_words & chapter_words)
+    for chapter in preferred:
+        named = len(subject_words & chapter_vocabulary(chapter))
 
         if named > best_named:
             best_named = named
@@ -58,6 +63,13 @@ def match_chapter(trend: Trend, chapters: list[dict]) -> str | None:
 
     if best_chapter_id is not None:
         return best_chapter_id
+
+    # Nothing names it, but a chapter's own notebooks install it. That chapter owns
+    # it, even when it is a dependency the course never talks about.
+    installing = [c["chapter_id"] for c in chapters if installs(c, trend.subject)]
+
+    if installing:
+        return installing[0]
 
     trend_text = " ".join([trend.subject] + [claim.text for claim in trend.claims])
     trend_words = word_set(trend_text) - STOP_WORDS

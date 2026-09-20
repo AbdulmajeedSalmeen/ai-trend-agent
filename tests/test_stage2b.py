@@ -222,3 +222,47 @@ def test_partial_version_does_not_match_different_major_version():
     evidence = find_evidence(claim, [signal])
 
     assert evidence is None
+
+
+from src.stages.stage2b_verify import classify
+
+
+def signal_at(signal_id, tier=1):
+    return Signal(
+        id=signal_id, source="pypi" if signal_id.startswith("pypi") else "github", tier=tier,
+        subject="langchain", title="langchain 1.4.2",
+        url=f"https://example.test/{signal_id}",
+        published_at=datetime(2026, 9, 18, tzinfo=timezone.utc),
+    )
+
+
+def claim_from(source_id):
+    return Claim(text="langchain 1.4.2 was released", subject="langchain",
+                 version="1.4.2", source_signal_id=source_id)
+
+
+def test_a_release_repeating_itself_is_a_primary_report():
+    claim = claim_from("gh_langchain_1.4.2")
+
+    assert classify(claim, signal_at("gh_langchain_1.4.2"), 1) == ("primary_report", 0.7)
+
+
+def test_two_registries_agreeing_is_not_an_independent_check():
+    claim = claim_from("gh_langchain_1.4.2")
+
+    kind, confidence = classify(claim, signal_at("pypi_langchain_1.4.2"), 1)
+
+    assert kind == "registry_match"
+    assert confidence < 0.9
+
+
+def test_a_community_claim_confirmed_by_a_release_is_cross_source():
+    claim = claim_from("hn_4412")
+
+    assert classify(claim, signal_at("gh_langchain_1.4.2"), 2) == ("cross_source", 0.9)
+
+
+def test_an_unknown_source_tier_is_treated_as_community():
+    claim = claim_from("hn_4412")
+
+    assert classify(claim, signal_at("gh_langchain_1.4.2"), None)[0] == "cross_source"

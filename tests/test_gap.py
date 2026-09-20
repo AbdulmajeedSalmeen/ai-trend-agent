@@ -148,3 +148,26 @@ def test_a_package_no_chapter_covers_is_described_as_a_gap():
 
     assert sentence.startswith("No chapter in the course installs or teaches crewai")
     assert "1.15.22" in sentence
+
+
+def test_an_unbound_package_the_chapter_teaches_is_worth_rewriting():
+    assessment = gap.assess("langchain", ["1.4.2"], None, [], None, unpinned=True, taught=True)
+
+    assert assessment["kind"] == gap.UNPINNED
+    assert assessment["kind"] in gap.ACTIONABLE
+
+
+def test_an_unbound_dependency_the_chapter_never_teaches_is_not():
+    assessment = gap.assess("pandas", ["3.0.6"], None, [], None, unpinned=True, taught=False)
+
+    assert assessment["kind"] == gap.DEPENDENCY
+    assert assessment["kind"] not in gap.ACTIONABLE
+    assert "dependency to pin" in assessment["sentence"]
+
+
+def test_a_removed_api_makes_even_an_untaught_package_actionable():
+    markers = [{"package": "openai", "uses": "openai.ChatCompletion", "note": "removed in openai 1.x"}]
+    assessment = gap.assess("openai", ["3.16.2"], None, [], None, unpinned=True,
+                            taught=False, legacy=markers)
+
+    assert assessment["kind"] == gap.UNPINNED

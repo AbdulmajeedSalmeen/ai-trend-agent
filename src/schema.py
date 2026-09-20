@@ -5,7 +5,7 @@ from pydantic import (BaseModel, Field, field_validator)
 
 class Signal(BaseModel):
     id:str
-    source: Literal['github','hackernews']
+    source: Literal['github','hackernews','pypi']
     tier: Literal[1,2]
     subject:Optional[str] = None
     title:str
@@ -30,7 +30,7 @@ class Claim(BaseModel):
     evidence_url:Optional[str] = None
     confidence: float = Field(0.2, ge=0.0, le=1.0)
     source_signal_id: Optional[str] = None
-    evidence_kind: Optional[Literal['primary_report', 'cross_source']] = None
+    evidence_kind: Optional[Literal['primary_report', 'cross_source', 'registry_match']] = None
 
 
 class Trend(BaseModel):

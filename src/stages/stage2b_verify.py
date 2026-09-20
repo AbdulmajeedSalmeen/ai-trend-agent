@@ -33,7 +33,24 @@ def find_evidence(claim: Claim, signals: list[Signal]) -> Signal | None:
     return None
 
 
-def verify_claim(claim: Claim, signals: list[Signal]) -> Claim:
+def classify(claim: Claim, evidence: Signal, source_tier: int | None) -> tuple[str, float]:
+    """What kind of check is this, and how much does it buy?
+
+    The release repeating itself is the weakest. Two registries carrying the same
+    version is stronger, but both are the publisher speaking, so it is not an
+    independent check. Only a claim made somewhere else and then confirmed by an
+    official release counts as cross-source.
+    """
+    if evidence.id == claim.source_signal_id:
+        return "primary_report", 0.7
+
+    if source_tier == 1:
+        return "registry_match", 0.8
+
+    return "cross_source", 0.9
+
+
+def verify_claim(claim: Claim, signals: list[Signal], tiers: dict[str, int] | None = None) -> Claim:
     evidence = find_evidence(claim, signals)
 
     if evidence is None:
@@ -46,12 +63,8 @@ def verify_claim(claim: Claim, signals: list[Signal]) -> Claim:
             }
         )
 
-    if evidence.id == claim.source_signal_id:
-        evidence_kind = "primary_report"
-        confidence = 0.7
-    else:
-        evidence_kind = "cross_source"
-        confidence = 0.9
+    source_tier = (tiers or {}).get(claim.source_signal_id or "")
+    evidence_kind, confidence = classify(claim, evidence, source_tier)
 
     return claim.model_copy(
         update={
@@ -67,14 +80,15 @@ def run(run_dir: Path) -> None:
     signals = runio.load_artifact(run_dir, "signals", Signal)
     trends = runio.load_artifact(run_dir, "trends", Trend)
 
+    tiers = {signal.id: signal.tier for signal in signals}
     verified_trends = []
-    counts = {"cross_source": 0, "primary_report": 0, "unverified": 0}
+    counts = {"cross_source": 0, "registry_match": 0, "primary_report": 0, "unverified": 0}
 
     for trend in trends:
         verified_claims = []
 
         for claim in trend.claims:
-            verified = verify_claim(claim, signals)
+            verified = verify_claim(claim, signals, tiers)
             counts[verified.evidence_kind or "unverified"] += 1
             verified_claims.append(verified)
 
@@ -82,6 +96,7 @@ def run(run_dir: Path) -> None:
 
     print(
         f"verified: {counts['cross_source']} cross-source, "
+        f"{counts['registry_match']} registry match, "
         f"{counts['primary_report']} primary report, "
         f"{counts['unverified']} unverified"
     )

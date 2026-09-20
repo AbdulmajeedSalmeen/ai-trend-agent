@@ -216,3 +216,37 @@ def test_stop_words_alone_do_not_match_a_chapter():
     )
 
     assert match_chapter(trend, load_chapters()) is None
+
+
+def test_a_chapter_that_installs_the_package_beats_one_that_only_names_it():
+    chapters = [
+        {"chapter_id": "C2", "topics_covered": ["OpenAI account and API key setup"],
+         "tools_covered": [], "pins": {}, "installs_unpinned": []},
+        {"chapter_id": "C5", "topics_covered": ["OpenAI API quickstart", "prompt engineering"],
+         "tools_covered": ["openai"], "pins": {}, "installs_unpinned": ["openai"]},
+    ]
+    trend = Trend(id="t1", subject="openai", signal_ids=["s1"], claims=[])
+
+    assert match_chapter(trend, chapters) == "C5"
+
+
+def test_a_dependency_no_chapter_talks_about_still_lands_in_the_chapter_that_installs_it():
+    chapters = [
+        {"chapter_id": "C6", "topics_covered": ["RAG introduction"], "tools_covered": ["FAISS"],
+         "pins": {}, "installs_unpinned": []},
+        {"chapter_id": "C8", "topics_covered": ["LangChain splitter"], "tools_covered": ["LangChain"],
+         "pins": {}, "installs_unpinned": ["pypdf"]},
+    ]
+    trend = Trend(id="t2", subject="pypdf", signal_ids=["s1"], claims=[])
+
+    assert match_chapter(trend, chapters) == "C8"
+
+
+def test_a_package_the_course_never_installs_has_no_chapter():
+    chapters = [
+        {"chapter_id": "C6", "topics_covered": ["RAG introduction"], "tools_covered": ["FAISS"],
+         "pins": {}, "installs_unpinned": []},
+    ]
+    trend = Trend(id="t3", subject="crewai", signal_ids=["s1"], claims=[])
+
+    assert match_chapter(trend, chapters) is None

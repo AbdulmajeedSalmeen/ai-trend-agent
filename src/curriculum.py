@@ -105,6 +105,19 @@ def apply(chapters: list[dict], grouped: dict) -> None:
         chapter["notebooks"] = sorted(entry["files"])
 
 
+def tracked_packages(path: Path = CURRICULUM_PATH) -> list[str]:
+    """Every package the course installs, pinned or not. This is the watchlist:
+    the agent follows what the material actually depends on, not a list we typed."""
+    data = json.loads(path.read_text(encoding="utf-8"))
+    found: set[str] = set()
+
+    for chapter in data["chapters"]:
+        found.update(chapter.get("pins", {}))
+        found.update(chapter.get("installs_unpinned", []))
+
+    return sorted(found)
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description="Read the course notebooks into the curriculum file.")
     parser.add_argument("--notebooks", default=str(NOTEBOOK_DIR))

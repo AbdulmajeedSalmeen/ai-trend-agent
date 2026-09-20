@@ -5,7 +5,8 @@ from dotenv import load_dotenv
 
 from src import runio
 from src.schema import Signal
-from src.sources import github_releases, hackernews
+from src.curriculum import tracked_packages
+from src.sources import github_releases, hackernews, pypi
 
 HN_QUERIES = ["langgraph", "langchain", "openai", "claude", "hugging face", "ai agent"]
 
@@ -31,11 +32,16 @@ def run(run_dir: Path) -> None:
     _hn_raw, hn_signals = hackernews.fetch_hackernews(HN_QUERIES, raw_dir=raw_dir)
     _gh_raw, gh_signals = github_releases.fetch_github_releases(token, raw_dir=raw_dir)
 
-    signals = dedupe_by_url(hn_signals + gh_signals)
+    packages = tracked_packages()
+    print(f"pypi: following {len(packages)} packages the course installs")
+    _pypi_raw, pypi_signals = pypi.fetch_pypi(packages, raw_dir=raw_dir)
+
+    signals = dedupe_by_url(gh_signals + pypi_signals + hn_signals)
 
     print(
         f"hackernews: {len(hn_signals)} signals, "
         f"github: {len(gh_signals)} signals, "
+        f"pypi: {len(pypi_signals)} signals, "
         f"after dedupe: {len(signals)}"
     )
 

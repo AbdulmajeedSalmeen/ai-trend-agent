@@ -1,0 +1,742 @@
+[
+  {
+    "trend_id": "trend_001",
+    "chapter_id": "C19",
+    "confidence": 0.7,
+    "dimensions": {
+      "relevance": 2,
+      "impact": 5,
+      "educational_value": 3,
+      "difficulty": 2,
+      "market_relevance": 3
+    },
+    "provenance": {
+      "relevance": "measured",
+      "impact": "measured",
+      "educational_value": "default",
+      "difficulty": "default",
+      "market_relevance": "measured"
+    },
+    "priority": 3.1500000000000004
+  },
+  {
+    "trend_id": "trend_002",
+    "chapter_id": "C19",
+    "confidence": 0.575,
+    "dimensions": {
+      "relevance": 2,
+      "impact": 5,
+      "educational_value": 3,
+      "difficulty": 2,
+      "market_relevance": 5
+    },
+    "provenance": {
+      "relevance": "measured",
+      "impact": "measured",
+      "educational_value": "default",
+      "difficulty": "default",
+      "market_relevance": "measured"
+    },
+    "priority": 3.5500000000000003
+  },
+  {
+    "trend_id": "trend_003",
+    "chapter_id": "C19",
+    "confidence": 0.7,
+    "dimensions": {
+      "relevance": 2,
+      "impact": 4,
+      "educational_value": 3,
+      "difficulty": 2,
+      "market_relevance": 2
+    },
+    "provenance": {
+      "relevance": "measured",
+      "impact": "measured",
+      "educational_value": "default",
+      "difficulty": "default",
+      "market_relevance": "measured"
+    },
+    "priority": 2.7
+  },
+  {
+    "trend_id": "trend_004",
+    "chapter_id": "C19",
+    "confidence": 0.7,
+    "dimensions": {
+      "relevance": 2,
+      "impact": 3,
+      "educational_value": 3,
+      "difficulty": 2,
+      "market_relevance": 2
+    },
+    "provenance": {
+      "relevance": "measured",
+      "impact": "measured",
+      "educational_value": "default",
+      "difficulty": "default",
+      "market_relevance": "measured"
+    },
+    "priority": 2.45
+  },
+  {
+    "trend_id": "trend_005",
+    "chapter_id": "C19",
+    "confidence": 0.7,
+    "dimensions": {
+      "relevance": 2,
+      "impact": 3,
+      "educational_value": 3,
+      "difficulty": 2,
+      "market_relevance": 2
+    },
+    "provenance": {
+      "relevance": "measured",
+      "impact": "measured",
+      "educational_value": "default",
+      "difficulty": "default",
+      "market_relevance": "measured"
+    },
+    "priority": 2.45
+  },
+  {
+    "trend_id": "trend_006",
+    "chapter_id": "C19",
+    "confidence": 0.7,
+    "dimensions": {
+      "relevance": 2,
+      "impact": 3,
+      "educational_value": 3,
+      "difficulty": 2,
+      "market_relevance": 2
+    },
+    "provenance": {
+      "relevance": "measured",
+      "impact": "measured",
+      "educational_value": "default",
+      "difficulty": "default",
+      "market_relevance": "measured"
+    },
+    "priority": 2.45
+  },
+  {
+    "trend_id": "trend_007",
+    "chapter_id": "C8",
+    "confidence": 0.6799999999999999,
+    "dimensions": {
+      "relevance": 5,
+      "impact": 5,
+      "educational_value": 3,
+      "difficulty": 2,
+      "market_relevance": 5
+    },
+    "provenance": {
+      "relevance": "measured",
+      "impact": "measured",
+      "educational_value": "default",
+      "difficulty": "default",
+      "market_relevance": "measured"
+    },
+    "priority": 4.3
+  },
+  {
+    "trend_id": "trend_008",
+    "chapter_id": "C8",
+    "confidence": 0.7,
+    "dimensions": {
+      "relevance": 2,
+      "impact": 4,
+      "educational_value": 3,
+      "difficulty": 2,
+      "market_relevance": 2
+    },
+    "provenance": {
+      "relevance": "measured",
+      "impact": "measured",
+      "educational_value": "default",
+      "difficulty": "default",
+      "market_relevance": "measured"
+    },
+    "priority": 2.7
+  },
+  {
+    "trend_id": "trend_009",
+    "chapter_id": "C8",
+    "confidence": 0.7666666666666666,
+    "dimensions": {
+      "relevance": 2,
+      "impact": 5,
+      "educational_value": 3,
+      "difficulty": 2,
+      "market_relevance": 2
+    },
+    "provenance": {
+      "relevance": "measured",
+      "impact": "measured",
+      "educational_value": "default",
+      "difficulty": "default",
+      "market_relevance": "measured"
+    },
+    "priority": 2.95
+  },
+  {
+    "trend_id": "trend_010",
+    "chapter_id": "C8",
+    "confidence": 0.7,
+    "dimensions": {
+      "relevance": 2,
+      "impact": 3,
+      "educational_value": 3,
+      "difficulty": 2,
+      "market_relevance": 2
+    },
+    "provenance": {
+      "relevance": "measured",
+      "impact": "measured",
+      "educational_value": "default",
+      "difficulty": "default",
+      "market_relevance": "measured"
+    },
+    "priority": 2.45
+  },
+  {
+    "trend_id": "trend_011",
+    "chapter_id": "C8",
+    "confidence": 0.8,
+    "dimensions": {
+      "relevance": 2,
+      "impact": 5,
+      "educational_value": 3,
+      "difficulty": 2,
+      "market_relevance": 2
+    },
+    "provenance": {
+      "relevance": "measured",
+      "impact": "measured",
+      "educational_value": "default",
+      "difficulty": "default",
+      "market_relevance": "measured"
+    },
+    "priority": 2.95
+  },
+  {
+    "trend_id": "trend_012",
+    "chapter_id": "C4",
+    "confidence": 0.73,
+    "dimensions": {
+      "relevance": 2,
+      "impact": 5,
+      "educational_value": 3,
+      "difficulty": 2,
+      "market_relevance": 2
+    },
+    "provenance": {
+      "relevance": "measured",
+      "impact": "measured",
+      "educational_value": "default",
+      "difficulty": "default",
+      "market_relevance": "measured"
+    },
+    "priority": 2.95
+  },
+  {
+    "trend_id": "trend_013",
+    "chapter_id": "C5",
+    "confidence": 0.7,
+    "dimensions": {
+      "relevance": 2,
+      "impact": 5,
+      "educational_value": 3,
+      "difficulty": 2,
+      "market_relevance": 2
+    },
+    "provenance": {
+      "relevance": "measured",
+      "impact": "measured",
+      "educational_value": "default",
+      "difficulty": "default",
+      "market_relevance": "measured"
+    },
+    "priority": 2.95
+  },
+  {
+    "trend_id": "trend_014",
+    "chapter_id": null,
+    "confidence": 0.7,
+    "dimensions": {
+      "relevance": 2,
+      "impact": 5,
+      "educational_value": 3,
+      "difficulty": 2,
+      "market_relevance": 2
+    },
+    "provenance": {
+      "relevance": "measured",
+      "impact": "measured",
+      "educational_value": "default",
+      "difficulty": "default",
+      "market_relevance": "measured"
+    },
+    "priority": 2.95
+  },
+  {
+    "trend_id": "trend_015",
+    "chapter_id": null,
+    "confidence": 0.7,
+    "dimensions": {
+      "relevance": 2,
+      "impact": 5,
+      "educational_value": 3,
+      "difficulty": 2,
+      "market_relevance": 2
+    },
+    "provenance": {
+      "relevance": "measured",
+      "impact": "measured",
+      "educational_value": "default",
+      "difficulty": "default",
+      "market_relevance": "measured"
+    },
+    "priority": 2.95
+  },
+  {
+    "trend_id": "trend_016",
+    "chapter_id": null,
+    "confidence": 0.7,
+    "dimensions": {
+      "relevance": 2,
+      "impact": 5,
+      "educational_value": 3,
+      "difficulty": 2,
+      "market_relevance": 2
+    },
+    "provenance": {
+      "relevance": "measured",
+      "impact": "measured",
+      "educational_value": "default",
+      "difficulty": "default",
+      "market_relevance": "measured"
+    },
+    "priority": 2.95
+  },
+  {
+    "trend_id": "trend_017",
+    "chapter_id": null,
+    "confidence": 0.7,
+    "dimensions": {
+      "relevance": 2,
+      "impact": 5,
+      "educational_value": 3,
+      "difficulty": 2,
+      "market_relevance": 2
+    },
+    "provenance": {
+      "relevance": "measured",
+      "impact": "measured",
+      "educational_value": "default",
+      "difficulty": "default",
+      "market_relevance": "measured"
+    },
+    "priority": 2.95
+  },
+  {
+    "trend_id": "trend_018",
+    "chapter_id": "C4",
+    "confidence": 0.7,
+    "dimensions": {
+      "relevance": 2,
+      "impact": 3,
+      "educational_value": 3,
+      "difficulty": 2,
+      "market_relevance": 2
+    },
+    "provenance": {
+      "relevance": "measured",
+      "impact": "measured",
+      "educational_value": "default",
+      "difficulty": "default",
+      "market_relevance": "measured"
+    },
+    "priority": 2.45
+  },
+  {
+    "trend_id": "trend_019",
+    "chapter_id": "C9",
+    "confidence": 0.7,
+    "dimensions": {
+      "relevance": 2,
+      "impact": 3,
+      "educational_value": 3,
+      "difficulty": 2,
+      "market_relevance": 2
+    },
+    "provenance": {
+      "relevance": "measured",
+      "impact": "measured",
+      "educational_value": "default",
+      "difficulty": "default",
+      "market_relevance": "measured"
+    },
+    "priority": 2.45
+  },
+  {
+    "trend_id": "trend_020",
+    "chapter_id": "C14",
+    "confidence": 0.7,
+    "dimensions": {
+      "relevance": 2,
+      "impact": 3,
+      "educational_value": 3,
+      "difficulty": 2,
+      "market_relevance": 2
+    },
+    "provenance": {
+      "relevance": "measured",
+      "impact": "measured",
+      "educational_value": "default",
+      "difficulty": "default",
+      "market_relevance": "measured"
+    },
+    "priority": 2.45
+  },
+  {
+    "trend_id": "trend_021",
+    "chapter_id": "C5",
+    "confidence": 0.7,
+    "dimensions": {
+      "relevance": 5,
+      "impact": 4,
+      "educational_value": 3,
+      "difficulty": 2,
+      "market_relevance": 2
+    },
+    "provenance": {
+      "relevance": "measured",
+      "impact": "measured",
+      "educational_value": "default",
+      "difficulty": "default",
+      "market_relevance": "measured"
+    },
+    "priority": 3.45
+  },
+  {
+    "trend_id": "trend_022",
+    "chapter_id": "C7",
+    "confidence": 0.7,
+    "dimensions": {
+      "relevance": 5,
+      "impact": 3,
+      "educational_value": 3,
+      "difficulty": 2,
+      "market_relevance": 2
+    },
+    "provenance": {
+      "relevance": "measured",
+      "impact": "measured",
+      "educational_value": "default",
+      "difficulty": "default",
+      "market_relevance": "measured"
+    },
+    "priority": 3.2
+  },
+  {
+    "trend_id": "trend_023",
+    "chapter_id": "C6",
+    "confidence": 0.7,
+    "dimensions": {
+      "relevance": 2,
+      "impact": 3,
+      "educational_value": 3,
+      "difficulty": 2,
+      "market_relevance": 2
+    },
+    "provenance": {
+      "relevance": "measured",
+      "impact": "measured",
+      "educational_value": "default",
+      "difficulty": "default",
+      "market_relevance": "measured"
+    },
+    "priority": 2.45
+  },
+  {
+    "trend_id": "trend_024",
+    "chapter_id": "C13",
+    "confidence": 0.7,
+    "dimensions": {
+      "relevance": 2,
+      "impact": 5,
+      "educational_value": 3,
+      "difficulty": 2,
+      "market_relevance": 2
+    },
+    "provenance": {
+      "relevance": "measured",
+      "impact": "measured",
+      "educational_value": "default",
+      "difficulty": "default",
+      "market_relevance": "measured"
+    },
+    "priority": 2.95
+  },
+  {
+    "trend_id": "trend_025",
+    "chapter_id": "C7",
+    "confidence": 0.69375,
+    "dimensions": {
+      "relevance": 2,
+      "impact": 5,
+      "educational_value": 3,
+      "difficulty": 2,
+      "market_relevance": 3
+    },
+    "provenance": {
+      "relevance": "measured",
+      "impact": "measured",
+      "educational_value": "default",
+      "difficulty": "default",
+      "market_relevance": "measured"
+    },
+    "priority": 3.1500000000000004
+  },
+  {
+    "trend_id": "trend_026",
+    "chapter_id": "C24",
+    "confidence": 0.7,
+    "dimensions": {
+      "relevance": 2,
+      "impact": 3,
+      "educational_value": 3,
+      "difficulty": 2,
+      "market_relevance": 2
+    },
+    "provenance": {
+      "relevance": "measured",
+      "impact": "measured",
+      "educational_value": "default",
+      "difficulty": "default",
+      "market_relevance": "measured"
+    },
+    "priority": 2.45
+  },
+  {
+    "trend_id": "trend_027",
+    "chapter_id": "C5",
+    "confidence": 0.6705882352941176,
+    "dimensions": {
+      "relevance": 5,
+      "impact": 5,
+      "educational_value": 3,
+      "difficulty": 2,
+      "market_relevance": 5
+    },
+    "provenance": {
+      "relevance": "measured",
+      "impact": "measured",
+      "educational_value": "default",
+      "difficulty": "default",
+      "market_relevance": "measured"
+    },
+    "priority": 4.3
+  },
+  {
+    "trend_id": "trend_028",
+    "chapter_id": "C24",
+    "confidence": 0.7,
+    "dimensions": {
+      "relevance": 2,
+      "impact": 3,
+      "educational_value": 3,
+      "difficulty": 2,
+      "market_relevance": 2
+    },
+    "provenance": {
+      "relevance": "measured",
+      "impact": "measured",
+      "educational_value": "default",
+      "difficulty": "default",
+      "market_relevance": "measured"
+    },
+    "priority": 2.45
+  },
+  {
+    "trend_id": "trend_029",
+    "chapter_id": "C9",
+    "confidence": 0.7,
+    "dimensions": {
+      "relevance": 5,
+      "impact": 3,
+      "educational_value": 3,
+      "difficulty": 2,
+      "market_relevance": 2
+    },
+    "provenance": {
+      "relevance": "measured",
+      "impact": "measured",
+      "educational_value": "default",
+      "difficulty": "default",
+      "market_relevance": "measured"
+    },
+    "priority": 3.2
+  },
+  {
+    "trend_id": "trend_030",
+    "chapter_id": "C8",
+    "confidence": 0.7,
+    "dimensions": {
+      "relevance": 2,
+      "impact": 5,
+      "educational_value": 3,
+      "difficulty": 2,
+      "market_relevance": 2
+    },
+    "provenance": {
+      "relevance": "measured",
+      "impact": "measured",
+      "educational_value": "default",
+      "difficulty": "default",
+      "market_relevance": "measured"
+    },
+    "priority": 2.95
+  },
+  {
+    "trend_id": "trend_031",
+    "chapter_id": "C7",
+    "confidence": 0.7,
+    "dimensions": {
+      "relevance": 2,
+      "impact": 3,
+      "educational_value": 3,
+      "difficulty": 2,
+      "market_relevance": 2
+    },
+    "provenance": {
+      "relevance": "measured",
+      "impact": "measured",
+      "educational_value": "default",
+      "difficulty": "default",
+      "market_relevance": "measured"
+    },
+    "priority": 2.45
+  },
+  {
+    "trend_id": "trend_032",
+    "chapter_id": "C4",
+    "confidence": 0.7,
+    "dimensions": {
+      "relevance": 2,
+      "impact": 3,
+      "educational_value": 3,
+      "difficulty": 2,
+      "market_relevance": 2
+    },
+    "provenance": {
+      "relevance": "measured",
+      "impact": "measured",
+      "educational_value": "default",
+      "difficulty": "default",
+      "market_relevance": "measured"
+    },
+    "priority": 2.45
+  },
+  {
+    "trend_id": "trend_033",
+    "chapter_id": "C6",
+    "confidence": 0.7,
+    "dimensions": {
+      "relevance": 2,
+      "impact": 4,
+      "educational_value": 3,
+      "difficulty": 2,
+      "market_relevance": 2
+    },
+    "provenance": {
+      "relevance": "measured",
+      "impact": "measured",
+      "educational_value": "default",
+      "difficulty": "default",
+      "market_relevance": "measured"
+    },
+    "priority": 2.7
+  },
+  {
+    "trend_id": "trend_034",
+    "chapter_id": "C10",
+    "confidence": 0.7,
+    "dimensions": {
+      "relevance": 5,
+      "impact": 4,
+      "educational_value": 3,
+      "difficulty": 2,
+      "market_relevance": 2
+    },
+    "provenance": {
+      "relevance": "measured",
+      "impact": "measured",
+      "educational_value": "default",
+      "difficulty": "default",
+      "market_relevance": "measured"
+    },
+    "priority": 3.45
+  },
+  {
+    "trend_id": "trend_035",
+    "chapter_id": "C4",
+    "confidence": 0.7,
+    "dimensions": {
+      "relevance": 2,
+      "impact": 3,
+      "educational_value": 3,
+      "difficulty": 2,
+      "market_relevance": 2
+    },
+    "provenance": {
+      "relevance": "measured",
+      "impact": "measured",
+      "educational_value": "default",
+      "difficulty": "default",
+      "market_relevance": "measured"
+    },
+    "priority": 2.45
+  },
+  {
+    "trend_id": "trend_036",
+    "chapter_id": "C4",
+    "confidence": 0.7,
+    "dimensions": {
+      "relevance": 2,
+      "impact": 3,
+      "educational_value": 3,
+      "difficulty": 2,
+      "market_relevance": 2
+    },
+    "provenance": {
+      "relevance": "measured",
+      "impact": "measured",
+      "educational_value": "default",
+      "difficulty": "default",
+      "market_relevance": "measured"
+    },
+    "priority": 2.45
+  },
+  {
+    "trend_id": "trend_037",
+    "chapter_id": "C8",
+    "confidence": 0.6999999999999998,
+    "dimensions": {
+      "relevance": 2,
+      "impact": 5,
+      "educational_value": 3,
+      "difficulty": 2,
+      "market_relevance": 2
+    },
+    "provenance": {
+      "relevance": "measured",
+      "impact": "measured",
+      "educational_value": "default",
+      "difficulty": "default",
+      "market_relevance": "measured"
+    },
+    "priority": 2.95
+  }
+]

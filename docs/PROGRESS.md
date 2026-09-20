@@ -1,6 +1,6 @@
 # Progress
 
-**Last updated:** 2026-09-19 · **Tests:** 149 passing · **Demo:** Sep 26–27
+**Last updated:** 2026-09-20 · **Tests:** 174 passing · **Demo:** Sep 26–27
 
 The pipeline runs end to end, live, from a web app. A model reads, judges and writes;
 rules still decide what counts as confirmed, and every recommendation now carries the reason
@@ -35,6 +35,13 @@ behind it: what the chapter teaches, which version it runs, and how far the rele
   Evidence from a different document is `cross_source`; the release speaking about itself is
   `primary_report`.
 - One trend per subject; versions are claims inside it, not separate trends.
+- PyPI is a second tier-1 source, because it is the registry `pip install` actually reads.
+  Two registries carrying the same version is `registry_match`, not `cross_source`: they are
+  the same publisher, and passing that off as an independent check would be grading our own
+  homework.
+- An unbound install only asks for a rewrite when the chapter teaches that package or still
+  calls something a release removed. Otherwise it is a dependency to pin. Without that
+  distinction the run asked to rewrite C24 because pandas moved.
 - Chapters are matched from the curriculum text (tool names included), not a hand-written map.
 - A recommendation must carry its reason. The action comes from the distance between the version a
   chapter runs and the newest confirmed release: a major or minor jump is worth rewriting, patch
@@ -56,8 +63,11 @@ behind it: what the chapter teaches, which version it runs, and how far the rele
 
 ## Measured facts to quote at the demo
 
-- A run collects ~395 signals: ~315 Hacker News, ~80 GitHub releases.
-- 17 subjects, ~82 claims, 80 primary reports, 2 unverified, **0 cross-source**.
+- A run collects ~486 signals: ~316 Hacker News, ~90 PyPI releases, 80 GitHub releases.
+- The PyPI watchlist is the 53 packages the course notebooks install, read from the material.
+- 37 subjects, 157 claims: 139 primary reports, 14 registry matches, 4 unverified,
+  **0 cross-source**.
+- 12 chapters to update, 4 packages with no chapter at all, across 11 of the 25 chapters.
 - The model reads every discussion post that names a tracked package. **None has yet stated
   anything a release page could check.** That is why cross-source is zero — the community
   discusses tools, it does not report versions. The per-run count is in the log.
@@ -91,7 +101,7 @@ behind it: what the chapter teaches, which version it runs, and how far the rele
 - [x] `src/notebooks.py` + `src/curriculum.py` — read the course notebooks into the curriculum
 - [x] Team names in README, and how to run everything after the move to `web/`
 - [x] `docs/DEMO-QA.md` — the hard questions, each answered from the frozen run
-- [x] Demo run frozen: `run_20260919T152501Z` now travels with the repo, so anyone can
+- [x] Demo run frozen: `run_20260920T080135Z` now travels with the repo, so anyone can
       replay it offline
 
 ## Not done
@@ -101,6 +111,16 @@ behind it: what the chapter teaches, which version it runs, and how far the rele
 - [ ] Optional: GitHub token per member (60 requests/hour without one)
 
 ## Standup log
+
+### 2026-09-20
+- Read the whole bootcamp back into the project. PyPI added as a second tier-1 source, with
+  the watchlist derived from the 53 packages the notebooks install: coverage went from 2
+  chapters to 11. Two bugs the wider watchlist exposed and we fixed: chapters were matched
+  by text alone, so `pypdf` became "add a new lesson" when C8 already installs it; and every
+  unbound dependency asked for a chapter rewrite.
+- From week 6 of the course itself: the guardrail idea (allowlist, hard limits, a fallback
+  that explains itself) and the evaluation vocabulary (grounded citations, stability across
+  runs) now have names in our own design.
 
 ### 2026-09-19 (night)
 - All 89 course notebooks read (weeks 1-6). The curriculum is no longer a list of topic names: it
