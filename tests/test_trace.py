@@ -124,9 +124,16 @@ def use(monkeypatch, entries):
     monkeypatch.setattr(model, "config", lambda: entries[0] if entries else None)
 
 
-def test_a_spent_quota_drops_that_provider_for_the_rest_of_the_run(monkeypatch):
+def refusal(code, body=b"", headers=None):
+    import io
     import urllib.error
 
+    return urllib.error.HTTPError(
+        "https://example.test", code, "refused", headers or {}, io.BytesIO(body)
+    )
+
+
+def test_a_spent_account_drops_that_provider_for_the_rest_of_the_run(monkeypatch):
     from src.adapters import model
 
     model.reset()
@@ -136,7 +143,7 @@ def test_a_spent_quota_drops_that_provider_for_the_rest_of_the_run(monkeypatch):
 
     def refuse(*args, **kwargs):
         calls.append(1)
-        raise urllib.error.HTTPError("https://example.test", 429, "quota", {}, None)
+        raise refusal(429, b'{"error": {"code": "project_spend_limit_exceeded"}}')
 
     monkeypatch.setattr(model.urllib.request, "urlopen", refuse)
     trace.start("run_halt", "openai:gpt-4o-mini")
@@ -146,8 +153,57 @@ def test_a_spent_quota_drops_that_provider_for_the_rest_of_the_run(monkeypatch):
     assert model.ask_json("s", "u", action="read_post") is None
 
     assert len(calls) == 1
-    assert model.halted() == "HTTP 429"
-    assert trace.current.steps[-1].note == "skipped, HTTP 429"
+    assert model.halted() == "HTTP 429 out of credit"
+    model.reset()
+
+
+def test_a_rate_limit_waits_and_tries_the_same_provider_again(monkeypatch):
+    import io
+    import json as jsonlib
+
+    from src.adapters import model
+
+    model.reset()
+    use(monkeypatch, only("groq", "openai/gpt-oss-120b"))
+    slept = []
+    monkeypatch.setattr(model.time, "sleep", lambda seconds: slept.append(seconds))
+
+    calls = []
+
+    def answer(request, timeout=None):
+        calls.append(1)
+
+        if len(calls) == 1:
+            raise refusal(429, b'{"error": {"message": "rate limit reached for requests"}}',
+                          {"Retry-After": "7"})
+
+        payload = {"choices": [{"message": {"content": '{"ok": 1}'}, "finish_reason": "stop"}],
+                   "usage": {}}
+        return _as_context(io.BytesIO(jsonlib.dumps(payload).encode()))
+
+    monkeypatch.setattr(model.urllib.request, "urlopen", answer)
+    trace.start("run_rate", "groq")
+
+    assert model.ask_json("s", "u", action="read_post") == {"ok": 1}
+    assert slept == [7.0]
+    assert model.halted() is None
+    assert "rate limited" in trace.current.steps[0].note
+    model.reset()
+
+
+def test_an_ambiguous_rate_limit_waits_rather_than_ending_the_run(monkeypatch):
+    from src.adapters import model
+
+    model.reset()
+    use(monkeypatch, only("groq", "openai/gpt-oss-120b"))
+    slept = []
+    monkeypatch.setattr(model.time, "sleep", lambda seconds: slept.append(seconds))
+    monkeypatch.setattr(model.urllib.request, "urlopen",
+                        lambda *a, **k: (_ for _ in ()).throw(refusal(429, b"too many requests")))
+    trace.start("run_rate_2", "groq")
+
+    assert model.ask_json("s", "u", action="read_post") is None
+    assert slept == [5.0]
     model.reset()
 
 
@@ -302,4 +358,160 @@ def test_one_good_answer_clears_the_strikes(monkeypatch):
     assert model.ask_json("s", "u", action="read_post") == {"ok": 1}
     assert model._strikes["groq"] == 0
     assert model.halted() is None
+    model.reset()
+
+
+def test_a_slow_provider_does_not_block_the_one_behind_it(monkeypatch):
+    import io
+    import json as jsonlib
+
+    from src.adapters import model
+
+    model.reset()
+    use(monkeypatch, only("nvidia", "slow-model") + only("groq", "llama-3.3-70b-versatile"))
+    monkeypatch.setattr(model.time, "sleep", lambda seconds: None)
+
+    seen = []
+
+    def answer(request, timeout=None):
+        body = jsonlib.loads(request.data)
+        seen.append(body["model"])
+
+        if body["model"] == "slow-model":
+            raise TimeoutError("too slow")
+
+        payload = {"choices": [{"message": {"content": '{"ok": 1}'}}], "usage": {}}
+        return _as_context(io.BytesIO(jsonlib.dumps(payload).encode()))
+
+    monkeypatch.setattr(model.urllib.request, "urlopen", answer)
+    trace.start("run_slow_first", "nvidia, groq")
+
+    assert model.ask_json("s", "u", action="read_post") == {"ok": 1}
+    assert seen == ["slow-model", "slow-model", "llama-3.3-70b-versatile"]
+    model.reset()
+
+
+def test_every_request_names_us_because_a_cdn_refuses_anonymous_clients(monkeypatch):
+    import io
+    import json as jsonlib
+
+    from src.adapters import model
+
+    model.reset()
+    use(monkeypatch, only("groq", "openai/gpt-oss-120b"))
+    sent = {}
+
+    def capture(request, timeout=None):
+        sent.update(request.headers)
+        payload = {"choices": [{"message": {"content": '{"ok": 1}'}}], "usage": {}}
+        return _as_context(io.BytesIO(jsonlib.dumps(payload).encode()))
+
+    monkeypatch.setattr(model.urllib.request, "urlopen", capture)
+    trace.start("run_ua", "groq")
+
+    assert model.ask_json("s", "u", action="read_post") == {"ok": 1}
+    assert sent.get("User-agent", "").startswith("ai-trend-agent/")
+    model.reset()
+
+
+def test_a_model_with_no_published_price_says_so_rather_than_reporting_zero():
+    record = trace.Trace(model="groq:openai/gpt-oss-120b")
+    record.record("x", 1.0, tokens_in=1000, tokens_out=200)
+
+    summary = record.summary()
+
+    assert summary["priced"] is False
+    assert summary["tokens"] == 1200
+
+
+def test_a_reasoning_model_that_spent_its_budget_gets_more_room(monkeypatch):
+    import io
+    import json as jsonlib
+
+    from src.adapters import model
+
+    model.reset()
+    use(monkeypatch, only("groq", "openai/gpt-oss-120b"))
+    budgets = []
+
+    def answer(request, timeout=None):
+        budgets.append(jsonlib.loads(request.data)["max_tokens"])
+
+        if len(budgets) == 1:
+            payload = {"choices": [{"message": {"content": ""}, "finish_reason": "length"}],
+                       "usage": {"prompt_tokens": 91, "completion_tokens": 20}}
+        else:
+            payload = {"choices": [{"message": {"content": '{"ok": 1}'}, "finish_reason": "stop"}],
+                       "usage": {"prompt_tokens": 91, "completion_tokens": 30}}
+
+        return _as_context(io.BytesIO(jsonlib.dumps(payload).encode()))
+
+    monkeypatch.setattr(model.urllib.request, "urlopen", answer)
+    trace.start("run_reasoning", "groq")
+
+    assert model.ask_json("s", "u", max_tokens=200, action="read_post") == {"ok": 1}
+    assert budgets == [200, 800]
+    assert trace.current.steps[0].note == "spent its budget reasoning"
+    model.reset()
+
+
+def test_model_order_is_also_a_guest_list(monkeypatch):
+    from src.adapters import model
+
+    monkeypatch.setenv("OPENAI_API_KEY", "a")
+    monkeypatch.setenv("GROQ_API_KEY", "b")
+    monkeypatch.setenv("NVIDIA_API_KEY", "c")
+    monkeypatch.delenv("MODEL_API_KEY", raising=False)
+
+    monkeypatch.setenv("MODEL_ORDER", "groq,openai")
+    assert [entry["provider"] for entry in model._configured()] == ["groq", "openai"]
+
+    monkeypatch.setenv("MODEL_ORDER", "groq")
+    assert [entry["provider"] for entry in model._configured()] == ["groq"]
+
+    monkeypatch.delenv("MODEL_ORDER")
+    assert [entry["provider"] for entry in model._configured()] == ["openai", "groq", "nvidia"]
+
+
+def test_a_rate_limit_that_mentions_billing_is_still_only_a_rate_limit(monkeypatch):
+    import io
+    import json as jsonlib
+
+    from src.adapters import model
+
+    model.reset()
+    use(monkeypatch, only("groq", "openai/gpt-oss-120b"))
+    monkeypatch.setattr(model.time, "sleep", lambda seconds: None)
+    calls = []
+
+    def answer(request, timeout=None):
+        calls.append(1)
+
+        if len(calls) == 1:
+            raise refusal(429, b'{"error": {"code": "rate_limit_exceeded", "message": '
+                               b'"Rate limit reached. Upgrade at console.groq.com/settings/billing"}}')
+
+        payload = {"choices": [{"message": {"content": '{"ok": 1}'}, "finish_reason": "stop"}],
+                   "usage": {}}
+        return _as_context(io.BytesIO(jsonlib.dumps(payload).encode()))
+
+    monkeypatch.setattr(model.urllib.request, "urlopen", answer)
+    trace.start("run_rate_billing", "groq")
+
+    assert model.ask_json("s", "u", action="read_post") == {"ok": 1}
+    assert model.halted() is None
+
+
+def test_a_spent_account_is_still_terminal(monkeypatch):
+    from src.adapters import model
+
+    model.reset()
+    use(monkeypatch, only())
+    monkeypatch.setattr(model.urllib.request, "urlopen",
+                        lambda *a, **k: (_ for _ in ()).throw(
+                            refusal(429, b'{"error": {"code": "insufficient_quota"}}')))
+    trace.start("run_spent", "openai")
+
+    assert model.ask_json("s", "u", action="read_post") is None
+    assert model.halted() == "HTTP 429 out of credit"
     model.reset()

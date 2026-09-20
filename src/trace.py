@@ -89,6 +89,7 @@ class Trace:
             "budget": self.budget,
             "budget_spent": round(self.tokens / self.budget, 4) if self.budget else 0.0,
             "cost_usd": self.cost(),
+            "priced": self.model.split(":")[-1] in PRICES,
             "halted": self.halted,
             "ms": round(sum(step.ms for step in self.steps), 1),
             "slowest_ms": round(max((step.ms for step in self.steps), default=0.0), 1),

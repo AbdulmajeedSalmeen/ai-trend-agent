@@ -1,3 +1,4 @@
+import contextlib
 import json
 import os
 import re
@@ -11,18 +12,38 @@ from src import trace
 
 load_dotenv()
 
+# Order matters: this is the order a run tries them in. Groq sits ahead of
+# NVIDIA because NVIDIA's endpoint answers in tens of seconds when it answers
+# at all, and a fallback that slow costs more than having none.
 PROVIDERS = {
     "openai": ("https://api.openai.com/v1", "gpt-4o-mini", "OPENAI_API_KEY"),
+    "groq": ("https://api.groq.com/openai/v1", "openai/gpt-oss-120b", "GROQ_API_KEY"),
     "nvidia": ("https://integrate.api.nvidia.com/v1", "nvidia/nemotron-3.5-lightning-30b-a3b", "NVIDIA_API_KEY"),
-    "groq": ("https://api.groq.com/openai/v1", "llama-3.3-70b-versatile", "GROQ_API_KEY"),
 }
 
 FENCE = re.compile(r"^```(?:json)?|```$", re.MULTILINE)
 
+# Groq sits behind Cloudflare, which refuses Python's default urllib signature
+# with a 403 before the request ever reaches the API. Naming ourselves fixes it
+# and is the polite thing to do at every other provider too.
+USER_AGENT = "ai-trend-agent/1.0 (SDA bootcamp capstone)"
+
 # A refused key, a revoked key or a spent quota will refuse the next call too.
 # Retrying them cost one run 170 failed calls and three minutes before the
 # stages fell back to rules anyway.
-FATAL_STATUS = {401, 402, 403, 429}
+FATAL_STATUS = {401, 402, 403}
+
+# 429 is two different answers wearing one number. A free tier saying "too many
+# requests this minute" wants us to wait; a spent account saying "you are out of
+# credit" wants us to stop.
+#
+# Match the error code the API sends, not the prose. Reading the prose cost us a
+# run: Groq's rate-limit message links to its billing page, the word "billing"
+# was taken for "out of credit", and the model was dropped while it was only
+# being asked to wait. Anything that is not an explicit out-of-credit code is
+# treated as a wait.
+OUT_OF_CREDIT = ("insufficient_quota", "spend_limit", "billing_hard_limit", "exceeded_current_quota")
+MAX_BACKOFF = 30.0
 
 # Which provider is out, and why. A key is refused per provider, not globally:
 # OpenAI running out of quota should not stop a working Groq key.
@@ -58,9 +79,14 @@ def _configured() -> list[dict]:
             "provider": os.environ.get("MODEL_PROVIDER", "custom"),
         })
 
+    # MODEL_ORDER is both the order and the guest list: naming any provider
+    # leaves the unnamed ones out, which is how a key that is present but known
+    # to be useless gets excluded without deleting it from the environment.
     order = [name.strip() for name in os.environ.get("MODEL_ORDER", "").split(",") if name.strip()]
     names = [name for name in order if name in PROVIDERS]
-    names += [name for name in PROVIDERS if name not in names]
+
+    if not names:
+        names = list(PROVIDERS)
 
     for provider in names:
         base_url, model, env_name = PROVIDERS[provider]
@@ -115,7 +141,11 @@ def _call(settings: dict, system: str, user: str, max_tokens: int, timeout: int,
     request = urllib.request.Request(
         f"{settings['base_url']}/chat/completions",
         data=body,
-        headers={"Authorization": f"Bearer {settings['key']}", "Content-Type": "application/json"},
+        headers={
+            "Authorization": f"Bearer {settings['key']}",
+            "Content-Type": "application/json",
+            "User-Agent": USER_AGENT,
+        },
     )
     label = f"{action}@{settings['provider']}"
 
@@ -124,7 +154,28 @@ def _call(settings: dict, system: str, user: str, max_tokens: int, timeout: int,
         try:
             with urllib.request.urlopen(request, timeout=timeout) as response:
                 payload = json.load(response)
-            text = payload["choices"][0]["message"]["content"]
+            choice = payload["choices"][0]
+            text = choice["message"].get("content") or ""
+
+            # A reasoning model bills its thinking against the same ceiling and
+            # can hand back an empty answer having spent all of it. That is not
+            # a broken model, it is too small a budget.
+            if not text.strip() and choice.get("finish_reason") == "length":
+                trace.current.record(
+                    label, (time.perf_counter() - started) * 1000,
+                    tokens_in=(payload.get("usage") or {}).get("prompt_tokens", 0),
+                    tokens_out=(payload.get("usage") or {}).get("completion_tokens", 0),
+                    ok=False, note="spent its budget reasoning",
+                )
+
+                if attempt == 0:
+                    body = json.loads(request.data)
+                    body["max_tokens"] = max_tokens * 4
+                    request.data = json.dumps(body).encode("utf-8")
+                    continue
+
+                return None, None
+
             answer = json.loads(FENCE.sub("", text).strip())
             usage = payload.get("usage") or {}
             trace.current.record(
@@ -134,8 +185,28 @@ def _call(settings: dict, system: str, user: str, max_tokens: int, timeout: int,
             )
             return answer, None
         except (urllib.error.URLError, TimeoutError, KeyError, ValueError, json.JSONDecodeError) as problem:
-            fatal = isinstance(problem, urllib.error.HTTPError) and problem.code in FATAL_STATUS
-            note = f"HTTP {problem.code}" if isinstance(problem, urllib.error.HTTPError) else type(problem).__name__
+            http = isinstance(problem, urllib.error.HTTPError)
+            fatal = http and problem.code in FATAL_STATUS
+            note = f"HTTP {problem.code}" if http else type(problem).__name__
+            wait = 0.0
+
+            if http and problem.code == 429:
+                detail = ""
+
+                with contextlib.suppress(Exception):
+                    detail = (problem.read() or b"").decode("utf-8", "replace").lower()
+
+                retry_after = problem.headers.get("Retry-After")
+
+                # Only an explicit out-of-credit code ends the run. An
+                # ambiguous 429 waits once; two failures in a row drop the
+                # provider anyway, so guessing wrong stays cheap.
+                if any(code in detail for code in OUT_OF_CREDIT):
+                    fatal = True
+                    note = "HTTP 429 out of credit"
+                else:
+                    wait = min(float(retry_after or 5), MAX_BACKOFF)
+                    note = f"HTTP 429 rate limited, waiting {wait:.0f}s"
             trace.current.record(
                 label, (time.perf_counter() - started) * 1000, ok=False, note=note,
             )
@@ -144,7 +215,7 @@ def _call(settings: dict, system: str, user: str, max_tokens: int, timeout: int,
                 return None, note
 
             if attempt == 0:
-                time.sleep(1.5)
+                time.sleep(wait or 1.5)
                 continue
 
     return None, None
@@ -180,10 +251,11 @@ def ask_json(system: str, user: str, max_tokens: int = 400, timeout: int = 40,
         if fatal is None:
             _strikes[name] = _strikes.get(name, 0) + 1
 
-            if _strikes[name] < STRIKES:
-                return None
+            if _strikes[name] >= STRIKES:
+                _halted[name] = f"{STRIKES} failed calls running"
+                print(f"{name} keeps failing; dropped for the rest of this run")
 
-            fatal = f"{STRIKES} failed calls running"
+            continue
 
         _halted[settings["provider"]] = fatal
         remaining = providers()
