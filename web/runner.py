@@ -8,7 +8,7 @@ from pathlib import Path
 
 import requests
 
-from src import runio
+from src import runio, trace
 from src.adapters import model
 from src.pipeline import STAGES
 
@@ -98,15 +98,28 @@ def _execute(run_id: str, replay: bool) -> None:
     mirror = io.StringIO()
     started = time.time()
 
+    # A run from the browser is a run: it gets its own trace, and a model that
+    # was halted by a spent quota an hour ago gets another chance now.
+    model.reset()
+    record = trace.start(run_id, model.describe())
+
     try:
         for index, (name, stage_run) in enumerate(stages, start=1):
             _set(stage=name, stage_index=index, stage_count=len(stages))
+            trace.set_stage(name)
             _log(f"stage: {name}")
             with contextlib.redirect_stdout(_LogStream(mirror)):
                 stage_run(run_path)
+        record.halted = model.halted()
+        record.save(run_path)
+        totals = record.summary()
+        _log(f"{totals['calls']} model calls, {totals['tokens']} tokens, ${totals['cost_usd']:.4f}")
         _log(f"done in {time.time() - started:.1f}s")
         _set(state="done", stage=None, finished_at=datetime.now(timezone.utc).isoformat())
     except Exception as error:
+        record.halted = model.halted()
+        with contextlib.suppress(OSError):
+            record.save(run_path)
         _log(f"failed during {_status['stage']}: {error}")
         _set(state="failed", error=str(error), finished_at=datetime.now(timezone.utc).isoformat())
     finally:

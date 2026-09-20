@@ -67,6 +67,8 @@
   --wash-c: rgba(52, 76, 110, .18);
   --spark: 240, 236, 228;
   --spark-warm: 232, 181, 75;
+  --hatch: rgba(10, 10, 12, .24);
+  --hatch-dim: rgba(10, 10, 12, .12);
 
   /* The project's radius scale, unchanged: marks, chips, cards, pills. */
   --r-mark: 4px;
@@ -129,6 +131,8 @@
   --wash-c: rgba(108, 132, 168, .16);
   --spark: 40, 38, 48;
   --spark-warm: 122, 90, 18;
+  --hatch: rgba(251, 250, 247, .40);
+  --hatch-dim: rgba(251, 250, 247, .22);
   color-scheme: light;
 }
 
@@ -139,11 +143,12 @@
 html {
   -webkit-text-size-adjust: 100%;
   scroll-behavior: smooth;
-  /* `clip` rather than `hidden`: hidden would make the root a scroll container
-     and break the sticky tab bar. It is needed because the vertical scrollbar
-     changes side when the page mirrors, which otherwise leaves a sliver of
-     horizontal drag on every Arabic page. */
-  overflow-x: clip;
+  /* No overflow clamp here. One was added when a mirrored layout left a sliver
+     of horizontal drag, but the cause was a header row that could not shrink;
+     fixing that removed the drag at source. A clip on the root outlives its
+     reason and quietly cuts off anything positioned that needs to escape, the
+     run picker's list first among them. Measured at zero drag in both
+     directions without it. */
 }
 
 body {
@@ -406,7 +411,27 @@ body[dir="rtl"] .viz figcaption { font-family: var(--ar); }
   display: flex; gap: 2px; height: 14px; border-radius: var(--r-chip);
   overflow: hidden; background: var(--gray-soft);
 }
-.stack span { display: block; transition: filter 160ms ease; }
+.stack span { display: block; transition: filter 160ms ease; position: relative; }
+
+/* Two registries carrying the same version is the same publisher speaking
+   twice, so the segment keeps the hue of a primary report and takes a shadow
+   across it. It has to read as the same family and a weaker claim, which means
+   quieter than its solid sibling, never louder. */
+.stack span.hatched::after, .legend .sw.hatched::after {
+  content: ""; position: absolute; inset: 0; border-radius: inherit;
+  /* Stripes alone only add texture, and texture reads as emphasis. A flat dim
+     under them takes the weight back off, so the segment ends up quieter than
+     the solid one it belongs beside rather than louder. */
+  background:
+    repeating-linear-gradient(135deg, transparent 0 5px, var(--hatch) 5px 10px),
+    linear-gradient(var(--hatch-dim), var(--hatch-dim));
+}
+.legend .sw.hatched { position: relative; overflow: hidden; }
+/* A 9px swatch cannot hold an 8px repeat, so the legend uses a finer pitch. */
+.legend .sw.hatched::after {
+  background: repeating-linear-gradient(135deg,
+    transparent 0 2px, var(--hatch) 2px 4px);
+}
 @media (hover: hover) and (pointer: fine) { .stack span:hover { filter: brightness(1.14); } }
 
 .legend {
@@ -441,22 +466,57 @@ body[dir="rtl"] .outside-l { font-family: var(--ar); }
 
 /* Distance rows. The fill is scaled rather than widened, so a redraw never
    costs a layout pass. */
-.dlist { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+.dlist { list-style: none; margin: 0; padding: 0; display: grid; gap: 4px; }
+.drow { padding: 7px 0; border-block-end: 1px solid var(--line-soft); }
+.dlist > .drow:last-child { border-block-end: 0; }
+/* A chapter already on the current major has nothing to report, so the whole
+   row steps back rather than sitting at the same weight as one that is behind. */
+.drow[data-behind="none"] .dname { color: var(--ink-soft); }
+.drow[data-behind="none"] .dlabel { color: var(--ink-faint); }
 .drow {
   display: grid; grid-template-columns: minmax(96px, 1.1fr) auto minmax(60px, 1.6fr) auto;
   gap: 12px; align-items: center; font-size: 12.5px;
 }
 .dname { font: 500 12.5px/1.2 var(--mono); color: var(--ink); }
 .dspec { font: 500 11px/1.2 var(--mono); color: var(--ink-faint); white-space: nowrap; }
-.dtrack { height: 8px; background: var(--gray-soft); border-radius: var(--r-mark); overflow: hidden; }
+.dtrack { height: 10px; background: var(--gray-soft); border-radius: var(--r-mark); overflow: hidden; }
+.drow[data-behind="none"] .dtrack { background: transparent; box-shadow: inset 0 0 0 1px var(--line); }
 .dtrack i {
   display: block; height: 100%; background: var(--crit); border-radius: var(--r-mark);
   transform-origin: left center; animation: grow 280ms var(--ease-out) both;
 }
 body[dir="rtl"] .dtrack i { transform-origin: right center; }
 @keyframes grow { from { transform: scaleX(0); } to { transform: scaleX(1); } }
-.dloose { margin-top: 16px; padding-top: 14px; border-top: 1px solid var(--line); }
-.dloose-t { display: block; font-size: 12px; color: var(--ink-faint); margin-bottom: 8px; }
+/* Per stage, against one scale. Shares the distance figure's track so the two
+   places on the page that divide a whole read the same way. */
+.slist { list-style: none; margin: 12px 0 0; padding: 0; display: grid; gap: 4px; }
+.srow {
+  display: grid; grid-template-columns: minmax(64px, 84px) minmax(60px, 1fr) auto auto;
+  gap: 12px; align-items: center; padding: 7px 0;
+  border-block-end: 1px solid var(--line-soft); font-size: 12.5px;
+}
+.slist > .srow:last-child { border-block-end: 0; }
+.sname { font: 500 12.5px/1.2 var(--mono); color: var(--ink); }
+.sfig { font: 500 12px/1.2 var(--mono); color: var(--ink-soft); white-space: nowrap; font-variant-numeric: tabular-nums; }
+.smeta { font: 500 11px/1.2 var(--mono); color: var(--ink-faint); white-space: nowrap; }
+.srow .dtrack i { background: var(--ink-faint); }
+@media (max-width: 560px) {
+  .srow { grid-template-columns: 1fr auto; gap: 5px 10px; }
+  .srow .dtrack { grid-column: 1 / -1; }
+  .smeta { grid-column: 1 / -1; }
+}
+
+.dloose { margin-top: 20px; padding-top: 16px; border-top: 1px solid var(--rule, var(--line)); }
+/* This group is the larger half of the answer, so its label is a heading with a
+   count rather than a caption trailing the rows above it. */
+.dloose-t {
+  display: flex; align-items: baseline; gap: 8px;
+  font-size: 13px; color: var(--ink-soft); margin-bottom: 11px;
+}
+.dloose-t b {
+  font-family: var(--display); font-weight: 600; font-size: 22px;
+  line-height: 1; color: var(--ink); font-variant-numeric: lining-nums tabular-nums;
+}
 body[dir="rtl"] .dloose-t { font-family: var(--ar); }
 .dloose-l { display: flex; flex-wrap: wrap; gap: 6px; }
 .dlabel { color: var(--ink-soft); white-space: nowrap; font-size: 11.5px; }
@@ -536,6 +596,26 @@ body[dir="rtl"] .chip { font-family: var(--ar); }
 .chip.gap { background: var(--crit-soft); color: var(--crit-ink); border-color: var(--crit-edge); }
 .chip.pkgs { background: var(--gray-soft); color: var(--ink-faint); font-family: var(--mono); font-weight: 500; border-color: var(--line); }
 
+/* A recommendation the run keeps making and nobody has acted on. It is neither
+   a confirmation nor a gap, so it takes no hue at all; it gets its weight from
+   contrast instead, which is the loudest thing left once colour is spoken for.
+   Two runs is a note and stays outlined. Four or more is a standing debt and
+   inverts, so it carries further than anything else in the row. */
+.chip.streak { font-variant-numeric: lining-nums tabular-nums; }
+.chip.streak[data-weight="soft"] {
+  background: transparent; color: var(--ink-soft);
+  border-color: var(--edge); border-style: dashed;
+}
+.chip.streak[data-weight="hard"] {
+  background: var(--ink); color: var(--paper);
+  border-color: var(--ink); font-weight: 700;
+}
+/* The card is already a hover target; the debt chip lifts a shade further so
+   it stays the first thing read on the row it belongs to. */
+@media (hover: hover) and (pointer: fine) {
+  .card:hover .chip.streak[data-weight="hard"] { background: var(--gold); color: var(--void); border-color: var(--gold); }
+}
+
 .meta { display: flex; gap: 16px; flex-wrap: wrap; color: var(--ink-faint); font-size: 12.5px; align-items: center; }
 .meta b { color: var(--ink-soft); font-weight: 600; }
 
@@ -597,18 +677,45 @@ body[dir="rtl"] .muted-none { font-style: normal; font-family: var(--ar); }
   background: var(--gray-soft); border: 1px solid var(--line);
   font: 500 11.5px/1.4 var(--mono); color: var(--ink-soft);
 }
-.gapline[data-kind="behind_major"], .gapline[data-kind="behind_minor"],
-.gapline[data-kind="unpinned"] {
+/* Graded by how much the reader has to do about it, not by kind. Only a
+   measured jump earns the alert hue, and only at full strength when the jump is
+   a major one. Everything below that steps down to neutral, so the page does
+   not cry wolf on twelve dependencies the chapter never taught. */
+.gapline[data-level="3"] {
   background: var(--crit-soft); color: var(--crit-ink); border-color: var(--crit-edge);
 }
+.gapline[data-level="2"] {
+  background: transparent; color: var(--crit-ink); border-color: var(--crit-edge);
+}
+.gapline[data-level="1"] { background: var(--gray-soft); color: var(--ink-soft); }
+/* No version bound is not a severity, it is an absence, so it borrows the
+   dashed language the loose pins already use for the same idea. */
+.gapline[data-level="-1"] {
+  background: transparent; color: var(--ink-soft);
+  border-color: var(--edge); border-style: dashed;
+}
+/* Installed but never taught. Nothing to act on, so it recedes furthest. */
+.gapline[data-kind="dependency"] {
+  background: transparent; color: var(--ink-faint); border-color: var(--line-soft);
+}
+
+.vmeter { display: inline-flex; gap: 2px; align-items: center; flex: none; }
+.vmeter i {
+  display: block; width: 3px; height: 10px; border-radius: 1px;
+  background: currentColor; opacity: .18;
+}
+.vmeter[data-level="1"] i:nth-child(1),
+.vmeter[data-level="2"] i:nth-child(-n+2),
+.vmeter[data-level="3"] i { opacity: 1; }
+.vmeter[data-level="-1"] i { opacity: .3; height: 6px; }
 .vpair { color: var(--ink); font-weight: 600; }
-.gapline[data-kind="behind_major"] .vpair, .gapline[data-kind="behind_minor"] .vpair,
-.gapline[data-kind="unpinned"] .vpair { color: inherit; }
+.gapline[data-level="3"] .vpair, .gapline[data-level="2"] .vpair,
+.gapline[data-level="-1"] .vpair { color: inherit; }
 .vpair.unknown { color: var(--ink-faint); font-weight: 500; }
 .vkind { padding: 3px 7px; border-radius: var(--r-chip); background: var(--surface); }
 .vsince { color: var(--ink-faint); }
-.gapline[data-kind="behind_major"] .vsince, .gapline[data-kind="behind_minor"] .vsince,
-.gapline[data-kind="unpinned"] .vsince { color: inherit; opacity: .85; }
+.gapline[data-level="3"] .vsince, .gapline[data-level="2"] .vsince,
+.gapline[data-level="-1"] .vsince { color: inherit; opacity: .85; }
 
 .legacyline {
   margin: -4px 0 11px; padding: 7px 11px; border-radius: var(--r-chip);
@@ -815,14 +922,12 @@ body[dir="rtl"] .runbtn { font-family: var(--ar); }
 @keyframes panelIn { from { opacity: 0; transform: translateY(-6px) scale(.985); } to { opacity: 1; transform: none; } }
 .runpanel.leaving { animation: panelOut 320ms var(--ease-out) both; }
 @keyframes panelOut { to { opacity: 0; transform: translateY(-6px) scale(.985); } }
-.runpanel { position: relative; overflow: hidden; }
-.runpanel[data-state="running"]::after {
-  content: ""; position: absolute; inset-block-start: 0; inset-inline-start: -40%;
-  width: 40%; height: 2px; pointer-events: none;
-  background: linear-gradient(90deg, transparent, var(--gold), transparent);
-  animation: sweep 2.1s linear infinite;
-}
-@keyframes sweep { to { transform: translateX(350%); } }
+/* A sweeping line used to run across the top of this panel while a run was in
+   flight. It was added before the stages had figures of their own, and once
+   they did it was a second, vaguer answer to a question the working machine,
+   the filling connector and the counting clock already answer precisely. Two
+   indicators of the same fact is one too many, so the looping one went. */
+.runpanel { position: relative; }
 
 .runpanel[data-state="done"] { border-color: var(--gold-edge); background: linear-gradient(180deg, var(--gold-soft), var(--surface) 55%); }
 .runpanel[data-state="failed"] { border-color: var(--crit-edge); background: linear-gradient(180deg, var(--crit-soft), var(--surface) 55%); }
@@ -1184,7 +1289,6 @@ bdi { unicode-bidi: isolate; }
   html.js .reveal, html.js .reveal.in { opacity: 1; transform: none; filter: none; }
   html.js .stack span, html.js .reveal.in .stack span { transform: scaleX(1); }
   html.js .cell, html.js .reveal.in .cell { transform: none; opacity: 1; }
-  .runpanel[data-state="running"]::after { animation: none; }
   .node.landed .pip::before { animation: none; opacity: 0; }
   .ov-rule { transform: scaleX(1); }
   .wash::before { animation: none; }

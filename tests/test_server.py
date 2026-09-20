@@ -60,3 +60,20 @@ def test_second_run_is_refused_while_one_is_running(monkeypatch):
 
     assert result["ok"] is False
     assert result["reason"] == "already_running"
+
+
+def test_a_browser_run_gets_its_own_trace_and_resets_the_breaker(tmp_path, monkeypatch):
+    from src import trace
+    from src.adapters import model as model_adapter
+    from web import runner as runner_module
+
+    monkeypatch.setattr(runio, "RUNS_DIR", tmp_path)
+    monkeypatch.setattr(runner_module, "STAGES", [("verify", lambda run_path: print("verified: ok"))])
+
+    model_adapter._halted = "HTTP 429"
+
+    runner_module._execute("run_20260920T090000Z", replay=True)
+
+    assert model_adapter.halted() is None
+    assert trace.current.run_id == "run_20260920T090000Z"
+    assert (tmp_path / "run_20260920T090000Z" / "trace.json").exists()

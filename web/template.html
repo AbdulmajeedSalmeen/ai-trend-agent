@@ -332,8 +332,21 @@ function gapLine(item) {
     ? `<div class="legacyline">${esc(t("g_legacy"))} ${item.legacy_uses.map((x) =>
         `<code>${esc(x)}</code>`).join(" ")}</div>` : "";
   const label = kind === "unpinned" ? "" : `<span class="vkind">${esc(t("gk_" + kind))}</span>`;
-  
-  return `<div class="gapline" data-kind="${esc(kind)}">${move}${label}${since}</div>${legacy}`;
+
+  /* How far behind, as a shape rather than a word. Seven verdicts shared two
+     tints, so a major jump and a minor one looked identical until you read the
+     chip. Three cells, filled by severity, put the difference in the first
+     glance. A verdict that cannot be measured gets no meter at all, because an
+     empty meter would read as "measured, and fine". */
+  const LEVEL = {
+    behind_major: 3, behind_minor: 2, patch_only: 1,
+    current: 0, ahead: 0, unpinned: -1, dependency: -2, unknown: -2
+  };
+  const level = LEVEL[kind] === undefined ? -2 : LEVEL[kind];
+  const meter = level <= -2 ? "" :
+    `<span class="vmeter" data-level="${level}" aria-hidden="true"><i></i><i></i><i></i></span>`;
+
+  return `<div class="gapline" data-kind="${esc(kind)}" data-level="${level}">${meter}${move}${label}${since}</div>${legacy}`;
 }
 
 function memberBlock(item, showName) {
@@ -360,16 +373,23 @@ function renderAct() {
       : `<span class="chip gap">${esc(t("gap"))}</span>`;
     const extra = g.members.length > 1
       ? `<span class="chip pkgs">${g.members.length} ${esc(t("packages"))}</span>` : "";
+    /* Asked for and not acted on is the most consequential thing a row can
+       say, and it cannot borrow gold or the alert hue: neither a confirmation
+       nor a gap. It gets loud through inversion instead, and only once it has
+       been ignored long enough to be worth shouting about. A second run is a
+       note; a fourth is a standing debt. */
     const streak = lead.runs_flagged > 1
-      ? `<span class="chip streak" title="${esc(t("m_since"))} ${esc(lead.first_seen_run || "")}">${
+      ? `<span class="chip streak" data-weight="${lead.runs_flagged >= 4 ? "hard" : "soft"}" title="${
+          esc(t("m_since"))} ${esc(lead.first_seen_run || "")}">${
           esc(fill(t("m_repeat"), { n: lead.runs_flagged }))}</span>` : "";
     const moved = lead.version_moved ? `<span class="chip moved">${esc(t("m_moved"))}</span>` : "";
     return `<details class="card">
       <summary>
         <div class="row1">
           <span class="chip ${actionClass(lead.action)}">${esc(t(lead.action))}</span>
+          ${streak}
           <span class="subject">${esc(g.family)}</span>
-          ${chapter}${extra}${streak}${moved}
+          ${chapter}${extra}${moved}
         </div>
         <div class="meta">
           <span>${esc(t("priority"))} <b>${lead.priority.toFixed(2)}</b></span>
@@ -476,10 +496,25 @@ function renderRun() {
       calls: tr.calls, tokens: tr.tokens, cost: tr.cost_usd.toFixed(4), failed: tr.failed_calls
     }) });
   }
+  /* Where the run actually spent itself. Three numbers per stage read as three
+     numbers; the same figures against a shared scale show at a glance that one
+     stage took the whole clock. The bar is drawn only when there is time to
+     divide, so a run that never got going does not imply a measurement. */
   const stages = tr && tr.by_stage ? Object.entries(tr.by_stage) : [];
+  const slowest = Math.max(0, ...stages.map(([, v]) => v.ms || 0));
   const cost = stages.length
-    ? `<div class="note"><h3>${esc(t("tr_stage"))}</h3><dl class="kv">${stages.map(([name, s]) =>
-        `<dt>${esc(name)}</dt><dd><span dir="ltr">${s.calls} ${esc(t("tr_calls"))} &middot; ${Math.round(s.ms)} ms &middot; ${s.tokens} ${esc(t("tr_tokens"))}</span></dd>`).join("")}</dl></div>`
+    ? `<div class="note"><h3>${esc(t("tr_stage"))}</h3><ul class="slist">${stages.map(([name, v]) => {
+        /* Same rule as the distance rows: a stage that took no measurable time
+           draws nothing. A minimum-width stub would claim a measurement that
+           was never made. */
+        const share = slowest > 0 && v.ms > 0 ? Math.max(3, (v.ms / slowest) * 100) : 0;
+        return `<li class="srow">
+          <span class="sname">${esc(name)}</span>
+          <span class="dtrack">${share ? `<i style="width:${share.toFixed(1)}%"></i>` : ""}</span>
+          <span class="sfig" dir="ltr">${Math.round(v.ms)} ms</span>
+          <span class="smeta" dir="ltr">${v.calls} ${esc(t("tr_calls"))} &middot; ${v.tokens} ${esc(t("tr_tokens"))}</span>
+        </li>`;
+      }).join("")}</ul></div>`
     : "";
 
   document.getElementById("runNotes").innerHTML = notes.map((n) =>
@@ -503,17 +538,20 @@ const VIZ = {
   gh: "var(--viz-official)"
 };
 
+/* The colour stays here; the texture moved to the stylesheet. A hatch mixed
+   into the fill had to name a light stripe, which was right on one plate and
+   wrong on the other, and it made the weaker claim the loudest thing in the
+   bar. The stylesheet overlays a shadow instead, so the segment keeps its hue
+   and loses weight on both plates. */
 function fillOf(part) {
-  return part.hatched
-    ? `background:repeating-linear-gradient(135deg, ${part.color} 0 3px, rgba(255,255,255,.55) 3px 6px)`
-    : `background:${part.color}`;
+  return `background:${part.color}`;
 }
 
 function stacked(parts, total) {
   const segs = parts.filter((p) => p.n > 0).map((p) =>
-    `<span style="width:${(p.n / total * 100).toFixed(2)}%;${fillOf(p)}" title="${esc(p.label)}: ${p.n}"></span>`).join("");
+    `<span class="${p.hatched ? "hatched" : ""}" style="width:${(p.n / total * 100).toFixed(2)}%;${fillOf(p)}" title="${esc(p.label)}: ${p.n}"></span>`).join("");
   const legend = parts.map((p) =>
-    `<li><span class="sw" style="${fillOf(p)}"></span>${esc(p.label)} <b class="${p.n ? "" : "zero"}">${p.n}</b></li>`).join("");
+    `<li><span class="sw ${p.hatched ? "hatched" : ""}" style="${fillOf(p)}"></span>${esc(p.label)} <b class="${p.n ? "" : "zero"}">${p.n}</b></li>`).join("");
   return `<div class="stack" role="img" aria-label="${esc(parts.map((p) => p.label + " " + p.n).join(", "))}">${segs}</div><ul class="legend">${legend}</ul>`;
 }
 
@@ -564,16 +602,25 @@ function renderDistance() {
   const bars = measured.map((r) => {
     const label = r.behind === 0 ? t("d_same")
       : `${r.behind} ${r.behind === 1 ? t("d_major") : t("d_majors")}`;
-    return `<li class="drow">
+    /* A chapter sitting on the current major is not behind by a little, it is
+       not behind at all, and a minimum bar width painted it in the alert hue as
+       though it were. Nothing to draw means nothing drawn. */
+    const bar = r.behind === 0
+      ? ""
+      : `<i style="width:${Math.max(6, (r.behind / widest) * 100).toFixed(1)}%"></i>`;
+    return `<li class="drow" data-behind="${r.behind === 0 ? "none" : "some"}">
       <span class="dname">${esc(r.subject)}</span>
       <span class="dspec" dir="ltr">${esc(r.chapter_version)} &rarr; ${esc(r.latest_version)}</span>
-      <span class="dtrack"><i style="width:${Math.max(5, (r.behind / widest) * 100).toFixed(1)}%"></i></span>
+      <span class="dtrack">${bar}</span>
       <span class="dlabel">${esc(label)}</span>
     </li>`;
   }).join("");
 
+  /* The unbound set is the finding here, not the footnote: on this course it
+     outnumbers the measurable one many times over. It carries its own count so
+     the proportion is readable without counting chips. */
   const loose = unbound.length
-    ? `<div class="dloose"><span class="dloose-t">${esc(t("d_nobound"))}</span>
+    ? `<div class="dloose"><span class="dloose-t"><b>${unbound.length}</b> ${esc(t("d_nobound"))}</span>
         <div class="dloose-l">${unbound.map((x) => `<span class="pin loose">${esc(x)}</span>`).join("")}</div></div>`
     : "";
 
