@@ -1,6 +1,6 @@
 # Progress
 
-**Last updated:** 2026-09-20 · **Tests:** 202 passing · **Demo:** Sep 26–27
+**Last updated:** 2026-09-20 · **Tests:** 221 passing · **Demo:** Sep 26–27
 
 The pipeline runs end to end, live, from a web app. A model reads, judges and writes;
 rules still decide what counts as confirmed, and every recommendation now carries the reason
@@ -117,6 +117,22 @@ behind it: what the chapter teaches, which version it runs, and how far the rele
 - [ ] Optional: GitHub token per member (60 requests/hour without one)
 
 ## Standup log
+
+### 2026-09-20 (evening)
+- PyPI joined as a second tier-1 source and the watchlist is now the 53 packages the course
+  installs, read from the notebooks. Coverage went from 2 chapters to 11.
+- The model works again, on Groq. Getting there took five fixes: Cloudflare refuses Python's
+  default user agent, the configured Groq model did not exist on the account, a non-fatal
+  failure returned instead of trying the next provider, a reasoning model bills its thinking
+  against `max_tokens` and our ceilings were too small, and a 429 was read as prose so a
+  rate-limit message that links to a billing page was taken for a spent account.
+- First run where the model survived start to finish: 151 calls, 46k tokens, nothing halted,
+  21 of 37 sentences written rather than fallen back.
+- Warnings are now errors (`pytest.ini`), with the two starlette ones ignored by exact
+  message. Our own code raises none.
+- **The OpenAI key is refused (401) and its project is over its spend limit. Groq carries the
+  run.** `MODEL_ORDER` in `.env` picks the chain and can exclude a provider without deleting
+  its key.
 
 ### 2026-09-20 (afternoon)
 - Read all 89 notebooks and 27 decks, weeks 1 to 6, and wrote down what came back into the
