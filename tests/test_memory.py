@@ -100,3 +100,24 @@ def test_history_stops_at_the_lookback_limit(tmp_path):
     past = memory.history("run_20260930T000000Z", tmp_path, limit=4)
 
     assert past["langchain"]["runs"] == 4
+
+
+def test_a_run_id_carries_its_collection_time():
+    started = memory.run_started("run_20260920T084236Z")
+
+    assert (started.year, started.month, started.day, started.hour) == (2026, 9, 20, 8)
+
+
+def test_something_that_is_not_a_run_id_has_no_time():
+    assert memory.run_started("demo") is None
+
+
+def test_the_previous_run_is_the_one_just_before(tmp_path):
+    make_run(tmp_path, "run_20260901T000000Z", {})
+    make_run(tmp_path, "run_20260910T000000Z", {})
+
+    assert memory.previous_run("run_20260920T000000Z", tmp_path) == "run_20260910T000000Z"
+
+
+def test_the_first_run_ever_has_no_previous(tmp_path):
+    assert memory.previous_run("run_20260920T000000Z", tmp_path) is None

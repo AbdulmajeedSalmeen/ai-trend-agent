@@ -92,3 +92,21 @@ def recall(subject: str, action: str, latest_version: str | None, past: dict) ->
         "first_seen_run": entry["first_run"],
         "version_moved": moved,
     }
+
+
+def run_started(run_id: str):
+    """The collection time encoded in a run id, or None if it is not one of ours."""
+    from datetime import datetime, timezone
+
+    try:
+        stamp = datetime.strptime(run_id, "run_%Y%m%dT%H%M%SZ")
+    except ValueError:
+        return None
+
+    return stamp.replace(tzinfo=timezone.utc)
+
+
+def previous_run(run_id: str, runs_dir: Path | None = None) -> str | None:
+    runs = earlier_runs(run_id, runs_dir, limit=1)
+
+    return runs[0].name if runs else None

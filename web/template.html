@@ -137,6 +137,9 @@ const T = {
     map_sub: "A highlighted chapter has something new this week. A package with no chapter is a gap in the course.",
     s_signals: "signals collected", s_trends: "subjects tracked", s_update: "chapters to update", s_gaps: "not in the curriculum", s_claims: "checkable claims",
     f_all: "All", f_update: "Update a chapter", f_add: "New lesson", f_watch: "Watch only",
+    f_new: "New since last run",
+    s_fresh: "arrived since the last run", s_standing: "still open from earlier runs",
+    n7_t: "What is actually new", n7_b: "A run reads a month of releases every time, so two runs a day apart collect nearly the same thing. {fresh} of the {signals} signals here arrived after the previous run, {new} of the asks below are new, and {standing} have been open since an earlier run.",
     v_all: "All claims", v_confirmed: "Confirmed", v_unverified: "Unverified",
     update_existing_material: "Update a chapter", add_new_lesson: "New lesson", watch: "Watch only",
     priority: "priority", confidence: "confidence", signals: "signals", claims: "claims", packages: "packages",
@@ -196,6 +199,9 @@ const T = {
     map_sub: "الفصل المميّز فيه جديد هذا الأسبوع. والحزمة بلا فصل فجوة في المقرر.",
     s_signals: "إشارة مجمّعة", s_trends: "موضوعاً متتبَّعاً", s_update: "فصلاً يحتاج تحديثاً", s_gaps: "خارج المنهج", s_claims: "ادّعاءً قابلاً للفحص",
     f_all: "الكل", f_update: "تحديث فصل", f_add: "درس جديد", f_watch: "مراقبة فقط",
+    f_new: "الجديد منذ آخر تشغيلة",
+    s_fresh: "وصلت منذ آخر تشغيلة", s_standing: "ما زالت مفتوحة من تشغيلات سابقة",
+    n7_t: "ما الجديد فعلاً", n7_b: "كل تشغيلة تقرأ شهراً من الإصدارات، فتشغيلتان بينهما يوم تجمعان الشيء نفسه تقريباً. {fresh} من أصل {signals} إشارة وصلت بعد التشغيلة السابقة، و{new} من الطلبات أدناه جديدة، و{standing} مفتوحة منذ تشغيلة أسبق.",
     v_all: "كل الادّعاءات", v_confirmed: "مؤكد", v_unverified: "غير مؤكد",
     update_existing_material: "تحديث فصل", add_new_lesson: "درس جديد", watch: "مراقبة فقط",
     priority: "الأولوية", confidence: "الثقة", signals: "إشارة", claims: "ادّعاء", packages: "حزم",
@@ -359,11 +365,14 @@ function memberBlock(item, showName) {
 }
 
 function renderAct() {
-  const filters = [["all", "f_all"], ["update_existing_material", "f_update"], ["add_new_lesson", "f_add"], ["watch", "f_watch"]];
+  const filters = [["all", "f_all"], ["new", "f_new"], ["update_existing_material", "f_update"], ["add_new_lesson", "f_add"], ["watch", "f_watch"]];
   document.getElementById("actFilters").innerHTML = filters.map(([v, k]) =>
     `<button type="button" data-act="${v}" aria-pressed="${actFilter === v}">${esc(t(k))}</button>`).join("");
 
-  const items = DATA.items.filter((i) => actFilter === "all" || i.action === actFilter);
+  const items = DATA.items.filter((i) =>
+    actFilter === "all" ? true
+    : actFilter === "new" ? (i.action !== "watch" && (i.runs_flagged === 1 || i.version_moved))
+    : i.action === actFilter);
   const groups = groupFamilies(items);
 
   document.getElementById("actList").innerHTML = groups.length ? groups.map((g) => {
@@ -488,6 +497,11 @@ function renderRun() {
   ];
 
   const tr = DATA.trace;
+  if (DATA.previous_run) {
+    notes.push({ t: t("n7_t"), b: fill(t("n7_b"), {
+      fresh: c.fresh_signals, signals: c.signals, new: c.new_asks, standing: c.standing_asks
+    }) });
+  }
   if (tr && tr.halted) {
     notes.push({ t: t("n6_t"), b: fill(t("n6_b"), { why: tr.halted }), warn: true });
   }

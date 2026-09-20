@@ -110,16 +110,27 @@ def test_the_model_refuses_to_spend_past_the_budget(monkeypatch):
     assert trace.current.steps[-1].ok is False
 
 
-def test_a_spent_quota_stops_the_run_from_asking_again(monkeypatch):
+def only(provider="openai", model_name="gpt-4o-mini"):
+    return [{"base_url": "https://example.test/v1", "model": model_name,
+             "key": "test", "provider": provider}]
+
+
+def use(monkeypatch, entries):
+    """conftest turns the model off for every test. These tests are about the
+    adapter itself, so they turn it back on for their own fake providers."""
+    from src.adapters import model
+
+    monkeypatch.setattr(model, "_configured", lambda: entries)
+    monkeypatch.setattr(model, "config", lambda: entries[0] if entries else None)
+
+
+def test_a_spent_quota_drops_that_provider_for_the_rest_of_the_run(monkeypatch):
     import urllib.error
 
     from src.adapters import model
 
     model.reset()
-    monkeypatch.setattr(model, "config", lambda: {
-        "base_url": "https://example.test/v1", "model": "gpt-4o-mini",
-        "key": "test", "provider": "openai",
-    })
+    use(monkeypatch, only())
 
     calls = []
 
@@ -144,10 +155,7 @@ def test_a_timeout_is_still_worth_retrying(monkeypatch):
     from src.adapters import model
 
     model.reset()
-    monkeypatch.setattr(model, "config", lambda: {
-        "base_url": "https://example.test/v1", "model": "gpt-4o-mini",
-        "key": "test", "provider": "openai",
-    })
+    use(monkeypatch, only())
     monkeypatch.setattr(model.time, "sleep", lambda seconds: None)
 
     calls = []
@@ -162,3 +170,136 @@ def test_a_timeout_is_still_worth_retrying(monkeypatch):
     assert model.ask_json("s", "u", action="read_post") is None
     assert len(calls) == 2
     assert model.halted() is None
+    model.reset()
+
+
+def test_a_refused_key_hands_over_to_the_next_provider(monkeypatch):
+    import io
+    import json as jsonlib
+    import urllib.error
+
+    from src.adapters import model
+
+    model.reset()
+    use(monkeypatch, only("openai") + only("groq", "llama-3.3-70b-versatile"))
+
+    seen = []
+
+    def answer(request, timeout=None):
+        body = jsonlib.loads(request.data)
+        seen.append(body["model"])
+
+        if body["model"] == "gpt-4o-mini":
+            raise urllib.error.HTTPError("https://example.test", 401, "bad key", {}, None)
+
+        payload = {"choices": [{"message": {"content": '{"ok": 1}'}}],
+                   "usage": {"prompt_tokens": 11, "completion_tokens": 3}}
+        return io.BytesIO(jsonlib.dumps(payload).encode())
+
+    monkeypatch.setattr(model.urllib.request, "urlopen",
+                        lambda request, timeout=None: _as_context(answer(request, timeout)))
+    trace.start("run_failover", "openai, groq")
+
+    assert model.ask_json("s", "u", action="read_post") == {"ok": 1}
+    assert seen == ["gpt-4o-mini", "llama-3.3-70b-versatile"]
+
+    # the dead provider is not asked again, the working one is
+    assert model.ask_json("s", "u", action="read_post") == {"ok": 1}
+    assert seen == ["gpt-4o-mini", "llama-3.3-70b-versatile", "llama-3.3-70b-versatile"]
+
+    assert model.halted() is None
+    assert trace.current.steps[-1].action == "read_post@groq"
+    assert trace.current.tokens == 28
+    model.reset()
+
+
+def test_every_provider_down_is_reported_as_halted(monkeypatch):
+    import urllib.error
+
+    from src.adapters import model
+
+    model.reset()
+    use(monkeypatch, only("openai") + only("groq"))
+
+    def refuse(*args, **kwargs):
+        raise urllib.error.HTTPError("https://example.test", 401, "bad key", {}, None)
+
+    monkeypatch.setattr(model.urllib.request, "urlopen", refuse)
+    trace.start("run_all_down", "openai, groq")
+
+    assert model.ask_json("s", "u", action="read_post") is None
+    assert model.halted() == "HTTP 401"
+    model.reset()
+
+
+class _as_context:
+    def __init__(self, stream):
+        self.stream = stream
+
+    def __enter__(self):
+        return self.stream
+
+    def __exit__(self, *args):
+        return False
+
+
+def test_a_provider_that_keeps_timing_out_is_dropped_too(monkeypatch):
+    from src.adapters import model
+
+    model.reset()
+    use(monkeypatch, only("nvidia", "slow-model"))
+    monkeypatch.setattr(model.time, "sleep", lambda seconds: None)
+
+    calls = []
+
+    def slow(*args, **kwargs):
+        calls.append(1)
+        raise TimeoutError("too slow")
+
+    monkeypatch.setattr(model.urllib.request, "urlopen", slow)
+    trace.start("run_strikes", "nvidia:slow-model")
+
+    assert model.ask_json("s", "u", action="read_post") is None
+    assert model.halted() is None
+
+    assert model.ask_json("s", "u", action="read_post") is None
+    assert model.halted() == "2 failed calls running"
+
+    before = len(calls)
+    assert model.ask_json("s", "u", action="read_post") is None
+    assert len(calls) == before
+    model.reset()
+
+
+def test_one_good_answer_clears_the_strikes(monkeypatch):
+    import io
+    import json as jsonlib
+
+    from src.adapters import model
+
+    model.reset()
+    use(monkeypatch, only("groq", "llama-3.3-70b-versatile"))
+    monkeypatch.setattr(model.time, "sleep", lambda seconds: None)
+
+    attempts = {"n": 0}
+
+    def flaky(request, timeout=None):
+        attempts["n"] += 1
+
+        if attempts["n"] <= 2:
+            raise TimeoutError("too slow")
+
+        payload = {"choices": [{"message": {"content": '{"ok": 1}'}}], "usage": {}}
+        return _as_context(io.BytesIO(jsonlib.dumps(payload).encode()))
+
+    monkeypatch.setattr(model.urllib.request, "urlopen", flaky)
+    trace.start("run_flaky", "groq")
+
+    # the first ask spends both of its own attempts on timeouts and takes a strike
+    assert model.ask_json("s", "u", action="read_post") is None
+    assert model._strikes["groq"] == 1
+
+    assert model.ask_json("s", "u", action="read_post") == {"ok": 1}
+    assert model._strikes["groq"] == 0
+    assert model.halted() is None
+    model.reset()

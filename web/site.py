@@ -2,7 +2,7 @@ import argparse
 import json
 from pathlib import Path
 
-from src import runio
+from src import memory, runio
 from src.schema import Recommendation, Score, Signal, Trend
 
 CURRICULUM_PATH = Path("fixtures/curriculum.json")
@@ -44,6 +44,12 @@ def build_payload(run_dir: Path) -> dict:
     sources = {}
     for signal in artifacts["signals"]:
         sources[signal.source] = sources.get(signal.source, 0) + 1
+
+    # A run collects a month of releases every time, so two runs a day apart look
+    # almost identical. What separates them is what arrived since the last one.
+    previous = memory.previous_run(run_dir.name)
+    since = memory.run_started(previous) if previous else None
+    fresh = sum(1 for s in artifacts["signals"] if since and s.published_at > since)
 
     items = []
     for rec in artifacts["recommendations"]:
@@ -137,7 +143,11 @@ def build_payload(run_dir: Path) -> dict:
             "kinds": kinds,
             "chapters": len(chapters),
             "chapters_touched": len({i["chapter_id"] for i in items if i["chapter_id"]}),
+            "fresh_signals": fresh,
+            "new_asks": sum(1 for i in items if i["action"] != "watch" and i["runs_flagged"] == 1),
+            "standing_asks": sum(1 for i in items if i["action"] != "watch" and i["runs_flagged"] > 1),
         },
+        "previous_run": previous,
         "trace": read_trace(run_dir),
         "items": items,
         "chapters": chapters,

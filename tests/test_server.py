@@ -70,7 +70,7 @@ def test_a_browser_run_gets_its_own_trace_and_resets_the_breaker(tmp_path, monke
     monkeypatch.setattr(runio, "RUNS_DIR", tmp_path)
     monkeypatch.setattr(runner_module, "STAGES", [("verify", lambda run_path: print("verified: ok"))])
 
-    model_adapter._halted = "HTTP 429"
+    model_adapter._halted["openai"] = "HTTP 429"
 
     runner_module._execute("run_20260920T090000Z", replay=True)
 
