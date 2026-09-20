@@ -7,6 +7,8 @@ import urllib.request
 
 from dotenv import load_dotenv
 
+from src import trace
+
 load_dotenv()
 
 PROVIDERS = {
@@ -16,6 +18,23 @@ PROVIDERS = {
 }
 
 FENCE = re.compile(r"^```(?:json)?|```$", re.MULTILINE)
+
+# A refused key, a revoked key or a spent quota will refuse the next call too.
+# Retrying them cost one run 170 failed calls and three minutes before the
+# stages fell back to rules anyway.
+FATAL_STATUS = {401, 402, 403, 429}
+
+_halted: str | None = None
+
+
+def halted() -> str | None:
+    return _halted
+
+
+def reset() -> None:
+    """Start of a run: give the model another chance."""
+    global _halted
+    _halted = None
 
 
 def config() -> dict | None:
@@ -45,10 +64,25 @@ def available() -> bool:
     return config() is not None
 
 
-def ask_json(system: str, user: str, max_tokens: int = 400, timeout: int = 40) -> dict | None:
-    """One model call that must answer with a JSON object. None on any failure."""
+def ask_json(system: str, user: str, max_tokens: int = 400, timeout: int = 40,
+             action: str = "ask") -> dict | None:
+    """One model call that must answer with a JSON object. None on any failure.
+
+    Every call is timed and counted against the run budget. Once the budget is
+    spent the model is treated as absent, which the stages already handle.
+    """
+    global _halted
+
     settings = config()
     if settings is None:
+        return None
+
+    if _halted:
+        trace.current.record(action, 0.0, ok=False, note=f"skipped, {_halted}")
+        return None
+
+    if trace.current.over_budget():
+        trace.current.record(action, 0.0, ok=False, note="budget spent")
         return None
 
     body = json.dumps({
@@ -65,12 +99,30 @@ def ask_json(system: str, user: str, max_tokens: int = 400, timeout: int = 40) -
     )
 
     for attempt in range(2):
+        started = time.perf_counter()
         try:
             with urllib.request.urlopen(request, timeout=timeout) as response:
                 payload = json.load(response)
             text = payload["choices"][0]["message"]["content"]
-            return json.loads(FENCE.sub("", text).strip())
-        except (urllib.error.URLError, TimeoutError, KeyError, ValueError, json.JSONDecodeError):
+            answer = json.loads(FENCE.sub("", text).strip())
+            usage = payload.get("usage") or {}
+            trace.current.record(
+                action, (time.perf_counter() - started) * 1000,
+                tokens_in=usage.get("prompt_tokens", 0),
+                tokens_out=usage.get("completion_tokens", 0),
+            )
+            return answer
+        except (urllib.error.URLError, TimeoutError, KeyError, ValueError, json.JSONDecodeError) as problem:
+            fatal = isinstance(problem, urllib.error.HTTPError) and problem.code in FATAL_STATUS
+            note = f"HTTP {problem.code}" if isinstance(problem, urllib.error.HTTPError) else type(problem).__name__
+            trace.current.record(
+                action, (time.perf_counter() - started) * 1000, ok=False, note=note,
+            )
+
+            if fatal:
+                _halted = note
+                print(f"model unavailable ({note}); the rest of this run uses rules only")
+                return None
             if attempt == 0:
                 time.sleep(1.5)
                 continue

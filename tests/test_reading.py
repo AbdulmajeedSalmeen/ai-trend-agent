@@ -74,3 +74,35 @@ def test_a_sentence_that_drops_the_facts_is_refused(monkeypatch):
     )
 
     assert written is None
+
+
+def test_a_sentence_that_says_the_opposite_is_refused(monkeypatch):
+    fake_model(monkeypatch, {"sentence": "langchain 1.4.2 is out but chapter C8 is up to date."})
+
+    written = reading.write_recommendation(
+        "langchain", "update_existing_material", "C8", 3, 1, 4.3, must_mention=["1.4.2"],
+    )
+
+    assert written is None
+
+
+def test_a_negated_contradiction_is_not_a_contradiction():
+    assert reading.contradicts_the_verdict("The chapter is not up to date with 1.4.2.") is None
+
+
+def test_an_asserted_contradiction_is_caught():
+    assert reading.contradicts_the_verdict("No action needed for langchain.") == "no action"
+
+
+def test_a_sentence_with_nothing_to_contradict_passes():
+    assert reading.contradicts_the_verdict("The notebooks still call RetrievalQA.") is None
+
+
+def test_watching_is_allowed_to_say_nothing_needs_doing(monkeypatch):
+    fake_model(monkeypatch, {"sentence": "Patch releases only, so the chapter is up to date."})
+
+    written = reading.write_recommendation(
+        "langgraph", "watch", "C19", 3, 0, 2.4, must_mention=["1.2.11"] if False else [],
+    )
+
+    assert written is not None

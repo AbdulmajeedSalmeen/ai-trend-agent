@@ -1,6 +1,6 @@
 # Progress
 
-**Last updated:** 2026-09-20 · **Tests:** 174 passing · **Demo:** Sep 26–27
+**Last updated:** 2026-09-20 · **Tests:** 202 passing · **Demo:** Sep 26–27
 
 The pipeline runs end to end, live, from a web app. A model reads, judges and writes;
 rules still decide what counts as confirmed, and every recommendation now carries the reason
@@ -99,6 +99,10 @@ behind it: what the chapter teaches, which version it runs, and how far the rele
 - [x] `src/adapters/model.py` + `src/reading.py` — provider-agnostic model, three thinking points
 - [x] `src/gap.py` + `src/pin.py` — version distance, staleness by date, and a way to record pins
 - [x] `src/notebooks.py` + `src/curriculum.py` — read the course notebooks into the curriculum
+- [x] `src/sources/pypi.py` — PyPI as a second tier-1 source, watchlist read from the course
+- [x] `src/trace.py` — every model call timed, counted and priced, with a budget and a breaker
+- [x] `src/memory.py` — what this run asked for that earlier runs already asked for
+- [x] `docs/FROM-THE-COURSE.md` — what we took from the bootcamp and what we left
 - [x] Team names in README, and how to run everything after the move to `web/`
 - [x] `docs/DEMO-QA.md` — the hard questions, each answered from the frozen run
 - [x] Demo run frozen: `run_20260920T080135Z` now travels with the repo, so anyone can
@@ -108,9 +112,24 @@ behind it: what the chapter teaches, which version it runs, and how far the rele
 
 - [ ] `dev` merged into `main`
 - [ ] Two timed rehearsals, and the offline fallback drill
+- [ ] Raise or refill the OpenAI spend limit; until then every run is rules only
+- [ ] The evaluation suite: frozen cases, several repeats, pass^k, a release gate
 - [ ] Optional: GitHub token per member (60 requests/hour without one)
 
 ## Standup log
+
+### 2026-09-20 (afternoon)
+- Read all 89 notebooks and 27 decks, weeks 1 to 6, and wrote down what came back into the
+  project and what we refused: `docs/FROM-THE-COURSE.md`. Three things were built from it.
+  An execution trace with cost and latency (`src/trace.py`), which caught on its first run
+  that the OpenAI key had hit its spend limit: 170 calls, 170 failures, and every stage
+  quietly falling back to rules. A token budget plus a circuit breaker, so a refused key is
+  not retried 170 times; the same replay went from 3.5 minutes to 3 seconds. And memory
+  between runs (`src/memory.py`), so a recommendation says whether it is new or has been
+  asked for several runs running.
+- The sentence the model writes is now also refused when it contradicts the verdict, not
+  only when it drops the facts. The week 6 deck calls this the semantic success trap.
+- **The OpenAI key is out of quota.** Runs still complete on rules and say so on the page.
 
 ### 2026-09-20
 - Read the whole bootcamp back into the project. PyPI added as a second tier-1 source, with

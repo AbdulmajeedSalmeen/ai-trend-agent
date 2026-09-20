@@ -24,6 +24,15 @@ def read_run(run_dir: Path) -> dict:
     return artifacts
 
 
+def read_trace(run_dir: Path) -> dict | None:
+    path = run_dir / "trace.json"
+
+    if not path.exists():
+        return None
+
+    return json.loads(path.read_text(encoding="utf-8")).get("summary")
+
+
 def build_payload(run_dir: Path) -> dict:
     artifacts = read_run(run_dir)
     curriculum = json.loads(CURRICULUM_PATH.read_text(encoding="utf-8"))
@@ -73,6 +82,9 @@ def build_payload(run_dir: Path) -> dict:
                 "gap_kind": rec.gap_kind,
                 "releases_since": rec.releases_since,
                 "legacy_uses": rec.legacy_uses,
+                "runs_flagged": rec.runs_flagged,
+                "first_seen_run": rec.first_seen_run,
+                "version_moved": rec.version_moved,
                 "priority": round(score.priority, 2),
                 "confidence": round(score.confidence, 2),
                 "dimensions": score.dimensions,
@@ -126,6 +138,7 @@ def build_payload(run_dir: Path) -> dict:
             "chapters": len(chapters),
             "chapters_touched": len({i["chapter_id"] for i in items if i["chapter_id"]}),
         },
+        "trace": read_trace(run_dir),
         "items": items,
         "chapters": chapters,
     }

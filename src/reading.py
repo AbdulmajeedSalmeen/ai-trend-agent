@@ -1,3 +1,5 @@
+import re
+
 from src.adapters import model
 from src.schema import Signal
 
@@ -46,6 +48,7 @@ def read_claim(signal: Signal, known_subjects: list[str]) -> dict | None:
         EXTRACT_SYSTEM,
         f"Packages we track: {', '.join(sorted(known_subjects))}\n\nTitle: {signal.title}\n\nBody: {body or '(none)'}",
         max_tokens=220,
+        action="read_post",
     )
     if not answer or not isinstance(answer, dict):
         return None
@@ -75,6 +78,7 @@ def judge_educational_value(subject: str, claim_texts: list[str], chapter_title:
         JUDGE_SYSTEM,
         f"Package: {subject}\n{where}\nWhat changed:\n- " + "\n- ".join(claim_texts[:6]),
         max_tokens=160,
+        action="judge_value",
     )
     if not answer:
         return None
@@ -91,9 +95,41 @@ def judge_educational_value(subject: str, claim_texts: list[str], chapter_title:
     return {"value": value, "reason": reason}
 
 
+# A sentence can pass every structural check and still say the opposite of what the
+# rules decided. These are the phrases that would contradict a verdict of "behind",
+# unless the phrase is itself negated.
+CONTRADICTIONS = [
+    "up to date", "no action", "no changes needed", "nothing to change",
+    "already current", "still supported", "not affected", "no update needed",
+]
+
+NEGATED = re.compile(
+    r"(?:\bnot|\bnever|\bno longer|\bisn't|\baren't|\bis not|\bare not|\bwasn't)\s+(?:\w+\s+){0,1}$"
+)
+
+
+
 def keeps_the_facts(sentence: str, must_mention: list[str]) -> bool:
     """A written sentence is only worth keeping if it still carries the facts it was given."""
     return all(fact in sentence for fact in must_mention if fact)
+
+
+def contradicts_the_verdict(sentence: str) -> str | None:
+    """The phrase that undoes the decision, or None.
+
+    A phrase only counts when it is asserted. "not up to date" agrees with us;
+    "up to date" does not.
+    """
+    lower = sentence.lower()
+
+    for phrase in CONTRADICTIONS:
+        for match in re.finditer(re.escape(phrase), lower):
+            before = lower[max(0, match.start() - 40):match.start()]
+
+            if not NEGATED.search(before):
+                return phrase
+
+    return None
 
 
 def write_recommendation(subject: str, action: str, chapter: str | None, confirmed: int,
@@ -117,6 +153,7 @@ def write_recommendation(subject: str, action: str, chapter: str | None, confirm
         f"Evidence: {confirmed} confirmed claims, {unverified} unverified\n"
         f"Priority score: {priority:.2f}",
         max_tokens=200,
+        action="write_reason",
     )
     sentence = (answer or {}).get("sentence")
 
@@ -128,5 +165,12 @@ def write_recommendation(subject: str, action: str, chapter: str | None, confirm
     if not keeps_the_facts(sentence, must_mention or []):
         print(f"think: the written sentence for {subject} dropped the facts, keeping ours")
         return None
+
+    if action != "watch":
+        contradiction = contradicts_the_verdict(sentence)
+
+        if contradiction:
+            print(f"think: the written sentence for {subject} said \"{contradiction}\", keeping ours")
+            return None
 
     return sentence

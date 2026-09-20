@@ -1228,3 +1228,8 @@ bdi { unicode-bidi: isolate; }
 }
 .gapline[data-kind="dependency"] { background: var(--gray-soft); color: var(--ink-soft); }
 .gapline[data-kind="dependency"] .vpair { color: var(--ink-soft); font-weight: 500; }
+/* Neither of these is evidence or a gap, so neither takes the page's two
+   meaningful colours. The streak earns an edge because an ask that keeps
+   coming back is the one a reader should stop skipping. */
+.chip.streak { background: var(--gray-soft); color: var(--ink-soft); border-color: var(--edge); }
+.chip.moved { background: var(--gray-soft); color: var(--ink-faint); }

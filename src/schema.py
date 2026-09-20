@@ -59,3 +59,6 @@ class Recommendation(BaseModel):
     gap_kind: Optional[str] = None
     releases_since: int = 0
     legacy_uses: list[str] = []
+    runs_flagged: int = 1
+    first_seen_run: Optional[str] = None
+    version_moved: bool = False

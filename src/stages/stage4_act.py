@@ -2,7 +2,7 @@ import json
 import re
 from pathlib import Path
 
-from src import gap, runio
+from src import gap, memory, runio
 from src.reading import write_recommendation
 from src.schema import Recommendation, Score, Signal, Trend
 
@@ -111,6 +111,7 @@ def run(run_dir: Path) -> None:
 
     published = {signal.id: signal.published_at.isoformat() for signal in signals}
     scores_by_trend = {score.trend_id: score for score in scores}
+    past = memory.history(run_dir.name)
 
     recommendations = []
     skipped = 0
@@ -138,6 +139,8 @@ def run(run_dir: Path) -> None:
             must_mention=required_facts(assessment),
         )
 
+        recalled = memory.recall(trend.subject, action, assessment["latest"], past)
+
         recommendations.append(
             Recommendation(
                 trend_id=trend.id,
@@ -149,9 +152,11 @@ def run(run_dir: Path) -> None:
                 gap_kind=assessment["kind"],
                 releases_since=assessment["released_since"],
                 legacy_uses=[marker["uses"] for marker in assessment["legacy"]],
+                **recalled,
             )
         )
 
     runio.save_artifact(run_dir, "recommendations", recommendations)
 
-    print(f"{len(recommendations)} recommendations, {skipped} trends skipped")
+    repeats = sum(1 for rec in recommendations if rec.runs_flagged > 1)
+    print(f"{len(recommendations)} recommendations, {skipped} trends skipped, {repeats} repeated from earlier runs")
