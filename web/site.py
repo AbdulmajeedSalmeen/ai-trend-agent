@@ -87,7 +87,7 @@ def build_payload(run_dir: Path) -> dict:
     items.sort(key=lambda i: (-i["priority"], i["subject"]))
 
     all_claims = [c for i in items for c in i["claims"]]
-    kinds = {"cross_source": 0, "primary_report": 0, "unverified": 0}
+    kinds = {"cross_source": 0, "registry_match": 0, "primary_report": 0, "unverified": 0}
     for claim in all_claims:
         kinds[claim["kind"] or "unverified"] += 1
 

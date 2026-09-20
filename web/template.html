@@ -10,18 +10,56 @@ __STYLE__
 </style>
 </head>
 <body dir="ltr">
+
+<canvas id="field" aria-hidden="true"></canvas>
+<div class="wash" aria-hidden="true"></div>
+<div class="grain" aria-hidden="true"></div>
+
+<div class="overture" id="overture" role="dialog" aria-modal="true" aria-labelledby="ovTitle" hidden>
+  <div class="ov-inner">
+    <h1 class="ov-title reveal" id="ovTitle" data-step="1" data-i18n-html="ov_title"></h1>
+    <div class="ov-rule" data-step="2" aria-hidden="true"></div>
+    <p class="ov-lede reveal" data-step="3" data-i18n="ov_lede"></p>
+    <ul class="ov-lines">
+      <li class="reveal" data-step="4"><i aria-hidden="true"></i><span data-i18n="ov_1"></span></li>
+      <li class="reveal" data-step="5"><i aria-hidden="true"></i><span data-i18n-html="ov_2"></span></li>
+      <li class="reveal" data-step="6"><i aria-hidden="true"></i><span data-i18n="ov_3"></span></li>
+    </ul>
+    <div class="ov-act reveal" data-step="7">
+      <button type="button" class="runbtn primary" id="ovEnter" data-i18n="ov_enter"></button>
+    </div>
+  </div>
+</div>
+
 <header>
   <div class="head-inner">
     <div class="brandline">
-      <span class="mark" aria-hidden="true"><i></i><i></i><i></i></span>
-      <h1>AI Trend Agent</h1>
+      <h1><button type="button" class="brandbtn" id="btnAbout" data-i18n-label="ov_replay">
+        <svg class="mark" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+          <rect class="mk-cell" x="0" y="0" width="6" height="6" rx="1.5"/><rect class="mk-cell" x="9" y="0" width="6" height="6" rx="1.5"/><rect class="mk-cell" x="18" y="0" width="6" height="6" rx="1.5"/><rect class="mk-cell" x="0" y="9" width="6" height="6" rx="1.5"/><rect class="mk-cell" x="9" y="9" width="6" height="6" rx="1.5"/><rect class="mk-cell" x="18" y="9" width="6" height="6" rx="1.5"/><rect class="mk-cell" x="0" y="18" width="6" height="6" rx="1.5"/><rect class="mk-cell" x="9" y="18" width="6" height="6" rx="1.5"/><rect class="mk-cell" x="18" y="18" width="6" height="6" rx="1.5"/>
+          <rect class="mk-found" x="0" y="0" width="6" height="6" rx="1.5"/>
+        </svg>
+        <span class="brandname">AI Trend Agent</span>
+      </button></h1>
       <span class="runid" id="runid"></span>
       <span class="spacer"></span>
       <span class="controls" id="controls" hidden>
-        <select id="runPicker" aria-label="run"></select>
+        <div class="pk" id="runPicker">
+          <button type="button" class="pk-trigger" aria-haspopup="listbox" aria-expanded="false" data-i18n-label="pk_label">
+            <span class="pk-value"></span>
+            <svg class="pk-caret" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M4 6.2 8 10.2 12 6.2"/></svg>
+          </button>
+          <div class="pk-list" role="listbox" hidden></div>
+        </div>
         <button type="button" class="runbtn" id="btnReplay" data-i18n="btn_replay"></button>
         <button type="button" class="runbtn primary" id="btnRun" data-i18n="btn_run"></button>
       </span>
+      <button type="button" class="runbtn icon-only" id="btnTheme" aria-pressed="false">
+        <svg class="thm" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+          <g class="sun"><circle cx="12" cy="12" r="3.9"/><path d="M12 2.6v2.3M12 19.1v2.3M4.8 4.8l1.6 1.6M17.6 17.6l1.6 1.6M2.6 12h2.3M19.1 12h2.3M4.8 19.2l1.6-1.6M17.6 6.4l1.6-1.6"/></g>
+          <g class="moon"><path d="M20.2 14.3A8.3 8.3 0 0 1 9.7 3.8 8.5 8.5 0 1 0 20.2 14.3Z"/></g>
+        </svg>
+      </button>
       <span class="lang" role="group" aria-label="Language">
         <button type="button" data-lang="en" aria-pressed="true">EN</button>
         <button type="button" data-lang="ar" aria-pressed="false">عربي</button>
@@ -114,12 +152,13 @@ const T = {
     g_notebooks: "notebooks read", g_reads: "read from the course notebooks",
     gk_behind_major: "major jump", gk_behind_minor: "minor jump", gk_patch_only: "patches only",
     gk_current: "same version", gk_ahead: "ahead of this run", gk_unknown: "not measurable",
-    gk_unpinned: "no version bound",
+    gk_unpinned: "no version bound", gk_dependency: "dependency, not taught",
     empty_t: "No recommendations under this filter", empty_b: "Switch the filter above to see the rest of the run.",
     btn_run: "Run now", btn_replay: "Re-analyse", loading: "Loading the latest run",
     p_live: "Collecting and checking", p_replay: "Re-analysing saved signals", p_done: "Run finished",
     p_failed: "Run failed", s_ingest: "collect", s_cluster: "group", s_verify: "check", s_score: "score", s_act: "decide",
     r_signals: "signals", r_skipped: "clusters skipped", r_primary: "primary", r_unverified: "unverified", r_recs: "recommendations",
+    r_confirmed: "confirmed", r_of: "of",
     p_waiting: "starting", p_elapsed: "s", m_reading: "reading with", m_none: "rules only, no model", e_running: "A run is already going.", e_budget: "GitHub requests are used up for this hour. Re-analyse a saved run instead.",
     e_locked: "Another run holds the lock.", e_nosignals: "That run has no saved signals to re-analyse.",
     e_offline: "Cannot reach GitHub right now.", no_runs: "No run yet. Press Run now to collect this week.",
@@ -130,11 +169,20 @@ const T = {
     d_majors: "major versions behind", d_major: "major version behind", d_same: "on the current major",
     d_nobound: "no version bound in the notebook",
     l_cross: "independent check", l_primary: "primary report", l_unverified: "unverified",
+    l_registry: "second registry",
     l_touched: "has something new", l_gapc: "not covered", l_quiet: "quiet this week", l_outside: "outside the course",
-    n1_t: "Where confirmations come from", n1_b: "Of {claims} claims, {primary} are primary reports: the official release states its own version, and we cite that release. {cross} are independent cross-source checks, where something said elsewhere was confirmed by an official release. {unv} are unverified.",
+    n1_t: "Where confirmations come from", n1_b: "Of {claims} claims, {primary} are primary reports: the release states its own version and we cite that release. {registry} carry a second registry, where GitHub and PyPI both record the same version. That is two records from the same publisher, so it is not an independent check. {cross} are cross-source, where something said elsewhere was confirmed by an official release. {unv} are unverified.",
     n2_t: "Why cross-source checks are rare", n2_b: "Of {hn} discussion signals, only a handful name a package we track, and almost none state a version number. A claim with no version has nothing to check, so it stays unverified. This is a property of the data, not a gap in the checker.",
-    n3_t: "What was collected", n3_b: "{signals} signals in this run: {breakdown}. Official releases are tier 1 and can serve as evidence; discussion is tier 2 and never confirms anything on its own.",
+    n3_t: "What was collected", n3_b: "{signals} signals in this run: {breakdown}. Official releases and the PyPI registry are tier 1 and can serve as evidence; discussion is tier 2 and never confirms anything on its own. The registry is followed for every package the course notebooks install, so the watchlist is read from the material rather than typed by us.",
     n4_t: "Curriculum source", n4_b: "The {chapters} chapters come from the live SDA course, not from a file we wrote. {touched} of them have something new this week.",
+    ov_title: "An agent that keeps the curriculum <em>current</em>.",
+    ov_lede: "Every week it reads what changed in the tools this bootcamp teaches, then reports which chapters have fallen behind and what it would take to bring them up to date.",
+    ov_1: "Collects this week's releases and discussion about every tool on the syllabus.",
+    ov_2: "Checks every claim against the official release, and records what it found, <b>including when it found nothing</b>.",
+    ov_3: "Recommends which chapters to update, and names the tools the course does not teach at all.",
+    ov_enter: "See this week", ov_replay: "What this is",
+    none: "none", theme_light: "Light", theme_dark: "Dark",
+    pk_label: "Choose a run", pk_partial: "partial",
     foot: "Generated from run {run}. Open this file on any machine; it needs no server and no network."
   },
   ar: {
@@ -159,12 +207,13 @@ const T = {
     g_notebooks: "نوتبوك مقروء", g_reads: "مقروءة من نوتبوكات الدورة",
     gk_behind_major: "قفزة كبرى", gk_behind_minor: "قفزة صغرى", gk_patch_only: "ترقيعات فقط",
     gk_current: "النسخة نفسها", gk_ahead: "أحدث من هذه التشغيلة", gk_unknown: "غير قابل للقياس",
-    gk_unpinned: "بلا تحديد نسخة",
+    gk_unpinned: "بلا تحديد نسخة", gk_dependency: "اعتمادية، غير مُدرَّسة",
     empty_t: "لا توصيات تحت هذا الفلتر", empty_b: "بدّل الفلتر أعلاه لرؤية بقية التشغيلة.",
     btn_run: "تشغيل الآن", btn_replay: "إعادة تحليل", loading: "جارٍ تحميل آخر تشغيلة",
     p_live: "جمع وتحقق", p_replay: "إعادة تحليل الإشارات المحفوظة", p_done: "انتهت التشغيلة",
     p_failed: "فشلت التشغيلة", s_ingest: "جمع", s_cluster: "تجميع", s_verify: "تحقق", s_score: "تقييم", s_act: "قرار",
     r_signals: "إشارة", r_skipped: "مجموعة متجاهَلة", r_primary: "تقرير رسمي", r_unverified: "غير مؤكد", r_recs: "توصية",
+    r_confirmed: "مؤكد", r_of: "من",
     p_waiting: "بدء", p_elapsed: "ث", m_reading: "يقرأ بـ", m_none: "قواعد فقط، بلا نموذج", e_running: "فيه تشغيلة جارية الآن.", e_budget: "حصة طلبات GitHub انتهت لهذه الساعة. أعد تحليل تشغيلة محفوظة بدلاً منها.",
     e_locked: "تشغيلة أخرى ممسكة بالقفل.", e_nosignals: "هذه التشغيلة ما فيها إشارات محفوظة لإعادة تحليلها.",
     e_offline: "تعذّر الوصول إلى GitHub الآن.", no_runs: "ما فيه تشغيلة بعد. اضغط تشغيل الآن لجمع هذا الأسبوع.",
@@ -175,11 +224,21 @@ const T = {
     d_majors: "نسخة رئيسية للوراء", d_major: "نسخة رئيسية للوراء", d_same: "على النسخة الرئيسية نفسها",
     d_nobound: "بلا تحديد نسخة في النوتبوك",
     l_cross: "تحقق مستقل", l_primary: "تقرير رسمي", l_unverified: "غير مؤكد",
+    l_registry: "سجلّ ثانٍ",
     l_touched: "فيه جديد", l_gapc: "غير مغطّى", l_quiet: "هادئ هذا الأسبوع", l_outside: "خارج المقرر",
-    n1_t: "من أين تأتي التأكيدات", n1_b: "من أصل {claims} ادّعاء، {primary} منها تقارير رسمية: الإصدار يذكر نسخته بنفسه ونستشهد به. و{cross} تحقق متقاطع مستقل، حيث أكّد إصدارٌ رسمي كلاماً قيل في مكان آخر. و{unv} غير مؤكدة.",
+    n1_t: "من أين تأتي التأكيدات", n1_b: "من أصل {claims} ادّعاء، {primary} تقارير رسمية: الإصدار يذكر نسخته بنفسه ونستشهد به. و{registry} يحملها سجلّ ثانٍ، حيث يسجّل GitHub وPyPI النسخة نفسها. وهذان سجلّان من الناشر نفسه، فليسا تحققاً مستقلاً. و{cross} تحقق متقاطع، حيث أكّد إصدارٌ رسمي كلاماً قيل في مكان آخر. و{unv} غير مؤكدة.",
     n2_t: "لماذا التحقق المتقاطع نادر", n2_b: "من أصل {hn} إشارة نقاش، قليل منها يذكر حزمة نتتبعها، وتكاد لا توجد واحدة تذكر رقم نسخة. والادّعاء بلا رقم نسخة لا يوجد فيه شيء قابل للفحص، فيبقى غير مؤكد. هذه خاصية في البيانات لا نقص في أداة التحقق.",
-    n3_t: "ما الذي جُمع", n3_b: "{signals} إشارة في هذه التشغيلة: {breakdown}. الإصدارات الرسمية من الفئة الأولى وتصلح أدلة، والنقاش من الفئة الثانية ولا يؤكد شيئاً بمفرده.",
+    n3_t: "ما الذي جُمع", n3_b: "{signals} إشارة في هذه التشغيلة: {breakdown}. الإصدارات الرسمية وسجلّ PyPI من الفئة الأولى وتصلح أدلة، والنقاش من الفئة الثانية ولا يؤكد شيئاً بمفرده. ونتابع السجلّ لكل حزمة تثبّتها نوتبوكات المقرر، فقائمة المتابعة مقروءة من المادة لا مكتوبة بأيدينا.",
     n4_t: "مصدر المنهج", n4_b: "الفصول الـ{chapters} مأخوذة من منصة SDA نفسها، لا من ملف كتبناه. و{touched} منها فيها جديد هذا الأسبوع.",
+
+    ov_title: "وكيل يُبقي المنهج <em>محدَّثاً</em>.",
+    ov_lede: "كل أسبوع يقرأ ما تغيّر في الأدوات التي يدرّسها هذا المعسكر، ثم يبيّن الفصول التي تأخّرت وما يلزم لتحديثها.",
+    ov_1: "يجمع إصدارات هذا الأسبوع والنقاش حول كل أداة في المنهج.",
+    ov_2: "يفحص كل ادّعاء أمام الإصدار الرسمي، ويسجّل ما وجده، <b>حتى حين لا يجد شيئاً</b>.",
+    ov_3: "يوصي بالفصول التي تحتاج تحديثاً، ويسمّي الأدوات التي لا يغطيها المقرر.",
+    ov_enter: "اعرض هذا الأسبوع", ov_replay: "ما هذا",
+    none: "لا شيء", theme_light: "فاتح", theme_dark: "داكن",
+    pk_label: "اختر تشغيلة", pk_partial: "ناقصة",
     foot: "مولَّدة من التشغيلة {run}. افتح هذا الملف على أي جهاز؛ لا يحتاج خادماً ولا إنترنت."
   }
 };
@@ -204,7 +263,7 @@ function renderStats() {
     { n: c.claims, l: t("s_claims") }
   ];
   document.getElementById("stats").innerHTML = cards.map((s) =>
-    `<div class="stat ${s.cls || ""}"><div class="n">${s.n}</div><div class="l">${esc(s.l)}</div></div>`).join("");
+    `<div class="stat ${s.cls || ""}"><div class="n" data-count="${s.n}">${s.n}</div><div class="l">${esc(s.l)}</div></div>`).join("");
 }
 
 function claimsTable(item) {
@@ -212,14 +271,14 @@ function claimsTable(item) {
     const kind = c.verdict === "confirmed" ? t(c.kind || "primary_report") : t("no_evidence");
     const evidence = c.evidence_url
       ? `<a href="${esc(c.evidence_url)}" target="_blank" rel="noopener">${esc(t("open_evidence"))}</a>`
-      : "—";
+      : `<span class="muted-none">${esc(t("none"))}</span>`;
     const origin = c.origin_title
       ? `<div class="origin">${esc(t("read_from"))}: ${c.origin_url ? `<a href="${esc(c.origin_url)}" target="_blank" rel="noopener">${esc(c.origin_title.slice(0, 64))}</a>` : esc(c.origin_title.slice(0, 64))}</div>`
       : "";
     return `<tr>
       <td><span class="verdict"><span class="dot ${c.verdict}"></span>${esc(t(c.verdict))}</span><div class="kind">${esc(kind)}</div></td>
       <td><div class="claimtext">${esc(c.text)}</div>${origin}</td>
-      <td class="ver">${esc(c.version || "—")}</td>
+      <td class="ver">${c.version ? esc(c.version) : `<span class="muted-none">${esc(t("none"))}</span>`}</td>
       <td>${evidence}</td>
     </tr>`;
   }).join("");
@@ -254,7 +313,7 @@ function gapLine(item) {
   if (!item.latest_version) return "";
   const kind = item.gap_kind || "unknown";
   const known = item.chapter_version !== null && item.chapter_version !== undefined;
-  const move = kind === "unpinned"
+  const move = kind === "unpinned" || kind === "dependency"
     ? `<span class="vpair"><span dir="ltr">${esc(item.latest_version)}</span> &middot; ${esc(t("g_unpinned"))}</span>`
     : known
       ? `<span class="vpair" dir="ltr">${esc(item.chapter_version)} &rarr; ${esc(item.latest_version)}</span>`
@@ -265,6 +324,7 @@ function gapLine(item) {
     ? `<div class="legacyline">${esc(t("g_legacy"))} ${item.legacy_uses.map((x) =>
         `<code>${esc(x)}</code>`).join(" ")}</div>` : "";
   const label = kind === "unpinned" ? "" : `<span class="vkind">${esc(t("gk_" + kind))}</span>`;
+  
   return `<div class="gapline" data-kind="${esc(kind)}">${move}${label}${since}</div>${legacy}`;
 }
 
@@ -360,7 +420,7 @@ function renderMap() {
   if (gaps.length) {
     html += `<div class="weekhead">${lang === "ar" ? "فجوات" : "Gaps"}</div>` + gaps.map((i) =>
       `<div class="chapter gapcard">
-        <div class="ctitle"><span class="cid">—</span><h3>${esc(i.subject)}</h3></div>
+        <div class="ctitle"><span class="cid"></span><h3>${esc(i.subject)}</h3></div>
         <div class="stale">${esc(i.rationale)}</div>
       </div>`).join("");
   }
@@ -389,7 +449,7 @@ function renderRun() {
   const c = DATA.counts;
   const breakdown = Object.entries(c.sources).map(([k, v]) => `${v} ${k}`).join(" · ");
   const notes = [
-    { t: t("n1_t"), b: fill(t("n1_b"), { claims: c.claims, primary: c.kinds.primary_report, cross: c.kinds.cross_source, unv: c.kinds.unverified }) },
+    { t: t("n1_t"), b: fill(t("n1_b"), { claims: c.claims, primary: c.kinds.primary_report, registry: c.kinds.registry_match || 0, cross: c.kinds.cross_source, unv: c.kinds.unverified }) },
     { t: t("n2_t"), b: fill(t("n2_b"), { hn: c.sources.hackernews || 0 }), warn: true },
     { t: t("n3_t"), b: fill(t("n3_b"), { signals: c.signals, breakdown }) },
     { t: t("n4_t"), b: fill(t("n4_b"), { chapters: c.chapters, touched: c.chapters_touched }) }
@@ -404,18 +464,27 @@ function renderRun() {
 }
 
 
-const token = (name) => getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+/* The series hand back the custom property itself rather than the colour it
+   resolves to right now. Reading the value at render time baked whichever
+   plate happened to be on into the markup, so switching to the light plate
+   left every chart still drawn in the dark one's colours. */
 const VIZ = {
-  get cross() { return token("--good"); }, get primary() { return token("--info"); },
-  get unverified() { return token("--warn"); }, get hn() { return token("--info"); },
-  get gh() { return token("--good"); }
+  cross: "var(--viz-cross)", primary: "var(--viz-primary)",
+  unverified: "var(--viz-unverified)", hn: "var(--viz-discussion)",
+  gh: "var(--viz-official)"
 };
+
+function fillOf(part) {
+  return part.hatched
+    ? `background:repeating-linear-gradient(135deg, ${part.color} 0 3px, rgba(255,255,255,.55) 3px 6px)`
+    : `background:${part.color}`;
+}
 
 function stacked(parts, total) {
   const segs = parts.filter((p) => p.n > 0).map((p) =>
-    `<span style="width:${(p.n / total * 100).toFixed(2)}%;background:${p.color}" title="${esc(p.label)}: ${p.n}"></span>`).join("");
+    `<span style="width:${(p.n / total * 100).toFixed(2)}%;${fillOf(p)}" title="${esc(p.label)}: ${p.n}"></span>`).join("");
   const legend = parts.map((p) =>
-    `<li><span class="sw" style="background:${p.color}"></span>${esc(p.label)} <b class="${p.n ? "" : "zero"}">${p.n}</b></li>`).join("");
+    `<li><span class="sw" style="${fillOf(p)}"></span>${esc(p.label)} <b class="${p.n ? "" : "zero"}">${p.n}</b></li>`).join("");
   return `<div class="stack" role="img" aria-label="${esc(parts.map((p) => p.label + " " + p.n).join(", "))}">${segs}</div><ul class="legend">${legend}</ul>`;
 }
 
@@ -427,12 +496,17 @@ function renderActViz() {
   const c = DATA.counts;
   const evidence = stacked([
     { label: t("l_cross"), n: c.kinds.cross_source, color: VIZ.cross },
+    { label: t("l_registry"), n: c.kinds.registry_match || 0, color: VIZ.primary, hatched: true },
     { label: t("l_primary"), n: c.kinds.primary_report, color: VIZ.primary },
     { label: t("l_unverified"), n: c.kinds.unverified, color: VIZ.unverified }
   ], Math.max(1, c.claims));
   const src = Object.entries(c.sources);
   const srcTotal = Math.max(1, src.reduce((a, [, v]) => a + v, 0));
-  const sources = stacked(src.map(([k, v], i) => ({ label: k, n: v, color: i === 0 ? VIZ.hn : VIZ.gh })), srcTotal);
+  const sources = stacked(src.map(([k, v]) => ({
+    label: k, n: v,
+    color: k === "hackernews" ? VIZ.hn : VIZ.gh,
+    hatched: k === "pypi"
+  })), srcTotal);
   document.getElementById("actViz").innerHTML =
     figure(t("viz_ev_t").replace("82", c.claims), t("viz_ev_c"), evidence) +
     figure(t("viz_src_t"), t("viz_src_c"), sources);
@@ -489,10 +563,13 @@ function renderMapViz() {
     const note = n ? `${n} ${t("claims")}` : t("l_quiet");
     return `<span class="cell ${state}" data-tip="${esc(label)}" data-note="${esc(note)}"></span>`;
   }).join("");
+  /* These name the cells in the grid above, so they have to be the colours the
+     grid actually paints. They were a hardcoded grey plus two series borrowed
+     from the other charts, which told the reader the wrong thing three times. */
   const legend = [
-    { label: t("l_touched"), n: Object.keys(touched).length, color: VIZ.cross },
-    { label: t("l_quiet"), n: DATA.chapters.length - Object.keys(touched).length, color: "#d9dad3" },
-    { label: t("l_gapc"), n: gaps, color: VIZ.unverified }
+    { label: t("l_touched"), n: Object.keys(touched).length, color: "var(--gold)" },
+    { label: t("l_quiet"), n: DATA.chapters.length - Object.keys(touched).length, color: "var(--neutral-mark)" },
+    { label: t("l_gapc"), n: gaps, color: "var(--crit)" }
   ].map((p) => `<li><span class="sw" style="background:${p.color}"></span>${esc(p.label)} <b>${p.n}</b></li>`).join("");
   const gapCells = DATA.items.filter((i) => !i.chapter_id)
     .map((i) => `<span class="cell gap" data-tip="${esc(i.subject)}" data-note="${esc(t("l_gapc"))}"></span>`).join("");
@@ -518,21 +595,132 @@ document.addEventListener("pointerout", (e) => {
 });
 
 let observer = null;
-function revealOnScroll() {
-  if (observer) observer.disconnect();
-  if (!("IntersectionObserver" in window)) {
-    document.querySelectorAll(".reveal").forEach((el) => el.classList.add("in"));
+/* Everything a reader scrolls past is a reveal target. Tagging them here rather
+   than in each template string keeps the markup builders unchanged and means a
+   new block picks the behaviour up for free. */
+const REVEAL_TARGETS = [
+  "#stats > .stat",
+  "#actViz > .viz", "#mapViz > .viz",
+  "#actList > .card", "#evList > .card",
+  "#mapList > .chapter", "#mapList > .weekhead",
+  "#runNotes > .note"
+];
+
+/* Claim the enhancement only once the script is actually running. */
+document.documentElement.classList.add("js");
+
+/* Safety net. If the observer never delivers, because the tab was opened in the
+   background and restored oddly or because something upstream threw, anything
+   the reader can actually see appears anyway. A page that hides its own content
+   must always have a way back.
+
+   Deliberately limited to what is on screen: revealing the whole document would
+   spend every scroll reveal at once and leave the rest of the page already
+   finished before the reader ever got there. */
+function revealWhatIsOnScreen() {
+  markReveals();
+  document.querySelectorAll(".reveal:not(.in)").forEach((el) => {
+    const r = el.getBoundingClientRect();
+    if (r.bottom < 0 || r.top > window.innerHeight) return;
+    el.classList.add("in");
+    const n = el.querySelector && el.querySelector(".n[data-count]");
+    if (n) countUp(n);
+    setTimeout(() => el.classList.add("settled"), 1400);
+  });
+}
+let safetyChecks = 0;
+const safetyTimer = setInterval(() => {
+  revealWhatIsOnScreen();
+  if (++safetyChecks >= 6) clearInterval(safetyTimer);
+}, 1200);
+
+/* The long entrance belongs to the first read. After that, content is being
+   replaced because the reader clicked a filter, a tab or a language, and a
+   click response that replays a 720ms scroll reveal reads as the page
+   restarting rather than answering. Those get a short fade instead. */
+let firstRevealPass = true;
+
+function markReveals() {
+  REVEAL_TARGETS.forEach((selector) => {
+    document.querySelectorAll(selector).forEach((el) => {
+      if (!el.classList.contains("reveal") && !el.classList.contains("in")) {
+        el.classList.add("reveal");
+        if (!firstRevealPass) el.classList.add("quick");
+      }
+    });
+  });
+  /* Segments inside a stacked bar draw one after another, and cells in the
+     coverage grid land in course order, so each gets its own offset off the
+     block's delay rather than a second observer. */
+  document.querySelectorAll(".stack").forEach((stack) => {
+    [...stack.children].forEach((seg, i) => seg.style.setProperty("--sd", `${i * 90}ms`));
+  });
+  document.querySelectorAll(".strip").forEach((strip) => {
+    [...strip.children].forEach((cell, i) => cell.style.setProperty("--cd", `${Math.min(i * 22, 700)}ms`));
+  });
+}
+
+/* Numbers that were counted should look counted. Runs once per element, off the
+   same reveal that brings its block in. */
+function countUp(el) {
+  const target = Number(el.dataset.count);
+  if (!Number.isFinite(target) || el.dataset.counted === "1") return;
+  el.dataset.counted = "1";
+  if (matchMedia("(prefers-reduced-motion: reduce)").matches || target === 0) {
+    el.textContent = String(target);
     return;
   }
+  const duration = 1100;
+  const start = performance.now();
+  /* The zero is written inside the first frame, never before it. Frame
+     callbacks are frozen while a tab is in the background, and setting the
+     text up front left the figure reading 0 permanently on any page that was
+     opened in a background tab. */
+  const step = (now) => {
+    const p = Math.min(1, (now - start) / duration);
+    /* Exponential ease out: fast off the mark, settles onto the real figure. */
+    const eased = 1 - Math.pow(2, -10 * p);
+    el.textContent = String(Math.round(target * (p === 1 ? 1 : eased)));
+    if (p < 1) requestAnimationFrame(step);
+    else el.textContent = String(target);
+  };
+  requestAnimationFrame(step);
+}
+
+function revealOnScroll() {
+  markReveals();
+  if (observer) observer.disconnect();
+
+  const finish = (el) => {
+    el.classList.add("in");
+    const n = el.querySelector?.(".n[data-count]");
+    if (n) countUp(n);
+    setTimeout(() => el.classList.add("settled"), 1400);
+  };
+
+  if (!("IntersectionObserver" in window)) {
+    document.querySelectorAll(".reveal").forEach(finish);
+    return;
+  }
+
   observer = new IntersectionObserver((entries) => {
-    entries.forEach((entry, index) => {
+    /* Stagger within the group that actually arrived together. Using the
+       callback's own index instead would key the delay to observer batching,
+       which has nothing to do with what the reader is looking at. */
+    const perParent = new Map();
+    entries.forEach((entry) => {
       if (!entry.isIntersecting) return;
-      entry.target.style.setProperty("--d", `${Math.min(index * 60, 240)}ms`);
-      entry.target.classList.add("in");
+      const parent = entry.target.parentElement;
+      const i = perParent.get(parent) || 0;
+      perParent.set(parent, i + 1);
+      entry.target.style.setProperty("--d", `${Math.min(i * 60, 300)}ms`);
+      finish(entry.target);
       observer.unobserve(entry.target);
     });
-  }, { rootMargin: "0px 0px -8% 0px" });
+  }, { rootMargin: "0px 0px -8% 0px", threshold: 0.04 });
+
   document.querySelectorAll(".reveal:not(.in)").forEach((el) => observer.observe(el));
+  firstRevealPass = false;
 }
 
 
@@ -558,8 +746,12 @@ function stageResults(log) {
   if (dedupe) out.ingest = `${dedupe[1]} ${t("r_signals")}`;
   const skipped = text.match(/skipped (\d+) clusters/);
   if (skipped) out.cluster = `${skipped[1]} ${t("r_skipped")}`;
-  const verdicts = text.match(/(\d+) cross-source, (\d+) primary report, (\d+) unverified/);
-  if (verdicts) out.verify = `${verdicts[2]} ${t("r_primary")} · ${verdicts[3]} ${t("r_unverified")}`;
+  const verdicts = text.match(/(\d+) cross-source, (\d+) registry match, (\d+) primary report, (\d+) unverified/);
+  if (verdicts) {
+    const confirmed = Number(verdicts[1]) + Number(verdicts[2]) + Number(verdicts[3]);
+    out.verify = `${confirmed} ${t("r_confirmed")} ${t("r_of")} ${confirmed + Number(verdicts[4])}`;
+    markConfirmations(confirmed);
+  }
   const recs = text.match(/(\d+) recommendations/);
   if (recs) out.act = `${recs[1]} ${t("r_recs")}`;
   return out;
@@ -582,21 +774,139 @@ function appendThoughts(thoughts) {
   while (box.children.length > 6) box.removeChild(box.firstElementChild);
 }
 
+/* The track is built once per run and then updated in place. Rewriting its
+   innerHTML on every poll replaced the nodes with fresh ones, so the pip and
+   the connecting line never had a previous value to transition from and the
+   whole sequence advanced in hard steps. */
+/* One machine, five jobs.
+
+   The same head appears at every stage, so the track reads as a single agent
+   working through the run rather than five unrelated marks. What changes is
+   what it is doing: gathering, sorting, looking, weighing, deciding. Drawn at
+   the page's own hairline weight on one 34 unit grid, so it sits with the type
+   instead of on top of it.
+
+   The head is kept small and low on purpose. The action is the point, and it
+   needs the top third of the grid to be legible at 34px.
+
+   Only the active stage moves. A finished stage holds its finished pose. */
+const FIG_HEAD =
+  '<rect class="hd" x="11.5" y="15" width="11" height="10" rx="3"/>' +
+  '<path class="ant" d="M17 15v-3.4"/><circle class="tip" cx="17" cy="10.4" r="1.2"/>' +
+  '<path class="leg" d="M14 25v2M20 25v2"/>';
+
+const FIG_EYES =
+  '<circle class="eye" cx="14.8" cy="20" r="1.05"/>' +
+  '<circle class="eye" cx="19.2" cy="20" r="1.05"/>';
+
+function stageFigure(key) {
+  switch (key) {
+    /* Gathering: loose items drop into the mouth of a hopper it is feeding. */
+    case "ingest":
+      return fig("ingest",
+        '<path class="hop" d="M7.5 2.6h19l-6.4 6.4h-6.2z"/>' +
+        '<circle class="fall f1" cx="11.5" cy="0" r="1.4"/>' +
+        '<circle class="fall f2" cx="17"   cy="0" r="1.4"/>' +
+        '<circle class="fall f3" cx="22.5" cy="0" r="1.4"/>' +
+        FIG_HEAD + FIG_EYES);
+
+    /* Sorting: scattered marks migrate inward and settle into one group. */
+    case "cluster":
+      return fig("cluster",
+        FIG_HEAD + FIG_EYES +
+        '<circle class="mv m1" cx="4"  cy="5"  r="1.4"/>' +
+        '<circle class="mv m2" cx="30" cy="5"  r="1.4"/>' +
+        '<circle class="mv m3" cx="3"  cy="21" r="1.4"/>' +
+        '<circle class="mv m4" cx="31" cy="21" r="1.4"/>');
+
+    /* Looking: the lens sweeps the field and the eye tracks with it. */
+    case "verify":
+      return fig("verify",
+        FIG_HEAD +
+        '<rect class="slit" x="13.6" y="18.4" width="6.8" height="3.2" rx="1.6"/>' +
+        '<circle class="pupil" cx="15.6" cy="20" r="1.05"/>' +
+        '<g class="lens"><circle cx="26.5" cy="6.5" r="4.2"/><path d="M29.6 9.6 32.4 12.4"/></g>');
+
+    /* Weighing: the readings rise and fall while it takes a measure. */
+    case "score":
+      /* No legs on this one: the readings stand where they would be, and two
+         sets of uprights in the same place read as a tangle rather than as a
+         machine taking a measurement. */
+      return fig("score",
+        '<rect class="hd" x="11.5" y="13" width="11" height="10" rx="3"/>' +
+        '<path class="ant" d="M17 13V9.6"/><circle class="tip" cx="17" cy="8.4" r="1.2"/>' +
+        '<circle class="eye" cx="14.8" cy="18" r="1.05"/>' +
+        '<circle class="eye" cx="19.2" cy="18" r="1.05"/>' +
+        '<path class="base" d="M7 32h20"/>' +
+        '<path class="bar b1" d="M10 32v-3.4"/>' +
+        '<path class="bar b2" d="M14.4 32v-5.8"/>' +
+        '<path class="bar b3" d="M19.6 32v-4.4"/>' +
+        '<path class="bar b4" d="M24 32v-6.6"/>');
+
+    /* Deciding: the mark comes down, lands, and lifts. */
+    case "act":
+      return fig("act",
+        '<g class="stamp"><path d="M10.6 7.2h12.8"/><path d="M17 7.2V2.4"/></g>' +
+        FIG_HEAD + FIG_EYES +
+        '<path class="mark" d="M11.6 30 15 33.2 23 26.4"/>');
+
+    default:
+      return fig("plain", FIG_HEAD + FIG_EYES);
+  }
+}
+
+function fig(name, inner) {
+  return '<svg class="fig fig-' + name + '" viewBox="0 0 34 34" aria-hidden="true" focusable="false">' +
+    inner + '</svg>';
+}
+
+let trackSignature = "";
+
 function renderTrack(state) {
   const results = stageResults(state.log);
   const done = state.state === "done";
   const stages = state.mode === "replay" ? STAGE_KEYS.slice(1) : STAGE_KEYS;
-  document.getElementById("track").innerHTML = stages.map((key, index) => {
+  const track = document.getElementById("track");
+  const signature = stages.join(",");
+
+  if (trackSignature !== signature) {
+    trackSignature = signature;
+    track.innerHTML = stages.map((key) => `<li class="node" data-state="pending" data-key="${esc(key)}">
+      <span class="pip" aria-hidden="true">${stageFigure(key)}</span>
+      <span class="nlabel">${esc(t("s_" + key))}</span>
+      <span class="nres"></span>
+    </li>`).join("");
+  }
+
+  stages.forEach((key, index) => {
     const position = index + 1;
+    const node = track.children[index];
+    if (!node) return;
     const nodeState = done || position < state.stage_index ? "done"
       : position === state.stage_index && state.state === "running" ? "active"
       : state.state === "failed" && position === state.stage_index ? "failed" : "pending";
-    return `<li class="node" data-state="${nodeState}">
-      <span class="pip" aria-hidden="true"></span>
-      <span class="nlabel">${esc(t("s_" + key))}</span>
-      <span class="nres">${esc(results[key] || "")}</span>
-    </li>`;
-  }).join("");
+
+    if (node.dataset.state !== nodeState) {
+      node.dataset.state = nodeState;
+      /* A stage landing is the moment worth marking, so it gets one short
+         pulse rather than a permanent decoration. */
+      if (nodeState === "done") {
+        node.classList.remove("landed");
+        void node.offsetWidth;
+        node.classList.add("landed");
+      }
+    }
+
+    const res = node.querySelector(".nres");
+    const text = results[key] || "";
+    if (res.textContent !== text) {
+      res.textContent = text;
+      res.classList.remove("fresh");
+      void res.offsetWidth;
+      res.classList.add("fresh");
+    }
+    node.querySelector(".nlabel").textContent = t("s_" + key);
+  });
 }
 
 function setProgress(state) {
@@ -610,6 +920,7 @@ function setProgress(state) {
     panel.classList.remove("leaving");
     runStartedAt = Date.now();
     shownThoughts = 0;
+    trackSignature = "";
     document.getElementById("thoughts").innerHTML = "";
   }
   const modelLabel = document.getElementById("runmodel");
@@ -650,14 +961,12 @@ function setBusy(busy) {
 
 async function loadRuns(preferred) {
   const { runs } = await api("/api/runs");
-  const picker = document.getElementById("runPicker");
-  picker.innerHTML = runs.map((r) =>
-    `<option value="${esc(r.run_id)}"${r.complete ? "" : " disabled"}>${esc(r.run_id)}${r.complete ? "" : " · partial"}</option>`).join("");
+  RunPicker.setRuns(runs);
   const target = preferred && runs.some((r) => r.run_id === preferred && r.complete)
     ? preferred
     : (runs.find((r) => r.complete) || {}).run_id;
   if (!target) { document.getElementById("headline").textContent = t("no_runs"); return; }
-  picker.value = target;
+  RunPicker.value = target;
   await loadRun(target);
 }
 
@@ -690,8 +999,7 @@ async function pollStatus() {
 
 async function startRun(replay) {
   setBusy(true);
-  const picker = document.getElementById("runPicker");
-  const payload = { replay_run_id: replay ? picker.value : null };
+  const payload = { replay_run_id: replay ? RunPicker.value : null };
   const result = await api("/api/run", {
     method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload)
   });
@@ -711,7 +1019,7 @@ async function boot() {
   document.getElementById("controls").hidden = false;
   document.getElementById("btnRun").addEventListener("click", () => startRun(false));
   document.getElementById("btnReplay").addEventListener("click", () => startRun(true));
-  document.getElementById("runPicker").addEventListener("change", (e) => loadRun(e.target.value));
+  document.getElementById("runPicker").addEventListener("change", (e) => loadRun(e.detail.value));
   document.getElementById("headline").textContent = t("loading");
   document.getElementById("actList").innerHTML =
     '<div class="skeleton"></div><div class="skeleton"></div><div class="skeleton"></div>';
@@ -726,6 +1034,10 @@ function applyStrings() {
   document.body.dir = lang === "ar" ? "rtl" : "ltr";
   document.querySelectorAll("[data-i18n]").forEach((el) => { el.textContent = t(el.dataset.i18n); });
   document.querySelectorAll(".lang button").forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.lang === lang)));
+  document.querySelectorAll("[data-i18n-html]").forEach((el) => { el.innerHTML = t(el.dataset.i18nHtml); });
+  document.querySelectorAll("[data-i18n-label]").forEach((el) => { el.setAttribute("aria-label", t(el.dataset.i18nLabel)); });
+  paintThemeButton();
+  if (typeof RunPicker !== "undefined") RunPicker.relabel();
 }
 
 function renderAll() {
@@ -735,6 +1047,10 @@ function renderAll() {
   document.body.dir = lang === "ar" ? "rtl" : "ltr";
   document.querySelectorAll("[data-i18n]").forEach((el) => { el.textContent = t(el.dataset.i18n); });
   document.querySelectorAll(".lang button").forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.lang === lang)));
+  document.querySelectorAll("[data-i18n-html]").forEach((el) => { el.innerHTML = t(el.dataset.i18nHtml); });
+  document.querySelectorAll("[data-i18n-label]").forEach((el) => { el.setAttribute("aria-label", t(el.dataset.i18nLabel)); });
+  paintThemeButton();
+  if (typeof RunPicker !== "undefined") RunPicker.relabel();
 
   const c = DATA.counts;
   document.getElementById("runid").textContent = DATA.run_id;
@@ -785,6 +1101,461 @@ document.getElementById("evFilters").addEventListener("click", (e) => {
   renderEvidence();
   requestAnimationFrame(revealOnScroll);
 });
+
+
+/* ------------------------------------------------------------------ plate -- */
+
+/* Dark by default, because that is the ground this page was designed on. A lit
+   room or a projector needs the other one, and the choice is remembered. */
+function paintThemeButton() {
+  const btn = document.getElementById("btnTheme");
+  if (!btn) return;
+  const dark = document.documentElement.dataset.theme !== "light";
+  const label = t(dark ? "theme_light" : "theme_dark");
+  btn.setAttribute("aria-label", label);
+  btn.setAttribute("title", label);
+  btn.setAttribute("aria-pressed", String(!dark));
+}
+
+(function initTheme() {
+  let saved = null;
+  try { saved = localStorage.getItem("ata_theme"); } catch (err) {}
+  if (saved === "light") document.documentElement.dataset.theme = "light";
+  document.getElementById("btnTheme").addEventListener("click", () => {
+    const toLight = document.documentElement.dataset.theme !== "light";
+    if (toLight) document.documentElement.dataset.theme = "light";
+    else delete document.documentElement.dataset.theme;
+    try { localStorage.setItem("ata_theme", toLight ? "light" : "dark"); } catch (err) {}
+    paintThemeButton();
+    if (window.FIELD) window.FIELD.retheme();
+  });
+  paintThemeButton();
+})();
+
+/* --------------------------------------------------------------- overture -- */
+
+(function initOverture() {
+  let settled = false;
+  const ov = document.getElementById("overture");
+  let seen = false;
+  try { seen = localStorage.getItem("ata_seen") === "1"; } catch (err) {}
+
+  const steps = Array.from(ov.querySelectorAll("[data-step]"))
+    .sort((a, b) => Number(a.dataset.step) - Number(b.dataset.step));
+
+  function play() {
+    settled = false;
+    ov.hidden = false;
+    ov.classList.remove("closing");
+    if (matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      steps.forEach((el) => el.classList.add("in"));
+    } else {
+      steps.forEach((el) => el.classList.remove("in"));
+      steps.forEach((el, i) => setTimeout(() => el.classList.add("in"), 150 + i * 145));
+    }
+    setTimeout(() => document.getElementById("ovEnter").focus({ preventScroll: true }), 700);
+  }
+
+  /* Two things race to finish the close: the transition, and a timeout that
+     covers the case where the transition never fires because the tab is
+     hidden. Whichever wins, the body runs once. */
+  function close() {
+    try { localStorage.setItem("ata_seen", "1"); } catch (err) {}
+    ov.classList.add("closing");
+    const done = () => {
+      if (settled) return;
+      settled = true;
+      ov.hidden = true;
+      ov.classList.remove("closing");
+      const run = document.getElementById("btnRun");
+      if (run && !run.disabled) run.focus({ preventScroll: true });
+    };
+    ov.addEventListener("transitionend", done, { once: true });
+    setTimeout(done, 460);
+  }
+
+  /* Every way out is wired before anything decides whether to open. An early
+     return above these lines left the dismiss button and the escape key with no
+     handler on every visit after the first, so replaying the opening put a
+     modal on screen that could not be closed. */
+  document.getElementById("ovEnter").addEventListener("click", close);
+  ov.addEventListener("keydown", (e) => { if (e.key === "Escape") close(); });
+
+  /* Asking to see it again is a deliberate, rare action, so it lives on the
+     brand rather than taking a control of its own in the header. */
+  const about = document.getElementById("btnAbout");
+  if (about) about.addEventListener("click", play);
+
+  if (!seen) play();
+})();
+
+/* ------------------------------------------------------------------ field -- */
+
+/* The week's traffic, drifting behind the bulletin. It is the corpus this run
+   read rather than wallpaper: when a claim is confirmed the field marks a point
+   and lets it fade. Cost is kept low by drawing the two deep layers once into
+   offscreen tiles and then only translating them, so a frame is four drawImage
+   calls plus the few near sparks that actually flicker. */
+window.FIELD = (function createField() {
+  const canvas = document.getElementById("field");
+  if (!canvas) return { resolve() {}, retheme() {} };
+  const ctx = canvas.getContext("2d", { alpha: true });
+  const still = matchMedia("(prefers-reduced-motion: reduce)");
+
+  let w = 0, h = 0, dpr = 1, layers = [], near = [], marks = [];
+  let raf = 0, last = 0, clock = 0, running = false;
+  let hue = { cool: "240,236,228", warm: "232,181,75" };
+
+  const rand = (a, b) => a + Math.random() * (b - a);
+
+  function readHues() {
+    const cs = getComputedStyle(document.documentElement);
+    const cool = (cs.getPropertyValue("--spark") || "").trim();
+    const warm = (cs.getPropertyValue("--spark-warm") || "").trim();
+    hue = { cool: cool || hue.cool, warm: warm || hue.warm };
+  }
+
+  function tile(count, maxR, alpha, colour) {
+    const c = document.createElement("canvas");
+    c.width = Math.max(1, Math.floor(w * dpr));
+    c.height = Math.max(1, Math.floor(h * dpr));
+    const g = c.getContext("2d");
+    g.scale(dpr, dpr);
+    for (let i = 0; i < count; i += 1) {
+      g.beginPath();
+      g.arc(Math.random() * w, Math.random() * h, rand(maxR * 0.35, maxR), 0, Math.PI * 2);
+      g.fillStyle = "rgba(" + colour + "," + rand(alpha * 0.4, alpha).toFixed(3) + ")";
+      g.fill();
+    }
+    return c;
+  }
+
+  function build() {
+    readHues();
+    /* Density follows area, so a wide monitor does not look emptier than a
+       laptop, and is capped so a very large screen does not pay for it. */
+    const scale = Math.min(2.2, Math.max(0.5, (w * h) / (1440 * 900)));
+    layers = [
+      { t: tile(Math.round(210 * scale), 0.75, 0.40, hue.cool), speed: 2.2, x: 0, y: 0 },
+      { t: tile(Math.round(85 * scale), 1.2, 0.55, hue.cool), speed: 5.2, x: 0, y: 0 }
+    ];
+    near = [];
+    const n = Math.round(58 * Math.min(1.6, scale));
+    for (let i = 0; i < n; i += 1) {
+      near.push({
+        x: Math.random() * w, y: Math.random() * h, r: rand(0.9, 1.8),
+        base: rand(0.28, 0.58), phase: Math.random() * Math.PI * 2,
+        rate: rand(0.25, 0.75), warm: Math.random() < 0.16
+      });
+    }
+  }
+
+  function resize() {
+    const r = canvas.getBoundingClientRect();
+    w = Math.max(1, Math.round(r.width || window.innerWidth));
+    h = Math.max(1, Math.round(r.height || window.innerHeight));
+    dpr = Math.min(2, window.devicePixelRatio || 1);
+    canvas.width = Math.floor(w * dpr);
+    canvas.height = Math.floor(h * dpr);
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    build();
+    draw(0);
+  }
+
+  function draw(dt) {
+    ctx.clearRect(0, 0, w, h);
+    for (const L of layers) {
+      if (dt) { L.x += L.speed * dt / 1000; L.y -= L.speed * 0.34 * dt / 1000; }
+      const ox = ((L.x % w) + w) % w, oy = ((L.y % h) + h) % h;
+      ctx.drawImage(L.t, ox - w, oy - h, w, h);
+      ctx.drawImage(L.t, ox, oy - h, w, h);
+      ctx.drawImage(L.t, ox - w, oy, w, h);
+      ctx.drawImage(L.t, ox, oy, w, h);
+    }
+    for (const s of near) {
+      const a = still.matches ? s.base : s.base + Math.sin(clock * s.rate + s.phase) * 0.22;
+      ctx.beginPath();
+      ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+      ctx.fillStyle = "rgba(" + (s.warm ? hue.warm : hue.cool) + "," + Math.max(0.05, Math.min(0.9, a)).toFixed(3) + ")";
+      ctx.fill();
+    }
+    if (marks.length) drawMarks();
+  }
+
+  function drawMarks() {
+    const now = performance.now();
+    for (let i = marks.length - 1; i >= 0; i -= 1) {
+      const m = marks[i];
+      const p = (now - m.born) / 2400;
+      if (p >= 1) { marks.splice(i, 1); continue; }
+      const fade = p < 0.12 ? p / 0.12 : 1 - (p - 0.12) / 0.88;
+      const ease = 1 - Math.pow(1 - Math.min(1, p * 1.35), 3);
+      ctx.beginPath();
+      ctx.arc(m.x, m.y, 2.3, 0, Math.PI * 2);
+      ctx.fillStyle = "rgba(" + hue.warm + "," + (fade * 0.95).toFixed(3) + ")";
+      ctx.fill();
+      ctx.beginPath();
+      ctx.arc(m.x, m.y, 6 + ease * 24, 0, Math.PI * 2);
+      ctx.strokeStyle = "rgba(" + hue.warm + "," + (fade * 0.38).toFixed(3) + ")";
+      ctx.lineWidth = 1;
+      ctx.stroke();
+    }
+  }
+
+  function frame(now) {
+    if (!running) return;
+    const dt = Math.min(64, now - (last || now));
+    last = now; clock += dt / 1000;
+    draw(dt);
+    raf = requestAnimationFrame(frame);
+  }
+  function start() { if (running || document.hidden) return; running = true; last = 0; raf = requestAnimationFrame(frame); }
+  function stop() { running = false; if (raf) cancelAnimationFrame(raf); raf = 0; }
+  /* Under reduced motion the field is still drawn, because it is content, but
+     it is drawn once and then left alone. */
+  function apply() { stop(); if (still.matches) draw(0); else start(); }
+
+  let timer = 0;
+  window.addEventListener("resize", () => { clearTimeout(timer); timer = setTimeout(resize, 140); });
+  document.addEventListener("visibilitychange", () => { if (document.hidden) stop(); else apply(); });
+  still.addEventListener("change", apply);
+
+  resize();
+  apply();
+
+  return {
+    resolve() {
+      if (marks.length > 6) marks.shift();
+      marks.push({ x: rand(w * 0.08, w * 0.92), y: rand(h * 0.06, h * 0.5), born: performance.now() });
+      if (!running && !still.matches) start(); else if (still.matches) draw(0);
+    },
+    retheme() { build(); draw(0); }
+  };
+})();
+
+/* One mark per confirmation, spaced out rather than fired all at once, and
+   capped so a large run does not turn the field into a firework. */
+function markConfirmations(n) {
+  if (!window.FIELD || !n) return;
+  const shots = Math.min(6, n);
+  for (let i = 0; i < shots; i += 1) setTimeout(() => window.FIELD.resolve(), i * 260);
+}
+
+/* Opening and closing a card.
+
+   A details element snaps: the browser flips display and nothing travels. The
+   accordion is the one case where animating height is the sanctioned choice,
+   because there is no transform that expresses a box growing, so the height is
+   measured and animated rather than left to jump to auto.
+
+   Delegated from the document, so cards re-rendered by a filter or a language
+   change keep the behaviour without being wired up again. Closing runs faster
+   than opening: opening is a decision the reader made, closing is the system
+   getting out of the way. */
+(function initCardMotion() {
+  const OPEN_MS = 260;
+  const SHUT_MS = 190;
+  const EASE = "cubic-bezier(.23, 1, .32, 1)";
+  const running = new WeakMap();
+
+  const still = () => matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  document.addEventListener("click", (event) => {
+    const summary = event.target.closest("details.card > summary");
+    if (!summary) return;
+    const card = summary.parentElement;
+    const body = card.querySelector(":scope > .body");
+    if (!body) return;
+
+    /* Reduced motion keeps the native toggle: the state change still reads,
+       it simply does not travel. */
+    if (still()) return;
+
+    event.preventDefault();
+
+    const prev = running.get(card);
+    const startHeight = prev || card.open ? body.getBoundingClientRect().height : 0;
+    let opening;
+
+    if (prev) {
+      /* Mid-flight. Reverse from wherever it actually is rather than restarting,
+         so a double click does not snap the box back to zero first. */
+      opening = prev.target === 0;
+      prev.animation.cancel();
+    } else {
+      opening = !card.open;
+    }
+
+    card.open = true;
+    card.toggleAttribute("data-closing", !opening);
+
+    /* Measure the resting height with the animation off the element. */
+    const fullHeight = body.scrollHeight;
+    const target = opening ? fullHeight : 0;
+
+    body.style.overflow = "hidden";
+    const animation = body.animate(
+      [
+        { height: startHeight + "px", opacity: opening ? 0.35 : 1 },
+        { height: target + "px", opacity: opening ? 1 : 0 }
+      ],
+      { duration: opening ? OPEN_MS : SHUT_MS, easing: EASE, fill: "both" }
+    );
+
+    running.set(card, { animation, target });
+
+    animation.onfinish = () => {
+      /* Close first, then release the fill. The other order lets the box snap
+         back to its full height for one frame before the element is hidden,
+         which reads as a flash. */
+      if (!opening) card.open = false;
+      animation.cancel();
+      body.style.overflow = "";
+      card.removeAttribute("data-closing");
+      running.delete(card);
+    };
+  });
+})();
+
+/* The run picker.
+
+   This was the one control still wearing the operating system's clothes: a
+   native select cannot be styled past its arrow and its popup, so on a dark
+   page it opened a bright system list in a font nobody chose.
+
+   It is rebuilt as a listbox and keeps the same surface as the element it
+   replaces, a `value` and a `change` event, so the code around it is unchanged.
+   The run id stays verbatim because it names a directory on disk; the readable
+   time is added beside it rather than instead of it. */
+const RunPicker = (function buildPicker() {
+  const root = document.getElementById("runPicker");
+  if (!root) return { setRuns() {}, get value() { return null; } };
+
+  const trigger = root.querySelector(".pk-trigger");
+  const valueText = root.querySelector(".pk-value");
+  const list = root.querySelector(".pk-list");
+
+  let runs = [];
+  let current = null;
+  let open = false;
+
+  /* run_20260919T211050Z carries the moment it was taken. Showing it as a time
+     as well costs nothing and saves the reader decoding a timestamp. */
+  function readableTime(runId) {
+    const m = /^run_(\d{4})(\d{2})(\d{2})T(\d{2})(\d{2})(\d{2})Z$/.exec(runId || "");
+    if (!m) return "";
+    const [, y, mo, d, h, mi] = m;
+    const when = new Date(Date.UTC(+y, +mo - 1, +d, +h, +mi));
+    if (Number.isNaN(when.getTime())) return "";
+    try {
+      return when.toLocaleString(lang === "ar" ? "ar" : "en-GB",
+        { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" });
+    } catch (err) {
+      return "";
+    }
+  }
+
+  function paintTrigger() {
+    valueText.textContent = current || "";
+    trigger.setAttribute("title", current || "");
+  }
+
+  function paintList() {
+    list.innerHTML = runs.map((r) => {
+      const time = readableTime(r.run_id);
+      return '<button type="button" role="option" class="pk-opt"' +
+        ' data-value="' + esc(r.run_id) + '"' +
+        (r.complete ? "" : " disabled") +
+        ' aria-selected="' + String(r.run_id === current) + '">' +
+        '<span class="pk-id">' + esc(r.run_id) + '</span>' +
+        '<span class="pk-meta">' + esc(time) +
+        (r.complete ? "" : '<span class="pk-partial">' + esc(t("pk_partial")) + "</span>") +
+        "</span></button>";
+    }).join("");
+  }
+
+  function setOpen(next) {
+    if (open === next) return;
+    open = next;
+    trigger.setAttribute("aria-expanded", String(open));
+    root.toggleAttribute("data-open", open);
+    if (open) {
+      paintList();
+      list.hidden = false;
+      const active = list.querySelector('[aria-selected="true"]:not([disabled])') ||
+                     list.querySelector(".pk-opt:not([disabled])");
+      if (active) active.focus({ preventScroll: true });
+    } else {
+      /* The list is only hidden once its exit has played, otherwise it
+         disappears on the first frame and the motion is never seen. */
+      const done = () => { if (!open) list.hidden = true; };
+      list.addEventListener("transitionend", done, { once: true });
+      setTimeout(done, 200);
+    }
+  }
+
+  function choose(value) {
+    if (!value || value === current) { setOpen(false); trigger.focus(); return; }
+    current = value;
+    paintTrigger();
+    setOpen(false);
+    trigger.focus();
+    root.dispatchEvent(new CustomEvent("change", { detail: { value } }));
+  }
+
+  trigger.addEventListener("click", () => setOpen(!open));
+
+  trigger.addEventListener("keydown", (event) => {
+    if (event.key === "ArrowDown" || event.key === "ArrowUp") {
+      event.preventDefault();
+      setOpen(true);
+    }
+  });
+
+  list.addEventListener("click", (event) => {
+    const option = event.target.closest(".pk-opt");
+    if (option && !option.disabled) choose(option.dataset.value);
+  });
+
+  list.addEventListener("keydown", (event) => {
+    const options = [...list.querySelectorAll(".pk-opt:not([disabled])")];
+    const index = options.indexOf(document.activeElement);
+    if (event.key === "Escape") {
+      event.preventDefault();
+      setOpen(false);
+      trigger.focus();
+    } else if (event.key === "ArrowDown" || event.key === "ArrowUp") {
+      event.preventDefault();
+      const step = event.key === "ArrowDown" ? 1 : -1;
+      const next = options[(index + step + options.length) % options.length];
+      if (next) next.focus({ preventScroll: true });
+    } else if (event.key === "Home" || event.key === "End") {
+      event.preventDefault();
+      const edge = event.key === "Home" ? options[0] : options[options.length - 1];
+      if (edge) edge.focus({ preventScroll: true });
+    } else if (event.key === "Tab") {
+      setOpen(false);
+    }
+  });
+
+  /* Clicking anywhere else puts it away, which a native select does for free
+     and a rebuilt one has to be told. */
+  document.addEventListener("pointerdown", (event) => {
+    if (open && !root.contains(event.target)) setOpen(false);
+  });
+
+  return {
+    setRuns(next) {
+      runs = next || [];
+      if (!runs.some((r) => r.run_id === current)) current = null;
+      paintTrigger();
+      if (open) paintList();
+    },
+    get value() { return current; },
+    set value(v) { current = v; paintTrigger(); if (open) paintList(); },
+    relabel() { paintTrigger(); if (open) paintList(); }
+  };
+})();
 
 if (LIVE) { applyStrings(); boot(); } else { renderAll(); }
 </script>
