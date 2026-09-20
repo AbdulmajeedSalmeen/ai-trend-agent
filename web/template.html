@@ -178,7 +178,7 @@ const T = {
     n2_t: "Why cross-source checks are rare", n2_b: "Of {hn} discussion signals, only a handful name a package we track, and almost none state a version number. A claim with no version has nothing to check, so it stays unverified. This is a property of the data, not a gap in the checker.",
     n3_t: "What was collected", n3_b: "{signals} signals in this run: {breakdown}. Official releases and the PyPI registry are tier 1 and can serve as evidence; discussion is tier 2 and never confirms anything on its own. The registry is followed for every package the course notebooks install, so the watchlist is read from the material rather than typed by us.",
     n4_t: "Curriculum source", n4_b: "The {chapters} chapters come from the live SDA course, not from a file we wrote. {touched} of them have something new this week.",
-    n5_t: "What the run cost", n5_b: "{calls} model calls, {tokens} tokens, about ${cost}. The model was asked to read, judge and write; it never decided what counts as evidence. {failed} calls failed and fell back to rules.",
+    n5_t: "What the run cost", n5_b: "{calls} model calls, {tokens} tokens{cost}. The model was asked to read, judge and write; it never decided what counts as evidence. {failed} calls failed and fell back to rules.",
     n6_t: "The model stopped early", n6_b: "The model returned {why} and was not asked again this run. Every sentence below therefore comes from the rules, which is the fallback the stages are built around.",
     m_repeat: "asked for in {n} runs running", m_since: "since", m_moved: "new version since the last run",
     tr_calls: "model calls", tr_tokens: "tokens", tr_cost: "cost", tr_slow: "slowest call", tr_budget: "budget used", tr_stage: "per stage",
@@ -240,7 +240,7 @@ const T = {
     n2_t: "لماذا التحقق المتقاطع نادر", n2_b: "من أصل {hn} إشارة نقاش، قليل منها يذكر حزمة نتتبعها، وتكاد لا توجد واحدة تذكر رقم نسخة. والادّعاء بلا رقم نسخة لا يوجد فيه شيء قابل للفحص، فيبقى غير مؤكد. هذه خاصية في البيانات لا نقص في أداة التحقق.",
     n3_t: "ما الذي جُمع", n3_b: "{signals} إشارة في هذه التشغيلة: {breakdown}. الإصدارات الرسمية وسجلّ PyPI من الفئة الأولى وتصلح أدلة، والنقاش من الفئة الثانية ولا يؤكد شيئاً بمفرده. ونتابع السجلّ لكل حزمة تثبّتها نوتبوكات المقرر، فقائمة المتابعة مقروءة من المادة لا مكتوبة بأيدينا.",
     n4_t: "مصدر المنهج", n4_b: "الفصول الـ{chapters} مأخوذة من منصة SDA نفسها، لا من ملف كتبناه. و{touched} منها فيها جديد هذا الأسبوع.",
-    n5_t: "كم كلّفت التشغيلة", n5_b: "{calls} استدعاء للنموذج، {tokens} توكن، بنحو ${cost}. النموذج طُلب منه أن يقرأ ويحكم ويكتب، ولم يقرر قط ما الذي يُعدّ دليلاً. وفشل {failed} استدعاء فرجعت القواعد مكانه.",
+    n5_t: "كم كلّفت التشغيلة", n5_b: "{calls} استدعاء للنموذج، {tokens} توكن{cost}. النموذج طُلب منه أن يقرأ ويحكم ويكتب، ولم يقرر قط ما الذي يُعدّ دليلاً. وفشل {failed} استدعاء فرجعت القواعد مكانه.",
     n6_t: "النموذج توقف مبكراً", n6_b: "أرجع النموذج {why} فلم نسأله مرة أخرى في هذه التشغيلة. وكل جملة في الأسفل مصدرها القواعد، وهي البديل الذي بُنيت عليه المراحل.",
     m_repeat: "مطلوب منذ {n} تشغيلات متتالية", m_since: "منذ", m_moved: "نسخة جديدة منذ آخر تشغيلة",
     tr_calls: "استدعاء للنموذج", tr_tokens: "توكن", tr_cost: "التكلفة", tr_slow: "أبطأ استدعاء", tr_budget: "من الميزانية", tr_stage: "لكل مرحلة",
@@ -507,7 +507,8 @@ function renderRun() {
   }
   if (tr && tr.calls) {
     notes.push({ t: t("n5_t"), b: fill(t("n5_b"), {
-      calls: tr.calls, tokens: tr.tokens, cost: tr.cost_usd.toFixed(4), failed: tr.failed_calls
+      calls: tr.calls, tokens: tr.tokens, failed: tr.failed_calls,
+      cost: tr.priced ? `, about $${tr.cost_usd.toFixed(4)}` : ""
     }) });
   }
   /* Where the run actually spent itself. Three numbers per stage read as three

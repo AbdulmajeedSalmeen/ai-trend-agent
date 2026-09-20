@@ -515,3 +515,23 @@ def test_a_spent_account_is_still_terminal(monkeypatch):
     assert model.ask_json("s", "u", action="read_post") is None
     assert model.halted() == "HTTP 429 out of credit"
     model.reset()
+
+
+def test_being_told_to_wait_does_not_count_against_a_provider(monkeypatch):
+    from src.adapters import model
+
+    model.reset()
+    use(monkeypatch, only("groq", "openai/gpt-oss-120b"))
+    monkeypatch.setattr(model.time, "sleep", lambda seconds: None)
+    monkeypatch.setattr(model.urllib.request, "urlopen",
+                        lambda *a, **k: (_ for _ in ()).throw(
+                            refusal(429, b'{"error": {"code": "rate_limit_exceeded"}}',
+                                    {"Retry-After": "2"})))
+    trace.start("run_patience", "groq")
+
+    for _ in range(5):
+        assert model.ask_json("s", "u", action="read_post") is None
+
+    assert model.halted() is None
+    assert model._strikes.get("groq", 0) == 0
+    model.reset()

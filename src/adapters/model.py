@@ -129,8 +129,8 @@ def halted() -> str | None:
 
 
 def _call(settings: dict, system: str, user: str, max_tokens: int, timeout: int,
-          action: str) -> tuple[dict | None, str | None]:
-    """One provider, one question. Returns (answer, fatal_reason)."""
+          action: str) -> tuple[dict | None, str | None, bool]:
+    """One provider, one question. Returns (answer, fatal_reason, rate_limited)."""
     body = json.dumps({
         "model": settings["model"],
         "messages": [{"role": "system", "content": system}, {"role": "user", "content": user}],
@@ -174,7 +174,9 @@ def _call(settings: dict, system: str, user: str, max_tokens: int, timeout: int,
                     request.data = json.dumps(body).encode("utf-8")
                     continue
 
-                return None, None
+                # Our ceiling was too low for this model, which is not the
+                # provider failing. Counting it dropped a working key.
+                return None, None, True
 
             answer = json.loads(FENCE.sub("", text).strip())
             usage = payload.get("usage") or {}
@@ -183,7 +185,7 @@ def _call(settings: dict, system: str, user: str, max_tokens: int, timeout: int,
                 tokens_in=usage.get("prompt_tokens", 0),
                 tokens_out=usage.get("completion_tokens", 0),
             )
-            return answer, None
+            return answer, None, False
         except (urllib.error.URLError, TimeoutError, KeyError, ValueError, json.JSONDecodeError) as problem:
             http = isinstance(problem, urllib.error.HTTPError)
             fatal = http and problem.code in FATAL_STATUS
@@ -212,13 +214,13 @@ def _call(settings: dict, system: str, user: str, max_tokens: int, timeout: int,
             )
 
             if fatal:
-                return None, note
+                return None, note, False
 
             if attempt == 0:
                 time.sleep(wait or 1.5)
                 continue
 
-    return None, None
+    return None, None, bool(wait)
 
 
 def ask_json(system: str, user: str, max_tokens: int = 400, timeout: int = 40,
@@ -242,11 +244,17 @@ def ask_json(system: str, user: str, max_tokens: int = 400, timeout: int = 40,
 
     for settings in candidates:
         name = settings["provider"]
-        answer, fatal = _call(settings, system, user, max_tokens, timeout, action)
+        answer, fatal, rate_limited = _call(settings, system, user, max_tokens, timeout, action)
 
         if answer is not None:
             _strikes[name] = 0
             return answer
+
+        # Being told to wait is not the provider failing. Counting it as one
+        # dropped a working Groq key after two calls, because a free tier says
+        # "wait" far more often than it says "no".
+        if rate_limited:
+            continue
 
         if fatal is None:
             _strikes[name] = _strikes.get(name, 0) + 1

@@ -47,7 +47,7 @@ def read_claim(signal: Signal, known_subjects: list[str]) -> dict | None:
     answer = model.ask_json(
         EXTRACT_SYSTEM,
         f"Packages we track: {', '.join(sorted(known_subjects))}\n\nTitle: {signal.title}\n\nBody: {body or '(none)'}",
-        max_tokens=220,
+        max_tokens=700,
         action="read_post",
     )
     if not answer or not isinstance(answer, dict):
@@ -77,7 +77,7 @@ def judge_educational_value(subject: str, claim_texts: list[str], chapter_title:
     answer = model.ask_json(
         JUDGE_SYSTEM,
         f"Package: {subject}\n{where}\nWhat changed:\n- " + "\n- ".join(claim_texts[:6]),
-        max_tokens=160,
+        max_tokens=600,
         action="judge_value",
     )
     if not answer:
@@ -152,7 +152,7 @@ def write_recommendation(subject: str, action: str, chapter: str | None, confirm
         f"What changed:\n- {changes}\n"
         f"Evidence: {confirmed} confirmed claims, {unverified} unverified\n"
         f"Priority score: {priority:.2f}",
-        max_tokens=200,
+        max_tokens=600,
         action="write_reason",
     )
     sentence = (answer or {}).get("sentence")
