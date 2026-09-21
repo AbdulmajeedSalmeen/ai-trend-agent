@@ -47,7 +47,7 @@
     "dimensions": {
       "relevance": 2,
       "impact": 4,
-      "educational_value": 4,
+      "educational_value": 3,
       "difficulty": 2,
       "market_relevance": 4
     },
@@ -58,13 +58,13 @@
       "difficulty": "default",
       "market_relevance": "measured"
     },
-    "priority": 3.3000000000000003,
+    "priority": 3.1,
     "changes": {
       "breaking": 0,
       "deprecation": 0,
       "feature": 4,
       "fix": 2,
-      "noise": 20,
+      "noise": 19,
       "other": 0,
       "highlights": [
         "feature: expose `trace_policy` on `add_node`",
@@ -72,7 +72,7 @@
         "feature: drop tags from TracePolicy"
       ],
       "teachable": 4,
-      "lines": 26
+      "lines": 25
     },
     "market": {
       "subject": "langgraph",
@@ -89,7 +89,7 @@
     "dimensions": {
       "relevance": 2,
       "impact": 3,
-      "educational_value": 3,
+      "educational_value": 2,
       "difficulty": 2,
       "market_relevance": 4
     },
@@ -100,7 +100,7 @@
       "difficulty": "default",
       "market_relevance": "measured"
     },
-    "priority": 2.85,
+    "priority": 2.65,
     "changes": {
       "breaking": 0,
       "deprecation": 0,
@@ -129,7 +129,7 @@
     "dimensions": {
       "relevance": 2,
       "impact": 3,
-      "educational_value": 3,
+      "educational_value": 2,
       "difficulty": 2,
       "market_relevance": 4
     },
@@ -140,7 +140,7 @@
       "difficulty": "default",
       "market_relevance": "measured"
     },
-    "priority": 2.85,
+    "priority": 2.65,
     "changes": {
       "breaking": 0,
       "deprecation": 0,
@@ -207,7 +207,7 @@
     "dimensions": {
       "relevance": 2,
       "impact": 3,
-      "educational_value": 4,
+      "educational_value": 2,
       "difficulty": 2,
       "market_relevance": 4
     },
@@ -218,7 +218,7 @@
       "difficulty": "default",
       "market_relevance": "measured"
     },
-    "priority": 3.0500000000000003,
+    "priority": 2.65,
     "changes": {
       "breaking": 0,
       "deprecation": 0,
@@ -247,7 +247,7 @@
     "dimensions": {
       "relevance": 2,
       "impact": 3,
-      "educational_value": 4,
+      "educational_value": 3,
       "difficulty": 2,
       "market_relevance": 3
     },
@@ -258,7 +258,7 @@
       "difficulty": "default",
       "market_relevance": "measured"
     },
-    "priority": 2.85,
+    "priority": 2.6500000000000004,
     "changes": {
       "breaking": 0,
       "deprecation": 0,
@@ -407,7 +407,7 @@
     "dimensions": {
       "relevance": 2,
       "impact": 3,
-      "educational_value": 4,
+      "educational_value": 3,
       "difficulty": 2,
       "market_relevance": 4
     },
@@ -418,20 +418,20 @@
       "difficulty": "default",
       "market_relevance": "measured"
     },
-    "priority": 3.0500000000000003,
+    "priority": 2.85,
     "changes": {
       "breaking": 0,
       "deprecation": 0,
       "feature": 2,
       "fix": 5,
-      "noise": 7,
+      "noise": 5,
       "other": 0,
       "highlights": [
         "feature: support async tools",
         "feature: support `configuration_update`"
       ],
       "teachable": 2,
-      "lines": 14
+      "lines": 12
     },
     "market": {
       "subject": "langchain-openai",
@@ -448,7 +448,7 @@
     "dimensions": {
       "relevance": 2,
       "impact": 5,
-      "educational_value": 3,
+      "educational_value": 1,
       "difficulty": 2,
       "market_relevance": 4
     },
@@ -459,14 +459,14 @@
       "difficulty": "default",
       "market_relevance": "measured"
     },
-    "priority": 3.35,
+    "priority": 2.95,
     "changes": {
-      "breaking": 15,
+      "breaking": 14,
       "deprecation": 0,
-      "feature": 63,
-      "fix": 565,
-      "noise": 69,
-      "other": 453,
+      "feature": 31,
+      "fix": 613,
+      "noise": 41,
+      "other": 192,
       "highlights": [
         "breaking: Vision (2d/3d) rotary embeddings",
         "breaking: TP dtensor API inference + training",
@@ -475,8 +475,8 @@
         "breaking: [`Kernels`] Refactor all linear attn models & native kernels fallback",
         "breaking: [cache] Cropping can only be done with negative values"
       ],
-      "teachable": 78,
-      "lines": 1165
+      "teachable": 45,
+      "lines": 891
     },
     "market": {
       "subject": "transformers",
@@ -493,7 +493,7 @@
     "dimensions": {
       "relevance": 2,
       "impact": 4,
-      "educational_value": 4,
+      "educational_value": 3,
       "difficulty": 2,
       "market_relevance": 4
     },
@@ -504,7 +504,7 @@
       "difficulty": "default",
       "market_relevance": "measured"
     },
-    "priority": 3.3000000000000003,
+    "priority": 3.1,
     "changes": {
       "breaking": 0,
       "deprecation": 0,
@@ -538,24 +538,24 @@
     "dimensions": {
       "relevance": 2,
       "impact": 5,
-      "educational_value": 3,
+      "educational_value": 5,
       "difficulty": 2,
       "market_relevance": 4
     },
     "provenance": {
       "relevance": "measured",
       "impact": "measured",
-      "educational_value": "default",
+      "educational_value": "judged",
       "difficulty": "default",
       "market_relevance": "measured"
     },
-    "priority": 3.35,
+    "priority": 3.75,
     "changes": {
       "breaking": 1,
       "deprecation": 1,
-      "feature": 28,
+      "feature": 27,
       "fix": 31,
-      "noise": 48,
+      "noise": 47,
       "other": 0,
       "highlights": [
         "breaking: client: upgrade to httpx2 and some minor breaking changes. See MIGRATION.md for details",
@@ -565,8 +565,8 @@
         "feature: api: add compaction parameter and signed compaction blocks (beta)",
         "feature: api: add enum types for workspace data-residency geo fields"
       ],
-      "teachable": 30,
-      "lines": 109
+      "teachable": 29,
+      "lines": 107
     },
     "market": {
       "subject": "anthropic-sdk-python",
@@ -583,7 +583,7 @@
     "dimensions": {
       "relevance": 2,
       "impact": 4,
-      "educational_value": 4,
+      "educational_value": 3,
       "difficulty": 2,
       "market_relevance": 2
     },
@@ -594,7 +594,7 @@
       "difficulty": "default",
       "market_relevance": "measured"
     },
-    "priority": 2.9,
+    "priority": 2.7,
     "changes": {
       "breaking": 0,
       "deprecation": 1,
@@ -628,7 +628,7 @@
     "dimensions": {
       "relevance": 2,
       "impact": 4,
-      "educational_value": 4,
+      "educational_value": 3,
       "difficulty": 2,
       "market_relevance": 2
     },
@@ -639,7 +639,7 @@
       "difficulty": "default",
       "market_relevance": "measured"
     },
-    "priority": 2.9,
+    "priority": 2.7,
     "changes": {
       "breaking": 0,
       "deprecation": 0,
@@ -672,8 +672,8 @@
     "confidence": 0.7,
     "dimensions": {
       "relevance": 2,
-      "impact": 5,
-      "educational_value": 5,
+      "impact": 4,
+      "educational_value": 3,
       "difficulty": 2,
       "market_relevance": 3
     },
@@ -684,24 +684,24 @@
       "difficulty": "default",
       "market_relevance": "measured"
     },
-    "priority": 3.5500000000000003,
+    "priority": 2.9000000000000004,
     "changes": {
-      "breaking": 1,
+      "breaking": 0,
       "deprecation": 0,
-      "feature": 106,
-      "fix": 175,
-      "noise": 1394,
-      "other": 345,
+      "feature": 89,
+      "fix": 189,
+      "noise": 70,
+      "other": 58,
       "highlights": [
-        "breaking: Fix Breaking Change in Message Block Buffer Resolution",
         "feature: add raise_on_error to LLM path extractors",
         "feature: allow Memory to accept any AsyncDBChatStore",
         "feature: Add support for Claude Sonnet 5",
         "feature: add Claude Opus 5 to model allowlists",
-        "feature: Multimodal synthesis part 2"
+        "feature: Support thinking type 'disabled'",
+        "feature: use gemini 3.7 Flash by default in lib and docs"
       ],
-      "teachable": 107,
-      "lines": 2021
+      "teachable": 89,
+      "lines": 406
     },
     "market": {
       "subject": "llama_index",
@@ -886,18 +886,18 @@
     "dimensions": {
       "relevance": 2,
       "impact": 2,
-      "educational_value": 3,
+      "educational_value": 1,
       "difficulty": 2,
       "market_relevance": 3
     },
     "provenance": {
       "relevance": "measured",
       "impact": "default",
-      "educational_value": "default",
+      "educational_value": "judged",
       "difficulty": "default",
       "market_relevance": "measured"
     },
-    "priority": 2.4000000000000004,
+    "priority": 2.0,
     "changes": {},
     "market": {
       "subject": "langsmith",

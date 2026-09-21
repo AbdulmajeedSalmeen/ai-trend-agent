@@ -468,7 +468,7 @@ def test_model_order_is_also_a_guest_list(monkeypatch):
     assert [entry["provider"] for entry in model._configured()] == ["groq"]
 
     monkeypatch.delenv("MODEL_ORDER")
-    assert [entry["provider"] for entry in model._configured()] == ["openai", "groq", "nvidia"]
+    assert [entry["provider"] for entry in model._configured()] == ["openai", "groq-fast", "groq", "nvidia"]
 
 
 def test_a_rate_limit_that_mentions_billing_is_still_only_a_rate_limit(monkeypatch):
@@ -556,3 +556,106 @@ def test_an_answer_with_no_object_at_all_is_still_a_failure():
 
     with pytest.raises(jsonlib.JSONDecodeError):
         model.parse_json("I cannot help with that.")
+
+
+def test_rate_limit_durations_are_read_in_every_shape():
+    from src.adapters import model
+
+    assert model.seconds("577ms") == 0.577
+    assert model.seconds("7.66s") == 7.66
+    assert model.seconds("1m30s") == 90.0
+    assert model.seconds("2m3.5s") == 123.5
+    assert model.seconds("") == 0.0
+    assert model.seconds("soon") == 0.0
+
+
+def test_a_provider_with_room_is_not_made_to_wait(monkeypatch):
+    from src.adapters import model
+
+    model.reset()
+    slept = []
+    monkeypatch.setattr(model.time, "sleep", lambda s: slept.append(s))
+    model.remember_budget("groq", {"x-ratelimit-remaining-tokens": "7000", "x-ratelimit-reset-tokens": "5s"})
+
+    assert model.pace("groq", 600) == 0.0
+    assert slept == []
+
+
+def test_a_provider_without_room_is_waited_for_before_asking(monkeypatch):
+    from src.adapters import model
+
+    model.reset()
+    slept = []
+    monkeypatch.setattr(model.time, "sleep", lambda s: slept.append(s))
+    model.remember_budget("groq", {"x-ratelimit-remaining-tokens": "200", "x-ratelimit-reset-tokens": "4s"})
+
+    waited = model.pace("groq", 600)
+
+    assert 3.5 < waited <= 4.0
+    assert len(slept) == 1
+
+
+def test_an_unknown_budget_never_waits(monkeypatch):
+    from src.adapters import model
+
+    model.reset()
+    monkeypatch.setattr(model.time, "sleep", lambda s: (_ for _ in ()).throw(AssertionError("no wait")))
+
+    assert model.pace("groq", 10_000) == 0.0
+
+
+def test_a_wait_is_capped_so_a_bad_header_cannot_stall_a_run(monkeypatch):
+    from src.adapters import model
+
+    model.reset()
+    slept = []
+    monkeypatch.setattr(model.time, "sleep", lambda s: slept.append(s))
+    model.remember_budget("groq", {"x-ratelimit-remaining-tokens": "0", "x-ratelimit-reset-tokens": "59m"})
+
+    assert model.pace("groq", 600) == model.MAX_PACE_WAIT
+
+
+def test_a_spent_daily_allowance_hands_over_at_once_instead_of_waiting(monkeypatch):
+    import io
+    import json as jsonlib
+
+    from src.adapters import model
+
+    model.reset()
+    use(monkeypatch, only("groq", "openai/gpt-oss-120b") + only("groq-fast", "qwen/qwen3.8-27b"))
+    slept = []
+    monkeypatch.setattr(model.time, "sleep", lambda s: slept.append(s))
+    seen = []
+
+    def answer(request, timeout=None):
+        body = jsonlib.loads(request.data)
+        seen.append(body["model"])
+
+        if body["model"] == "openai/gpt-oss-120b":
+            raise refusal(429, b'{"error": {"code": "rate_limit_exceeded", "message": "Rate limit reached '
+                               b'for model on tokens per day (TPD): Limit 200000, Used 199639"}}',
+                          {"Retry-After": "69"})
+
+        payload = {"choices": [{"message": {"content": '{"ok": 1}'}, "finish_reason": "stop"}], "usage": {}}
+        return _as_context(io.BytesIO(jsonlib.dumps(payload).encode()))
+
+    monkeypatch.setattr(model.urllib.request, "urlopen", answer)
+    trace.start("run_daily", "groq, groq-fast")
+
+    assert model.ask_json("s", "u", action="judge_value") == {"ok": 1}
+    assert seen == ["openai/gpt-oss-120b", "qwen/qwen3.8-27b"]
+    assert slept == []
+    assert trace.current.steps[0].note == "HTTP 429 daily allowance spent"
+    model.reset()
+
+
+def test_the_default_chain_tries_the_fast_groq_model_before_the_large_one(monkeypatch):
+    from src.adapters import model
+
+    monkeypatch.setenv("GROQ_API_KEY", "k")
+    monkeypatch.delenv("OPENAI_API_KEY", raising=False)
+    monkeypatch.delenv("NVIDIA_API_KEY", raising=False)
+    monkeypatch.delenv("MODEL_API_KEY", raising=False)
+    monkeypatch.delenv("MODEL_ORDER", raising=False)
+
+    assert [entry["model"] for entry in model._configured()] == ["qwen/qwen3.8-27b", "openai/gpt-oss-120b"]

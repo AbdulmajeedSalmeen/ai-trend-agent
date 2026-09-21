@@ -16,6 +16,8 @@ def main() -> None:
     parser.add_argument("--run-id", default=None, help="replay a saved run instead of fetching")
     parser.add_argument("--budget", type=int, default=trace.DEFAULT_BUDGET,
                         help="token ceiling for the whole run; the model stops when it is spent")
+    parser.add_argument("--from", dest="start", default=None, choices=[name for name, _ in STAGES],
+                        help="with --run-id, start at this stage and keep the earlier artifacts")
     args = parser.parse_args()
 
     run_id = args.run_id or runio.new_run_id()
@@ -28,6 +30,14 @@ def main() -> None:
     if args.run_id:
         stages = [(name, stage_run) for name, stage_run in STAGES if name != "ingest"]
         print(f"[{run_id}] replaying saved signals, ingest skipped")
+
+    # A change to scoring does not need the posts read again. Starting at the
+    # stage that changed skips seven minutes of model calls that would only
+    # repeat what the saved artifacts already hold.
+    if args.run_id and args.start:
+        names = [name for name, _ in stages]
+        stages = stages[names.index(args.start):] if args.start in names else stages
+        print(f"[{run_id}] starting at {args.start}")
 
     for name, stage_run in stages:
         trace.set_stage(name)

@@ -15,8 +15,15 @@ load_dotenv()
 # Order matters: this is the order a run tries them in. Groq sits ahead of
 # NVIDIA because NVIDIA's endpoint answers in tens of seconds when it answers
 # at all, and a fallback that slow costs more than having none.
+#
+# Groq's free tier caps tokens per day per model, so its two models are two
+# providers with two budgets. qwen goes first: it answers our prompts in a third
+# of a second on about half the tokens of gpt-oss-120b, which is a reasoning
+# model that bills its thinking. A day of repeated runs spent 120b's 200,000
+# tokens; qwen's allowance was untouched.
 PROVIDERS = {
     "openai": ("https://api.openai.com/v1", "gpt-4o-mini", "OPENAI_API_KEY"),
+    "groq-fast": ("https://api.groq.com/openai/v1", "qwen/qwen3.8-27b", "GROQ_API_KEY"),
     "groq": ("https://api.groq.com/openai/v1", "openai/gpt-oss-120b", "GROQ_API_KEY"),
     "nvidia": ("https://integrate.api.nvidia.com/v1", "nvidia/nemotron-3.5-lightning-30b-a3b", "NVIDIA_API_KEY"),
 }
@@ -43,6 +50,9 @@ FATAL_STATUS = {401, 402, 403}
 # being asked to wait. Anything that is not an explicit out-of-credit code is
 # treated as a wait.
 OUT_OF_CREDIT = ("insufficient_quota", "spend_limit", "billing_hard_limit", "exceeded_current_quota")
+# "tokens per day (TPD)" and "requests per day (RPD)" in Groq's message. Its
+# error code is the same one a per-minute limit uses, so here the words decide.
+SPENT_FOR_THE_DAY = re.compile(r"\bper day\b|\(tpd\)|\(rpd\)")
 MAX_BACKOFF = 30.0
 
 # Which provider is out, and why. A key is refused per provider, not globally:
@@ -55,11 +65,71 @@ _halted: dict[str, str] = {}
 STRIKES = 2
 _strikes: dict[str, int] = {}
 
+# What each provider said it had left, from its rate-limit headers. Groq counts a
+# request's max_tokens against the minute's budget before it answers, so a run
+# that ignored this bounced off the limit on almost every call: one replay took
+# an hour and most of its answers never came back. Waiting for the budget to
+# refill before asking is faster than being refused and retrying.
+_budget: dict[str, dict] = {}
+DURATION_RE = re.compile(r"(?:(?P<m>\d+(?:\.\d+)?)m)?(?:(?P<s>\d+(?:\.\d+)?)s)?(?:(?P<ms>\d+(?:\.\d+)?)ms)?$")
+MAX_PACE_WAIT = 65.0
+
 
 def reset() -> None:
     """Start of a run: give every provider another chance."""
     _halted.clear()
     _strikes.clear()
+    _budget.clear()
+
+
+def seconds(duration: str | None) -> float:
+    """"577ms", "7.66s", "1m30s" in seconds. Anything unreadable is no wait."""
+    if not duration:
+        return 0.0
+
+    match = DURATION_RE.match(duration.strip())
+
+    if not match or not any(match.groupdict().values()):
+        return 0.0
+
+    minutes = float(match.group("m") or 0)
+    secs = float(match.group("s") or 0)
+    millis = float(match.group("ms") or 0)
+
+    return minutes * 60 + secs + millis / 1000
+
+
+def remember_budget(provider: str, headers) -> None:
+    remaining = headers.get("x-ratelimit-remaining-tokens")
+
+    if remaining is None:
+        return
+
+    try:
+        left = int(float(remaining))
+    except ValueError:
+        return
+
+    _budget[provider] = {
+        "tokens": left,
+        "refills_at": time.monotonic() + seconds(headers.get("x-ratelimit-reset-tokens")),
+    }
+
+
+def pace(provider: str, reserve: int) -> float:
+    """Wait until the provider's minute has room for this request. Returns the wait."""
+    known = _budget.get(provider)
+
+    if known is None or known["tokens"] >= reserve:
+        return 0.0
+
+    wait = min(max(0.0, known["refills_at"] - time.monotonic()), MAX_PACE_WAIT)
+
+    if wait:
+        time.sleep(wait)
+
+    _budget.pop(provider, None)
+    return wait
 
 
 def _configured() -> list[dict]:
@@ -168,11 +238,15 @@ def _call(settings: dict, system: str, user: str, max_tokens: int, timeout: int,
         },
     )
     label = f"{action}@{settings['provider']}"
+    # Roughly four characters to a token, plus everything the answer may use.
+    reserve = (len(system) + len(user)) // 4 + max_tokens
 
     for attempt in range(2):
+        pace(settings["provider"], reserve)
         started = time.perf_counter()
         try:
             with urllib.request.urlopen(request, timeout=timeout) as response:
+                remember_budget(settings["provider"], getattr(response, "headers", None) or {})
                 payload = json.load(response)
             choice = payload["choices"][0]
             text = choice["message"].get("content") or ""
@@ -223,9 +297,16 @@ def _call(settings: dict, system: str, user: str, max_tokens: int, timeout: int,
                 # Only an explicit out-of-credit code ends the run. An
                 # ambiguous 429 waits once; two failures in a row drop the
                 # provider anyway, so guessing wrong stays cheap.
+                #
+                # A spent daily allowance also ends it for this provider: the
+                # day does not refill within a run. Waiting thirty seconds per
+                # call on a spent day turned one replay into an hour of waits.
                 if any(code in detail for code in OUT_OF_CREDIT):
                     fatal = True
                     note = "HTTP 429 out of credit"
+                elif SPENT_FOR_THE_DAY.search(detail):
+                    fatal = True
+                    note = "HTTP 429 daily allowance spent"
                 else:
                     wait = min(float(retry_after or 5), MAX_BACKOFF)
                     note = f"HTTP 429 rate limited, waiting {wait:.0f}s"
