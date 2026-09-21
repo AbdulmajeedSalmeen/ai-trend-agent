@@ -50,6 +50,7 @@ def build_payload(run_dir: Path) -> dict:
     previous = memory.previous_run(run_dir.name)
     since = memory.run_started(previous) if previous else None
     fresh = sum(1 for s in artifacts["signals"] if since and s.published_at > since)
+    started = memory.run_started(run_dir.name)
 
     items = []
     for rec in artifacts["recommendations"]:
@@ -75,6 +76,9 @@ def build_payload(run_dir: Path) -> dict:
             )
 
         confirmed = sum(1 for c in claims if c["verdict"] == "confirmed")
+        # When an ask began, not only how many runs it has lasted. Nine runs reads
+        # like nine weeks, and on a day of testing it can be one afternoon.
+        first = memory.run_started(rec.first_seen_run or "") if rec.runs_flagged > 1 else None
         items.append(
             {
                 "trend_id": trend.id,
@@ -91,6 +95,8 @@ def build_payload(run_dir: Path) -> dict:
                 "legacy_uses": rec.legacy_uses,
                 "runs_flagged": rec.runs_flagged,
                 "first_seen_run": rec.first_seen_run,
+                "asked_since": first.date().isoformat() if first else None,
+                "asked_days": (started - first).days if first and started else None,
                 "version_moved": rec.version_moved,
                 "priority": round(score.priority, 2),
                 "confidence": round(score.confidence, 2),

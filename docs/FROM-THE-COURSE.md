@@ -37,7 +37,8 @@ and a half minutes. The same replay now finishes in three seconds and says why.
 **What we built:** `src/memory.py`. Each run reads the runs before it and reports whether a
 recommendation is new or has been asked for several runs running, and whether the version has
 moved since we last looked. A chapter flagged four runs in a row and still not acted on is a
-different message from one flagged today.
+different message from one flagged today. The page names the day an ask began rather than
+counting runs, because nine runs can be nine weeks or, while testing, one afternoon.
 
 **Where we differ from the course:** they reach for a vector store because their agents hold
 free-text conversations. Our history is keyed by package name and version, so a keyed read of

@@ -5,7 +5,7 @@ from src.schema import Claim, Recommendation, Score, Signal, Trend
 from web.site import build_payload
 
 
-def build_run(path, rationale_ar=None):
+def build_run(path, rationale_ar=None, **recalled):
     signal = Signal(
         id="gh_langgraph_1.2.11",
         source="github",
@@ -40,6 +40,7 @@ def build_run(path, rationale_ar=None):
         chapter_id="C19",
         rationale="langgraph: 1 confirmed, 0 unverified.",
         rationale_ar=rationale_ar,
+        **recalled,
     )
     runio.save_artifact(path, "signals", [signal])
     runio.save_artifact(path, "trends", [trend])
@@ -92,6 +93,29 @@ def test_every_chapter_in_the_payload_says_what_it_teaches_in_both_languages(tmp
 
     assert len(chapters) == 25
     assert all(chapter["teaches"] and chapter["teaches_ar"] for chapter in chapters)
+
+
+def test_a_standing_ask_says_when_it_began_not_only_how_many_runs(tmp_path):
+    run_dir = tmp_path / "run_20260921T104824Z"
+    run_dir.mkdir()
+    build_run(run_dir, runs_flagged=9, first_seen_run="run_20260920T080135Z")
+
+    item = build_payload(run_dir)["items"][0]
+
+    assert item["runs_flagged"] == 9
+    assert item["asked_since"] == "2026-09-20"
+    assert item["asked_days"] == 1
+
+
+def test_a_first_ask_has_no_start_date(tmp_path):
+    run_dir = tmp_path / "run_20260921T104824Z"
+    run_dir.mkdir()
+    build_run(run_dir, first_seen_run="run_20260921T104824Z")
+
+    item = build_payload(run_dir)["items"][0]
+
+    assert item["asked_since"] is None
+    assert item["asked_days"] is None
 
 
 def test_payload_survives_a_run_without_recommendations(tmp_path):
