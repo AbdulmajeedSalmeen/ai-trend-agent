@@ -1,28 +1,70 @@
 # Demo answers
 
-Every number here comes from `run_20260920T080135Z`. Re-run `python -m src.pipeline --run-id
-run_20260920T080135Z` and they come back the same, because replay never touches the network.
+Every number here comes from `run_20260921T104824Z`. Re-run `python -m src.pipeline --run-id
+run_20260921T104824Z` and they come back the same, because replay never touches the network.
 
 ## The run, in numbers
 
 | | |
 |---|---|
-| Signals collected | 486 - 316 Hacker News, 90 PyPI releases, 80 GitHub releases |
+| Signals collected | 483 - 315 Hacker News, 88 PyPI releases, 80 GitHub releases |
 | Packages followed | 53, every one the course notebooks install |
 | Subjects tracked | 37 |
-| Checkable claims | 157 |
+| Checkable claims | 156 |
 | Confirmed by the release itself | 139 |
-| Carried by a second registry | 14 |
+| Carried by a second registry | 13 |
 | Confirmed by an independent source | 0 |
 | Unverified | 4 |
-| Recommendations | 12 update a chapter, 4 new lesson, 21 watch |
+| Release-note lines read | 2,933 - 17 breaking, 2 deprecations, 308 features, 948 fixes, 1,658 chores |
+| Job posts searched | about 1,200, the last three "Ask HN: Who is hiring?" threads |
+| Recommendations | 5 update a chapter, 2 new lesson, 30 watch |
 | Chapters with something to act on | 11 of 25 |
 | Course notebooks read | 89, across six weeks |
 | Chapters installing something with no version bound | 19 of 25 |
 | Removed APIs still called in the material | 7 |
-| Tests | 174, in 17 files. None calls a model or the network |
+| Tests | 285. None calls a model or the network |
 
 ---
+
+## "Why would a school care about langchain 1.4.2?"
+
+It should not, and that is the question that reshaped the agent.
+
+The first version decided by version number. A package scored higher the more often it
+shipped, market relevance was how much Hacker News talked about it, and the judge rating
+teaching value was shown "langchain version 1.4.2 was released" and nothing else. It rated 29
+of 37 packages 2 out of 5 and nothing above 3, because it could not tell a new concept from a
+dependency bump.
+
+A school asks three different questions, and the agent now answers each from data:
+
+| The question | Where the answer comes from |
+|---|---|
+| Did something we teach break? | removed APIs found in the course notebooks, and breaking changes in the release notes |
+| Is there a new concept worth a lesson? | the `feat:` and "Features" lines of the release notes, read by a judge told to think as a head of curriculum |
+| Do employers want it? | job posts naming the tool in the last three "Who is hiring?" threads, and PyPI installs |
+
+The release notes were already being collected and thrown away. Read now, they show why
+versions mislead: of 2,933 lines, nine in ten are fixes or chores. About one line in nine is
+something a teacher would read.
+
+What changed as a result, in the same data:
+
+- **crewai** had been "add a new lesson". Four job posts in three months. It is now watched,
+  with the reason "few employers ask for it yet".
+- **torch and torchvision** had been "update chapter C4" because the notebook pins 2.5.1 and
+  2.14.0 exists. The
+  notebook is pinned, so it runs for a student exactly as written, and nothing in what we read
+  says the approach changed. It is now watched.
+- **Six more PyPI-only packages** (dspy, evidently, faiss-cpu, openai, peft, streamlit) had
+  been "update the chapter" with no release notes to read at all: the version was the only
+  reason. They are watched, with advice to pin.
+- **langchain** is still "update chapter C8", even though its recent releases scored 1 out of 5
+  for teaching. That is correct: the notebooks call `RetrievalQA`, which 1.x removed, so the
+  material does not run. A broken notebook is a teaching problem whatever the release notes say.
+
+The result: 5 chapter updates and 2 new lessons, each with a reason a teacher would accept,
+out of 37 packages that shipped something.
 
 ## "Why is cross-source zero? Is the checker broken?"
 
@@ -95,11 +137,14 @@ Then the verdict is arithmetic:
 
 | What we find | Verdict |
 |---|---|
-| Major or minor release since the pinned version | worth rewriting |
-| Only patch releases since | leave it alone |
-| No bound, and the chapter teaches the package | no guarantee - a student installs whatever shipped that day |
-| No bound, but the package is only a dependency | a version to pin, not material to rewrite |
-| Nothing recorded | say so, do not call the chapter stale |
+| The notebook calls an API a newer release removed | rewrite - the material does not run |
+| A major release since the pinned version | rewrite - semver says a major breaks things |
+| A minor gap, with a breaking change or new concept in the notes | rewrite |
+| A minor gap, with only fixes and chores in the notes | watch - the pinned notebook still runs |
+| No bound, and the releases add something worth teaching | rewrite |
+| No bound, and nothing read shows a change worth teaching | watch, and pin it |
+| No chapter, and employers ask for it | a new lesson |
+| No chapter, and few employers ask | watch |
 
 That last distinction matters. Without it the run produced 24 chapter updates, including
 "update chapter C24" because pandas moved. Pandas moving is a dependency-hygiene problem;

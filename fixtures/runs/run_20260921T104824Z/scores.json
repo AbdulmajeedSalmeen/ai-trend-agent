@@ -1,0 +1,1274 @@
+[
+  {
+    "trend_id": "trend_001",
+    "chapter_id": "C19",
+    "confidence": 0.7,
+    "dimensions": {
+      "relevance": 2,
+      "impact": 3,
+      "educational_value": 3,
+      "difficulty": 2,
+      "market_relevance": 4
+    },
+    "provenance": {
+      "relevance": "measured",
+      "impact": "measured",
+      "educational_value": "judged",
+      "difficulty": "default",
+      "market_relevance": "measured"
+    },
+    "priority": 2.85,
+    "changes": {
+      "breaking": 0,
+      "deprecation": 0,
+      "feature": 2,
+      "fix": 2,
+      "noise": 23,
+      "other": 1,
+      "highlights": [
+        "feature: route LangSmith traces from thread streams",
+        "feature: add decrypt replacement result"
+      ],
+      "teachable": 2,
+      "lines": 28
+    },
+    "market": {
+      "subject": "langgraph-sdk",
+      "job_term": "langgraph",
+      "jobs": 14,
+      "downloads": 41476658,
+      "months": 3
+    }
+  },
+  {
+    "trend_id": "trend_002",
+    "chapter_id": "C19",
+    "confidence": 0.575,
+    "dimensions": {
+      "relevance": 2,
+      "impact": 4,
+      "educational_value": 4,
+      "difficulty": 2,
+      "market_relevance": 4
+    },
+    "provenance": {
+      "relevance": "measured",
+      "impact": "measured",
+      "educational_value": "judged",
+      "difficulty": "default",
+      "market_relevance": "measured"
+    },
+    "priority": 3.3000000000000003,
+    "changes": {
+      "breaking": 0,
+      "deprecation": 0,
+      "feature": 4,
+      "fix": 2,
+      "noise": 20,
+      "other": 0,
+      "highlights": [
+        "feature: expose `trace_policy` on `add_node`",
+        "feature: type v3 stream_events return and native projections",
+        "feature: drop tags from TracePolicy"
+      ],
+      "teachable": 4,
+      "lines": 26
+    },
+    "market": {
+      "subject": "langgraph",
+      "job_term": "langgraph",
+      "jobs": 14,
+      "downloads": 43805978,
+      "months": 3
+    }
+  },
+  {
+    "trend_id": "trend_003",
+    "chapter_id": "C19",
+    "confidence": 0.7,
+    "dimensions": {
+      "relevance": 2,
+      "impact": 3,
+      "educational_value": 3,
+      "difficulty": 2,
+      "market_relevance": 4
+    },
+    "provenance": {
+      "relevance": "measured",
+      "impact": "measured",
+      "educational_value": "judged",
+      "difficulty": "default",
+      "market_relevance": "measured"
+    },
+    "priority": 2.85,
+    "changes": {
+      "breaking": 0,
+      "deprecation": 0,
+      "feature": 1,
+      "fix": 2,
+      "noise": 15,
+      "other": 0,
+      "highlights": [
+        "feature: add opt-in omit_expired to skip expired rows on read"
+      ],
+      "teachable": 1,
+      "lines": 18
+    },
+    "market": {
+      "subject": "langgraph-checkpointpostgres",
+      "job_term": "langgraph",
+      "jobs": 14,
+      "downloads": 7445566,
+      "months": 3
+    }
+  },
+  {
+    "trend_id": "trend_004",
+    "chapter_id": "C19",
+    "confidence": 0.7,
+    "dimensions": {
+      "relevance": 2,
+      "impact": 3,
+      "educational_value": 3,
+      "difficulty": 2,
+      "market_relevance": 4
+    },
+    "provenance": {
+      "relevance": "measured",
+      "impact": "measured",
+      "educational_value": "judged",
+      "difficulty": "default",
+      "market_relevance": "measured"
+    },
+    "priority": 2.85,
+    "changes": {
+      "breaking": 0,
+      "deprecation": 0,
+      "feature": 1,
+      "fix": 1,
+      "noise": 10,
+      "other": 0,
+      "highlights": [
+        "feature: add opt-in omit_expired to skip expired rows on read"
+      ],
+      "teachable": 1,
+      "lines": 12
+    },
+    "market": {
+      "subject": "langgraph-checkpoint",
+      "job_term": "langgraph",
+      "jobs": 14,
+      "downloads": 40349212,
+      "months": 3
+    }
+  },
+  {
+    "trend_id": "trend_005",
+    "chapter_id": "C19",
+    "confidence": 0.7,
+    "dimensions": {
+      "relevance": 2,
+      "impact": 2,
+      "educational_value": 1,
+      "difficulty": 2,
+      "market_relevance": 4
+    },
+    "provenance": {
+      "relevance": "measured",
+      "impact": "measured",
+      "educational_value": "judged",
+      "difficulty": "default",
+      "market_relevance": "measured"
+    },
+    "priority": 2.2,
+    "changes": {
+      "breaking": 0,
+      "deprecation": 0,
+      "feature": 0,
+      "fix": 1,
+      "noise": 9,
+      "other": 0,
+      "highlights": [],
+      "teachable": 0,
+      "lines": 10
+    },
+    "market": {
+      "subject": "langgraph-checkpointsqlite",
+      "job_term": "langgraph",
+      "jobs": 14,
+      "downloads": 2427838,
+      "months": 3
+    }
+  },
+  {
+    "trend_id": "trend_006",
+    "chapter_id": "C19",
+    "confidence": 0.7,
+    "dimensions": {
+      "relevance": 2,
+      "impact": 3,
+      "educational_value": 4,
+      "difficulty": 2,
+      "market_relevance": 4
+    },
+    "provenance": {
+      "relevance": "measured",
+      "impact": "measured",
+      "educational_value": "judged",
+      "difficulty": "default",
+      "market_relevance": "measured"
+    },
+    "priority": 3.0500000000000003,
+    "changes": {
+      "breaking": 0,
+      "deprecation": 0,
+      "feature": 1,
+      "fix": 0,
+      "noise": 11,
+      "other": 0,
+      "highlights": [
+        "feature: allow prebuild images for langgraph deploy"
+      ],
+      "teachable": 1,
+      "lines": 12
+    },
+    "market": {
+      "subject": "langgraph-cli",
+      "job_term": "langgraph",
+      "jobs": 14,
+      "downloads": 2573329,
+      "months": 3
+    }
+  },
+  {
+    "trend_id": "trend_007",
+    "chapter_id": "C8",
+    "confidence": 0.6999999999999998,
+    "dimensions": {
+      "relevance": 2,
+      "impact": 3,
+      "educational_value": 4,
+      "difficulty": 2,
+      "market_relevance": 3
+    },
+    "provenance": {
+      "relevance": "measured",
+      "impact": "measured",
+      "educational_value": "judged",
+      "difficulty": "default",
+      "market_relevance": "measured"
+    },
+    "priority": 2.85,
+    "changes": {
+      "breaking": 0,
+      "deprecation": 0,
+      "feature": 8,
+      "fix": 2,
+      "noise": 3,
+      "other": 0,
+      "highlights": [
+        "feature: make classifier questions invocation-scoped",
+        "feature: experimental `AutoModeMiddleware`",
+        "feature: experimental `ModelRouterMiddleware`",
+        "feature: `TypeSafeClassifier`"
+      ],
+      "teachable": 8,
+      "lines": 13
+    },
+    "market": {
+      "subject": "langchain-typesafe",
+      "job_term": "langchain",
+      "jobs": 17,
+      "downloads": 1359,
+      "months": 3
+    }
+  },
+  {
+    "trend_id": "trend_008",
+    "chapter_id": "C8",
+    "confidence": 0.67,
+    "dimensions": {
+      "relevance": 5,
+      "impact": 2,
+      "educational_value": 1,
+      "difficulty": 2,
+      "market_relevance": 4
+    },
+    "provenance": {
+      "relevance": "measured",
+      "impact": "measured",
+      "educational_value": "judged",
+      "difficulty": "default",
+      "market_relevance": "measured"
+    },
+    "priority": 2.95,
+    "changes": {
+      "breaking": 0,
+      "deprecation": 0,
+      "feature": 0,
+      "fix": 3,
+      "noise": 2,
+      "other": 0,
+      "highlights": [],
+      "teachable": 0,
+      "lines": 5
+    },
+    "market": {
+      "subject": "langchain",
+      "job_term": "langchain",
+      "jobs": 17,
+      "downloads": 176686980,
+      "months": 3
+    }
+  },
+  {
+    "trend_id": "trend_009",
+    "chapter_id": "C8",
+    "confidence": 0.7666666666666666,
+    "dimensions": {
+      "relevance": 2,
+      "impact": 3,
+      "educational_value": 4,
+      "difficulty": 2,
+      "market_relevance": 4
+    },
+    "provenance": {
+      "relevance": "measured",
+      "impact": "measured",
+      "educational_value": "judged",
+      "difficulty": "default",
+      "market_relevance": "measured"
+    },
+    "priority": 3.0500000000000003,
+    "changes": {
+      "breaking": 0,
+      "deprecation": 0,
+      "feature": 2,
+      "fix": 2,
+      "noise": 6,
+      "other": 0,
+      "highlights": [
+        "feature: Allow model name and provider tracing metadata override based on gateway response",
+        "feature: support async tools"
+      ],
+      "teachable": 2,
+      "lines": 10
+    },
+    "market": {
+      "subject": "langchain-core",
+      "job_term": "langchain",
+      "jobs": 17,
+      "downloads": 146753919,
+      "months": 3
+    }
+  },
+  {
+    "trend_id": "trend_010",
+    "chapter_id": "C8",
+    "confidence": 0.7,
+    "dimensions": {
+      "relevance": 2,
+      "impact": 2,
+      "educational_value": 1,
+      "difficulty": 2,
+      "market_relevance": 4
+    },
+    "provenance": {
+      "relevance": "measured",
+      "impact": "measured",
+      "educational_value": "judged",
+      "difficulty": "default",
+      "market_relevance": "measured"
+    },
+    "priority": 2.2,
+    "changes": {
+      "breaking": 0,
+      "deprecation": 0,
+      "feature": 0,
+      "fix": 1,
+      "noise": 1,
+      "other": 0,
+      "highlights": [],
+      "teachable": 0,
+      "lines": 2
+    },
+    "market": {
+      "subject": "langchain-anthropic",
+      "job_term": "langchain",
+      "jobs": 17,
+      "downloads": 16958827,
+      "months": 3
+    }
+  },
+  {
+    "trend_id": "trend_011",
+    "chapter_id": "C8",
+    "confidence": 0.8,
+    "dimensions": {
+      "relevance": 2,
+      "impact": 3,
+      "educational_value": 4,
+      "difficulty": 2,
+      "market_relevance": 4
+    },
+    "provenance": {
+      "relevance": "measured",
+      "impact": "measured",
+      "educational_value": "judged",
+      "difficulty": "default",
+      "market_relevance": "measured"
+    },
+    "priority": 3.0500000000000003,
+    "changes": {
+      "breaking": 0,
+      "deprecation": 0,
+      "feature": 2,
+      "fix": 5,
+      "noise": 7,
+      "other": 0,
+      "highlights": [
+        "feature: support async tools",
+        "feature: support `configuration_update`"
+      ],
+      "teachable": 2,
+      "lines": 14
+    },
+    "market": {
+      "subject": "langchain-openai",
+      "job_term": "langchain",
+      "jobs": 17,
+      "downloads": 40856844,
+      "months": 3
+    }
+  },
+  {
+    "trend_id": "trend_012",
+    "chapter_id": "C4",
+    "confidence": 0.73,
+    "dimensions": {
+      "relevance": 2,
+      "impact": 5,
+      "educational_value": 3,
+      "difficulty": 2,
+      "market_relevance": 4
+    },
+    "provenance": {
+      "relevance": "measured",
+      "impact": "measured",
+      "educational_value": "judged",
+      "difficulty": "default",
+      "market_relevance": "measured"
+    },
+    "priority": 3.35,
+    "changes": {
+      "breaking": 15,
+      "deprecation": 0,
+      "feature": 63,
+      "fix": 565,
+      "noise": 69,
+      "other": 453,
+      "highlights": [
+        "breaking: Vision (2d/3d) rotary embeddings",
+        "breaking: TP dtensor API inference + training",
+        "breaking: [wav2vec2] Support attn_implementation=sdpa dispatch",
+        "breaking: Leftover processors",
+        "breaking: [`Kernels`] Refactor all linear attn models & native kernels fallback",
+        "breaking: [cache] Cropping can only be done with negative values"
+      ],
+      "teachable": 78,
+      "lines": 1165
+    },
+    "market": {
+      "subject": "transformers",
+      "job_term": "hugging face",
+      "jobs": 8,
+      "downloads": 98762799,
+      "months": 3
+    }
+  },
+  {
+    "trend_id": "trend_013",
+    "chapter_id": "C5",
+    "confidence": 0.7,
+    "dimensions": {
+      "relevance": 2,
+      "impact": 4,
+      "educational_value": 4,
+      "difficulty": 2,
+      "market_relevance": 4
+    },
+    "provenance": {
+      "relevance": "measured",
+      "impact": "measured",
+      "educational_value": "judged",
+      "difficulty": "default",
+      "market_relevance": "measured"
+    },
+    "priority": 3.3000000000000003,
+    "changes": {
+      "breaking": 0,
+      "deprecation": 0,
+      "feature": 12,
+      "fix": 22,
+      "noise": 17,
+      "other": 0,
+      "highlights": [
+        "feature: api: add webhook endpoint management",
+        "feature: api: add agent session model settings",
+        "feature: api: add audio-mini model choices",
+        "feature: api: add compaction progress events",
+        "feature: api: add managed Responses WebSocket sessions",
+        "feature: api: add prompt-cache prewarming"
+      ],
+      "teachable": 12,
+      "lines": 51
+    },
+    "market": {
+      "subject": "openai-python",
+      "job_term": "openai",
+      "jobs": 19,
+      "downloads": 286423757,
+      "months": 3
+    }
+  },
+  {
+    "trend_id": "trend_014",
+    "chapter_id": null,
+    "confidence": 0.7,
+    "dimensions": {
+      "relevance": 2,
+      "impact": 5,
+      "educational_value": 3,
+      "difficulty": 2,
+      "market_relevance": 4
+    },
+    "provenance": {
+      "relevance": "measured",
+      "impact": "measured",
+      "educational_value": "default",
+      "difficulty": "default",
+      "market_relevance": "measured"
+    },
+    "priority": 3.35,
+    "changes": {
+      "breaking": 1,
+      "deprecation": 1,
+      "feature": 28,
+      "fix": 31,
+      "noise": 48,
+      "other": 0,
+      "highlights": [
+        "breaking: client: upgrade to httpx2 and some minor breaking changes. See MIGRATION.md for details",
+        "deprecation: api: add group with display_name to rate limits, deprecate group_type",
+        "feature: tools: add compact_before_next_turn() to the tool runner",
+        "feature: api: add auto mode tool permissions for Managed Agents",
+        "feature: api: add compaction parameter and signed compaction blocks (beta)",
+        "feature: api: add enum types for workspace data-residency geo fields"
+      ],
+      "teachable": 30,
+      "lines": 109
+    },
+    "market": {
+      "subject": "anthropic-sdk-python",
+      "job_term": "anthropic",
+      "jobs": 12,
+      "downloads": 139463073,
+      "months": 3
+    }
+  },
+  {
+    "trend_id": "trend_015",
+    "chapter_id": null,
+    "confidence": 0.7,
+    "dimensions": {
+      "relevance": 2,
+      "impact": 4,
+      "educational_value": 4,
+      "difficulty": 2,
+      "market_relevance": 2
+    },
+    "provenance": {
+      "relevance": "measured",
+      "impact": "measured",
+      "educational_value": "judged",
+      "difficulty": "default",
+      "market_relevance": "measured"
+    },
+    "priority": 2.9,
+    "changes": {
+      "breaking": 0,
+      "deprecation": 1,
+      "feature": 42,
+      "fix": 69,
+      "noise": 1,
+      "other": 7,
+      "highlights": [
+        "deprecation: Deprecate `fallback_model` in favor of `fallback_subagent_model` on `ImageGeneration` and `XSearch`",
+        "feature: Let `TypeSafeModel` fill a tool's arguments when Jev can express them",
+        "feature: Add `RealtimeSession.wait_for_playback()` and let the docs examples finish the reply before closing",
+        "feature: Add `supports_text_output` to `ModelProfile`, and run `LLMJudge` and `GEval` on a model without it",
+        "feature: Add `typesafe_boolean_threshold` for what a yes/no has to be before it is `True`",
+        "feature: Let `TypeSafeModel` fill a union of output types by choosing the type first"
+      ],
+      "teachable": 43,
+      "lines": 120
+    },
+    "market": {
+      "subject": "pydantic-ai",
+      "job_term": "pydantic",
+      "jobs": 1,
+      "downloads": 5575469,
+      "months": 3
+    }
+  },
+  {
+    "trend_id": "trend_016",
+    "chapter_id": null,
+    "confidence": 0.7,
+    "dimensions": {
+      "relevance": 2,
+      "impact": 4,
+      "educational_value": 4,
+      "difficulty": 2,
+      "market_relevance": 2
+    },
+    "provenance": {
+      "relevance": "measured",
+      "impact": "measured",
+      "educational_value": "judged",
+      "difficulty": "default",
+      "market_relevance": "measured"
+    },
+    "priority": 2.9,
+    "changes": {
+      "breaking": 0,
+      "deprecation": 0,
+      "feature": 36,
+      "fix": 65,
+      "noise": 22,
+      "other": 0,
+      "highlights": [
+        "feature: Support aliases as connection identifiers",
+        "feature: Record reasons for deployment creation failures",
+        "feature: Collect human feedback and pause events in tracing",
+        "feature: Add `llm_overlay` context variable to route agent roles to models",
+        "feature: Carry `task_prompt` and output in agent execution payloads",
+        "feature: Validate platform integrations during crew setup"
+      ],
+      "teachable": 36,
+      "lines": 123
+    },
+    "market": {
+      "subject": "crewai",
+      "job_term": "crewai",
+      "jobs": 4,
+      "downloads": 6453644,
+      "months": 3
+    }
+  },
+  {
+    "trend_id": "trend_017",
+    "chapter_id": null,
+    "confidence": 0.7,
+    "dimensions": {
+      "relevance": 2,
+      "impact": 5,
+      "educational_value": 5,
+      "difficulty": 2,
+      "market_relevance": 3
+    },
+    "provenance": {
+      "relevance": "measured",
+      "impact": "measured",
+      "educational_value": "judged",
+      "difficulty": "default",
+      "market_relevance": "measured"
+    },
+    "priority": 3.5500000000000003,
+    "changes": {
+      "breaking": 1,
+      "deprecation": 0,
+      "feature": 106,
+      "fix": 175,
+      "noise": 1394,
+      "other": 345,
+      "highlights": [
+        "breaking: Fix Breaking Change in Message Block Buffer Resolution",
+        "feature: add raise_on_error to LLM path extractors",
+        "feature: allow Memory to accept any AsyncDBChatStore",
+        "feature: Add support for Claude Sonnet 5",
+        "feature: add Claude Opus 5 to model allowlists",
+        "feature: Multimodal synthesis part 2"
+      ],
+      "teachable": 107,
+      "lines": 2021
+    },
+    "market": {
+      "subject": "llama_index",
+      "job_term": "llamaindex",
+      "jobs": 5,
+      "downloads": 3462409,
+      "months": 3
+    }
+  },
+  {
+    "trend_id": "trend_018",
+    "chapter_id": "C4",
+    "confidence": 0.7,
+    "dimensions": {
+      "relevance": 2,
+      "impact": 2,
+      "educational_value": 1,
+      "difficulty": 2,
+      "market_relevance": 4
+    },
+    "provenance": {
+      "relevance": "measured",
+      "impact": "default",
+      "educational_value": "judged",
+      "difficulty": "default",
+      "market_relevance": "measured"
+    },
+    "priority": 2.2,
+    "changes": {},
+    "market": {
+      "subject": "accelerate",
+      "job_term": null,
+      "jobs": null,
+      "downloads": 17184661,
+      "months": 3
+    }
+  },
+  {
+    "trend_id": "trend_019",
+    "chapter_id": "C9",
+    "confidence": 0.7,
+    "dimensions": {
+      "relevance": 2,
+      "impact": 2,
+      "educational_value": 1,
+      "difficulty": 2,
+      "market_relevance": 2
+    },
+    "provenance": {
+      "relevance": "measured",
+      "impact": "default",
+      "educational_value": "judged",
+      "difficulty": "default",
+      "market_relevance": "measured"
+    },
+    "priority": 1.8,
+    "changes": {},
+    "market": {
+      "subject": "bitsandbytes",
+      "job_term": "bitsandbytes",
+      "jobs": 0,
+      "downloads": 3522889,
+      "months": 3
+    }
+  },
+  {
+    "trend_id": "trend_020",
+    "chapter_id": "C14",
+    "confidence": 0.7,
+    "dimensions": {
+      "relevance": 2,
+      "impact": 2,
+      "educational_value": 1,
+      "difficulty": 2,
+      "market_relevance": 3
+    },
+    "provenance": {
+      "relevance": "measured",
+      "impact": "default",
+      "educational_value": "judged",
+      "difficulty": "default",
+      "market_relevance": "measured"
+    },
+    "priority": 2.0,
+    "changes": {},
+    "market": {
+      "subject": "ddgs",
+      "job_term": null,
+      "jobs": null,
+      "downloads": 5082274,
+      "months": 3
+    }
+  },
+  {
+    "trend_id": "trend_021",
+    "chapter_id": "C5",
+    "confidence": 0.7,
+    "dimensions": {
+      "relevance": 5,
+      "impact": 2,
+      "educational_value": 1,
+      "difficulty": 2,
+      "market_relevance": 2
+    },
+    "provenance": {
+      "relevance": "measured",
+      "impact": "default",
+      "educational_value": "judged",
+      "difficulty": "default",
+      "market_relevance": "measured"
+    },
+    "priority": 2.55,
+    "changes": {},
+    "market": {
+      "subject": "dspy",
+      "job_term": "dspy",
+      "jobs": 0,
+      "downloads": 4860735,
+      "months": 3
+    }
+  },
+  {
+    "trend_id": "trend_022",
+    "chapter_id": "C7",
+    "confidence": 0.7,
+    "dimensions": {
+      "relevance": 5,
+      "impact": 2,
+      "educational_value": 1,
+      "difficulty": 2,
+      "market_relevance": 2
+    },
+    "provenance": {
+      "relevance": "measured",
+      "impact": "default",
+      "educational_value": "judged",
+      "difficulty": "default",
+      "market_relevance": "measured"
+    },
+    "priority": 2.55,
+    "changes": {},
+    "market": {
+      "subject": "evidently",
+      "job_term": null,
+      "jobs": null,
+      "downloads": 863013,
+      "months": 3
+    }
+  },
+  {
+    "trend_id": "trend_023",
+    "chapter_id": "C6",
+    "confidence": 0.7,
+    "dimensions": {
+      "relevance": 2,
+      "impact": 2,
+      "educational_value": 1,
+      "difficulty": 2,
+      "market_relevance": 2
+    },
+    "provenance": {
+      "relevance": "measured",
+      "impact": "default",
+      "educational_value": "judged",
+      "difficulty": "default",
+      "market_relevance": "measured"
+    },
+    "priority": 1.8,
+    "changes": {},
+    "market": {
+      "subject": "faiss-cpu",
+      "job_term": "faiss",
+      "jobs": 0,
+      "downloads": 11499184,
+      "months": 3
+    }
+  },
+  {
+    "trend_id": "trend_024",
+    "chapter_id": "C13",
+    "confidence": 0.7,
+    "dimensions": {
+      "relevance": 2,
+      "impact": 2,
+      "educational_value": 3,
+      "difficulty": 2,
+      "market_relevance": 3
+    },
+    "provenance": {
+      "relevance": "measured",
+      "impact": "default",
+      "educational_value": "default",
+      "difficulty": "default",
+      "market_relevance": "measured"
+    },
+    "priority": 2.4000000000000004,
+    "changes": {},
+    "market": {
+      "subject": "langsmith",
+      "job_term": "langsmith",
+      "jobs": 2,
+      "downloads": 80021305,
+      "months": 3
+    }
+  },
+  {
+    "trend_id": "trend_025",
+    "chapter_id": "C7",
+    "confidence": 0.69375,
+    "dimensions": {
+      "relevance": 2,
+      "impact": 2,
+      "educational_value": 1,
+      "difficulty": 2,
+      "market_relevance": 3
+    },
+    "provenance": {
+      "relevance": "measured",
+      "impact": "default",
+      "educational_value": "judged",
+      "difficulty": "default",
+      "market_relevance": "measured"
+    },
+    "priority": 2.0,
+    "changes": {},
+    "market": {
+      "subject": "litellm",
+      "job_term": "litellm",
+      "jobs": 0,
+      "downloads": 141593074,
+      "months": 3
+    }
+  },
+  {
+    "trend_id": "trend_026",
+    "chapter_id": "C24",
+    "confidence": 0.7,
+    "dimensions": {
+      "relevance": 2,
+      "impact": 2,
+      "educational_value": 1,
+      "difficulty": 2,
+      "market_relevance": 3
+    },
+    "provenance": {
+      "relevance": "measured",
+      "impact": "default",
+      "educational_value": "judged",
+      "difficulty": "default",
+      "market_relevance": "measured"
+    },
+    "priority": 2.0,
+    "changes": {},
+    "market": {
+      "subject": "matplotlib",
+      "job_term": "matplotlib",
+      "jobs": 1,
+      "downloads": 156605194,
+      "months": 3
+    }
+  },
+  {
+    "trend_id": "trend_027",
+    "chapter_id": "C5",
+    "confidence": 0.6705882352941176,
+    "dimensions": {
+      "relevance": 5,
+      "impact": 2,
+      "educational_value": 1,
+      "difficulty": 2,
+      "market_relevance": 4
+    },
+    "provenance": {
+      "relevance": "measured",
+      "impact": "default",
+      "educational_value": "judged",
+      "difficulty": "default",
+      "market_relevance": "measured"
+    },
+    "priority": 2.95,
+    "changes": {},
+    "market": {
+      "subject": "openai",
+      "job_term": "openai",
+      "jobs": 19,
+      "downloads": 286423757,
+      "months": 3
+    }
+  },
+  {
+    "trend_id": "trend_028",
+    "chapter_id": "C24",
+    "confidence": 0.7,
+    "dimensions": {
+      "relevance": 2,
+      "impact": 2,
+      "educational_value": 1,
+      "difficulty": 2,
+      "market_relevance": 4
+    },
+    "provenance": {
+      "relevance": "measured",
+      "impact": "default",
+      "educational_value": "judged",
+      "difficulty": "default",
+      "market_relevance": "measured"
+    },
+    "priority": 2.2,
+    "changes": {},
+    "market": {
+      "subject": "pandas",
+      "job_term": "pandas",
+      "jobs": 10,
+      "downloads": 524772986,
+      "months": 3
+    }
+  },
+  {
+    "trend_id": "trend_029",
+    "chapter_id": "C9",
+    "confidence": 0.7,
+    "dimensions": {
+      "relevance": 5,
+      "impact": 2,
+      "educational_value": 1,
+      "difficulty": 2,
+      "market_relevance": 2
+    },
+    "provenance": {
+      "relevance": "measured",
+      "impact": "default",
+      "educational_value": "judged",
+      "difficulty": "default",
+      "market_relevance": "measured"
+    },
+    "priority": 2.55,
+    "changes": {},
+    "market": {
+      "subject": "peft",
+      "job_term": "peft",
+      "jobs": 1,
+      "downloads": null,
+      "months": 3
+    }
+  },
+  {
+    "trend_id": "trend_030",
+    "chapter_id": "C8",
+    "confidence": 0.7,
+    "dimensions": {
+      "relevance": 2,
+      "impact": 2,
+      "educational_value": 1,
+      "difficulty": 2,
+      "market_relevance": 3
+    },
+    "provenance": {
+      "relevance": "measured",
+      "impact": "default",
+      "educational_value": "judged",
+      "difficulty": "default",
+      "market_relevance": "measured"
+    },
+    "priority": 2.0,
+    "changes": {},
+    "market": {
+      "subject": "pypdf",
+      "job_term": "pypdf",
+      "jobs": 0,
+      "downloads": 115340494,
+      "months": 3
+    }
+  },
+  {
+    "trend_id": "trend_031",
+    "chapter_id": "C7",
+    "confidence": 0.7,
+    "dimensions": {
+      "relevance": 2,
+      "impact": 2,
+      "educational_value": 1,
+      "difficulty": 2,
+      "market_relevance": 3
+    },
+    "provenance": {
+      "relevance": "measured",
+      "impact": "default",
+      "educational_value": "judged",
+      "difficulty": "default",
+      "market_relevance": "measured"
+    },
+    "priority": 2.0,
+    "changes": {},
+    "market": {
+      "subject": "rapidfuzz",
+      "job_term": "rapidfuzz",
+      "jobs": 0,
+      "downloads": 117050160,
+      "months": 3
+    }
+  },
+  {
+    "trend_id": "trend_032",
+    "chapter_id": "C4",
+    "confidence": 0.7,
+    "dimensions": {
+      "relevance": 2,
+      "impact": 2,
+      "educational_value": 1,
+      "difficulty": 2,
+      "market_relevance": 3
+    },
+    "provenance": {
+      "relevance": "measured",
+      "impact": "default",
+      "educational_value": "judged",
+      "difficulty": "default",
+      "market_relevance": "measured"
+    },
+    "priority": 2.0,
+    "changes": {},
+    "market": {
+      "subject": "scikit-learn",
+      "job_term": "scikit-learn",
+      "jobs": 1,
+      "downloads": 185452344,
+      "months": 3
+    }
+  },
+  {
+    "trend_id": "trend_033",
+    "chapter_id": "C6",
+    "confidence": 0.7,
+    "dimensions": {
+      "relevance": 2,
+      "impact": 2,
+      "educational_value": 1,
+      "difficulty": 2,
+      "market_relevance": 3
+    },
+    "provenance": {
+      "relevance": "measured",
+      "impact": "default",
+      "educational_value": "judged",
+      "difficulty": "default",
+      "market_relevance": "measured"
+    },
+    "priority": 2.0,
+    "changes": {},
+    "market": {
+      "subject": "sentence-transformers",
+      "job_term": "sentence-transformers",
+      "jobs": 3,
+      "downloads": 23459498,
+      "months": 3
+    }
+  },
+  {
+    "trend_id": "trend_034",
+    "chapter_id": "C10",
+    "confidence": 0.7,
+    "dimensions": {
+      "relevance": 5,
+      "impact": 2,
+      "educational_value": 1,
+      "difficulty": 2,
+      "market_relevance": 3
+    },
+    "provenance": {
+      "relevance": "measured",
+      "impact": "default",
+      "educational_value": "judged",
+      "difficulty": "default",
+      "market_relevance": "measured"
+    },
+    "priority": 2.75,
+    "changes": {},
+    "market": {
+      "subject": "streamlit",
+      "job_term": "streamlit",
+      "jobs": 3,
+      "downloads": 19293493,
+      "months": 3
+    }
+  },
+  {
+    "trend_id": "trend_035",
+    "chapter_id": "C4",
+    "confidence": 0.7,
+    "dimensions": {
+      "relevance": 2,
+      "impact": 2,
+      "educational_value": 1,
+      "difficulty": 2,
+      "market_relevance": 4
+    },
+    "provenance": {
+      "relevance": "measured",
+      "impact": "default",
+      "educational_value": "judged",
+      "difficulty": "default",
+      "market_relevance": "measured"
+    },
+    "priority": 2.2,
+    "changes": {},
+    "market": {
+      "subject": "torch",
+      "job_term": "pytorch",
+      "jobs": 19,
+      "downloads": 61900457,
+      "months": 3
+    }
+  },
+  {
+    "trend_id": "trend_036",
+    "chapter_id": "C4",
+    "confidence": 0.7,
+    "dimensions": {
+      "relevance": 2,
+      "impact": 2,
+      "educational_value": 1,
+      "difficulty": 2,
+      "market_relevance": 4
+    },
+    "provenance": {
+      "relevance": "measured",
+      "impact": "default",
+      "educational_value": "judged",
+      "difficulty": "default",
+      "market_relevance": "measured"
+    },
+    "priority": 2.2,
+    "changes": {},
+    "market": {
+      "subject": "torchvision",
+      "job_term": "pytorch",
+      "jobs": 19,
+      "downloads": 17263735,
+      "months": 3
+    }
+  },
+  {
+    "trend_id": "trend_037",
+    "chapter_id": "C8",
+    "confidence": 0.7,
+    "dimensions": {
+      "relevance": 2,
+      "impact": 2,
+      "educational_value": 1,
+      "difficulty": 2,
+      "market_relevance": 3
+    },
+    "provenance": {
+      "relevance": "measured",
+      "impact": "default",
+      "educational_value": "judged",
+      "difficulty": "default",
+      "market_relevance": "measured"
+    },
+    "priority": 2.0,
+    "changes": {},
+    "market": {
+      "subject": "unstructured",
+      "job_term": null,
+      "jobs": null,
+      "downloads": 2639288,
+      "months": 3
+    }
+  }
+]

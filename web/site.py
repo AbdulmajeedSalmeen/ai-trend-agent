@@ -142,6 +142,7 @@ def build_payload(run_dir: Path) -> dict:
             "recommendations": len(items),
             "update": sum(1 for i in items if i["action"] == "update_existing_material"),
             "new_lesson": sum(1 for i in items if i["action"] == "add_new_lesson"),
+            "not_taught": sum(1 for i in items if not i["chapter_id"]),
             "watch": sum(1 for i in items if i["action"] == "watch"),
             "kinds": kinds,
             "chapters": len(chapters),

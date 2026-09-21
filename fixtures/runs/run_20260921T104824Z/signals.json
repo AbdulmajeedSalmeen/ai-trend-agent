@@ -100,6 +100,16 @@
     "body": "Changes since cli==0.4.30\n\n* chore(cli): allow langgraph-api versions up to 1.0.0 (#8319)\n* chore(deps): bump the minor-and-patch group in /libs/cli with 5 updates (#8251)\n* chore(deps): bump the minor-and-patch group in /libs/cli/js-examples with 6 updates (#8246)\n* chore(deps): bump the minor-and-patch group in /libs/cli/js-monorepo-example with 7 updates (#8245)\n* chore(deps): bump starlette from 1.0.1 to 1.3.1 in /libs/cli (#8105)\n* chore(deps): bump langsmith from 0.8.0 to 0.8.18 in /libs/cli (#8172)\n* feat(cli): allow prebuild images for langgraph deploy (#8100)\n* chore(deps): bump langchain-anthropic from 1.0.0a5 to 1.4.6 in /libs/cli/examples/graph_prerelease_reqs in the pip group across 1 directory (#8145)\n* chore(deps): bump @babel/core from 7.25.2 to 7.29.7 in /libs/cli/js-examples (#8144)\n* chore(deps): bump js-yaml from 4.1.1 to 4.2.0 in /libs/cli/js-monorepo-example (#8143)\n* chore(deps): bump cryptography from 46.0.7 to 48.0.1 in /libs/cli (#8103)\n* chore(deps): bump pyjwt from 2.12.1 to 2.13.0 in /libs/cli (#8093)"
   },
   {
+    "id": "gh_langchain-typesafe_langchain-typesafe==0.0.1a3",
+    "source": "github",
+    "tier": 1,
+    "subject": "langchain-typesafe",
+    "title": "langchain-typesafe==0.0.1a3",
+    "url": "https://github.com/langchain-ai/langchain/releases/tag/langchain-typesafe%3D%3D0.0.1a3",
+    "published_at": "2026-09-20T18:54:54Z",
+    "body": "Initial release\n\nrelease(typesafe): 0.0.1a3 (#40693)\nfeat(typesafe): make classifier questions invocation-scoped (#40659)\nrelease(typesafe): bump to 0.0.1a2 (#40576)\nfeat(typesafe): experimental `AutoModeMiddleware` (#40545)\nfeat(typesafe): experimental `ModelRouterMiddleware` (#40543)\nfix(typesafe): trace usage metadata (#40570)\nfeat(typesafe): `TypeSafeClassifier` (#40542)"
+  },
+  {
     "id": "gh_langchain_langchain==1.4.2",
     "source": "github",
     "tier": 1,
@@ -188,16 +198,6 @@
     "url": "https://github.com/langchain-ai/langchain/releases/tag/langchain-core%3D%3D1.6.2",
     "published_at": "2026-09-04T21:29:42Z",
     "body": "Changes since langchain-core==1.6.1\n\nrelease(core): 1.6.2 (#40209)\nfeat(openai): support async tools (#40208)\nchore(deps): bump mistune from 3.3.0 to 3.3.3 in /libs/core (#40150)\nchore(deps): bump tornado from 6.5.7 to 6.5.8 in /libs/core (#40113)\nfix(core): avoid mutation in google-genai standard content (#40023)\nfix(core): avoid mutation in bedrock converse standard content (#40022)"
-  },
-  {
-    "id": "gh_langchain_langchain==1.4.0",
-    "source": "github",
-    "tier": 1,
-    "subject": "langchain",
-    "title": "langchain==1.4.0",
-    "url": "https://github.com/langchain-ai/langchain/releases/tag/langchain%3D%3D1.4.0",
-    "published_at": "2026-09-03T16:59:53Z",
-    "body": "Changes since langchain==1.3.18\n\ndocs(langchain): runnable `langchain.mcp` examples (#39976)\nfeat(langchain): `langchain.mcp` namespace, `MCPAdapter` (#39939)\nperf(anthropic,langchain): omit middleware trace inputs (#40098)\nfix(langchain): include model destination in agent tool routing (#38355)\nchore(langchain): bump vcrpy test dependency minimum to `>=8.2.0` (#39942)"
   },
   {
     "id": "gh_transformers_v5.17.0",
@@ -827,16 +827,6 @@
     "title": "ddgs 9.16.0",
     "url": "https://pypi.org/project/ddgs/9.16.0/",
     "published_at": "2026-08-26T21:52:32.001097Z",
-    "body": ""
-  },
-  {
-    "id": "pypi_dspy_3.3.1",
-    "source": "pypi",
-    "tier": 1,
-    "subject": "dspy",
-    "title": "dspy 3.3.1",
-    "url": "https://pypi.org/project/dspy/3.3.1/",
-    "published_at": "2026-08-21T23:06:12.591794Z",
     "body": ""
   },
   {
@@ -1670,16 +1660,6 @@
     "body": ""
   },
   {
-    "id": "pypi_unstructured_0.27.1",
-    "source": "pypi",
-    "tier": 1,
-    "subject": "unstructured",
-    "title": "unstructured 0.27.1",
-    "url": "https://pypi.org/project/unstructured/0.27.1/",
-    "published_at": "2026-08-21T20:58:41.633912Z",
-    "body": ""
-  },
-  {
     "id": "pypi_unstructured_0.27.5",
     "source": "pypi",
     "tier": 1,
@@ -2370,16 +2350,6 @@
     "body": ""
   },
   {
-    "id": "hn_49563398",
-    "source": "hackernews",
-    "tier": 2,
-    "subject": null,
-    "title": "LangBrain",
-    "url": "https://github.com/youssouf994/LangBrain",
-    "published_at": "2026-09-04T11:59:46Z",
-    "body": ""
-  },
-  {
     "id": "hn_49538195",
     "source": "hackernews",
     "tier": 2,
@@ -2720,6 +2690,136 @@
     "body": ""
   },
   {
+    "id": "hn_49784462",
+    "source": "hackernews",
+    "tier": 2,
+    "subject": null,
+    "title": "OpenAI's Agentic Software Factory",
+    "url": "https://newsletter.pragmaticengineer.com/p/openai-software-factory",
+    "published_at": "2026-09-21T08:10:49Z",
+    "body": ""
+  },
+  {
+    "id": "hn_49783477",
+    "source": "hackernews",
+    "tier": 2,
+    "subject": null,
+    "title": "OpenAI Degrading Their Models, Also for Paid Users",
+    "url": "https://old.reddit.com/r/codex/comments/1wkwdfl/the_end_of_the_codex_era_ive_completely_lost/",
+    "published_at": "2026-09-21T05:52:36Z",
+    "body": ""
+  },
+  {
+    "id": "hn_49781855",
+    "source": "hackernews",
+    "tier": 2,
+    "subject": null,
+    "title": "OpenAI Sees Burning Through $278B by 2030: FT",
+    "url": "https://www.bloomberg.com/news/articles/2026-09-18/openai-projects-burning-through-278-billion-by-2030-ft-says",
+    "published_at": "2026-09-21T01:07:08Z",
+    "body": ""
+  },
+  {
+    "id": "hn_49779802",
+    "source": "hackernews",
+    "tier": 2,
+    "subject": null,
+    "title": "OpenAI's Sam Altman to Brief UN Security Council Next Week",
+    "url": "https://www.reuters.com/business/openais-sam-altman-to-brief-un-security-council-next-week-during-2026-09-18/",
+    "published_at": "2026-09-20T20:32:43Z",
+    "body": ""
+  },
+  {
+    "id": "hn_49779714",
+    "source": "hackernews",
+    "tier": 2,
+    "subject": null,
+    "title": "Oracle and OpenAI Are Trampling Native Treaty Rights to Build Data Centers",
+    "url": "https://truthout.org/articles/big-tech-is-trampling-native-treaty-rights-to-build-data-centers/",
+    "published_at": "2026-09-20T20:24:21Z",
+    "body": ""
+  },
+  {
+    "id": "hn_49779561",
+    "source": "hackernews",
+    "tier": 2,
+    "subject": null,
+    "title": "Lawsuit says Anthropic, OpenAI and Google made illegal agreement on AI slowdown",
+    "url": "https://www.cnn.com/2026/09/19/business/ai-slowdown-lawsuit-antitrust",
+    "published_at": "2026-09-20T20:09:19Z",
+    "body": ""
+  },
+  {
+    "id": "hn_49779244",
+    "source": "hackernews",
+    "tier": 2,
+    "subject": null,
+    "title": "JEV OAS Sentinel \u2013 catch breaking API changes hidden in OpenAPI prose",
+    "url": "https://github.com/marketplace/actions/jev-oas-sentinel",
+    "published_at": "2026-09-20T19:36:54Z",
+    "body": ""
+  },
+  {
+    "id": "hn_49779166",
+    "source": "hackernews",
+    "tier": 2,
+    "subject": null,
+    "title": "How workers are unlocking new ways of working",
+    "url": "https://openai.com/index/unlocking-new-ways-of-working/",
+    "published_at": "2026-09-20T19:30:26Z",
+    "body": ""
+  },
+  {
+    "id": "hn_49779084",
+    "source": "hackernews",
+    "tier": 2,
+    "subject": null,
+    "title": "Post-Quantum OpenID Connect",
+    "url": "https://openid.net/post-quantum-openid-connect/",
+    "published_at": "2026-09-20T19:21:13Z",
+    "body": ""
+  },
+  {
+    "id": "hn_49776305",
+    "source": "hackernews",
+    "tier": 2,
+    "subject": null,
+    "title": "Researchers escape OpenAI Codex sandbox to run commands on host",
+    "url": "https://www.bleepingcomputer.com/news/security/researchers-escape-openai-codex-sandbox-to-run-commands-on-host/",
+    "published_at": "2026-09-20T14:35:11Z",
+    "body": ""
+  },
+  {
+    "id": "hn_49775817",
+    "source": "hackernews",
+    "tier": 2,
+    "subject": null,
+    "title": "Lawsuit: Anthropic, OpenAI, SpaceXAI and Google made illegal slowdown agreement",
+    "url": "https://www.pbs.org/newshour/nation/lawsuit-says-anthropic-openai-spacexai-and-google-made-illegal-agreement-on-ai-slowdown",
+    "published_at": "2026-09-20T13:43:27Z",
+    "body": ""
+  },
+  {
+    "id": "hn_49774704",
+    "source": "hackernews",
+    "tier": 2,
+    "subject": null,
+    "title": "Underclass: An OpenAI-compatible pooling proxy that pins sessions to one account",
+    "url": "https://github.com/ghuntley/underclass",
+    "published_at": "2026-09-20T11:24:22Z",
+    "body": ""
+  },
+  {
+    "id": "hn_49773624",
+    "source": "hackernews",
+    "tier": 2,
+    "subject": null,
+    "title": "OpenAI and Microsoft knew they were starting a 'doom loop' for the web",
+    "url": "https://www.theverge.com/ai-artificial-intelligence/997633/openai-microsoft-chatgpt-ai-new-york-times-doom-loop-theft-google-zero",
+    "published_at": "2026-09-20T08:07:08Z",
+    "body": ""
+  },
+  {
     "id": "hn_49772909",
     "source": "hackernews",
     "tier": 2,
@@ -2937,16 +3037,6 @@
     "title": "Hex turns complex analysis into visual reports with GPT-6 Astra",
     "url": "https://openai.com/index/hex-gpt-6-astra",
     "published_at": "2026-09-18T22:29:34Z",
-    "body": ""
-  },
-  {
-    "id": "hn_49760133",
-    "source": "hackernews",
-    "tier": 2,
-    "subject": null,
-    "title": "Sam Altman to brief UN Security Council next week",
-    "url": "https://www.reuters.com/business/openais-sam-altman-to-brief-un-security-council-next-week-during-2026-09-18/",
-    "published_at": "2026-09-18T20:55:07Z",
     "body": ""
   },
   {
@@ -3170,123 +3260,153 @@
     "body": ""
   },
   {
-    "id": "hn_49747212",
+    "id": "hn_49785402",
     "source": "hackernews",
     "tier": 2,
     "subject": null,
-    "title": "OpenAI Agents Got into Link Shortener, Surfed Web, Called FBI with a Stranger's",
-    "url": "https://www.kennethdegraff.com/swarm",
-    "published_at": "2026-09-17T22:00:01Z",
+    "title": "Show HN: Open Source AI Employees",
+    "url": "https://github.com/markfulton/ai-employees",
+    "published_at": "2026-09-21T10:28:45Z",
     "body": ""
   },
   {
-    "id": "hn_49746604",
+    "id": "hn_49783133",
     "source": "hackernews",
     "tier": 2,
     "subject": null,
-    "title": "OpenAI Safety Guardrails: What to Test Before Trusting an AI Agent",
-    "url": "https://www.pentesty.co/blog/openai-safety-guardrails-ai-agent-security",
-    "published_at": "2026-09-17T21:11:32Z",
+    "title": "Show HN: Mini-AGI \u2013 Dynamic continual learning model trained on 8GB VRAM",
+    "url": "https://github.com/volotat/mini-AGI/",
+    "published_at": "2026-09-21T04:42:37Z",
     "body": ""
   },
   {
-    "id": "hn_49746194",
+    "id": "hn_49780550",
     "source": "hackernews",
     "tier": 2,
     "subject": null,
-    "title": "RFC 3161 vs. OpenTimestamps: What Each Timestamp Proves",
-    "url": "https://zatona.dev/blog/rfc-3161-vs-opentimestamps",
-    "published_at": "2026-09-17T20:37:30Z",
+    "title": "Ask HN: Do we still need code editors, or are Git clients enough?",
+    "url": "https://news.ycombinator.com/item?id=49780550",
+    "published_at": "2026-09-20T22:04:19Z",
     "body": ""
   },
   {
-    "id": "hn_49745940",
+    "id": "hn_49780164",
     "source": "hackernews",
     "tier": 2,
     "subject": null,
-    "title": "Astra for Law",
-    "url": "https://openai.com/index/astra-for-law/",
-    "published_at": "2026-09-17T20:17:48Z",
+    "title": "Moneypenny: Build Grok bot like bots in Claude or codex",
+    "url": "https://moneypennyagent.com/",
+    "published_at": "2026-09-20T21:17:33Z",
     "body": ""
   },
   {
-    "id": "hn_49745932",
+    "id": "hn_49779581",
     "source": "hackernews",
     "tier": 2,
     "subject": null,
-    "title": "Microsoft, OpenAI lose fight to hide internal docs admitting scraping is theft",
-    "url": "https://arstechnica.com/tech-policy/2026/09/microsoft-exec-called-ai-scraping-the-largest-theft-of-labor-in-human-history/",
-    "published_at": "2026-09-17T20:16:52Z",
+    "title": "Show HN: Openmsg, agent-to-agent talk while they run, Claude<>Codex<>OpenCode",
+    "url": "https://github.com/marciob/openmsg",
+    "published_at": "2026-09-20T20:10:39Z",
     "body": ""
   },
   {
-    "id": "hn_49745457",
+    "id": "hn_49779499",
     "source": "hackernews",
     "tier": 2,
     "subject": null,
-    "title": "OpenAI discloses new 'concerning' behavior",
-    "url": "https://www.dw.com/en/openai-discloses-new-concerning-behavior/a-79300180",
-    "published_at": "2026-09-17T19:31:29Z",
+    "title": "Better Call Sol or Better yet Claude or Astra",
+    "url": "https://thezvi.substack.com/p/better-call-sol-or-better-yet-claude",
+    "published_at": "2026-09-20T20:02:46Z",
     "body": ""
   },
   {
-    "id": "hn_49745280",
+    "id": "hn_49778978",
     "source": "hackernews",
     "tier": 2,
     "subject": null,
-    "title": "Inside OpenAI\u2019s agentic software factory",
-    "url": "https://newsletter.pragmaticengineer.com/p/openai-software-factory",
-    "published_at": "2026-09-17T19:17:25Z",
+    "title": "Claude skill and Obsidian plugin to proofread your English writing",
+    "url": "https://codomaniac.com/claude-skill-and-obsidian-plugin-to-proofread-your-english-writing/",
+    "published_at": "2026-09-20T19:13:12Z",
     "body": ""
   },
   {
-    "id": "hn_49744380",
+    "id": "hn_49778641",
     "source": "hackernews",
     "tier": 2,
     "subject": null,
-    "title": "OpenAI Misalignment Reports",
-    "url": "https://alignment.openai.com/misalignment-reports/",
-    "published_at": "2026-09-17T18:04:04Z",
+    "title": "Anthropic is cutting Claude Code's current weekly limits by 17%",
+    "url": "https://www.bleepingcomputer.com/news/artificial-intelligence/anthropic-is-cutting-claude-codes-current-weekly-limits-by-17-percent/",
+    "published_at": "2026-09-20T18:40:25Z",
     "body": ""
   },
   {
-    "id": "hn_49744080",
+    "id": "hn_49778390",
     "source": "hackernews",
     "tier": 2,
     "subject": null,
-    "title": "OpenWispr, a free, open-source push-to-talk AI dictation app for Android",
-    "url": "https://github.com/EdiBianco/OpenWhispr",
-    "published_at": "2026-09-17T17:42:15Z",
+    "title": "Show HN: Bailout \u2013 The coding agent meant to be deleted",
+    "url": "https://github.com/storozhenko98/bailout",
+    "published_at": "2026-09-20T18:14:58Z",
     "body": ""
   },
   {
-    "id": "hn_49743813",
+    "id": "hn_49778253",
     "source": "hackernews",
     "tier": 2,
     "subject": null,
-    "title": "Whoever's doing OpenAI's system security is just incompetent in the worst way",
-    "url": "https://news.ycombinator.com/item?id=49743813",
-    "published_at": "2026-09-17T17:23:29Z",
+    "title": "What Claude Code's AGENTS.md fallback does not cover",
+    "url": "https://samplexbro.github.io/agentsmesh/guides/claude-md-vs-agents-md/",
+    "published_at": "2026-09-20T18:01:42Z",
     "body": ""
   },
   {
-    "id": "hn_49743558",
+    "id": "hn_49776698",
     "source": "hackernews",
     "tier": 2,
     "subject": null,
-    "title": "Should OpenAlex publish a novelty score? A vibe check",
-    "url": "https://blog.openalex.org/should-openalex-publish-a-novelty-score-a-vibe-check/",
-    "published_at": "2026-09-17T17:00:19Z",
+    "title": "Ask HN: What is one plausible path to 'AI extinction'?",
+    "url": "https://news.ycombinator.com/item?id=49776698",
+    "published_at": "2026-09-20T15:16:06Z",
     "body": ""
   },
   {
-    "id": "hn_49743183",
+    "id": "hn_49776570",
     "source": "hackernews",
     "tier": 2,
     "subject": null,
-    "title": "AI caught telling future versions of itself to bypass human controls",
-    "url": "https://www.the-independent.com/tech/security/openai-chatgpt-lie-incident-ai-safety-b3051709.html",
-    "published_at": "2026-09-17T16:31:42Z",
+    "title": "Show HN: I got Claude Code and Codex to argue about my code",
+    "url": "https://github.com/chen-985211/cleancode",
+    "published_at": "2026-09-20T15:04:17Z",
+    "body": ""
+  },
+  {
+    "id": "hn_49775383",
+    "source": "hackernews",
+    "tier": 2,
+    "subject": null,
+    "title": "Claude Found Seed-indpendent collisions in most popular hash functions",
+    "url": "https://thomasahle.com/blog/adversarial-examples-for-hashes/",
+    "published_at": "2026-09-20T12:55:12Z",
+    "body": ""
+  },
+  {
+    "id": "hn_49774919",
+    "source": "hackernews",
+    "tier": 2,
+    "subject": null,
+    "title": "Claude Code is getting native AGENTS.md support",
+    "url": "https://github.com/anthropics/claude-code/tree/main/mods/agents-md",
+    "published_at": "2026-09-20T11:58:12Z",
+    "body": ""
+  },
+  {
+    "id": "hn_49774271",
+    "source": "hackernews",
+    "tier": 2,
+    "subject": null,
+    "title": "Joe Shipman proves marked ruler and compass solves the general quintic",
+    "url": "https://news.ycombinator.com/item?id=49774271",
+    "published_at": "2026-09-20T09:57:42Z",
     "body": ""
   },
   {
@@ -3377,16 +3497,6 @@
     "title": "Show HN: I asked Claude Code to teach my son about the phases of the moon",
     "url": "https://ricardoborges.github.io/MoonSrc/",
     "published_at": "2026-09-19T12:49:58Z",
-    "body": ""
-  },
-  {
-    "id": "hn_49765635",
-    "source": "hackernews",
-    "tier": 2,
-    "subject": null,
-    "title": "Claude Code Supports AGENTS.md",
-    "url": "https://github.com/anthropics/claude-code/tree/main/mods/agents-md",
-    "published_at": "2026-09-19T11:30:15Z",
     "body": ""
   },
   {
@@ -3660,143 +3770,73 @@
     "body": ""
   },
   {
-    "id": "hn_49749773",
+    "id": "hn_49785290",
     "source": "hackernews",
     "tier": 2,
     "subject": null,
-    "title": "Show HN: Concat: the open-source CapCut replacement.",
-    "url": "https://github.com/jub0t/Concat",
-    "published_at": "2026-09-18T03:04:58Z",
+    "title": "Thomson Reuters: Thomson-1.0-Small",
+    "url": "https://huggingface.co/thomsonreuters/Thomson-1.0-Small",
+    "published_at": "2026-09-21T10:08:35Z",
     "body": ""
   },
   {
-    "id": "hn_49749632",
+    "id": "hn_49783349",
     "source": "hackernews",
     "tier": 2,
     "subject": null,
-    "title": "Cache-Tax",
-    "url": "https://github.com/karanb192/claude-code-mods/tree/main/plugins/cache-tax",
-    "published_at": "2026-09-18T02:41:02Z",
+    "title": "DeltaTensors: Git for model fine-tunes that also saves you storage",
+    "url": "https://news.ycombinator.com/item?id=49783349",
+    "published_at": "2026-09-21T05:25:32Z",
     "body": ""
   },
   {
-    "id": "hn_49749457",
+    "id": "hn_49782912",
     "source": "hackernews",
     "tier": 2,
     "subject": null,
-    "title": "The open source version of Claude Project that gives you the context ownershp",
-    "url": "https://github.com/zqiren/Orbital",
-    "published_at": "2026-09-18T02:14:21Z",
+    "title": "Show HN: Mahabharata Characters \u2013 307 figures with gunas and decision primitives",
+    "url": "https://huggingface.co/datasets/gnumanth/mahabharata-characters",
+    "published_at": "2026-09-21T04:01:08Z",
     "body": ""
   },
   {
-    "id": "hn_49749019",
+    "id": "hn_49780344",
     "source": "hackernews",
     "tier": 2,
     "subject": null,
-    "title": "Claude Code from Source",
-    "url": "https://claude-code-from-source.com/",
-    "published_at": "2026-09-18T01:14:04Z",
+    "title": "Show HN: Ran Qwen 3.8 27B autonomously(ish) for 3 weeks on single 3090",
+    "url": "https://huggingface.co/datasets/skeole/qwen-cpp-agent-0-protocol",
+    "published_at": "2026-09-20T21:38:22Z",
     "body": ""
   },
   {
-    "id": "hn_49748648",
+    "id": "hn_49779887",
     "source": "hackernews",
     "tier": 2,
     "subject": null,
-    "title": "Anthropic says Claude now leads a quarter of work building its next AI models",
-    "url": "https://www.businesstimes.com.sg/companies-markets/telcos-media-tech/anthropic-says-claude-now-leads-quarter-work-building-its-next-ai-models",
-    "published_at": "2026-09-18T00:22:35Z",
+    "title": "Panic Won't Fix the Looming A.I. Threat. Politics Will",
+    "url": "https://www.nytimes.com/2026/09/19/opinion/ai-hugging-face-big-tech-danger.html",
+    "published_at": "2026-09-20T20:44:02Z",
     "body": ""
   },
   {
-    "id": "hn_49747128",
+    "id": "hn_49774861",
     "source": "hackernews",
     "tier": 2,
     "subject": null,
-    "title": "How Claude is uplifting biomolecular modeling",
-    "url": "https://www.anthropic.com/research/claude-uplifts-biomolecular-modeling",
-    "published_at": "2026-09-17T21:53:19Z",
+    "title": "Ternary-Bonsai-8B-Gguf",
+    "url": "https://huggingface.co/prism-ml/Ternary-Bonsai-8B-gguf",
+    "published_at": "2026-09-20T11:49:02Z",
     "body": ""
   },
   {
-    "id": "hn_49746401",
+    "id": "hn_49774452",
     "source": "hackernews",
     "tier": 2,
     "subject": null,
-    "title": "Show HN: Microsoft Office running with Wine on Linux with no virtualization",
-    "url": "https://github.com/Tombert/office365_flake",
-    "published_at": "2026-09-17T20:52:22Z",
-    "body": ""
-  },
-  {
-    "id": "hn_49746340",
-    "source": "hackernews",
-    "tier": 2,
-    "subject": null,
-    "title": "Please remove all mannered prose",
-    "url": "https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/prompting-claude-fable-5-1",
-    "published_at": "2026-09-17T20:47:28Z",
-    "body": ""
-  },
-  {
-    "id": "hn_49746321",
-    "source": "hackernews",
-    "tier": 2,
-    "subject": null,
-    "title": "Using Jev for Claude Code model routing",
-    "url": "https://github.com/gargpratyush/jev-router",
-    "published_at": "2026-09-17T20:46:40Z",
-    "body": ""
-  },
-  {
-    "id": "hn_49746238",
-    "source": "hackernews",
-    "tier": 2,
-    "subject": null,
-    "title": "Claude Slides, Claude Design and Claude Docs",
-    "url": "https://www.youtube.com/watch?v=To5nrYqvR44",
-    "published_at": "2026-09-17T20:40:53Z",
-    "body": ""
-  },
-  {
-    "id": "hn_49745810",
-    "source": "hackernews",
-    "tier": 2,
-    "subject": null,
-    "title": "After the Write Hole (Btrfs)",
-    "url": "https://claude.ai/code/artifact/90f24687-21ff-4709-a3e0-5bf50ba547c2",
-    "published_at": "2026-09-17T20:05:33Z",
-    "body": ""
-  },
-  {
-    "id": "hn_49745627",
-    "source": "hackernews",
-    "tier": 2,
-    "subject": null,
-    "title": "Show HN: Multiplayer Mode for AI Agents",
-    "url": "https://gotincan.com/",
-    "published_at": "2026-09-17T19:48:24Z",
-    "body": ""
-  },
-  {
-    "id": "hn_49745351",
-    "source": "hackernews",
-    "tier": 2,
-    "subject": null,
-    "title": "Show HN: MCPJam - the first testing & evaluations platform for MCP servers",
-    "url": "https://www.mcpjam.com",
-    "published_at": "2026-09-17T19:23:47Z",
-    "body": ""
-  },
-  {
-    "id": "hn_49744490",
-    "source": "hackernews",
-    "tier": 2,
-    "subject": null,
-    "title": "Show HN: Agent Router picks Cursor/Claude and effort per task, then launches it",
-    "url": "https://github.com/nidhi-singh02/agent-router",
-    "published_at": "2026-09-17T18:13:55Z",
+    "title": "What the Hugging Face Incident Changed in How I See the Current State of AI",
+    "url": "https://chrhenning.com/blog/2026/hugging-face-incident/",
+    "published_at": "2026-09-20T10:35:54Z",
     "body": ""
   },
   {
@@ -4260,73 +4300,163 @@
     "body": ""
   },
   {
-    "id": "hn_49628391",
+    "id": "hn_49783694",
     "source": "hackernews",
     "tier": 2,
     "subject": null,
-    "title": "IBM releases SOTA Granite Time Series model with commercial-friendly license",
-    "url": "https://huggingface.co/blog/ibm-research/ibm-releases-sota-granite-time-series",
-    "published_at": "2026-09-09T15:41:58Z",
+    "title": "Models Watching Models",
+    "url": "https://www.southbridge.ai/blog/jev-watching-the-agents",
+    "published_at": "2026-09-21T06:28:19Z",
     "body": ""
   },
   {
-    "id": "hn_49625820",
+    "id": "hn_49783671",
     "source": "hackernews",
     "tier": 2,
     "subject": null,
-    "title": "OpenAI/Hugging Face incident \u2013 Independent investigation of agents' behavior [pdf]",
-    "url": "https://metr.org/hugging-face-incident-report-aug-2026.pdf",
-    "published_at": "2026-09-09T12:58:35Z",
+    "title": "Evaluating Long-Term Memory for AI Agents: AML Cycle 2 Is Now Open",
+    "url": "https://twitter.com/AgentMemoryL/status/2101515447816663222",
+    "published_at": "2026-09-21T06:24:34Z",
     "body": ""
   },
   {
-    "id": "hn_49625508",
+    "id": "hn_49783107",
     "source": "hackernews",
     "tier": 2,
     "subject": null,
-    "title": "Show HN: Mark 1x-9B \u2013 a 9B model that answers with interfaces, not paragraphs",
-    "url": "https://huggingface.co/Saanora/mark-1x-9b",
-    "published_at": "2026-09-09T12:33:05Z",
+    "title": "Investment Seer: Agentic AI-Powered Stock and Crypto Analyst",
+    "url": "https://investmentseer.com/",
+    "published_at": "2026-09-21T04:36:47Z",
     "body": ""
   },
   {
-    "id": "hn_49621585",
+    "id": "hn_49782242",
     "source": "hackernews",
     "tier": 2,
     "subject": null,
-    "title": "Introduction \u00b7 Hugging Face",
-    "url": "https://huggingface.co/learn/llm-course/en/chapter1/1",
-    "published_at": "2026-09-09T05:41:43Z",
+    "title": "Can I Let My AI Agent Run on Shabbat?",
+    "url": "https://www.chabad.org/library/article_cdo/aid/7288064/jewish/Can-I-Let-My-AI-Agent-Run-on-Shabbat.htm",
+    "published_at": "2026-09-21T02:05:45Z",
     "body": ""
   },
   {
-    "id": "hn_49613632",
+    "id": "hn_49782006",
     "source": "hackernews",
     "tier": 2,
     "subject": null,
-    "title": "Give Your Coding Agents a Memory You Own",
-    "url": "https://huggingface.co/blog/funes",
-    "published_at": "2026-09-08T17:35:27Z",
+    "title": "ZCode: Z.ai's coding agent harness. Powerful, intelligent, extensible",
+    "url": "https://github.com/zai-org/ZCode",
+    "published_at": "2026-09-21T01:28:58Z",
     "body": ""
   },
   {
-    "id": "hn_49607271",
+    "id": "hn_49781727",
     "source": "hackernews",
     "tier": 2,
     "subject": null,
-    "title": "Neural Canvas: a fruit fly connectome demo in the browser",
-    "url": "https://huggingface.co/spaces/Xenova/fruit-fly-simulation",
-    "published_at": "2026-09-08T08:23:30Z",
+    "title": "Show HN: Gdocs-me-up: a high-fidelity Google Docs exporter",
+    "url": "https://github.com/behdad/gdocs-me-up",
+    "published_at": "2026-09-21T00:46:42Z",
     "body": ""
   },
   {
-    "id": "hn_49604579",
+    "id": "hn_49780222",
     "source": "hackernews",
     "tier": 2,
     "subject": null,
-    "title": "Outrageously Small Neural Networks: Emergent Basic Reasoning at 6,616 tok/SEC [pdf]",
-    "url": "https://huggingface.co/gdiamos/amx-reasoning-v1-instruct/blob/main/paper.pdf",
-    "published_at": "2026-09-08T01:07:48Z",
+    "title": "Show HN: AgentTrace\u2013Observability and runtime self-healing engine for AI agents",
+    "url": "https://github.com/mohitkumar188/AgentTrace",
+    "published_at": "2026-09-20T21:24:17Z",
+    "body": ""
+  },
+  {
+    "id": "hn_49779504",
+    "source": "hackernews",
+    "tier": 2,
+    "subject": null,
+    "title": "Why are AI agents lying, cheating and coordinating?",
+    "url": "https://yoshuabengio.org/en/blog/why-are-ai-agents-lying-cheating-and-coordinating",
+    "published_at": "2026-09-20T20:03:14Z",
+    "body": ""
+  },
+  {
+    "id": "hn_49779500",
+    "source": "hackernews",
+    "tier": 2,
+    "subject": null,
+    "title": "I see the mathematicians panicking at what we can do with agentic AI",
+    "url": "https://twitter.com/lemire/status/2101684818358439959",
+    "published_at": "2026-09-20T20:02:46Z",
+    "body": ""
+  },
+  {
+    "id": "hn_49779485",
+    "source": "hackernews",
+    "tier": 2,
+    "subject": null,
+    "title": "Casbin Gateway: a security gateway for the AI coding agents on your machine",
+    "url": "https://github.com/apache/casbin-gateway",
+    "published_at": "2026-09-20T20:01:25Z",
+    "body": ""
+  },
+  {
+    "id": "hn_49777181",
+    "source": "hackernews",
+    "tier": 2,
+    "subject": null,
+    "title": "Show HN: OpensourceDB Tamper-evident,checksum-backed decision and session replay",
+    "url": "https://github.com/ZIZKA-AI-SL/ZizkaDB",
+    "published_at": "2026-09-20T16:07:23Z",
+    "body": ""
+  },
+  {
+    "id": "hn_49776683",
+    "source": "hackernews",
+    "tier": 2,
+    "subject": null,
+    "title": "Karen Nikoghosyan Is Building AI Operating Layers for Multichannel Commerce",
+    "url": "https://news.ycombinator.com/item?id=49776683",
+    "published_at": "2026-09-20T15:15:00Z",
+    "body": ""
+  },
+  {
+    "id": "hn_49775627",
+    "source": "hackernews",
+    "tier": 2,
+    "subject": null,
+    "title": "Show HN: Keep your social media active without posting every day",
+    "url": "https://post.buzz/",
+    "published_at": "2026-09-20T13:24:07Z",
+    "body": ""
+  },
+  {
+    "id": "hn_49775481",
+    "source": "hackernews",
+    "tier": 2,
+    "subject": null,
+    "title": "BragJack attacks hijack AI browser agents through malicious extensions",
+    "url": "https://www.bleepingcomputer.com/news/security/bragjack-attacks-hijack-ai-browser-agents-through-malicious-extensions/",
+    "published_at": "2026-09-20T13:07:09Z",
+    "body": ""
+  },
+  {
+    "id": "hn_49775304",
+    "source": "hackernews",
+    "tier": 2,
+    "subject": null,
+    "title": "AAA AI \u2013 Autonomous AI agent squads for local and cloud LLMs",
+    "url": "https://aaaai.me/",
+    "published_at": "2026-09-20T12:45:19Z",
+    "body": ""
+  },
+  {
+    "id": "hn_49773912",
+    "source": "hackernews",
+    "tier": 2,
+    "subject": null,
+    "title": "Enjambre \u2013 a durable kernel for swarms of AI agents (Python, MCP)",
+    "url": "https://github.com/santibccc-sudo/enjambre-os",
+    "published_at": "2026-09-20T08:55:30Z",
     "body": ""
   },
   {
@@ -4697,166 +4827,6 @@
     "title": "Show HN: AI agents design an open chip, the best one gets fabricated",
     "url": "https://neruva.io/",
     "published_at": "2026-09-18T11:51:21Z",
-    "body": ""
-  },
-  {
-    "id": "hn_49752422",
-    "source": "hackernews",
-    "tier": 2,
-    "subject": null,
-    "title": "ZCode, the GLM coding agent, silently uploads your Git history",
-    "url": "https://tokenstead.ai/guides/zcode-silent-git-history-upload",
-    "published_at": "2026-09-18T10:35:28Z",
-    "body": ""
-  },
-  {
-    "id": "hn_49750622",
-    "source": "hackernews",
-    "tier": 2,
-    "subject": null,
-    "title": "UN turns to Google to make its global data ready for AI agents",
-    "url": "https://techcrunch.com/2026/09/17/un-turns-to-google-to-make-its-global-data-ready-for-ai-agents/",
-    "published_at": "2026-09-18T05:59:46Z",
-    "body": ""
-  },
-  {
-    "id": "hn_49750009",
-    "source": "hackernews",
-    "tier": 2,
-    "subject": null,
-    "title": "macOS 27 is a lifesaver for killing leftover AI Agent processes",
-    "url": "https://9to5mac.com/2026/06/09/macos-27-golden-gate-makes-it-clear-when-apps-are-sneakily-running-in-background/",
-    "published_at": "2026-09-18T03:55:42Z",
-    "body": ""
-  },
-  {
-    "id": "hn_49749997",
-    "source": "hackernews",
-    "tier": 2,
-    "subject": null,
-    "title": "The Provenance Tax: How LLM Watermarking Changes AI Agent Behavior",
-    "url": "https://www.lasso.security/blog/the-provenance-tax-understanding-the-impact-of-llm-watermarking-on-ai-agent-behavior",
-    "published_at": "2026-09-18T03:53:51Z",
-    "body": ""
-  },
-  {
-    "id": "hn_49749829",
-    "source": "hackernews",
-    "tier": 2,
-    "subject": null,
-    "title": "Google announces new experimental \"CC\" AI agent for families",
-    "url": "https://arstechnica.com/google/2026/09/google-announces-new-experimental-cc-ai-agent-for-families/",
-    "published_at": "2026-09-18T03:14:57Z",
-    "body": ""
-  },
-  {
-    "id": "hn_49749689",
-    "source": "hackernews",
-    "tier": 2,
-    "subject": null,
-    "title": "Show HN: An open Add/Search evaluation framework for agent memory",
-    "url": "https://agentmemoryleaderboard.ai/",
-    "published_at": "2026-09-18T02:52:01Z",
-    "body": ""
-  },
-  {
-    "id": "hn_49748868",
-    "source": "hackernews",
-    "tier": 2,
-    "subject": null,
-    "title": "AI agents can modify themselves without humans telling them to do so",
-    "url": "https://www.theregister.com/security/2026/09/16/ai-agents-can-modify-themselves-without-humans-telling-them-to-do-so/5296991",
-    "published_at": "2026-09-18T00:53:02Z",
-    "body": ""
-  },
-  {
-    "id": "hn_49748775",
-    "source": "hackernews",
-    "tier": 2,
-    "subject": null,
-    "title": "Lakera \u2013 Test your AI hacking skills",
-    "url": "https://play.lakera.ai/agent-breaker",
-    "published_at": "2026-09-18T00:38:21Z",
-    "body": ""
-  },
-  {
-    "id": "hn_49748067",
-    "source": "hackernews",
-    "tier": 2,
-    "subject": null,
-    "title": "SHOW HN: I built the fastest PHP webserver in the world",
-    "url": "https://news.ycombinator.com/item?id=49748067",
-    "published_at": "2026-09-17T23:18:42Z",
-    "body": ""
-  },
-  {
-    "id": "hn_49748041",
-    "source": "hackernews",
-    "tier": 2,
-    "subject": null,
-    "title": "Show HN: Scry, programmable internet search w/ congestion pricing",
-    "url": "https://scry.io/",
-    "published_at": "2026-09-17T23:15:57Z",
-    "body": ""
-  },
-  {
-    "id": "hn_49747632",
-    "source": "hackernews",
-    "tier": 2,
-    "subject": null,
-    "title": "Show HN: Respawn \u2013 an undo button for AI agents (Rust, local-first, no cloud)",
-    "url": "https://github.com/savageAZfck/respawn",
-    "published_at": "2026-09-17T22:36:40Z",
-    "body": ""
-  },
-  {
-    "id": "hn_49747623",
-    "source": "hackernews",
-    "tier": 2,
-    "subject": null,
-    "title": "Show HN: Unmute \u2013 a single definition for voice agents, pushed to any stack",
-    "url": "https://github.com/slng-ai/unmute",
-    "published_at": "2026-09-17T22:36:09Z",
-    "body": ""
-  },
-  {
-    "id": "hn_49747494",
-    "source": "hackernews",
-    "tier": 2,
-    "subject": null,
-    "title": "Agent Session Introspection",
-    "url": "https://lmstudio.ai/blog/introducing-introspection",
-    "published_at": "2026-09-17T22:23:00Z",
-    "body": ""
-  },
-  {
-    "id": "hn_49747239",
-    "source": "hackernews",
-    "tier": 2,
-    "subject": null,
-    "title": "Show HN: Salt \u2013 Human and AI Economies driven across E2E encrypted chats",
-    "url": "https://saltapp.ai/",
-    "published_at": "2026-09-17T22:02:07Z",
-    "body": ""
-  },
-  {
-    "id": "hn_49747226",
-    "source": "hackernews",
-    "tier": 2,
-    "subject": null,
-    "title": "Resy suspends VC for using AI agents to book reservations",
-    "url": "https://www.businessinsider.com/resy-suspends-vcs-account-ai-agent-reservation-attempt-2026-9",
-    "published_at": "2026-09-17T22:01:14Z",
-    "body": ""
-  },
-  {
-    "id": "hn_49746795",
-    "source": "hackernews",
-    "tier": 2,
-    "subject": null,
-    "title": "Show HN: AI crawler honeypot \u2013 logs every agent that requests it",
-    "url": "https://ai-crawler-honeypot-697299601273.europe-west2.run.app/",
-    "published_at": "2026-09-17T21:28:13Z",
     "body": ""
   }
 ]

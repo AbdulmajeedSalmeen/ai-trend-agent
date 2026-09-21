@@ -215,3 +215,24 @@ def test_an_unbound_package_with_a_new_concept_is_worth_rewriting_for():
     assessment = make_assessment(gap.UNPINNED, pinned=None)
 
     assert decide_action(score, assessment) == "update_existing_material"
+
+
+def test_a_pinned_notebook_a_minor_version_behind_still_runs_and_is_watched():
+    score = make_score(chapter_id="C4", priority=3.4)
+    assessment = make_assessment(gap.BEHIND_MINOR, pinned="2.5.1", latest="2.14.0")
+
+    assert decide_action(score, assessment) == "watch"
+
+
+def test_a_minor_gap_with_a_breaking_change_in_the_notes_is_rewritten():
+    score = make_score(chapter_id="C4", priority=3.4,
+                       changes={"breaking": 2, "highlights": ["breaking: remove the old API"]})
+    assessment = make_assessment(gap.BEHIND_MINOR, pinned="2.5.1", latest="2.14.0")
+
+    assert decide_action(score, assessment) == "update_existing_material"
+
+
+def test_a_major_gap_is_rewritten_even_with_no_notes():
+    score = make_score(chapter_id="C8", priority=3.4)
+
+    assert decide_action(score, make_assessment(gap.BEHIND_MAJOR, pinned="0.1.0")) == "update_existing_material"

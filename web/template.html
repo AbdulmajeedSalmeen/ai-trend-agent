@@ -135,7 +135,7 @@ const T = {
     tab_act: "What to do", tab_map: "Curriculum map", tab_ev: "Evidence", tab_run: "About this run",
     h_act: "Ordered by priority", h_map: "Where this week lands in the course", h_ev: "Every claim, and what backs it", h_run: "What this run can and cannot show",
     map_sub: "A highlighted chapter has something new this week. A package with no chapter is a gap in the course.",
-    s_signals: "signals collected", s_trends: "subjects tracked", s_update: "chapters to update", s_gaps: "not in the curriculum", s_claims: "checkable claims",
+    s_signals: "signals collected", s_trends: "subjects tracked", s_update: "chapters to update", s_gaps: "worth a new lesson", s_claims: "checkable claims",
     f_all: "All", f_update: "Update a chapter", f_add: "New lesson", f_watch: "Watch only",
     f_new: "New since last run",
     s_fresh: "arrived since the last run", s_standing: "still open from earlier runs",
@@ -182,6 +182,8 @@ const T = {
     n6_t: "The model stopped early", n6_b: "The model returned {why} and was not asked again this run. Every sentence below therefore comes from the rules, which is the fallback the stages are built around.",
     ch_breaking: "breaking", ch_deprecation: "deprecated", ch_feature: "new features", ch_fix: "fixes",
     ch_maintenance: "maintenance only, nothing new to teach", ch_title: "What the releases changed",
+    wg_title: "Nothing to change yet",
+    wg_note: "{n} packages only shipped fixes this week. They stay on the watch list until a release changes what the course should teach.",
     mk_jobs: "job posts, last {m} months", mk_installs: "installs last month", mk_title: "Does the market want it",
     mk_few: "few employers ask for it yet",
     m_repeat: "asked for in {n} runs running", m_since: "since", m_moved: "new version since the last run",
@@ -201,7 +203,7 @@ const T = {
     tab_act: "ماذا نفعل", tab_map: "خريطة المنهج", tab_ev: "الأدلة", tab_run: "عن هذه التشغيلة",
     h_act: "مرتّبة حسب الأولوية", h_map: "أين يقع جديد هذا الأسبوع من المقرر", h_ev: "كل ادّعاء، وما يسنده", h_run: "ما تستطيع هذه التشغيلة إثباته وما لا تستطيع",
     map_sub: "الفصل المميّز فيه جديد هذا الأسبوع. والحزمة بلا فصل فجوة في المقرر.",
-    s_signals: "إشارة مجمّعة", s_trends: "موضوعاً متتبَّعاً", s_update: "فصلاً يحتاج تحديثاً", s_gaps: "خارج المنهج", s_claims: "ادّعاءً قابلاً للفحص",
+    s_signals: "إشارة مجمّعة", s_trends: "موضوعاً متتبَّعاً", s_update: "فصلاً يحتاج تحديثاً", s_gaps: "تستحق درساً جديداً", s_claims: "ادّعاءً قابلاً للفحص",
     f_all: "الكل", f_update: "تحديث فصل", f_add: "درس جديد", f_watch: "مراقبة فقط",
     f_new: "الجديد منذ آخر تشغيلة",
     s_fresh: "وصلت منذ آخر تشغيلة", s_standing: "ما زالت مفتوحة من تشغيلات سابقة",
@@ -248,6 +250,8 @@ const T = {
     n6_t: "النموذج توقف مبكراً", n6_b: "أرجع النموذج {why} فلم نسأله مرة أخرى في هذه التشغيلة. وكل جملة في الأسفل مصدرها القواعد، وهي البديل الذي بُنيت عليه المراحل.",
     ch_breaking: "تغيير كاسر", ch_deprecation: "مهجور", ch_feature: "ميزات جديدة", ch_fix: "إصلاحات",
     ch_maintenance: "صيانة فقط، لا جديد يُدرَّس", ch_title: "ما الذي غيّرته الإصدارات",
+    wg_title: "لا شيء يستدعي التغيير بعد",
+    wg_note: "{n} حزمة لم تصدر لها هذا الأسبوع إلا إصلاحات. تبقى في قائمة المراقبة حتى يغيّر إصدارٌ ما ينبغي أن يدرّسه المقرر.",
     mk_jobs: "وظيفة، آخر {m} أشهر", mk_installs: "تثبيت الشهر الماضي", mk_title: "هل يطلبه السوق",
     mk_few: "قلّة من أصحاب العمل يطلبونه",
     m_repeat: "مطلوب منذ {n} تشغيلات متتالية", m_since: "منذ", m_moved: "نسخة جديدة منذ آخر تشغيلة",
@@ -377,25 +381,52 @@ function whyLine(item) {
   const m = item.market || {};
   const parts = [];
 
+  /* The counts are what a teacher reads first, so they are set as figures in
+     the display face, not folded into a sentence. Breaking changes lead: they
+     are the ones that break material already written. */
   if (Object.keys(c).length) {
     const teachable = (c.breaking || 0) + (c.deprecation || 0) + (c.feature || 0);
-    const counts = teachable
-      ? ["breaking", "deprecation", "feature"].filter((k) => c[k])
-          .map((k) => `<b>${c[k]}</b> ${esc(t("ch_" + k))}`).join(" ")
-      : `<span class="quiet">${esc(t("ch_maintenance"))}</span>`;
-    const lines = (c.highlights || []).map((h) => `<li>${esc(h.split(": ").slice(1).join(": "))}</li>`).join("");
-    parts.push(`<div class="why-changed"><span class="why-t">${esc(t("ch_title"))}</span>
-      <span class="why-v">${counts}</span>${lines ? `<ul class="why-list">${lines}</ul>` : ""}</div>`);
+    const figs = teachable
+      ? `<div class="why-figs">${["breaking", "deprecation", "feature"].filter((k) => c[k]).map((k) =>
+          `<span class="why-fig" data-kind="${k}"><b>${c[k]}</b><span>${esc(t("ch_" + k))}</span></span>`).join("")}</div>`
+      : `<p class="quiet">${esc(t("ch_maintenance"))}</p>`;
+    const lines = (c.highlights || []).map((h) =>
+      `<li>${esc(h.split(": ").slice(1).join(": "))}</li>`).join("");
+    parts.push(`<div class="why-panel why-changed"><span class="why-t">${esc(t("ch_title"))}</span>
+      ${figs}${lines ? `<ul class="why-list">${lines}</ul>` : ""}</div>`);
   }
 
+  /* Who pays for it and who uses it are different questions, so they get
+     different marks rather than two bars on one scale. Job posts are a small
+     count across a narrow range and read correctly as a length. Installs span
+     five orders of magnitude, where a linear bar hides almost every package
+     and a logarithmic one is read as linear and overstates the small ones, so
+     they take a stepped size class instead: discrete cells say "this order of
+     magnitude", not "this much". An unmeasured value is left out, never drawn
+     as a zero. */
   if (m.jobs !== undefined && (m.jobs !== null || m.downloads !== null)) {
-    const bits = [];
-    if (m.jobs !== null) bits.push(`<b>${m.jobs}</b> ${esc(fill(t("mk_jobs"), { m: m.months || 3 }))}`);
-    if (m.downloads !== null) bits.push(`<b dir="ltr">${compactNumber(m.downloads)}</b> ${esc(t("mk_installs"))}`);
+    const rows = [];
+    if (m.jobs !== null) {
+      const widest = Math.max(1, ...DATA.items.map((i) => ((i.market || {}).jobs) || 0));
+      const bar = m.jobs > 0 ? `<i style="width:${Math.max(4, (m.jobs / widest) * 100).toFixed(1)}%"></i>` : "";
+      rows.push(`<div class="mk-row">
+        <span class="mk-label">${esc(fill(t("mk_jobs"), { m: m.months || 3 }))}</span>
+        <span class="mk-track">${bar}</span>
+        <b class="mk-num">${m.jobs}</b></div>`);
+    }
+    if (m.downloads !== null) {
+      /* One cell per power of ten from a thousand upward, capped at six. */
+      const steps = m.downloads >= 1000 ? Math.min(6, Math.floor(Math.log10(m.downloads)) - 2) : 0;
+      const cells = Array.from({ length: 6 }, (_, i) => `<i${i < steps ? ' class="on"' : ""}></i>`).join("");
+      rows.push(`<div class="mk-row">
+        <span class="mk-label">${esc(t("mk_installs"))}</span>
+        <span class="mk-mag" aria-hidden="true">${cells}</span>
+        <b class="mk-num" dir="ltr">${compactNumber(m.downloads)}</b></div>`);
+    }
     const few = item.provenance && item.provenance.market_relevance === "measured"
-      && item.dimensions.market_relevance < 3 ? ` <span class="quiet">${esc(t("mk_few"))}</span>` : "";
-    parts.push(`<div class="why-market"><span class="why-t">${esc(t("mk_title"))}</span>
-      <span class="why-v">${bits.join(" &middot; ")}${few}</span></div>`);
+      && item.dimensions.market_relevance < 3 ? `<p class="quiet">${esc(t("mk_few"))}</p>` : "";
+    parts.push(`<div class="why-panel why-market"><span class="why-t">${esc(t("mk_title"))}</span>
+      ${rows.join("")}${few}</div>`);
   }
 
   return parts.length ? `<div class="why">${parts.join("")}</div>` : "";
@@ -407,7 +438,7 @@ function memberBlock(item, showName) {
        <span class="chip ${actionClass(item.action)}">${esc(t(item.action))}</span>
        <span class="mprio">${esc(t("priority"))} ${item.priority.toFixed(2)}</span></div>`
     : "";
-  return `${name}${gapLine(item)}${whyLine(item)}<p class="reason">${esc(item.rationale)}</p>${claimsTable(item)}`;
+  return `${name}${whyLine(item)}${gapLine(item)}<p class="reason">${esc(item.rationale)}</p>${claimsTable(item)}`;
 }
 
 function renderAct() {
@@ -421,7 +452,7 @@ function renderAct() {
     : i.action === actFilter);
   const groups = groupFamilies(items);
 
-  document.getElementById("actList").innerHTML = groups.length ? groups.map((g) => {
+  const card = (g) => {
     const lead = g.lead;
     const chapter = lead.chapter_id
       ? `<span class="chip chapter">${esc(lead.chapter_id)}</span>`
@@ -456,7 +487,30 @@ function renderAct() {
       </summary>
       <div class="body">${g.members.map((m) => memberBlock(m, g.members.length > 1)).join("")}</div>
     </details>`;
-  }).join("") : `<p class="empty"><strong>${esc(t("empty_t"))}</strong><span>${esc(t("empty_b"))}</span></p>`;
+  };
+
+  /* Most weeks, most releases only fix things, so most of the list is watch.
+     Sorted purely by priority the seven that ask for action were scattered
+     through thirty that do not, and the page opened on a wall of "nothing to
+     do". In the full view the actions lead and the watch list gathers into one
+     group underneath, closed, with its count and the reason it is quiet. The
+     filters still show any single kind on its own. */
+  let html;
+  if (actFilter === "all") {
+    const acting = groups.filter((g) => g.lead.action !== "watch");
+    const watching = groups.filter((g) => g.lead.action === "watch");
+    html = acting.map(card).join("") + (watching.length ? `<details class="watchgroup">
+      <summary>
+        <span class="wg-head"><span class="wg-t">${esc(t("wg_title"))}</span><span class="wg-n">${watching.length}</span></span>
+        <span class="wg-note">${esc(fill(t("wg_note"), { n: watching.length }))}</span>
+      </summary>
+      <div class="wg-body">${watching.map(card).join("")}</div>
+    </details>` : "");
+  } else {
+    html = groups.map(card).join("");
+  }
+  document.getElementById("actList").innerHTML = groups.length ? html
+    : `<p class="empty"><strong>${esc(t("empty_t"))}</strong><span>${esc(t("empty_b"))}</span></p>`;
 }
 
 function renderMap() {
@@ -1192,8 +1246,8 @@ function renderAll() {
   const c = DATA.counts;
   document.getElementById("runid").textContent = DATA.run_id;
   document.getElementById("headline").innerHTML = lang === "ar"
-    ? `${c.trends} موضوعاً هذا الأسبوع، منها <b>${c.update}</b> تستدعي تحديث فصل، و<span class="warn">${c.new_lesson}</span> أدوات لا يغطيها المنهج.`
-    : `${c.trends} subjects this week: <b>${c.update}</b> call for a chapter update and <span class="warn">${c.new_lesson}</span> are not in the curriculum at all.`;
+    ? `${c.trends} موضوعاً هذا الأسبوع، منها <b>${c.update}</b> تستدعي تحديث فصل، و<span class="warn">${c.new_lesson}</span> تستحق درساً جديداً${c.not_taught > c.new_lesson ? ` من أصل ${c.not_taught} لا يغطيها المنهج` : ""}.`
+    : `${c.trends} subjects this week: <b>${c.update}</b> call for a chapter update and <span class="warn">${c.new_lesson}</span> deserve a new lesson${c.not_taught > c.new_lesson ? `, of ${c.not_taught} the course does not teach` : ""}.`;
   document.getElementById("c_act").textContent = groupFamilies(DATA.items).length;
   document.getElementById("c_map").textContent = c.chapters;
   document.getElementById("c_ev").textContent = c.claims;
@@ -1498,10 +1552,10 @@ function markConfirmations(n) {
   const still = () => matchMedia("(prefers-reduced-motion: reduce)").matches;
 
   document.addEventListener("click", (event) => {
-    const summary = event.target.closest("details.card > summary");
+    const summary = event.target.closest("details.card > summary, details.watchgroup > summary");
     if (!summary) return;
     const card = summary.parentElement;
-    const body = card.querySelector(":scope > .body");
+    const body = card.querySelector(":scope > .body, :scope > .wg-body");
     if (!body) return;
 
     /* Reduced motion keeps the native toggle: the state change still reads,

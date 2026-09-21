@@ -7,7 +7,9 @@ the official release that would have to confirm it, then compares the confirmed 
 with what our own course notebooks install. It follows every package the course installs,
 because that watchlist is read out of the material rather than typed by us.
 
-It does not report news. It reports what our material teaches that no longer exists.
+It does not report news. It reports what our material teaches that no longer exists, and
+what employers ask for that the course does not teach yet. A version number is evidence,
+never the reason on its own.
 
 ## What it found
 
@@ -51,16 +53,26 @@ version.** Three rules keep that honest:
    said elsewhere is confirmed by an official release. Two registries run by the same project
    are not independent, so they do not get to count as a cross-source check.
 
-**A chapter is only called stale when the distance can be measured.** The verdict comes from
-what the notebooks actually install:
+**It decides the way a school would, not the way a changelog does.** Most of what ships is
+not teachable: of 2,933 lines in the release notes of the frozen run, nine in ten are fixes or
+chores. So the agent reads the notes and sorts every line into breaking, deprecation,
+feature, fix or chore, the judge is shown what changed rather than the version number, and
+market demand comes from real job posts and real installs rather than from how much a tool
+is discussed.
+
+**A chapter is only called stale when the distance can be measured and it matters.** The
+verdict comes from what the notebooks install and what the releases changed:
 
 | What the scan finds | Verdict |
 |---|---|
-| A major or minor release since the pinned version | worth rewriting |
-| Only patch releases since | leave it alone |
-| No bound, and the chapter teaches the package | no guarantee, a student installs whatever shipped that day |
-| No bound, but the package is only a dependency | a version to pin, not material to rewrite |
-| Nothing recorded | say so, do not call the chapter stale |
+| The notebook calls an API a newer release removed | rewrite: the material does not run |
+| A major release since the pinned version | rewrite: semver says a major breaks things |
+| A minor gap, and the notes show a breaking change or a new concept | rewrite |
+| A minor gap, and the notes show only fixes and chores | watch: the pinned notebook still runs |
+| No bound, and the releases add something the chapter should teach | rewrite |
+| No bound, and nothing read shows a change worth teaching | watch, and pin the version |
+| No chapter, and employers ask for it | a new lesson |
+| No chapter, and few employers ask for it | watch |
 
 ### Where the model is allowed to decide
 
@@ -74,21 +86,23 @@ instead. The run log says so when it happens.
 
 ## Numbers from the frozen run
 
-`run_20260920T080135Z` travels with the repo, so anyone can replay it with no network.
+`run_20260921T104824Z` travels with the repo, so anyone can replay it with no network.
 
 | | |
 |---|---|
-| Signals collected | 486, being 316 Hacker News, 90 PyPI and 80 GitHub |
+| Signals collected | 483, being 315 Hacker News, 88 PyPI and 80 GitHub |
 | Packages followed | 53, every one the course notebooks install |
 | Subjects tracked | 37 |
-| Checkable claims | 157 |
+| Checkable claims | 156 |
 | Confirmed by the release itself | 139 |
-| Carried by a second registry | 14 |
+| Carried by a second registry | 13 |
 | Confirmed by an independent source | 0 |
 | Unverified | 4 |
-| Recommendations | 12 update a chapter, 4 new lesson, 21 watch |
+| Release-note lines read | 2,933: 17 breaking, 2 deprecations, 308 features, 948 fixes, 1,658 chores |
+| Job posts searched | the last three "Ask HN: Who is hiring?" threads, about 1,200 posts |
+| Recommendations | 5 update a chapter, 2 new lesson, 30 watch |
 | Chapters with something to act on | 11 of 25 |
-| Tests | 174, none of which calls a model or the network |
+| Tests | 285, none of which calls a model or the network |
 
 Cross-source is zero because no discussion post this week stated anything a release page
 could check. That is a property of the data, not a gap in the checker, and the page prints

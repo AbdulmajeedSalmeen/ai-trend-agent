@@ -39,6 +39,7 @@
       "gh_langgraph_1.2.9",
       "hn_49657460",
       "hn_49345619",
+      "hn_48016483",
       "hn_49408247",
       "hn_49275717",
       "hn_47467676",
@@ -50,13 +51,13 @@
       "hn_48953085",
       "hn_47906692",
       "hn_48952432",
+      "hn_49723289",
       "hn_49664619",
       "hn_48920715",
       "hn_48343061",
       "hn_48805437",
-      "hn_48185834",
       "hn_47727255",
-      "hn_47510639",
+      "hn_49767823",
       "hn_48766154",
       "hn_48147471",
       "hn_48761132",
@@ -68,11 +69,11 @@
       "hn_49761145",
       "hn_48346869",
       "hn_48331106",
+      "hn_48026370",
       "hn_48316615",
       "hn_48306369",
-      "hn_48026370",
-      "hn_49756160",
-      "hn_49755195",
+      "hn_48185834",
+      "hn_47510639",
       "hn_47977127",
       "hn_47937042",
       "hn_47628609"
@@ -209,11 +210,56 @@
   },
   {
     "id": "trend_007",
+    "subject": "langchain-typesafe",
+    "signal_ids": [
+      "gh_langchain-typesafe_langchain-typesafe==0.0.1a3",
+      "gh_langchain-typesafe_langchain-typesafe==0.0.1a2",
+      "gh_langchain-typesafe_langchain-typesafe==0.0.1a1",
+      "hn_49573630",
+      "hn_49332584",
+      "hn_49785402",
+      "hn_49751141",
+      "hn_49734345"
+    ],
+    "claims": [
+      {
+        "text": "langchain-typesafe version 0.0.1a3 was released",
+        "subject": "langchain-typesafe",
+        "version": "0.0.1a3",
+        "verdict": "confirmed",
+        "evidence_url": "https://github.com/langchain-ai/langchain/releases/tag/langchain-typesafe%3D%3D0.0.1a3",
+        "confidence": 0.7,
+        "source_signal_id": "gh_langchain-typesafe_langchain-typesafe==0.0.1a3",
+        "evidence_kind": "primary_report"
+      },
+      {
+        "text": "langchain-typesafe version 0.0.1a2 was released",
+        "subject": "langchain-typesafe",
+        "version": "0.0.1a2",
+        "verdict": "confirmed",
+        "evidence_url": "https://github.com/langchain-ai/langchain/releases/tag/langchain-typesafe%3D%3D0.0.1a2",
+        "confidence": 0.7,
+        "source_signal_id": "gh_langchain-typesafe_langchain-typesafe==0.0.1a2",
+        "evidence_kind": "primary_report"
+      },
+      {
+        "text": "langchain-typesafe version 0.0.1a1 was released",
+        "subject": "langchain-typesafe",
+        "version": "0.0.1a1",
+        "verdict": "confirmed",
+        "evidence_url": "https://github.com/langchain-ai/langchain/releases/tag/langchain-typesafe%3D%3D0.0.1a1",
+        "confidence": 0.7,
+        "source_signal_id": "gh_langchain-typesafe_langchain-typesafe==0.0.1a1",
+        "evidence_kind": "primary_report"
+      }
+    ]
+  },
+  {
+    "id": "trend_008",
     "subject": "langchain",
     "signal_ids": [
       "gh_langchain_langchain==1.4.2",
       "gh_langchain_langchain==1.4.1",
-      "gh_langchain_langchain==1.4.0",
       "pypi_langchain_1.3.17",
       "pypi_langchain_1.3.18",
       "pypi_langchain_1.4.0",
@@ -229,19 +275,16 @@
       "hn_49461911",
       "hn_48588177",
       "hn_48295920",
+      "hn_49777181",
       "hn_49744527",
-      "hn_49754080",
+      "hn_49750964",
+      "hn_49780164",
       "hn_49702684",
       "hn_49766795",
-      "hn_49573630",
-      "hn_49332584",
-      "hn_49734345",
       "hn_49227511",
       "hn_48794716",
       "hn_48768491",
       "hn_49761110",
-      "hn_48016483",
-      "hn_49621585",
       "hn_48001123",
       "hn_47928150",
       "hn_47911058",
@@ -317,9 +360,9 @@
         "version": "1.4.0",
         "verdict": "confirmed",
         "evidence_url": "https://pypi.org/project/langchain/1.4.0/",
-        "confidence": 0.8,
-        "source_signal_id": "gh_langchain_langchain==1.4.0",
-        "evidence_kind": "registry_match"
+        "confidence": 0.7,
+        "source_signal_id": "pypi_langchain_1.4.0",
+        "evidence_kind": "primary_report"
       },
       {
         "text": "langchain version 1.3.18 was released",
@@ -350,36 +393,6 @@
         "confidence": 0.2,
         "source_signal_id": "hn_48810399",
         "evidence_kind": null
-      }
-    ]
-  },
-  {
-    "id": "trend_008",
-    "subject": "langchain-typesafe",
-    "signal_ids": [
-      "gh_langchain-typesafe_langchain-typesafe==0.0.1a2",
-      "gh_langchain-typesafe_langchain-typesafe==0.0.1a1"
-    ],
-    "claims": [
-      {
-        "text": "langchain-typesafe version 0.0.1a2 was released",
-        "subject": "langchain-typesafe",
-        "version": "0.0.1a2",
-        "verdict": "confirmed",
-        "evidence_url": "https://github.com/langchain-ai/langchain/releases/tag/langchain-typesafe%3D%3D0.0.1a2",
-        "confidence": 0.7,
-        "source_signal_id": "gh_langchain-typesafe_langchain-typesafe==0.0.1a2",
-        "evidence_kind": "primary_report"
-      },
-      {
-        "text": "langchain-typesafe version 0.0.1a1 was released",
-        "subject": "langchain-typesafe",
-        "version": "0.0.1a1",
-        "verdict": "confirmed",
-        "evidence_url": "https://github.com/langchain-ai/langchain/releases/tag/langchain-typesafe%3D%3D0.0.1a1",
-        "confidence": 0.7,
-        "source_signal_id": "gh_langchain-typesafe_langchain-typesafe==0.0.1a1",
-        "evidence_kind": "primary_report"
       }
     ]
   },
@@ -1249,7 +1262,6 @@
     "id": "trend_021",
     "subject": "dspy",
     "signal_ids": [
-      "pypi_dspy_3.3.1",
       "pypi_dspy_3.4.0b1"
     ],
     "claims": [
@@ -1261,16 +1273,6 @@
         "evidence_url": "https://pypi.org/project/dspy/3.4.0b1/",
         "confidence": 0.7,
         "source_signal_id": "pypi_dspy_3.4.0b1",
-        "evidence_kind": "primary_report"
-      },
-      {
-        "text": "dspy version 3.3.1 was released",
-        "subject": "dspy",
-        "version": "3.3.1",
-        "verdict": "confirmed",
-        "evidence_url": "https://pypi.org/project/dspy/3.3.1/",
-        "confidence": 0.7,
-        "source_signal_id": "pypi_dspy_3.3.1",
         "evidence_kind": "primary_report"
       }
     ]
@@ -1652,57 +1654,61 @@
       "pypi_openai_3.9.0",
       "hn_48852366",
       "hn_48568824",
+      "hn_49773624",
       "hn_49750788",
-      "hn_49772909",
-      "hn_49772427",
+      "hn_48499258",
+      "hn_49761432",
+      "hn_49784462",
+      "hn_49783477",
+      "hn_49752361",
+      "hn_49783694",
+      "hn_49781855",
       "hn_49772294",
       "hn_49761392",
-      "hn_49769668",
-      "hn_49752586",
+      "hn_49779802",
+      "hn_49779714",
+      "hn_49779561",
+      "hn_49775817",
       "hn_49769050",
       "hn_49768108",
       "hn_49767558",
       "hn_49766722",
       "hn_49765720",
-      "hn_49768921",
-      "hn_49745932",
+      "hn_49776305",
+      "hn_49779581",
+      "hn_49774704",
+      "hn_49772909",
+      "hn_49772427",
+      "hn_49769668",
       "hn_49767080",
       "hn_49766921",
       "hn_49766056",
       "hn_49764030",
       "hn_49758749",
       "hn_49754406",
-      "hn_49761432",
-      "hn_49753045",
       "hn_49755468",
       "hn_49754903",
       "hn_49754831",
       "hn_49753020",
       "hn_49752766",
-      "hn_49752361",
+      "hn_49752586",
       "hn_49751030",
       "hn_49662872",
+      "hn_49655215",
       "hn_49651701",
       "hn_49750216",
       "hn_49749656",
       "hn_49748613",
       "hn_49747379",
       "hn_49762699",
-      "hn_49747212",
-      "hn_49746604",
-      "hn_49745457",
-      "hn_49745280",
-      "hn_49744380",
-      "hn_49743813",
+      "hn_49774452",
       "hn_49771266",
       "hn_49733629",
       "hn_49731861",
       "hn_49716241",
       "hn_49697478",
       "hn_49669099",
-      "hn_49655215",
       "hn_49643948",
-      "hn_49625820",
       "hn_49715010",
       "hn_49688493",
       "hn_49659245",
@@ -1870,13 +1876,13 @@
         "evidence_kind": "primary_report"
       },
       {
-        "text": "'Doom Loop': OpenAI and Microsoft Admits LLMs Are Destroying the Web",
+        "text": "OpenAI and Microsoft knew they were starting a 'doom loop' for the web",
         "subject": "openai",
         "version": null,
         "verdict": "unverified",
         "evidence_url": null,
         "confidence": 0.2,
-        "source_signal_id": "hn_49750788",
+        "source_signal_id": "hn_49773624",
         "evidence_kind": null
       }
     ]
@@ -2122,7 +2128,6 @@
     "id": "trend_037",
     "subject": "unstructured",
     "signal_ids": [
-      "pypi_unstructured_0.27.1",
       "pypi_unstructured_0.27.5",
       "pypi_unstructured_0.27.6"
     ],
@@ -2145,16 +2150,6 @@
         "evidence_url": "https://pypi.org/project/unstructured/0.27.5/",
         "confidence": 0.7,
         "source_signal_id": "pypi_unstructured_0.27.5",
-        "evidence_kind": "primary_report"
-      },
-      {
-        "text": "unstructured version 0.27.1 was released",
-        "subject": "unstructured",
-        "version": "0.27.1",
-        "verdict": "confirmed",
-        "evidence_url": "https://pypi.org/project/unstructured/0.27.1/",
-        "confidence": 0.7,
-        "source_signal_id": "pypi_unstructured_0.27.1",
         "evidence_kind": "primary_report"
       }
     ]

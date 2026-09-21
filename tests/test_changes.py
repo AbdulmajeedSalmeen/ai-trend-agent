@@ -198,3 +198,30 @@ def test_a_leading_emoji_is_dropped():
     summary = changes.classify("### Breaking changes\n* 🚨 TP dtensor API inference")
 
     assert summary["highlights"] == ["breaking: TP dtensor API inference"]
+
+
+def test_a_fix_for_a_breaking_change_is_a_fix_not_a_break():
+    summary = changes.classify("### Bug Fixes\n* Fix Breaking Change in Message Block Buffer Resolution")
+
+    assert summary["fix"] == 1
+    assert summary["breaking"] == 0
+
+
+def test_a_chore_that_announces_a_breaking_change_is_breaking():
+    summary = changes.classify("### Chores\n* client: upgrade to httpx2 and some minor breaking changes")
+
+    assert summary["breaking"] == 1
+
+
+def test_an_unsorted_line_that_opens_with_fix_is_a_fix():
+    summary = changes.classify("### llama-index-core [0.14.21]\n- Fix Breaking Change in Message Block Buffer Resolution")
+
+    assert summary["fix"] == 1
+    assert summary["breaking"] == 0
+
+
+def test_a_change_listed_twice_in_one_release_counts_once():
+    notes = ("### Chores\n* client: upgrade to httpx2 and some minor breaking changes\n"
+             "### Refactors\n* client: upgrade to httpx2 and some minor breaking changes\n")
+
+    assert changes.classify(notes)["breaking"] == 1

@@ -1,9 +1,10 @@
 """What a release actually changed, read from its notes.
 
 A version number says something shipped. It does not say whether a teacher should
-care. Four in five lines of the release notes we collect are chores; a bootcamp
-needs to know about the breaking change and the new concept, not the dependency
-bump. This reads the notes and sorts every line into the kind of change it is.
+care. Across the frozen run's release notes, nine lines in ten are fixes or chores
+and about one in nine is a breaking change, a deprecation or a new feature; a
+bootcamp needs that one line, not the dependency bump. This reads the notes and
+sorts every line into the kind of change it is.
 
 Release notes arrive in four shapes, and all four are handled:
   - one conventional commit per line:   "feat(langgraph): expose trace_policy"
@@ -46,7 +47,7 @@ TEACHABLE = ("breaking", "deprecation", "feature")
 
 ADDITION_RE = re.compile(r"^(add|adds|added|support|supports|introduce|introduces|new|enable|expose)\b", re.I)
 DEPRECATION_RE = re.compile(r"\bdeprecat", re.I)
-BREAKING_TEXT = re.compile(r"\bbreaking change\b", re.I)
+BREAKING_TEXT = re.compile(r"\bbreaking changes?\b", re.I)
 REMOVAL_TEXT = re.compile(
     r"\b(remove|removes|removed|drop|drops|dropped)\b.*\b(support|api|argument|parameter|method|class|function|module)\b",
     re.I,
@@ -54,6 +55,7 @@ REMOVAL_TEXT = re.compile(
 PRERELEASE_RE = re.compile(r"\d(a|b|rc|dev|alpha|beta)\d*$", re.I)
 
 NOISE_TEXT = re.compile(r"^(bump|update) .*(dependenc|version|group)|^release\b", re.I)
+FIX_TEXT = re.compile(r"^(fix|fixes|fixed|resolve|resolves|resolved)\b", re.I)
 
 
 def clean(text: str) -> str:
@@ -123,16 +125,27 @@ def line_kind(line: str, section: str | None) -> tuple[str, str] | None:
     if NOISE_TEXT.search(text):
         return "noise", text
 
+    # An unsorted line that opens with "Fix" is a fix, whatever it mentions.
+    # "Fix Breaking Change in Message Block Buffer Resolution" sat under a
+    # package heading rather than "Bug Fixes", and was read as a new break.
+    if FIX_TEXT.match(text):
+        return "fix", text
+
     return ("feature" if ADDITION_RE.match(text) else "other"), text
 
 
 def promote(kind: str, text: str) -> tuple[str, str]:
     """A line that says it breaks something is breaking, whatever section it sat in.
 
-    A fix is never promoted for removing something: taking out the argument that
-    caused a bug is still a fix to the person reading it. A feature or an
-    unsorted line that removes support or an API is not.
+    A fix is never promoted. "Fix Breaking Change in Message Block Buffer" is a
+    fix for a regression, not a new break, and reading it as one handed
+    llama_index a breaking change it never shipped. Taking out the argument that
+    caused a bug is likewise still a fix. A feature, a chore or an unsorted line
+    that announces a breaking change or removes an API is not.
     """
+    if kind == "fix":
+        return kind, text
+
     if BREAKING_TEXT.search(text):
         return "breaking", text
 
@@ -148,6 +161,7 @@ def classify(notes: str) -> dict:
     counts = {kind: 0 for kind in KINDS}
     highlights: list[tuple[str, str]] = []
     section = None
+    seen: set[str] = set()
 
     for raw in (notes or "").splitlines():
         heading = HEADING_RE.match(raw)
@@ -162,6 +176,13 @@ def classify(notes: str) -> dict:
             continue
 
         kind, text = promote(*found)
+
+        # The same change listed twice in one release is one change. Release
+        # notes that repeat a line under two headings counted it twice.
+        if text.lower() in seen:
+            continue
+
+        seen.add(text.lower())
         counts[kind] += 1
 
         if kind in TEACHABLE and len(text) > 8:

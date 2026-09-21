@@ -49,9 +49,16 @@ def decide_action(score: Score, assessment: dict | None = None) -> str:
         # notebook still calls, or a breaking change or new concept read out of
         # the release notes. Without either, "a newer version exists" is the
         # only reason left, and a version number is evidence, never a reason.
-        # That rule sent nine PyPI-only packages with no notes to "update the
-        # chapter" on the strength of their version alone.
+        # Without this, six unbound PyPI-only packages with no notes at all were
+        # sent to "update the chapter" on the strength of their version alone.
         if assessment["kind"] == gap.UNPINNED and not assessment["legacy"] and teachable_changes(score) == 0:
+            return "watch"
+
+        # A pinned notebook runs for the student exactly as it was written, so a
+        # minor-version gap on its own breaks nothing. It takes a breaking change,
+        # a deprecation or a new concept in the notes to make the gap matter. A
+        # major gap is different: semver says a major release breaks things.
+        if assessment["kind"] == gap.BEHIND_MINOR and not assessment["legacy"] and teachable_changes(score) == 0:
             return "watch"
 
         if assessment["kind"] in gap.ACTIONABLE:
@@ -154,6 +161,9 @@ def build_rationale(trend: Trend, score: Score, action: str,
         parts.append("Nothing read from its releases shows that it breaks what the chapter teaches "
                      "or adds something worth teaching, so there is nothing to rewrite. Pinning the "
                      "version in the notebook keeps it that way.")
+    elif action == "watch" and assessment["kind"] == gap.BEHIND_MINOR:
+        parts.append("The notebook pins its version, so it runs for a student exactly as written, "
+                     "and nothing read from the releases shows the approach it teaches has changed.")
     elif action == "watch" and score.chapter_id is None and market_wants_it(score) is False:
         parts.append("Not a new lesson until more employers ask for it.")
 

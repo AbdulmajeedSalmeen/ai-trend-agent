@@ -1,6 +1,6 @@
 # Progress
 
-**Last updated:** 2026-09-20 · **Tests:** 221 passing · **Demo:** Sep 26–27
+**Last updated:** 2026-09-21 · **Tests:** 285 passing · **Demo:** Sep 26–27
 
 The pipeline runs end to end, live, from a web app. A model reads, judges and writes;
 rules still decide what counts as confirmed, and every recommendation now carries the reason
@@ -35,6 +35,11 @@ behind it: what the chapter teaches, which version it runs, and how far the rele
   Evidence from a different document is `cross_source`; the release speaking about itself is
   `primary_report`.
 - One trend per subject; versions are claims inside it, not separate trends.
+- **The agent decides like a school, not a changelog.** A version number is evidence, never
+  the reason on its own. Impact comes from what the release notes say changed (breaking,
+  deprecation, feature, fix, chore), not from how often a package ships. Market relevance
+  comes from job posts in the "Ask HN: Who is hiring?" threads and from PyPI installs, kept
+  apart, not from how much a tool is discussed. A new lesson needs employers asking for it.
 - PyPI is a second tier-1 source, because it is the registry `pip install` actually reads.
   Two registries carrying the same version is `registry_match`, not `cross_source`: they are
   the same publisher, and passing that off as an independent check would be grading our own
@@ -105,7 +110,7 @@ behind it: what the chapter teaches, which version it runs, and how far the rele
 - [x] `docs/FROM-THE-COURSE.md` — what we took from the bootcamp and what we left
 - [x] Team names in README, and how to run everything after the move to `web/`
 - [x] `docs/DEMO-QA.md` — the hard questions, each answered from the frozen run
-- [x] Demo run frozen: `run_20260920T080135Z` now travels with the repo, so anyone can
+- [x] Demo run frozen: `run_20260921T104824Z` now travels with the repo, so anyone can
       replay it offline
 
 ## Not done
@@ -117,6 +122,22 @@ behind it: what the chapter teaches, which version it runs, and how far the rele
 - [ ] Optional: GitHub token per member (60 requests/hour without one)
 
 ## Standup log
+
+### 2026-09-21
+- The lead asked the right question: would a school care about every langchain version, or
+  about whether a change matters for lessons and for jobs? Measured it. The judge had been
+  shown nothing but "version 1.4.2 was released" and rated 29 of 37 packages 2 out of 5 with
+  nothing above 3; "market relevance" was a count of Hacker News posts; "impact" was how often
+  a package shipped. Rebuilt all three.
+- `src/changes.py` reads the release notes we had been throwing away and sorts every line; of
+  2,933 lines, nine in ten are fixes or chores. `src/sources/market.py` counts job posts
+  naming each tool over three months (about 1,200 posts) and reads PyPI installs.
+- Decisions moved from 12 updates and 4 new lessons to 5 updates and 2 new lessons, each with
+  a reason a teacher would accept. crewai (4 job posts) is no longer a new lesson; torch,
+  pinned at 2.5.1 and still running, is no longer a rewrite; six packages with no notes at all
+  are no longer rewrites on their version alone. langchain stays a rewrite: its notebooks call
+  APIs 1.x removed.
+- Frozen run moved to `run_20260921T104824Z`, which carries market data and a trace.
 
 ### 2026-09-20 (evening)
 - PyPI joined as a second tier-1 source and the watchlist is now the 53 packages the course
