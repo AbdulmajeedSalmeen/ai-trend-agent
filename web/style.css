@@ -555,7 +555,7 @@ body[dir="rtl"] .filters button { font-family: var(--ar); font-weight: 600; }
 .card, .chapter { transition: border-color 200ms var(--ease-out), box-shadow 200ms var(--ease-out), transform 180ms var(--ease-out); }
 .card:active { transform: scale(.995); }
 .card > summary {
-  list-style: none; cursor: pointer; padding: 18px 46px 18px 20px;
+  list-style: none; cursor: pointer; padding-block: 18px; padding-inline: 20px 46px;
   display: grid; gap: 6px; position: relative;
   transition: transform 140ms var(--ease-out);
 }
@@ -592,15 +592,22 @@ body[dir="rtl"] .chip { font-family: var(--ar); }
 .chip.update { background: var(--gold-soft); color: var(--gold-ink); border-color: var(--gold-edge); }
 .chip.add { background: var(--crit-soft); color: var(--crit-ink); border-color: var(--crit-edge); }
 .chip.watch { background: var(--gray-soft); color: var(--ink-soft); border-color: var(--line); }
-.chip.chapter { background: var(--gray-soft); color: var(--ink-soft); font-family: var(--mono); font-weight: 500; border-color: var(--line); }
+.chip.chapter {
+  background: var(--gray-soft); color: var(--ink-soft); font-family: var(--mono); font-weight: 500; border-color: var(--line);
+  /* The curriculum map's chapter cards share this class name. A chip must not
+     inherit a card's padding, radius, shadow or hover lift. */
+  display: inline-block; padding: 6px 10px; margin: 0; border-radius: var(--r-pill);
+  box-shadow: none; transform: none;
+}
 .chip.gap { background: var(--crit-soft); color: var(--crit-ink); border-color: var(--crit-edge); }
 .chip.pkgs { background: var(--gray-soft); color: var(--ink-faint); font-family: var(--mono); font-weight: 500; border-color: var(--line); }
 
 /* A recommendation the run keeps making and nobody has acted on. It is neither
    a confirmation nor a gap, so it takes no hue at all; it gets its weight from
    contrast instead, which is the loudest thing left once colour is spoken for.
-   Two runs is a note and stays outlined. Four or more is a standing debt and
-   inverts, so it carries further than anything else in the row. */
+   A repeat is a note and stays outlined. Three weeks, a fourth weekly run, is
+   a standing debt and inverts, so it carries further than anything else in
+   the row. */
 .chip.streak { font-variant-numeric: lining-nums tabular-nums; }
 .chip.streak[data-weight="soft"] {
   background: transparent; color: var(--ink-soft);
@@ -671,33 +678,27 @@ body[dir="rtl"] .muted-none { font-style: normal; font-family: var(--ar); }
 
 /* -------------------------------------------------------------- gaplines -- */
 
+/* The version line. It used to open the card; the card now opens on what the
+   releases changed and whether employers want it, so this is the footnote that
+   says which version shipped, set as one quiet line. Graded by what the reader
+   must do: only a major jump, the one semver says breaks things, keeps the
+   alert hue, and only on its meter and its word. A minor jump runs for a
+   student exactly as it was written, so it asks for nothing and stays neutral. */
 .gapline {
   display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
-  margin: 0 0 11px; padding: 8px 11px; border-radius: var(--r-chip);
-  background: var(--gray-soft); border: 1px solid var(--line);
-  font: 500 11.5px/1.4 var(--mono); color: var(--ink-soft);
+  margin: 0 0 12px; padding: 6px 10px; border-radius: var(--r-chip);
+  background: transparent; border: 1px solid var(--line-soft);
+  font: 500 11px/1.4 var(--mono); color: var(--ink-faint);
 }
-/* Graded by how much the reader has to do about it, not by kind. Only a
-   measured jump earns the alert hue, and only at full strength when the jump is
-   a major one. Everything below that steps down to neutral, so the page does
-   not cry wolf on twelve dependencies the chapter never taught. */
-.gapline[data-level="3"] {
-  background: var(--crit-soft); color: var(--crit-ink); border-color: var(--crit-edge);
-}
-.gapline[data-level="2"] {
-  background: transparent; color: var(--crit-ink); border-color: var(--crit-edge);
-}
-.gapline[data-level="1"] { background: var(--gray-soft); color: var(--ink-soft); }
+.gapline[data-level="3"] { border-color: var(--crit-edge); color: var(--ink-soft); }
+.gapline[data-level="3"] .vmeter { color: var(--crit-ink); }
+.gapline[data-level="2"] { border-color: var(--line); color: var(--ink-soft); }
 /* No version bound is not a severity, it is an absence, so it borrows the
    dashed language the loose pins already use for the same idea. */
-.gapline[data-level="-1"] {
-  background: transparent; color: var(--ink-soft);
-  border-color: var(--edge); border-style: dashed;
-}
-/* Installed but never taught. Nothing to act on, so it recedes furthest. */
-.gapline[data-kind="dependency"] {
-  background: transparent; color: var(--ink-faint); border-color: var(--line-soft);
-}
+.gapline[data-level="-1"] { border-color: var(--edge); border-style: dashed; }
+/* Installed but never taught. Nothing to act on, so it recedes furthest: no
+   frame at all, just the words. */
+.gapline[data-kind="dependency"] { border-color: transparent; padding-inline: 0; }
 
 .vmeter { display: inline-flex; gap: 2px; align-items: center; flex: none; }
 .vmeter i {
@@ -708,14 +709,12 @@ body[dir="rtl"] .muted-none { font-style: normal; font-family: var(--ar); }
 .vmeter[data-level="2"] i:nth-child(-n+2),
 .vmeter[data-level="3"] i { opacity: 1; }
 .vmeter[data-level="-1"] i { opacity: .3; height: 6px; }
-.vpair { color: var(--ink); font-weight: 600; }
-.gapline[data-level="3"] .vpair, .gapline[data-level="2"] .vpair,
-.gapline[data-level="-1"] .vpair { color: inherit; }
+.vpair { color: var(--ink-soft); font-weight: 600; }
+.gapline[data-level="3"] .vpair { color: var(--ink); }
 .vpair.unknown { color: var(--ink-faint); font-weight: 500; }
-.vkind { padding: 3px 7px; border-radius: var(--r-chip); background: var(--surface); }
+.vkind { padding: 2px 7px; border-radius: var(--r-chip); background: var(--gray-soft); }
+.gapline[data-level="3"] .vkind { background: var(--crit-soft); color: var(--crit-ink); }
 .vsince { color: var(--ink-faint); }
-.gapline[data-level="3"] .vsince, .gapline[data-level="2"] .vsince,
-.gapline[data-level="-1"] .vsince { color: inherit; opacity: .85; }
 
 .legacyline {
   margin: -4px 0 11px; padding: 7px 11px; border-radius: var(--r-chip);
@@ -754,6 +753,13 @@ body[dir="rtl"] .chapter h3 { font-family: var(--ar); }
 .stale { font-size: 12px; color: var(--ink-faint); }
 body[dir="rtl"] .stale { font-family: var(--ar); }
 .teaches { margin: 0 0 11px; font-size: 12.5px; line-height: 1.55; color: var(--ink-soft); }
+/* Only on the Arabic page, above a paragraph the run has no Arabic for. It
+   sits inside the English block it describes, on that block's own edge. */
+.en-note {
+  display: block; width: fit-content; margin-block-end: 7px;
+  font: 600 11px/1.3 var(--ar); letter-spacing: 0; color: var(--ink-faint);
+  padding: 3px 9px 4px; border: 1px solid var(--line); border-radius: var(--r-pill);
+}
 
 .pins { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 8px; }
 .pin {
@@ -1330,20 +1336,172 @@ bdi { unicode-bidi: isolate; }
   .ov-act { width: 100%; }
   .ov-act .runbtn { flex: 1 1 auto; }
 }
-.gapline[data-kind="dependency"] { background: var(--gray-soft); color: var(--ink-soft); }
-.gapline[data-kind="dependency"] .vpair { color: var(--ink-soft); font-weight: 500; }
+.gapline[data-kind="dependency"] .vpair { font-weight: 500; }
 /* Neither of these is evidence or a gap, so neither takes the page's two
    meaningful colours. The streak earns an edge because an ask that keeps
    coming back is the one a reader should stop skipping. */
 .chip.streak { background: var(--gray-soft); color: var(--ink-soft); border-color: var(--edge); }
 .chip.moved { background: var(--gray-soft); color: var(--ink-faint); }
 
-/* What changed, and whether the market wants it: the two things a teacher
-   decides by. Neutral on purpose; neither is evidence or a gap. */
-.why { display: grid; gap: 8px; margin: 0 0 12px; }
-.why-changed, .why-market { display: grid; gap: 4px; font-size: 12.5px; color: var(--ink-soft); }
-.why-t { font-size: 11px; color: var(--ink-faint); }
-.why-v b { color: var(--ink); font-weight: 600; font-variant-numeric: tabular-nums; }
-.why-v .quiet { color: var(--ink-faint); }
-.why-list { margin: 2px 0 0; padding-inline-start: 16px; display: grid; gap: 2px; }
-.why-list li { font: 500 11.5px/1.45 var(--mono); color: var(--ink-soft); }
+/* ------------------------------------------------------------------ why -- */
+
+/* What changed, and whether employers want it: the two things a teacher
+   decides by, so they open the card and are set as figures rather than as a
+   line of small print. Two columns under hairlines, like a ledger, rather than
+   two boxes, because a box inside a card is a card inside a card. Neutral on
+   purpose: neither is evidence nor a gap, so neither borrows gold or the alert
+   hue, and a breaking change leads by position and weight instead. */
+.why {
+  display: grid; grid-auto-flow: column; grid-auto-columns: minmax(0, 1fr);
+  margin: 4px 0 14px; padding: 15px 0 17px;
+  border-block: 1px solid var(--line-soft);
+}
+.why:has(> .why-changed + .why-market) {
+  grid-auto-flow: row; grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr);
+}
+.why-panel { display: grid; align-content: start; gap: 13px; min-width: 0; }
+.why-panel:not(:last-child) { padding-inline-end: 24px; }
+.why-panel + .why-panel { padding-inline-start: 24px; border-inline-start: 1px solid var(--line-soft); }
+/* On its own a panel keeps the width it has beside its partner; stretched
+   across the card the job bar turns into a rule and its number drifts away. */
+.why > .why-panel:only-child { max-inline-size: 440px; }
+
+.why-t {
+  font: 600 10.5px/1.2 var(--sans); letter-spacing: .08em; text-transform: uppercase;
+  color: var(--ink-faint);
+}
+body[dir="rtl"] .why-t { font: 600 12px/1.3 var(--ar); letter-spacing: 0; text-transform: none; }
+
+.why-figs { display: flex; flex-wrap: wrap; align-items: end; gap: 12px 26px; }
+.why-fig { display: grid; gap: 5px; }
+.why-fig b {
+  font: 600 38px/.86 var(--display); letter-spacing: -.02em; color: var(--ink);
+  font-variant-numeric: lining-nums tabular-nums;
+}
+.why-fig > span { font-size: 11.5px; line-height: 1.2; color: var(--ink-soft); white-space: nowrap; }
+body[dir="rtl"] .why-fig > span { font-family: var(--ar); font-size: 12px; }
+.why-fig[data-kind="breaking"] > span { color: var(--ink); font-weight: 600; }
+/* Fixes are counted and set back, so the eye lands on what a lesson needs. */
+.why-fig[data-kind="fix"] b { font-size: 26px; color: var(--ink-faint); }
+.why-fig[data-kind="fix"] > span { color: var(--ink-faint); }
+
+.why .quiet { margin: 0; font: italic 400 16.5px/1.35 var(--display); color: var(--ink-soft); }
+body[dir="rtl"] .why .quiet { font: 500 13px/1.6 var(--ar); }
+
+/* Each highlight keeps the kind it was filed under, as a small tag in a
+   column of its own so the release notes start on one edge. */
+.why-list {
+  list-style: none; margin: 0; padding: 0;
+  display: grid; grid-template-columns: max-content minmax(0, 1fr); gap: 8px 12px;
+}
+.why-list li {
+  grid-column: 1 / -1; display: grid; grid-template-columns: subgrid; align-items: baseline;
+  font: 500 12px/1.5 var(--mono); color: var(--ink-soft);
+}
+@supports not (grid-template-columns: subgrid) {
+  .why-list li { grid-template-columns: 7em minmax(0, 1fr); }
+}
+.why-h { justify-self: start; min-width: 0; overflow-wrap: anywhere; }
+.why-k {
+  justify-self: start; white-space: nowrap;
+  font: 600 9.5px/1 var(--sans); letter-spacing: .08em; text-transform: uppercase;
+  color: var(--ink-faint); padding: 4px 6px 3px;
+  border: 1px solid var(--line); border-radius: var(--r-mark);
+}
+.why-k[data-kind="breaking"] { color: var(--ink); border-color: var(--edge); }
+body[dir="rtl"] .why-k { font: 600 11px/1 var(--ar); letter-spacing: 0; text-transform: none; padding: 4px 6px; }
+
+/* Who pays for it and who uses it. A length for job posts, which sit in a
+   narrow range; a stepped size class for installs, which span five orders of
+   magnitude, one cell per power of ten from a thousand. Different marks so
+   the two are never read on one scale. */
+.mk-row {
+  display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center;
+  gap: 7px 14px;
+}
+.mk-label { grid-column: 1 / -1; font-size: 11.5px; line-height: 1.3; color: var(--ink-soft); }
+body[dir="rtl"] .mk-label { font-family: var(--ar); font-size: 12px; }
+.mk-num {
+  font: 600 25px/.9 var(--display); letter-spacing: -.01em; color: var(--ink);
+  font-variant-numeric: lining-nums tabular-nums; text-align: end; min-inline-size: 2ch;
+}
+.mk-track { display: block; height: 5px; border-radius: var(--r-pill); background: var(--neutral-mark); overflow: hidden; }
+.mk-track i {
+  display: block; height: 100%; border-radius: inherit; background: var(--ink-soft);
+  transform-origin: left center; animation: grow 300ms var(--ease-out) 80ms both;
+}
+body[dir="rtl"] .mk-track i { transform-origin: right center; }
+.mk-mag { display: flex; align-items: flex-end; gap: 3px; height: 16px; }
+.mk-mag i { display: block; flex: none; width: 7px; border-radius: 1px; background: var(--neutral-mark); }
+.mk-mag i:nth-child(1) { height: 5px; }
+.mk-mag i:nth-child(2) { height: 7px; }
+.mk-mag i:nth-child(3) { height: 9px; }
+.mk-mag i:nth-child(4) { height: 11px; }
+.mk-mag i:nth-child(5) { height: 13.5px; }
+.mk-mag i:nth-child(6) { height: 16px; }
+.mk-mag i.on {
+  background: var(--ink-soft); transform-origin: center bottom;
+  animation: magRise 240ms var(--ease-out) both;
+}
+.mk-mag i.on:nth-child(2) { animation-delay: 40ms; }
+.mk-mag i.on:nth-child(3) { animation-delay: 80ms; }
+.mk-mag i.on:nth-child(4) { animation-delay: 120ms; }
+.mk-mag i.on:nth-child(5) { animation-delay: 160ms; }
+.mk-mag i.on:nth-child(6) { animation-delay: 200ms; }
+@keyframes magRise { from { opacity: 0; transform: scaleY(.25); } to { opacity: 1; transform: none; } }
+
+/* ------------------------------------------------------------- watching -- */
+
+/* The watch list, gathered under the actions. Closed it is one line: how
+   many, and why they are quiet. Open, its cards sit on the page's ground
+   instead of lifted off it, so an action card is always the brighter one. */
+.watchgroup { margin-top: 26px; border-top: 1px solid var(--line); }
+.watchgroup > summary {
+  list-style: none; cursor: pointer; position: relative;
+  display: grid; grid-template-columns: auto minmax(0, 1fr); align-items: center; column-gap: 18px;
+  padding-block: 20px; padding-inline: 0 46px;
+  transition: transform 140ms var(--ease-out);
+}
+.watchgroup > summary::-webkit-details-marker { display: none; }
+.watchgroup > summary:active { transform: scale(.995); }
+.watchgroup > summary::after {
+  content: ""; position: absolute; inset-inline-end: 20px; top: 50%; margin-top: -6px;
+  width: 7px; height: 7px;
+  border-right: 1.5px solid var(--ink-faint); border-bottom: 1.5px solid var(--ink-faint);
+  transform: rotate(45deg); transform-origin: center;
+  transition: transform 220ms var(--ease-out), border-color 200ms ease;
+}
+.watchgroup[open] > summary::after { transform: rotate(-135deg); border-color: var(--ink); }
+.watchgroup[open][data-closing] > summary::after { transform: rotate(45deg); border-color: var(--ink-faint); }
+.wg-n {
+  font: 600 46px/.86 var(--display); letter-spacing: -.02em; color: var(--ink-soft);
+  font-variant-numeric: lining-nums tabular-nums;
+  padding-inline-end: 18px; border-inline-end: 1px solid var(--line);
+  transition: color 160ms ease;
+}
+.wg-text { display: grid; gap: 5px; min-width: 0; }
+.wg-t { font: 600 21px/1.15 var(--display); letter-spacing: -.01em; color: var(--ink); }
+body[dir="rtl"] .wg-t { font: 600 17px/1.45 var(--ar); letter-spacing: 0; }
+.wg-note { font-size: 13px; line-height: 1.5; color: var(--ink-faint); max-width: 68ch; }
+body[dir="rtl"] .wg-note { font-family: var(--ar); }
+@media (hover: hover) and (pointer: fine) {
+  .watchgroup > summary:hover .wg-n { color: var(--ink); }
+  .watchgroup > summary:hover::after { border-color: var(--ink); }
+}
+.watchgroup > summary:focus-visible { outline: 2px solid var(--ink-soft); outline-offset: 4px; border-radius: var(--r-chip); }
+.wg-body { padding-bottom: 6px; }
+.wg-body > .card { background: var(--paper); border-color: var(--line-soft); box-shadow: none; }
+
+@media (max-width: 640px) {
+  .why, .why:has(> .why-changed + .why-market) { grid-auto-flow: row; grid-template-columns: minmax(0, 1fr); }
+  .why-panel:not(:last-child) { padding-inline-end: 0; }
+  .why-panel + .why-panel {
+    padding-inline-start: 0; border-inline-start: 0;
+    margin-top: 15px; padding-top: 15px; border-top: 1px solid var(--line-soft);
+  }
+  .wg-n { font-size: 36px; padding-inline-end: 14px; }
+  .watchgroup > summary { column-gap: 14px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .mk-track i, .mk-mag i.on { animation: none; transform: none; opacity: 1; }
+}

@@ -182,11 +182,13 @@ const T = {
     n6_t: "The model stopped early", n6_b: "The model returned {why} and was not asked again this run. Every sentence below therefore comes from the rules, which is the fallback the stages are built around.",
     ch_breaking: "breaking", ch_deprecation: "deprecated", ch_feature: "new features", ch_fix: "fixes",
     ch_maintenance: "maintenance only, nothing new to teach", ch_title: "What the releases changed",
-    wg_title: "Nothing to change yet",
-    wg_note: "{n} packages only shipped fixes this week. They stay on the watch list until a release changes what the course should teach.",
+    hl_breaking: "breaking", hl_deprecation: "deprecated", hl_feature: "new",
+    wg_title: "Watching, nothing to change yet",
+    wg_note: "Packages the agent checked and found no reason to touch the course this week. Each card says why.",
+    en_only: "The text is in English",
     mk_jobs: "job posts, last {m} months", mk_installs: "installs last month", mk_title: "Does the market want it",
     mk_few: "few employers ask for it yet",
-    m_repeat: "asked for in {n} runs running", m_since: "since", m_moved: "new version since the last run",
+    m_repeat: "asked for since", m_runs: "{n} runs in a row", m_moved: "new version since the last run",
     tr_calls: "model calls", tr_tokens: "tokens", tr_cost: "cost", tr_slow: "slowest call", tr_budget: "budget used", tr_stage: "per stage",
     ov_title: "An agent that keeps the curriculum <em>current</em>.",
     ov_lede: "Every week it reads what changed in the tools this bootcamp teaches, then reports which chapters have fallen behind and what it would take to bring them up to date.",
@@ -250,11 +252,13 @@ const T = {
     n6_t: "النموذج توقف مبكراً", n6_b: "أرجع النموذج {why} فلم نسأله مرة أخرى في هذه التشغيلة. وكل جملة في الأسفل مصدرها القواعد، وهي البديل الذي بُنيت عليه المراحل.",
     ch_breaking: "تغيير كاسر", ch_deprecation: "مهجور", ch_feature: "ميزات جديدة", ch_fix: "إصلاحات",
     ch_maintenance: "صيانة فقط، لا جديد يُدرَّس", ch_title: "ما الذي غيّرته الإصدارات",
-    wg_title: "لا شيء يستدعي التغيير بعد",
-    wg_note: "{n} حزمة لم تصدر لها هذا الأسبوع إلا إصلاحات. تبقى في قائمة المراقبة حتى يغيّر إصدارٌ ما ينبغي أن يدرّسه المقرر.",
+    hl_breaking: "كاسر", hl_deprecation: "مهجور", hl_feature: "جديد",
+    wg_title: "تحت المراقبة، لا تغيير بعد",
+    wg_note: "حزم فحصها الوكيل ولم يجد هذا الأسبوع ما يستدعي تعديل المقرر. كل بطاقة تذكر السبب.",
+    en_only: "النص بالإنجليزية",
     mk_jobs: "وظيفة، آخر {m} أشهر", mk_installs: "تثبيت الشهر الماضي", mk_title: "هل يطلبه السوق",
     mk_few: "قلّة من أصحاب العمل يطلبونه",
-    m_repeat: "مطلوب منذ {n} تشغيلات متتالية", m_since: "منذ", m_moved: "نسخة جديدة منذ آخر تشغيلة",
+    m_repeat: "مطلوب منذ", m_runs: "عدد التشغيلات المتتالية: {n}", m_moved: "نسخة جديدة منذ آخر تشغيلة",
     tr_calls: "استدعاء للنموذج", tr_tokens: "توكن", tr_cost: "التكلفة", tr_slow: "أبطأ استدعاء", tr_budget: "من الميزانية", tr_stage: "لكل مرحلة",
 
     ov_title: "وكيل يُبقي المنهج <em>محدَّثاً</em>.",
@@ -375,7 +379,7 @@ function compactNumber(n) {
 }
 
 /* What a teacher decides by: what changed, and whether employers want it. The
-   version line above says what shipped; these say whether it matters. */
+   version line below says what shipped; these say whether it matters. */
 function whyLine(item) {
   const c = item.changes || {};
   const m = item.market || {};
@@ -386,14 +390,22 @@ function whyLine(item) {
      are the ones that break material already written. */
   if (Object.keys(c).length) {
     const teachable = (c.breaking || 0) + (c.deprecation || 0) + (c.feature || 0);
-    const figs = teachable
-      ? `<div class="why-figs">${["breaking", "deprecation", "feature"].filter((k) => c[k]).map((k) =>
+    /* Fixes are counted too but set back: they are why a release exists, not
+       why a lesson changes, and showing them says they were read, not missed. */
+    const shown = ["breaking", "deprecation", "feature", "fix"].filter((k) => c[k]);
+    const figs = shown.length
+      ? `<div class="why-figs">${shown.map((k) =>
           `<span class="why-fig" data-kind="${k}"><b>${c[k]}</b><span>${esc(t("ch_" + k))}</span></span>`).join("")}</div>`
-      : `<p class="quiet">${esc(t("ch_maintenance"))}</p>`;
-    const lines = (c.highlights || []).map((h) =>
-      `<li>${esc(h.split(": ").slice(1).join(": "))}</li>`).join("");
+      : "";
+    const quiet = teachable ? "" : `<p class="quiet">${esc(t("ch_maintenance"))}</p>`;
+    const lines = (c.highlights || []).map((h) => {
+      const kind = h.split(": ")[0];
+      const tag = ["breaking", "deprecation", "feature"].includes(kind)
+        ? `<span class="why-k" data-kind="${kind}">${esc(t("hl_" + kind))}</span>` : "";
+      return `<li>${tag}<span class="why-h" dir="auto">${esc(h.split(": ").slice(1).join(": "))}</span></li>`;
+    }).join("");
     parts.push(`<div class="why-panel why-changed"><span class="why-t">${esc(t("ch_title"))}</span>
-      ${figs}${lines ? `<ul class="why-list">${lines}</ul>` : ""}</div>`);
+      ${figs}${quiet}${lines ? `<ul class="why-list">${lines}</ul>` : ""}</div>`);
   }
 
   /* Who pays for it and who uses it are different questions, so they get
@@ -432,13 +444,25 @@ function whyLine(item) {
   return parts.length ? `<div class="why">${parts.join("")}</div>` : "";
 }
 
+/* The agent's own sentences: the explanation on each card and each chapter's
+   summary. The page prints them, it does not write them. The Arabic page uses
+   the run's Arabic when the run carries it; otherwise it shows the English
+   with a note saying so, so an untranslated paragraph reads as known rather
+   than as a slip of the language switch. */
+function agentText(en, ar, tag, cls) {
+  if (lang !== "ar") return `<${tag} class="${cls}" dir="auto">${esc(en)}</${tag}>`;
+  if (ar) return `<${tag} class="${cls}" dir="rtl" lang="ar">${esc(ar)}</${tag}>`;
+  return `<${tag} class="${cls} in-en" dir="ltr" lang="en"><span class="en-note" dir="rtl" lang="ar">${
+    esc(t("en_only"))}</span>${esc(en)}</${tag}>`;
+}
+
 function memberBlock(item, showName) {
   const name = showName
     ? `<div class="member"><span class="subject">${esc(item.subject)}</span>
        <span class="chip ${actionClass(item.action)}">${esc(t(item.action))}</span>
        <span class="mprio">${esc(t("priority"))} ${item.priority.toFixed(2)}</span></div>`
     : "";
-  return `${name}${whyLine(item)}${gapLine(item)}<p class="reason">${esc(item.rationale)}</p>${claimsTable(item)}`;
+  return `${name}${whyLine(item)}${gapLine(item)}${agentText(item.rationale, item.rationale_ar, "p", "reason")}${claimsTable(item)}`;
 }
 
 function renderAct() {
@@ -462,12 +486,15 @@ function renderAct() {
     /* Asked for and not acted on is the most consequential thing a row can
        say, and it cannot borrow gold or the alert hue: neither a confirmation
        nor a gap. It gets loud through inversion instead, and only once it has
-       been ignored long enough to be worth shouting about. A second run is a
-       note; a fourth is a standing debt. */
+       been ignored long enough to be worth shouting about. The chip names the
+       day the ask began rather than the number of runs: nine runs reads like
+       nine weeks and can be one afternoon of testing. Any repeat is a note;
+       three weeks, a fourth weekly run, is a standing debt. */
     const streak = lead.runs_flagged > 1
-      ? `<span class="chip streak" data-weight="${lead.runs_flagged >= 4 ? "hard" : "soft"}" title="${
-          esc(t("m_since"))} ${esc(lead.first_seen_run || "")}">${
-          esc(fill(t("m_repeat"), { n: lead.runs_flagged }))}</span>` : "";
+      ? `<span class="chip streak" data-weight="${(lead.asked_days || 0) >= 21 ? "hard" : "soft"}" title="${
+          esc(fill(t("m_runs"), { n: lead.runs_flagged }))}">${lead.asked_since
+          ? `${esc(t("m_repeat"))} <span dir="ltr">${esc(lead.asked_since)}</span>`
+          : esc(fill(t("m_runs"), { n: lead.runs_flagged }))}</span>` : "";
     const moved = lead.version_moved ? `<span class="chip moved">${esc(t("m_moved"))}</span>` : "";
     return `<details class="card">
       <summary>
@@ -489,20 +516,21 @@ function renderAct() {
     </details>`;
   };
 
-  /* Most weeks, most releases only fix things, so most of the list is watch.
-     Sorted purely by priority the seven that ask for action were scattered
-     through thirty that do not, and the page opened on a wall of "nothing to
-     do". In the full view the actions lead and the watch list gathers into one
-     group underneath, closed, with its count and the reason it is quiet. The
-     filters still show any single kind on its own. */
+  /* Most of a week's list is watch. Sorted by priority alone, the few rows
+     that ask for action were scattered through the many that do not, so in
+     the full view the actions lead and the watch rows gather underneath in
+     one closed group. The split is made per package before families are
+     grouped: a family led by a watch row can still hold an update, and
+     grouping first would fold that update away with the rest. */
   let html;
   if (actFilter === "all") {
-    const acting = groups.filter((g) => g.lead.action !== "watch");
-    const watching = groups.filter((g) => g.lead.action === "watch");
+    const acting = groupFamilies(items.filter((i) => i.action !== "watch"));
+    const watchItems = items.filter((i) => i.action === "watch");
+    const watching = groupFamilies(watchItems);
     html = acting.map(card).join("") + (watching.length ? `<details class="watchgroup">
       <summary>
-        <span class="wg-head"><span class="wg-t">${esc(t("wg_title"))}</span><span class="wg-n">${watching.length}</span></span>
-        <span class="wg-note">${esc(fill(t("wg_note"), { n: watching.length }))}</span>
+        <span class="wg-n">${watchItems.length}</span>
+        <span class="wg-text"><span class="wg-t">${esc(t("wg_title"))}</span><span class="wg-note">${esc(t("wg_note"))}</span></span>
       </summary>
       <div class="wg-body">${watching.map(card).join("")}</div>
     </details>` : "");
@@ -529,7 +557,7 @@ function renderMap() {
     }
     const touched = byChapter[ch.chapter_id] || [];
     const tools = ch.tools.length ? `<div class="tools">${ch.tools.map((x) => `<span class="tool">${esc(x)}</span>`).join("")}</div>` : "";
-    const teaches = ch.teaches ? `<p class="teaches">${esc(ch.teaches)}</p>` : "";
+    const teaches = ch.teaches ? agentText(ch.teaches, ch.teaches_ar, "p", "teaches") : "";
     const pinned = Object.entries(ch.pins || {});
     const pins = pinned.length
       ? `<div class="pins"><span class="pinlabel">${esc(t("g_pinned"))}</span>${pinned.map(([pkg, v]) =>
@@ -562,7 +590,7 @@ function renderMap() {
     html += `<div class="weekhead">${lang === "ar" ? "فجوات" : "Gaps"}</div>` + gaps.map((i) =>
       `<div class="chapter gapcard">
         <div class="ctitle"><span class="cid"></span><h3>${esc(i.subject)}</h3></div>
-        <div class="stale">${esc(i.rationale)}</div>
+        ${agentText(i.rationale, i.rationale_ar, "div", "stale")}
       </div>`).join("");
   }
   document.getElementById("mapList").innerHTML = html;
@@ -792,7 +820,7 @@ let observer = null;
 const REVEAL_TARGETS = [
   "#stats > .stat",
   "#actViz > .viz", "#mapViz > .viz",
-  "#actList > .card", "#evList > .card",
+  "#actList > .card", "#actList > .watchgroup", "#evList > .card",
   "#mapList > .chapter", "#mapList > .weekhead",
   "#runNotes > .note"
 ];
@@ -1248,7 +1276,9 @@ function renderAll() {
   document.getElementById("headline").innerHTML = lang === "ar"
     ? `${c.trends} موضوعاً هذا الأسبوع، منها <b>${c.update}</b> تستدعي تحديث فصل، و<span class="warn">${c.new_lesson}</span> تستحق درساً جديداً${c.not_taught > c.new_lesson ? ` من أصل ${c.not_taught} لا يغطيها المنهج` : ""}.`
     : `${c.trends} subjects this week: <b>${c.update}</b> call for a chapter update and <span class="warn">${c.new_lesson}</span> deserve a new lesson${c.not_taught > c.new_lesson ? `, of ${c.not_taught} the course does not teach` : ""}.`;
-  document.getElementById("c_act").textContent = groupFamilies(DATA.items).length;
+  /* The tab counts what it asks of the reader, the same number the headline
+     gives, not every row it lists: most rows are on the watch list. */
+  document.getElementById("c_act").textContent = DATA.items.filter((i) => i.action !== "watch").length;
   document.getElementById("c_map").textContent = c.chapters;
   document.getElementById("c_ev").textContent = c.claims;
   document.getElementById("foot").textContent = fill(t("foot"), { run: DATA.run_id });
