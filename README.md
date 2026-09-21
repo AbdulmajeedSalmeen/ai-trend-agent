@@ -148,6 +148,9 @@ network. The stages report what they are thinking while they work.
 Writes `web/dist/site.html` with the run and its fonts embedded. It opens on any machine
 with no server and no network, and it is what we present from if the wifi dies.
 
+Every card's reason is on the page in English and Arabic. The Arabic is built from rules,
+never the model, so it carries the same versions, dates and counts as the English.
+
 ## Reading the course into the agent
 
 The agent cannot say a chapter is behind unless it knows what that chapter runs. That comes

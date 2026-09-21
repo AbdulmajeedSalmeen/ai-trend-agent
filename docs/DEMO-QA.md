@@ -119,6 +119,19 @@ is used instead. The run log prints it when that happens:
 
     think: the written sentence for langchain dropped the facts, keeping ours
 
+## "Is the Arabic machine-translated?"
+
+No, and no model writes it. Each card's Arabic reason is built from the same rules and the
+same facts as the English one: the same versions, dates, counts, install figures and
+priority, character for character. The model may rewrite the English sentence, but our checks
+on a written sentence look for English phrases, so an Arabic sentence from a model could not
+be held to the same standard. The release-note lines quoted in brackets stay in English,
+because they are quotes.
+
+A test builds both languages for every combination the rules can meet, 11,664 cards, plus the
+37 cards of the frozen run, and fails if the Arabic carries a figure the English does not.
+The only differences allowed are zero, one and two, which Arabic writes as words.
+
 ## "Why one agent and not one per stage?"
 
 Because the stages have nothing to negotiate. Each one reads the previous artifact and writes

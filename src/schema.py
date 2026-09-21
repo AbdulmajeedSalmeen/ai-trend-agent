@@ -68,6 +68,8 @@ class Recommendation(BaseModel):
     action: Literal['update_existing_material', 'add_new_lesson', 'watch']
     chapter_id: Optional[str] = None
     rationale: str
+    # The same reason in Arabic, always built from the rules, never the model.
+    rationale_ar: Optional[str] = None
     chapter_version: Optional[str] = None
     latest_version: Optional[str] = None
     gap_kind: Optional[str] = None

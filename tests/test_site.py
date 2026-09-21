@@ -5,7 +5,7 @@ from src.schema import Claim, Recommendation, Score, Signal, Trend
 from web.site import build_payload
 
 
-def build_run(path):
+def build_run(path, rationale_ar=None):
     signal = Signal(
         id="gh_langgraph_1.2.11",
         source="github",
@@ -39,6 +39,7 @@ def build_run(path):
         action="update_existing_material",
         chapter_id="C19",
         rationale="langgraph: 1 confirmed, 0 unverified.",
+        rationale_ar=rationale_ar,
     )
     runio.save_artifact(path, "signals", [signal])
     runio.save_artifact(path, "trends", [trend])
@@ -67,6 +68,30 @@ def test_payload_counts_evidence_kinds(tmp_path):
     assert counts["kinds"]["primary_report"] == 1
     assert counts["kinds"]["cross_source"] == 0
     assert counts["update"] == 1
+
+
+def test_payload_carries_the_arabic_reason_beside_the_english(tmp_path):
+    build_run(tmp_path, rationale_ar="langgraph: مؤكد 1، غير مؤكد 0.")
+
+    item = build_payload(tmp_path)["items"][0]
+
+    assert item["rationale"] == "langgraph: 1 confirmed, 0 unverified."
+    assert item["rationale_ar"] == "langgraph: مؤكد 1، غير مؤكد 0."
+
+
+def test_a_run_decided_before_the_arabic_existed_says_so_with_none(tmp_path):
+    build_run(tmp_path)
+
+    assert build_payload(tmp_path)["items"][0]["rationale_ar"] is None
+
+
+def test_every_chapter_in_the_payload_says_what_it_teaches_in_both_languages(tmp_path):
+    build_run(tmp_path)
+
+    chapters = build_payload(tmp_path)["chapters"]
+
+    assert len(chapters) == 25
+    assert all(chapter["teaches"] and chapter["teaches_ar"] for chapter in chapters)
 
 
 def test_payload_survives_a_run_without_recommendations(tmp_path):

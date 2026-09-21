@@ -18,6 +18,7 @@
       ],
       "tools_covered": [],
       "teaches": "Orientation only: the syllabus and how the bootcamp runs. No tools.",
+      "teaches_ar": "تعريف فقط: خطة المقرر وطريقة سير المعسكر. بلا أدوات.",
       "pins": {},
       "prerequisites": [],
       "last_updated": "2026-08-20"
@@ -40,6 +41,7 @@
         "GitHub"
       ],
       "teaches": "Set up the local toolchain: VS Code, Colab, and API keys for OpenAI and GitHub.",
+      "teaches_ar": "تجهيز بيئة العمل المحلية: VS Code وColab ومفاتيح API لـOpenAI وGitHub.",
       "pins": {},
       "prerequisites": [
         "C1"
@@ -59,6 +61,7 @@
       ],
       "tools_covered": [],
       "teaches": "Concepts only: how LLMs and transformers work, and the ethics around them.",
+      "teaches_ar": "مفاهيم فقط: كيف تعمل النماذج اللغوية الكبيرة والمحوّلات، والأخلاقيات المحيطة بها.",
       "pins": {},
       "prerequisites": [
         "C2"
@@ -84,6 +87,7 @@
         "BERT"
       ],
       "teaches": "Classify and compare text with BERT through Hugging Face transformers, then fine-tune it.",
+      "teaches_ar": "تصنيف النصوص ومقارنتها بـBERT عبر مكتبة transformers من Hugging Face، ثم ضبطه بدقة.",
       "pins": {
         "torch": "2.5.1",
         "torchaudio": "2.5.1",
@@ -130,6 +134,7 @@
         "DSPy"
       ],
       "teaches": "Call the OpenAI API directly and shape answers by prompt engineering and chaining, with DSPy shown for optimization.",
+      "teaches_ar": "استدعاء OpenAI API مباشرة وتوجيه الإجابات بهندسة الأوامر وتسلسلها، مع عرض DSPy للتحسين.",
       "pins": {},
       "prerequisites": [
         "C3"
@@ -162,6 +167,7 @@
         "FAISS"
       ],
       "teaches": "Build RAG from scratch: chunk, embed, index with FAISS, retrieve, then answer.",
+      "teaches_ar": "بناء RAG من الصفر: التقطيع، ثم التضمين، ثم الفهرسة بـFAISS، ثم الاسترجاع، ثم الإجابة.",
       "pins": {
         "datasets": "2.14.5"
       },
@@ -198,6 +204,7 @@
         "Evidently"
       ],
       "teaches": "Measure a RAG system with Ragas and Evidently, including LLM-as-jury scoring.",
+      "teaches_ar": "قياس نظام RAG بـRagas وEvidently، بما في ذلك التقييم بلجنة من النماذج اللغوية.",
       "pins": {
         "langchain-community": "<0.4.2"
       },
@@ -244,6 +251,7 @@
         "FAISS"
       ],
       "teaches": "Rebuild document QA on LangChain: splitters, a FAISS vector store, and chains over documents and Wikipedia.",
+      "teaches_ar": "إعادة بناء الإجابة عن أسئلة المستندات على LangChain: أدوات التقسيم، ومخزن متجهات FAISS، وسلاسل تعمل على المستندات وويكيبيديا.",
       "pins": {
         "faiss-cpu": "1.7.4",
         "ipykernel": "6.20.2",
@@ -339,6 +347,7 @@
         "LoRA"
       ],
       "teaches": "Evaluate an LLM with basic metrics, then fine-tune with PEFT and LoRA.",
+      "teaches_ar": "تقييم نموذج لغوي بمقاييس أساسية، ثم ضبطه بدقة باستخدام PEFT وLoRA.",
       "pins": {
         "datasets": "2.14.5"
       },
@@ -383,6 +392,7 @@
         "Streamlit"
       ],
       "teaches": "Serve an AI application: a FastAPI backend and a Streamlit interface.",
+      "teaches_ar": "نشر تطبيق ذكاء اصطناعي: خادم بـFastAPI وواجهة بـStreamlit.",
       "pins": {},
       "prerequisites": [
         "C8"
@@ -410,6 +420,7 @@
       ],
       "tools_covered": [],
       "teaches": "Turn a RAG pipeline into an agent that chooses and calls its own tools.",
+      "teaches_ar": "تحويل مسار RAG إلى وكيل يختار أدواته ويستدعيها بنفسه.",
       "pins": {},
       "prerequisites": [
         "C8"
@@ -438,6 +449,7 @@
       ],
       "tools_covered": [],
       "teaches": "Control an agent with an explicit reason-act-observe loop, and debug one that misbehaves.",
+      "teaches_ar": "التحكم في الوكيل بحلقة صريحة من التفكير ثم الفعل ثم الملاحظة، وتصحيح وكيل يسيء التصرف.",
       "pins": {
         "langchain": "0.3.*",
         "langchain-community": "0.3.*",
@@ -473,6 +485,7 @@
       ],
       "tools_covered": [],
       "teaches": "Design tool systems: schemas for arguments, a dispatcher, and error handling.",
+      "teaches_ar": "تصميم أنظمة الأدوات: مخططات للمعاملات، وموزّع للاستدعاءات، ومعالجة للأخطاء.",
       "pins": {
         "langchain": "0.3.*",
         "langchain-community": "0.3.*",
@@ -514,6 +527,7 @@
       ],
       "tools_covered": [],
       "teaches": "Build a task-oriented agent and bound its autonomy with guardrails.",
+      "teaches_ar": "بناء وكيل موجّه للمهام وتقييد استقلاليته بحواجز أمان.",
       "pins": {
         "langchain": "0.3.*",
         "langchain-community": "0.3.*",
@@ -551,6 +565,7 @@
       ],
       "tools_covered": [],
       "teaches": "Move from one agent to several with role-based design and a shared workflow.",
+      "teaches_ar": "الانتقال من وكيل واحد إلى عدة وكلاء بتصميم قائم على الأدوار وسير عمل مشترك.",
       "pins": {
         "langchain": ">=0.1.0,<1.0",
         "langchain-community": "0.3.*",
@@ -590,6 +605,7 @@
       ],
       "tools_covered": [],
       "teaches": "Walk through a reference agent system, evaluate its behavior, and document it.",
+      "teaches_ar": "استعراض نظام وكيل مرجعي، وتقييم سلوكه، وتوثيقه.",
       "pins": {
         "langchain": ">=0.1.0,<1.0",
         "langchain-community": "0.3.*",
@@ -630,6 +646,7 @@
       ],
       "tools_covered": [],
       "teaches": "Give an agent memory: conversation history plus long-term recall from a vector store.",
+      "teaches_ar": "منح الوكيل ذاكرة: سجل المحادثة، واستدعاء طويل المدى من مخزن متجهات.",
       "pins": {
         "langchain": "0.3.*",
         "langchain-community": "0.3.*",
@@ -678,6 +695,7 @@
       ],
       "tools_covered": [],
       "teaches": "Make an agent plan: decompose a task, track execution, and prevent loops.",
+      "teaches_ar": "جعل الوكيل يخطط: تفكيك المهمة، وتتبّع التنفيذ، ومنع الحلقات المفرغة.",
       "pins": {
         "langchain": "0.3.*",
         "langchain-community": "0.3.*",
@@ -717,6 +735,7 @@
         "n8n"
       ],
       "teaches": "Orchestrate agents as a graph with LangGraph, including multi-agent conversation and a review agent, with n8n shown as a no-code alternative.",
+      "teaches_ar": "تنسيق الوكلاء كرسم بياني بـLangGraph، بما في ذلك محادثة بين عدة وكلاء ووكيل مراجعة، مع عرض n8n بديلاً بلا كود.",
       "pins": {
         "langchain": "0.3.*",
         "langchain-community": "0.3.*",
@@ -752,6 +771,7 @@
       ],
       "tools_covered": [],
       "teaches": "Name the ways agents fail, diagnose a failure, and fix it.",
+      "teaches_ar": "تسمية أنماط فشل الوكلاء، وتشخيص الفشل، وإصلاحه.",
       "pins": {
         "langchain": "0.3.*",
         "langchain-community": "0.3.*",
@@ -791,6 +811,7 @@
       ],
       "tools_covered": [],
       "teaches": "Diagnose coordination failures in a multi-agent system and document its architecture.",
+      "teaches_ar": "تشخيص أعطال التنسيق في نظام متعدد الوكلاء وتوثيق بنيته.",
       "pins": {
         "langchain": "0.3.*",
         "langchain-community": "0.3.*",
@@ -829,6 +850,7 @@
       ],
       "tools_covered": [],
       "teaches": "Build an evaluation set and an automated evaluator for agent behavior.",
+      "teaches_ar": "بناء مجموعة تقييم ومقيّم آلي لسلوك الوكيل.",
       "pins": {
         "langchain": "0.3.*",
         "langchain-openai": "0.2.*"
@@ -861,6 +883,7 @@
       ],
       "tools_covered": [],
       "teaches": "Apply guardrail patterns and human-in-the-loop control, then test them.",
+      "teaches_ar": "تطبيق أنماط حواجز الأمان وتحكّم الإنسان في الحلقة، ثم اختبارها.",
       "pins": {
         "langchain": "0.3.*",
         "langchain-community": "0.3.*",
@@ -900,6 +923,7 @@
       ],
       "tools_covered": [],
       "teaches": "Log agent execution, monitor performance, and analyze the logs.",
+      "teaches_ar": "تسجيل تنفيذ الوكيل، ومراقبة الأداء، وتحليل السجلات.",
       "pins": {},
       "prerequisites": [
         "C23"
@@ -935,6 +959,7 @@
       ],
       "tools_covered": [],
       "teaches": "Capstone: scope a project, validate it with users, and present it.",
+      "teaches_ar": "المشروع الختامي: تحديد نطاق المشروع، والتحقق منه مع المستخدمين، وعرضه.",
       "pins": {},
       "prerequisites": [
         "C24"

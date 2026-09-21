@@ -2,7 +2,7 @@ import json
 import re
 from pathlib import Path
 
-from src import gap, memory, runio
+from src import arabic, gap, memory, runio
 from src.reading import write_recommendation
 from src.schema import Recommendation, Score, Signal, Trend
 
@@ -134,40 +134,94 @@ def readable(count: int) -> str:
     return str(count)
 
 
+CLOSINGS = {
+    "weak": "Not acted on: the claims are too weak to trust.",
+    "patch_only": "Nothing to rewrite yet.",
+    "unpinned": ("Nothing read from its releases shows that it breaks what the chapter teaches "
+                 "or adds something worth teaching, so there is nothing to rewrite. Pinning the "
+                 "version in the notebook keeps it that way."),
+    "behind_minor": ("The notebook pins its version, so it runs for a student exactly as written, "
+                     "and nothing read from the releases shows the approach it teaches has changed."),
+    "not_wanted": "Not a new lesson until more employers ask for it.",
+}
+
+
+def closing_for(score: Score, action: str, assessment: dict) -> str | None:
+    """Which closing a watch gets. Decided once for both languages."""
+    if action != "watch":
+        return None
+
+    if score.confidence < 0.5:
+        return "weak"
+
+    if assessment["kind"] == gap.PATCH_ONLY:
+        return "patch_only"
+
+    if assessment["kind"] == gap.UNPINNED:
+        return "unpinned"
+
+    if assessment["kind"] == gap.BEHIND_MINOR:
+        return "behind_minor"
+
+    if score.chapter_id is None and market_wants_it(score) is False:
+        return "not_wanted"
+
+    return None
+
+
 def build_rationale(trend: Trend, score: Score, action: str,
-                    assessment: dict | None = None, chapter: dict | None = None) -> str:
+                    assessment: dict | None = None, chapter: dict | None = None,
+                    lang: str = "en") -> str:
+    """The rules' reason, in English or Arabic.
+
+    Which sentences a reason holds, in what order, and which closing it ends
+    on are decided here once, for both languages. Only the wording differs, so
+    the Arabic cannot say something the English does not.
+    """
     confirmed = sum(1 for claim in trend.claims if claim.verdict == "confirmed")
     unverified = len(trend.claims) - confirmed
+    ar = lang == "ar"
 
     if assessment is None:
+        if ar:
+            return arabic.fallback(trend.subject, confirmed, unverified, score.priority,
+                                   score.confidence, score.chapter_id)
         where = f"chapter {score.chapter_id}" if score.chapter_id else "no matching chapter"
         weak = " Not acted on: evidence too weak." if score.confidence < 0.5 else ""
         return (f"{trend.subject}: {confirmed} confirmed, {unverified} unverified. "
                 f"Priority {score.priority:.2f}, Confidence {score.confidence:.2f}, {where}.{weak}")
 
-    if score.chapter_id is None:
-        parts = [assessment["sentence"], change_sentence(score), market_sentence(score, trend.subject)]
+    if ar:
+        downloads = (score.market or {}).get("downloads")
+        sentence = arabic.describe(trend.subject, assessment["pinned"], assessment["latest"],
+                                   assessment["kind"], has_chapter=score.chapter_id is not None)
+        changed = arabic.change_sentence(score.changes or {})
+        demand = arabic.market_sentence(score.market or {}, trend.subject,
+                                        readable(downloads) if downloads is not None else None,
+                                        market_wants_it(score))
+        legacy = arabic.legacy_sentence(assessment)
+        stale = arabic.staleness_sentence(assessment)
+        opening = arabic.chapter_opening(score.chapter_id, chapter.get("teaches_ar")) if chapter else ""
     else:
+        sentence = assessment["sentence"]
+        changed = change_sentence(score)
+        demand = market_sentence(score, trend.subject)
+        legacy = gap.legacy_sentence(assessment)
+        stale = gap.staleness_sentence(assessment)
         opening = f"Chapter {score.chapter_id} teaches: {chapter['teaches']}" if chapter else ""
-        parts = [opening, assessment["sentence"], gap.legacy_sentence(assessment),
-                 change_sentence(score), market_sentence(score, trend.subject),
-                 gap.staleness_sentence(assessment)]
 
-    if action == "watch" and score.confidence < 0.5:
-        parts.append("Not acted on: the claims are too weak to trust.")
-    elif action == "watch" and assessment["kind"] == gap.PATCH_ONLY:
-        parts.append("Nothing to rewrite yet.")
-    elif action == "watch" and assessment["kind"] == gap.UNPINNED:
-        parts.append("Nothing read from its releases shows that it breaks what the chapter teaches "
-                     "or adds something worth teaching, so there is nothing to rewrite. Pinning the "
-                     "version in the notebook keeps it that way.")
-    elif action == "watch" and assessment["kind"] == gap.BEHIND_MINOR:
-        parts.append("The notebook pins its version, so it runs for a student exactly as written, "
-                     "and nothing read from the releases shows the approach it teaches has changed.")
-    elif action == "watch" and score.chapter_id is None and market_wants_it(score) is False:
-        parts.append("Not a new lesson until more employers ask for it.")
+    if score.chapter_id is None:
+        parts = [sentence, changed, demand]
+    else:
+        parts = [opening, sentence, legacy, changed, demand, stale]
 
-    parts.append(f"{confirmed} confirmed, {unverified} unverified, priority {score.priority:.2f}.")
+    closing = closing_for(score, action, assessment)
+
+    if closing:
+        parts.append(arabic.CLOSINGS[closing] if ar else CLOSINGS[closing])
+
+    parts.append(arabic.counts_line(confirmed, unverified, score.priority) if ar
+                 else f"{confirmed} confirmed, {unverified} unverified, priority {score.priority:.2f}.")
 
     return " ".join(part for part in parts if part)
 
@@ -262,6 +316,7 @@ def run(run_dir: Path) -> None:
                 action=action,
                 chapter_id=score.chapter_id,
                 rationale=written or build_rationale(trend, score, action, assessment, chapter),
+                rationale_ar=build_rationale(trend, score, action, assessment, chapter, lang="ar"),
                 chapter_version=assessment["pinned"],
                 latest_version=assessment["latest"],
                 gap_kind=assessment["kind"],
@@ -275,3 +330,35 @@ def run(run_dir: Path) -> None:
 
     repeats = sum(1 for rec in recommendations if rec.runs_flagged > 1)
     print(f"{len(recommendations)} recommendations, {skipped} trends skipped, {repeats} repeated from earlier runs")
+
+
+def fill_arabic(run_dir: Path) -> int:
+    """Add the Arabic reason to a run that was decided before it existed.
+
+    Recomputes nothing the English depends on and calls no model: each
+    recommendation keeps its action and its English reason, and gains the rules'
+    Arabic for the same facts. Returns how many were filled.
+    """
+    trends = {trend.id: trend for trend in runio.load_artifact(run_dir, "trends", Trend)}
+    scores = {score.trend_id: score for score in runio.load_artifact(run_dir, "scores", Score)}
+    signals = runio.load_artifact(run_dir, "signals", Signal)
+    recommendations = runio.load_artifact(run_dir, "recommendations", Recommendation)
+    chapters = load_chapters()
+    published = {signal.id: signal.published_at.isoformat() for signal in signals}
+
+    filled = []
+
+    for rec in recommendations:
+        trend, score = trends.get(rec.trend_id), scores.get(rec.trend_id)
+
+        if trend is None or score is None:
+            filled.append(rec)
+            continue
+
+        chapter = chapters.get(score.chapter_id)
+        assessment = assess_trend(trend, chapter, published)
+        arabic_reason = build_rationale(trend, score, rec.action, assessment, chapter, lang="ar")
+        filled.append(rec.model_copy(update={"rationale_ar": arabic_reason}))
+
+    runio.save_artifact(run_dir, "recommendations", filled)
+    return sum(1 for rec in filled if rec.rationale_ar)
