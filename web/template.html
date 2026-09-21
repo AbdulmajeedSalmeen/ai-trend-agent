@@ -180,6 +180,10 @@ const T = {
     n4_t: "Curriculum source", n4_b: "The {chapters} chapters come from the live SDA course, not from a file we wrote. {touched} of them have something new this week.",
     n5_t: "What the run cost", n5_b: "{calls} model calls, {tokens} tokens{cost}. The model was asked to read, judge and write; it never decided what counts as evidence. {failed} calls failed and fell back to rules.",
     n6_t: "The model stopped early", n6_b: "The model returned {why} and was not asked again this run. Every sentence below therefore comes from the rules, which is the fallback the stages are built around.",
+    ch_breaking: "breaking", ch_deprecation: "deprecated", ch_feature: "new features", ch_fix: "fixes",
+    ch_maintenance: "maintenance only, nothing new to teach", ch_title: "What the releases changed",
+    mk_jobs: "job posts, last {m} months", mk_installs: "installs last month", mk_title: "Does the market want it",
+    mk_few: "few employers ask for it yet",
     m_repeat: "asked for in {n} runs running", m_since: "since", m_moved: "new version since the last run",
     tr_calls: "model calls", tr_tokens: "tokens", tr_cost: "cost", tr_slow: "slowest call", tr_budget: "budget used", tr_stage: "per stage",
     ov_title: "An agent that keeps the curriculum <em>current</em>.",
@@ -242,6 +246,10 @@ const T = {
     n4_t: "مصدر المنهج", n4_b: "الفصول الـ{chapters} مأخوذة من منصة SDA نفسها، لا من ملف كتبناه. و{touched} منها فيها جديد هذا الأسبوع.",
     n5_t: "كم كلّفت التشغيلة", n5_b: "{calls} استدعاء للنموذج، {tokens} توكن{cost}. النموذج طُلب منه أن يقرأ ويحكم ويكتب، ولم يقرر قط ما الذي يُعدّ دليلاً. وفشل {failed} استدعاء فرجعت القواعد مكانه.",
     n6_t: "النموذج توقف مبكراً", n6_b: "أرجع النموذج {why} فلم نسأله مرة أخرى في هذه التشغيلة. وكل جملة في الأسفل مصدرها القواعد، وهي البديل الذي بُنيت عليه المراحل.",
+    ch_breaking: "تغيير كاسر", ch_deprecation: "مهجور", ch_feature: "ميزات جديدة", ch_fix: "إصلاحات",
+    ch_maintenance: "صيانة فقط، لا جديد يُدرَّس", ch_title: "ما الذي غيّرته الإصدارات",
+    mk_jobs: "وظيفة، آخر {m} أشهر", mk_installs: "تثبيت الشهر الماضي", mk_title: "هل يطلبه السوق",
+    mk_few: "قلّة من أصحاب العمل يطلبونه",
     m_repeat: "مطلوب منذ {n} تشغيلات متتالية", m_since: "منذ", m_moved: "نسخة جديدة منذ آخر تشغيلة",
     tr_calls: "استدعاء للنموذج", tr_tokens: "توكن", tr_cost: "التكلفة", tr_slow: "أبطأ استدعاء", tr_budget: "من الميزانية", tr_stage: "لكل مرحلة",
 
@@ -355,13 +363,51 @@ function gapLine(item) {
   return `<div class="gapline" data-kind="${esc(kind)}" data-level="${level}">${meter}${move}${label}${since}</div>${legacy}`;
 }
 
+function compactNumber(n) {
+  if (n === null || n === undefined) return null;
+  const steps = [[1e9, "B"], [1e6, "M"], [1e3, "K"]];
+  for (const [size, suffix] of steps) if (n >= size) return `${(n / size).toFixed(1).replace(/\.0$/, "")}${suffix}`;
+  return String(n);
+}
+
+/* What a teacher decides by: what changed, and whether employers want it. The
+   version line above says what shipped; these say whether it matters. */
+function whyLine(item) {
+  const c = item.changes || {};
+  const m = item.market || {};
+  const parts = [];
+
+  if (Object.keys(c).length) {
+    const teachable = (c.breaking || 0) + (c.deprecation || 0) + (c.feature || 0);
+    const counts = teachable
+      ? ["breaking", "deprecation", "feature"].filter((k) => c[k])
+          .map((k) => `<b>${c[k]}</b> ${esc(t("ch_" + k))}`).join(" ")
+      : `<span class="quiet">${esc(t("ch_maintenance"))}</span>`;
+    const lines = (c.highlights || []).map((h) => `<li>${esc(h.split(": ").slice(1).join(": "))}</li>`).join("");
+    parts.push(`<div class="why-changed"><span class="why-t">${esc(t("ch_title"))}</span>
+      <span class="why-v">${counts}</span>${lines ? `<ul class="why-list">${lines}</ul>` : ""}</div>`);
+  }
+
+  if (m.jobs !== undefined && (m.jobs !== null || m.downloads !== null)) {
+    const bits = [];
+    if (m.jobs !== null) bits.push(`<b>${m.jobs}</b> ${esc(fill(t("mk_jobs"), { m: m.months || 3 }))}`);
+    if (m.downloads !== null) bits.push(`<b dir="ltr">${compactNumber(m.downloads)}</b> ${esc(t("mk_installs"))}`);
+    const few = item.provenance && item.provenance.market_relevance === "measured"
+      && item.dimensions.market_relevance < 3 ? ` <span class="quiet">${esc(t("mk_few"))}</span>` : "";
+    parts.push(`<div class="why-market"><span class="why-t">${esc(t("mk_title"))}</span>
+      <span class="why-v">${bits.join(" &middot; ")}${few}</span></div>`);
+  }
+
+  return parts.length ? `<div class="why">${parts.join("")}</div>` : "";
+}
+
 function memberBlock(item, showName) {
   const name = showName
     ? `<div class="member"><span class="subject">${esc(item.subject)}</span>
        <span class="chip ${actionClass(item.action)}">${esc(t(item.action))}</span>
        <span class="mprio">${esc(t("priority"))} ${item.priority.toFixed(2)}</span></div>`
     : "";
-  return `${name}${gapLine(item)}<p class="reason">${esc(item.rationale)}</p>${claimsTable(item)}`;
+  return `${name}${gapLine(item)}${whyLine(item)}<p class="reason">${esc(item.rationale)}</p>${claimsTable(item)}`;
 }
 
 function renderAct() {

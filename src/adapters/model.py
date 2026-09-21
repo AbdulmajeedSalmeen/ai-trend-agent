@@ -118,6 +118,26 @@ def available() -> bool:
     return config() is not None
 
 
+def parse_json(text: str) -> dict:
+    """The JSON object in a model's answer.
+
+    Asked for one object and nothing else, a reasoning model still sometimes
+    says a sentence first or after. Two of those in a row dropped a working
+    provider for the end of a run, when the object was right there in the text.
+    """
+    cleaned = FENCE.sub("", text).strip()
+
+    try:
+        return json.loads(cleaned)
+    except json.JSONDecodeError:
+        start, end = cleaned.find("{"), cleaned.rfind("}")
+
+        if start == -1 or end <= start:
+            raise
+
+        return json.loads(cleaned[start:end + 1])
+
+
 def halted() -> str | None:
     """Why the model is unavailable, when every configured provider is out."""
     configured = _configured()
@@ -178,7 +198,7 @@ def _call(settings: dict, system: str, user: str, max_tokens: int, timeout: int,
                 # provider failing. Counting it dropped a working key.
                 return None, None, True
 
-            answer = json.loads(FENCE.sub("", text).strip())
+            answer = parse_json(text)
             usage = payload.get("usage") or {}
             trace.current.record(
                 label, (time.perf_counter() - started) * 1000,

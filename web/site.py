@@ -95,6 +95,9 @@ def build_payload(run_dir: Path) -> dict:
                 "confidence": round(score.confidence, 2),
                 "dimensions": score.dimensions,
                 "provenance": score.provenance,
+                "changes": {k: score.changes.get(k, 0) for k in ("breaking", "deprecation", "feature", "fix", "noise")}
+                           | {"highlights": score.changes.get("highlights", [])[:3]} if score.changes else {},
+                "market": score.market,
                 "signal_count": len(trend.signal_ids),
                 "confirmed": confirmed,
                 "unverified": len(claims) - confirmed,

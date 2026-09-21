@@ -12,3 +12,6 @@ fixtures/runs/run_20260920T080135Z/raw
 
 # course notebooks, read locally, never published
 notebooks/
+
+# run logs written while testing
+*.log

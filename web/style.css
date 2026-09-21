@@ -1337,3 +1337,13 @@ bdi { unicode-bidi: isolate; }
    coming back is the one a reader should stop skipping. */
 .chip.streak { background: var(--gray-soft); color: var(--ink-soft); border-color: var(--edge); }
 .chip.moved { background: var(--gray-soft); color: var(--ink-faint); }
+
+/* What changed, and whether the market wants it: the two things a teacher
+   decides by. Neutral on purpose; neither is evidence or a gap. */
+.why { display: grid; gap: 8px; margin: 0 0 12px; }
+.why-changed, .why-market { display: grid; gap: 4px; font-size: 12.5px; color: var(--ink-soft); }
+.why-t { font-size: 11px; color: var(--ink-faint); }
+.why-v b { color: var(--ink); font-weight: 600; font-variant-numeric: tabular-nums; }
+.why-v .quiet { color: var(--ink-faint); }
+.why-list { margin: 2px 0 0; padding-inline-start: 16px; display: grid; gap: 2px; }
+.why-list li { font: 500 11.5px/1.45 var(--mono); color: var(--ink-soft); }

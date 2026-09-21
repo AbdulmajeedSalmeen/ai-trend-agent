@@ -4,9 +4,9 @@ from pathlib import Path
 from dotenv import load_dotenv
 
 from src import runio
-from src.schema import Signal
+from src.schema import MarketSignal, Signal
 from src.curriculum import tracked_packages
-from src.sources import github_releases, hackernews, pypi
+from src.sources import github_releases, hackernews, market, pypi
 
 HN_QUERIES = ["langgraph", "langchain", "openai", "claude", "hugging face", "ai agent"]
 
@@ -46,3 +46,10 @@ def run(run_dir: Path) -> None:
     )
 
     runio.save_artifact(run_dir, "signals", signals)
+
+    subjects = sorted({signal.subject for signal in signals if signal.subject})
+    demand = market.fetch_market(subjects, raw_dir=raw_dir)
+    runio.save_artifact(run_dir, "market", [
+        MarketSignal(subject=subject, **{key: value for key, value in entry.items()})
+        for subject, entry in demand.items()
+    ])

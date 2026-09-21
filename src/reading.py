@@ -16,16 +16,27 @@ EXTRACT_SYSTEM = (
 )
 
 JUDGE_SYSTEM = (
-    "You rate how much a change matters for a bootcamp that teaches AI agents. "
+    "You are the head of curriculum at a bootcamp that trains people for jobs building AI agents. "
+    "You are shown what a package's recent releases changed, and you decide whether any of it "
+    "belongs in the course. Judge the changes listed, never the version number: a new version "
+    "with nothing a student would use is worth nothing to teach. "
+    "Score on this scale, and use 1 freely: "
+    "5 = a breaking change to something students are taught, or a concept they will need in their "
+    "first job; "
+    "4 = a new capability worth its own lesson or a real update to one; "
+    "3 = worth a mention in class, not a lesson; "
+    "2 = fixes a student would never notice; "
+    "1 = maintenance only, nothing to teach. "
     "Answer with one JSON object and nothing else: "
-    '{"educational_value": <integer 1-5>, "reason": <one short sentence>}. '
-    "5 means students must learn it now; 1 means a routine patch nobody needs to teach."
+    '{"educational_value": <integer 1-5>, "reason": <one short sentence naming the change that decided it>}.'
 )
 
 WRITE_SYSTEM = (
     "You tell a curriculum owner what to do and, above all, why. "
-    "Lead with the strongest fact you are given, in this order: an API the notebooks still call "
-    "that a newer release removed, then the version distance, then how stale the chapter is. "
+    "Think like a school, not a changelog. Lead with the strongest fact you are given, in this "
+    "order: an API the notebooks still call that a newer release removed; a breaking change or a "
+    "new concept in what the releases changed; whether employers ask for the tool; and only then "
+    "the version distance. A version number is evidence, never the reason on its own. "
     "Never lead with how many releases landed, and never make release counts the whole reason. "
     "The reason must name what changed and what it means for the chapter's material - "
     "never restate the decision as its own reason, and never write 'due to N confirmed claims'. "
@@ -135,6 +146,7 @@ def contradicts_the_verdict(sentence: str) -> str | None:
 def write_recommendation(subject: str, action: str, chapter: str | None, confirmed: int,
                          unverified: int, priority: float, teaches: str | None = None,
                          gap_sentence: str = "", staleness: str = "", legacy: str = "",
+                         changed: str = "", demand: str = "",
                          claim_texts: list[str] | None = None,
                          must_mention: list[str] | None = None) -> str | None:
     if not model.available():
@@ -149,7 +161,10 @@ def write_recommendation(subject: str, action: str, chapter: str | None, confirm
         f"What that chapter teaches: {teaches or 'not recorded'}\n"
         f"Version distance: {gap_sentence or 'not measured'}\n"
         f"Staleness: {staleness or 'the chapter is not measurably behind'}\n"
-        f"What changed:\n- {changes}\n"
+        f"Old API still in the notebooks: {legacy or 'none found'}\n"
+        f"What the releases changed: {changed or 'not read'}\n"
+        f"Market demand: {demand or 'not measured'}\n"
+        f"Release claims:\n- {changes}\n"
         f"Evidence: {confirmed} confirmed claims, {unverified} unverified\n"
         f"Priority score: {priority:.2f}",
         max_tokens=600,

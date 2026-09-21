@@ -9,14 +9,51 @@ from src.schema import Recommendation, Score, Signal, Trend
 CURRICULUM_PATH = Path("fixtures/curriculum.json")
 
 
+# A new lesson costs a teacher weeks to write. It needs employers asking for the
+# tool, not only a tool existing. 3 on the market scale is roughly five job posts
+# over three months, or a million installs a month.
+NEW_LESSON_MARKET_FLOOR = 3
+
+
+def teachable_changes(score: Score) -> int:
+    found = score.changes or {}
+    return found.get("breaking", 0) + found.get("deprecation", 0) + found.get("feature", 0)
+
+
+def maintenance_only(score: Score) -> bool:
+    """The releases were read, and nothing in them is worth teaching."""
+    return bool(score.changes) and teachable_changes(score) == 0
+
+
+def market_wants_it(score: Score) -> bool | None:
+    """True or False when the market was measured, None when it could not be."""
+    if score.provenance.get("market_relevance") != "measured":
+        return None
+
+    return score.dimensions.get("market_relevance", 0) >= NEW_LESSON_MARKET_FLOOR
+
+
 def decide_action(score: Score, assessment: dict | None = None) -> str:
     if score.confidence < 0.5:
         return "watch"
 
     if score.chapter_id is None:
+        if market_wants_it(score) is False or maintenance_only(score):
+            return "watch"
+
         return "add_new_lesson" if score.priority >= 2.5 else "watch"
 
     if assessment is not None:
+        # An unbound install has no version to measure against, so something
+        # other than the version has to justify a rewrite: a removed API the
+        # notebook still calls, or a breaking change or new concept read out of
+        # the release notes. Without either, "a newer version exists" is the
+        # only reason left, and a version number is evidence, never a reason.
+        # That rule sent nine PyPI-only packages with no notes to "update the
+        # chapter" on the strength of their version alone.
+        if assessment["kind"] == gap.UNPINNED and not assessment["legacy"] and teachable_changes(score) == 0:
+            return "watch"
+
         if assessment["kind"] in gap.ACTIONABLE:
             return "update_existing_material"
 
@@ -31,6 +68,65 @@ def decide_action(score: Score, assessment: dict | None = None) -> str:
     return "update_existing_material" if score.priority >= 3.0 else "watch"
 
 
+def change_sentence(score: Score) -> str:
+    """What the releases changed, in the terms a teacher decides by."""
+    found = score.changes or {}
+
+    if not found:
+        return ""
+
+    highlights = [line.split(":", 1)[1].strip() for line in found.get("highlights", [])[:2]]
+    named = f" ({'; '.join(highlights)})" if highlights else ""
+
+    if found.get("breaking"):
+        return f"The releases include {found['breaking']} breaking change{'s' if found['breaking'] > 1 else ''}{named}."
+
+    if found.get("deprecation"):
+        return f"The releases deprecate something{named}."
+
+    if found.get("feature"):
+        count = found["feature"]
+        return f"The releases add {count} new feature{'s' if count > 1 else ''}{named}."
+
+    return (f"The releases are maintenance only: {found.get('fix', 0)} fixes and "
+            f"{found.get('noise', 0)} chores, nothing new to teach.")
+
+
+def market_sentence(score: Score, subject: str) -> str:
+    """Whether employers ask for it, from the hiring threads and PyPI."""
+    found = score.market or {}
+    jobs, downloads = found.get("jobs"), found.get("downloads")
+
+    if jobs is None and downloads is None:
+        return ""
+
+    parts = []
+
+    if jobs is not None:
+        term = found.get("job_term") or subject
+        months = found.get("months", 3)
+        parts.append(f"{jobs} job post{'s' if jobs != 1 else ''} named {term} in the last {months} months")
+
+    if downloads is not None:
+        parts.append(f"{readable(downloads)} installs last month")
+
+    sentence = " and ".join(parts)
+    sentence = sentence[0].upper() + sentence[1:] + "."
+
+    if market_wants_it(score) is False:
+        sentence += " Few employers ask for it yet."
+
+    return sentence
+
+
+def readable(count: int) -> str:
+    for size, suffix in ((1_000_000_000, "B"), (1_000_000, "M"), (1_000, "K")):
+        if count >= size:
+            return f"{count / size:.1f}{suffix}".replace(".0", "")
+
+    return str(count)
+
+
 def build_rationale(trend: Trend, score: Score, action: str,
                     assessment: dict | None = None, chapter: dict | None = None) -> str:
     confirmed = sum(1 for claim in trend.claims if claim.verdict == "confirmed")
@@ -43,16 +139,23 @@ def build_rationale(trend: Trend, score: Score, action: str,
                 f"Priority {score.priority:.2f}, Confidence {score.confidence:.2f}, {where}.{weak}")
 
     if score.chapter_id is None:
-        parts = [assessment["sentence"]]
+        parts = [assessment["sentence"], change_sentence(score), market_sentence(score, trend.subject)]
     else:
         opening = f"Chapter {score.chapter_id} teaches: {chapter['teaches']}" if chapter else ""
         parts = [opening, assessment["sentence"], gap.legacy_sentence(assessment),
+                 change_sentence(score), market_sentence(score, trend.subject),
                  gap.staleness_sentence(assessment)]
 
     if action == "watch" and score.confidence < 0.5:
         parts.append("Not acted on: the claims are too weak to trust.")
     elif action == "watch" and assessment["kind"] == gap.PATCH_ONLY:
         parts.append("Nothing to rewrite yet.")
+    elif action == "watch" and assessment["kind"] == gap.UNPINNED:
+        parts.append("Nothing read from its releases shows that it breaks what the chapter teaches "
+                     "or adds something worth teaching, so there is nothing to rewrite. Pinning the "
+                     "version in the notebook keeps it that way.")
+    elif action == "watch" and score.chapter_id is None and market_wants_it(score) is False:
+        parts.append("Not a new lesson until more employers ask for it.")
 
     parts.append(f"{confirmed} confirmed, {unverified} unverified, priority {score.priority:.2f}.")
 
@@ -134,6 +237,8 @@ def run(run_dir: Path) -> None:
             teaches=chapter["teaches"] if chapter else None,
             gap_sentence=assessment["sentence"],
             legacy=gap.legacy_sentence(assessment),
+            changed=change_sentence(score),
+            demand=market_sentence(score, trend.subject),
             staleness=gap.staleness_sentence(assessment),
             claim_texts=[claim.text for claim in trend.claims],
             must_mention=required_facts(assessment),

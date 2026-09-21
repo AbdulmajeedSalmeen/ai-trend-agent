@@ -33,6 +33,16 @@ class Claim(BaseModel):
     evidence_kind: Optional[Literal['primary_report', 'cross_source', 'registry_match']] = None
 
 
+class MarketSignal(BaseModel):
+    """Whether employers ask for a tool and how widely it is installed. None means
+    the source could not be read, which is not the same as nobody wanting it."""
+    subject: str
+    job_term: Optional[str] = None
+    jobs: Optional[int] = None
+    downloads: Optional[int] = None
+    months: int = 3
+
+
 class Trend(BaseModel):
     id:str
     subject: str
@@ -46,7 +56,11 @@ class Score(BaseModel):
     confidence: float = Field(ge=0.0, le=1.0)
     dimensions: dict[str, int]
     provenance: dict[str, str]
-    priority: float  
+    priority: float
+    # What the releases changed, read from their notes, and whether the market
+    # wants the tool. Kept beside the score so the reason can quote them.
+    changes: dict = Field(default_factory=dict)
+    market: dict = Field(default_factory=dict)
 
 
 class Recommendation(BaseModel):

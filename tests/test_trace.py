@@ -533,3 +533,26 @@ def test_being_told_to_wait_does_not_count_against_a_provider(monkeypatch):
     assert model.halted() is None
     assert model._strikes.get("groq", 0) == 0
     model.reset()
+
+
+def test_a_json_object_wrapped_in_a_sentence_is_still_read():
+    from src.adapters import model
+
+    assert model.parse_json('Here is the answer: {"sentence": "Pin it."} Hope that helps.') == {"sentence": "Pin it."}
+
+
+def test_a_fenced_json_object_is_read():
+    from src.adapters import model
+
+    assert model.parse_json('```json\n{"ok": 1}\n```') == {"ok": 1}
+
+
+def test_an_answer_with_no_object_at_all_is_still_a_failure():
+    import json as jsonlib
+
+    import pytest
+
+    from src.adapters import model
+
+    with pytest.raises(jsonlib.JSONDecodeError):
+        model.parse_json("I cannot help with that.")
