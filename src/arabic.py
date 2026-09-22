@@ -37,7 +37,7 @@ USES = {"langchain.chains imports": "استيرادات langchain.chains"}
 # Counted nouns: the form for one, two, three to ten, and eleven to ninety-nine.
 # Written as the subject of the sentence, so the one and two forms are in the
 # nominative, and every other count takes the form Arabic fixes for it.
-BREAKING = ("تغيير كاسر واحد", "تغييران كاسران", "تغييرات كاسرة", "تغييراً كاسراً")
+BREAKING = ("تغيير كاسر واحد", "تغييران كاسران", "تغييرات كاسرة", "تغييراً كاسراً", "تغييرين كاسرين")
 FEATURE = ("ميزة جديدة واحدة", "ميزتان جديدتان", "ميزات جديدة", "ميزة جديدة")
 FIX = ("إصلاح واحد", "إصلاحان", "إصلاحات", "إصلاحاً")
 CHORE = ("مهمة صيانة واحدة", "مهمتا صيانة", "مهام صيانة", "مهمة صيانة")
@@ -238,6 +238,7 @@ CLOSINGS = {
     "not_wanted": "ليس درساً جديداً حتى يطلبه عدد أكبر من أصحاب العمل.",
     "optional": "يستحق مادة اختيارية، لا درساً أساسياً، حتى يطلبه عدد أكبر من أصحاب العمل.",
     "course_wide": "الإصدار نفسه يتجاوز هذا الفصل: خطّط للانتقال مرة واحدة للمقرر كله.",
+    "immature": "ليست مستقرة بما يكفي لتُدرَّس بعد.",
 }
 
 
@@ -350,6 +351,9 @@ def plan_step(key: str, facts: dict, installs: str | None = None) -> str:
 
     if key == "wait_confirm":
         return "انتظر إصداراً رسمياً يؤكد الادعاءات قبل أي إجراء."
+
+    if key == "wait_stable":
+        return f"أعد النظر حين يصدر {facts['subject']} إصداراً مستقراً ويمضي على أول إصدار له عام."
 
     if key == "recheck_notes":
         return f"اقرأ ملاحظات إصدار {facts['subject']} القادم قبل الدفعة القادمة."

@@ -1,17 +1,20 @@
 import re
+from datetime import datetime, timezone
 from pathlib import Path
 import json
 
-from src import changes, runio
+from src import changes, feasibility, gap, memory, runio
 from src.reading import judge_educational_value
-from src.schema import MarketSignal, Score, Signal, Trend
+from src.schema import MarketSignal, PackageFacts, Score, Signal, Trend
 
+# How much a change matters. How ready the course is to teach it, maturity,
+# prerequisites and difficulty, is scored apart as feasibility: folded in here,
+# an easy version pin outranked a real change and every threshold moved at once.
 WEIGHTS = {
     "relevance": 0.25,
     "impact": 0.25,
-    "educational_value": 0.20,
-    "difficulty": 0.10,
-    "market_relevance": 0.20,
+    "educational_value": 0.25,
+    "market_relevance": 0.25,
 }
 
 assert abs(sum(WEIGHTS.values()) - 1.0) < 1e-9
@@ -187,11 +190,24 @@ def judge_input(trend: Trend, summary: dict) -> list[str]:
     return [claim.text for claim in trend.claims]
 
 
+def edits_by_package(chapters: list[dict]) -> dict[str, list[dict]]:
+    found: dict[str, list[dict]] = {}
+
+    for chapter in chapters:
+        for edit in chapter.get("material_edits", []):
+            found.setdefault(edit["package"], []).append(edit)
+
+    return found
+
+
 def score_trend(
     trend: Trend,
     chapters: list[dict],
     signals: list[Signal],
     market: dict[str, MarketSignal] | None = None,
+    facts: dict[str, dict] | None = None,
+    as_of: datetime | None = None,
+    taught: set[str] | None = None,
 ) -> Score:
     chapter_id = match_chapter(trend, chapters)
 
@@ -213,20 +229,33 @@ def score_trend(
     impact, impact_source = impact_of(trend, summary)
     market_relevance, market_source = market_score(demand)
 
+    package = (facts or {}).get(trend.subject)
+    newest = gap.newest([claim.version for claim in trend.claims if claim.verdict == "confirmed"])
+    mature, mature_source, mature_detail = feasibility.maturity(package, as_of or datetime.now(timezone.utc),
+                                                                summary, newest)
+    ready, ready_source, ready_detail = feasibility.prerequisites(
+        trend.subject, package, taught if taught is not None else feasibility.taught_packages(chapters))
+    effort, effort_source, effort_detail = feasibility.difficulty(
+        chapter_id, summary, edits_by_package(chapters).get(trend.subject, []), mature)
+
     dimensions = {
         "relevance": 5 if subject_in_curriculum else 2,
         "impact": impact,
         "educational_value": judgement["value"] if judgement else 3,
-        "difficulty": 2,
         "market_relevance": market_relevance,
+        "maturity": mature,
+        "prerequisites": ready,
+        "difficulty": effort,
     }
 
     provenance = {
         "relevance": "measured",
         "impact": impact_source,
         "educational_value": "judged" if judgement else "default",
-        "difficulty": "default",
         "market_relevance": market_source,
+        "maturity": mature_source,
+        "prerequisites": ready_source,
+        "difficulty": effort_source,
     }
 
     return Score(
@@ -238,6 +267,8 @@ def score_trend(
         priority=calculate_priority(dimensions),
         changes=summary,
         market=demand.model_dump() if demand else {},
+        feasibility=feasibility.score(dimensions),
+        factors={"maturity": mature_detail, "prerequisites": ready_detail, "difficulty": effort_detail},
     )
 
 
@@ -258,8 +289,19 @@ def run(run_dir: Path) -> None:
     market = ({entry.subject: entry for entry in runio.load_artifact(run_dir, "market", MarketSignal)}
               if market_path.exists() else {})
 
+    # The same goes for package histories: without them maturity and
+    # prerequisites fall back to default, and say so.
+    packages_path = run_dir / "packages.json"
+    facts = ({entry.subject: entry.model_dump() for entry in runio.load_artifact(run_dir, "packages", PackageFacts)}
+             if packages_path.exists() else {})
+
+    # Maturity is measured at the moment the run collected, so a replay next
+    # month judges the same age it judged on the day.
+    as_of = memory.run_started(run_dir.name) or datetime.now(timezone.utc)
+    taught = feasibility.taught_packages(chapters)
+
     scores = [
-        score_trend(trend, chapters, signals, market)
+        score_trend(trend, chapters, signals, market, facts, as_of, taught)
         for trend in trends
     ]
 

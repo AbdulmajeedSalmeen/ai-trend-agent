@@ -2,8 +2,9 @@ import argparse
 import json
 from pathlib import Path
 
-from src import concepts, memory, runio
+from src import concepts, feasibility, memory, runio
 from src.schema import Recommendation, Score, Signal, Trend
+from src.stages.stage3_score import WEIGHTS
 
 CURRICULUM_PATH = Path("fixtures/curriculum.json")
 TEMPLATE_PATH = Path("web/template.html")
@@ -31,6 +32,22 @@ def read_trace(run_dir: Path) -> dict | None:
         return None
 
     return json.loads(path.read_text(encoding="utf-8")).get("summary")
+
+
+def factors_of(score: Score, subject: str) -> dict:
+    """Each teaching-feasibility factor with its value, what it was measured from,
+    and why, in both languages. Empty for a run scored before the factors existed."""
+    if not all(name in score.dimensions for name in feasibility.FACTORS):
+        return {}
+
+    found = {}
+
+    for name in feasibility.FACTORS:
+        value, source = score.dimensions[name], score.provenance.get(name, "default")
+        english, arabic_reason = feasibility.explain(name, value, source, score.factors.get(name, {}), subject)
+        found[name] = {"score": value, "provenance": source, "why": english, "why_ar": arabic_reason}
+
+    return found
 
 
 def build_payload(run_dir: Path) -> dict:
@@ -104,6 +121,8 @@ def build_payload(run_dir: Path) -> dict:
                 "version_moved": rec.version_moved,
                 "priority": round(score.priority, 2),
                 "confidence": round(score.confidence, 2),
+                "feasibility": score.feasibility,
+                "factors": factors_of(score, trend.subject),
                 "dimensions": score.dimensions,
                 "provenance": score.provenance,
                 "changes": {k: score.changes.get(k, 0) for k in ("breaking", "deprecation", "feature", "fix", "noise")}
@@ -178,6 +197,12 @@ def build_payload(run_dir: Path) -> dict:
                                     if concept["action"] == "add_optional_content"),
         },
         "previous_run": previous,
+        # How the numbers on each card are made, so the page can show the math.
+        "scoring": {
+            "priority": WEIGHTS,
+            "feasibility": {"factors": list(feasibility.FACTORS), "ease": "6 - difficulty",
+                            "immature_at_or_below": feasibility.IMMATURE},
+        },
         "material_checked": curriculum.get("material_checked"),
         "concepts_checked": curriculum.get("concepts_checked"),
         "trace": read_trace(run_dir),

@@ -4,7 +4,7 @@ from pathlib import Path
 from dotenv import load_dotenv
 
 from src import runio
-from src.schema import MarketSignal, Signal
+from src.schema import MarketSignal, PackageFacts, Signal
 from src.curriculum import tracked_packages
 from src.sources import github_releases, hackernews, market, pypi
 
@@ -57,3 +57,15 @@ def run(run_dir: Path) -> None:
         MarketSignal(subject=subject, **{key: value for key, value in entry.items()})
         for subject, entry in demand.items()
     ])
+
+    runio.save_artifact(run_dir, "packages", package_facts(subjects))
+
+
+def package_facts(subjects: list[str]) -> list[PackageFacts]:
+    """Each subject's whole history on PyPI, which maturity and prerequisites are
+    judged from. A subject PyPI has no record of is left out and scores default."""
+    names = {subject: market.pypi_name(subject) for subject in subjects}
+    facts = pypi.fetch_facts(sorted(set(names.values())))
+    found = [PackageFacts(subject=subject, **facts[name]) for subject, name in names.items() if facts.get(name)]
+    print(f"pypi: history for {len(found)} of {len(subjects)} subjects")
+    return found

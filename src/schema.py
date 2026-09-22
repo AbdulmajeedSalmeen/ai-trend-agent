@@ -43,6 +43,16 @@ class MarketSignal(BaseModel):
     months: int = 3
 
 
+class PackageFacts(BaseModel):
+    """What PyPI records about a package's whole history, read at collection, so a
+    replay judges maturity and prerequisites without the network."""
+    subject: str
+    pypi: str
+    first_release: Optional[datetime] = None
+    latest_stable: Optional[str] = None
+    requires: list[str] = []
+
+
 class Trend(BaseModel):
     id:str
     subject: str
@@ -61,6 +71,10 @@ class Score(BaseModel):
     # wants the tool. Kept beside the score so the reason can quote them.
     changes: dict = Field(default_factory=dict)
     market: dict = Field(default_factory=dict)
+    # How ready the course is to teach it: maturity, prerequisites and difficulty,
+    # kept out of the priority, with what each was measured from.
+    feasibility: Optional[float] = None
+    factors: dict = Field(default_factory=dict)
 
 
 class Recommendation(BaseModel):

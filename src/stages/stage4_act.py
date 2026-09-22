@@ -2,7 +2,7 @@ import json
 import re
 from pathlib import Path
 
-from src import arabic, gap, memory, plan, runio
+from src import arabic, feasibility, gap, memory, plan, runio
 from src.reading import write_recommendation
 from src.schema import Recommendation, Score, Signal, Trend
 
@@ -45,6 +45,14 @@ def decide_action(score: Score, assessment: dict | None = None, chapters_affecte
     # one decision for the whole course, not an edit per chapter.
     if chapters_affected >= 2:
         return "investigate_larger_change"
+
+    # The brief's own test for watching: not stable enough to teach yet. Only a
+    # finding about the course's own material overrides it, an import the
+    # release removed or a major version gap, since the notebook breaks either way.
+    own_material = assessment is not None and (assessment["legacy"] or assessment["kind"] == gap.BEHIND_MAJOR)
+
+    if feasibility.immature(score) and not own_material:
+        return "watch"
 
     if score.chapter_id is None:
         if maintenance_only(score):
@@ -159,6 +167,7 @@ CLOSINGS = {
     "not_wanted": "Not a new lesson until more employers ask for it.",
     "optional": "Worth optional material, not a core lesson, until more employers ask for it.",
     "course_wide": "The same release reaches beyond this chapter: plan the move once, for the whole course.",
+    "immature": "Not stable enough to teach yet.",
 }
 
 
@@ -175,6 +184,9 @@ def closing_for(score: Score, action: str, assessment: dict) -> str | None:
 
     if score.confidence < 0.5:
         return "weak"
+
+    if feasibility.immature(score):
+        return "immature"
 
     if assessment["kind"] == gap.PATCH_ONLY:
         return "patch_only"

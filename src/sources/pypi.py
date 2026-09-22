@@ -1,9 +1,11 @@
 import json
+import re
 from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
 import requests
+from packaging.version import InvalidVersion, Version
 
 from src.schema import Signal
 
@@ -63,6 +65,65 @@ def parse_release(package: str, version: str, published_at: str) -> Signal:
         url=f"{PROJECT_URL}/{package}/{version}/",
         published_at=datetime.fromisoformat(published_at),
     )
+
+
+def summarise(package: str, payload: dict) -> dict:
+    """What a package's whole history says about how settled it is: when it first
+    shipped, its newest stable version, and what it declares it builds on. A
+    requirement that only an optional extra pulls in is not something it builds on."""
+    first, stable = None, []
+
+    for version, files in (payload.get("releases") or {}).items():
+        published = parse_upload_time([item for item in files if not item.get("yanked")])
+
+        if published is None:
+            continue
+
+        first = published if first is None or published < first else first
+
+        try:
+            parsed = Version(version)
+        except InvalidVersion:
+            continue
+
+        if not parsed.is_prerelease:
+            stable.append(parsed)
+
+    requires = []
+
+    for requirement in (payload.get("info") or {}).get("requires_dist") or []:
+        if "extra ==" in requirement:
+            continue
+
+        name = re.split(r"[\s;<>=!~\[(]", requirement.strip(), maxsplit=1)[0].lower().replace("_", "-")
+
+        if name and name not in requires:
+            requires.append(name)
+
+    return {
+        "pypi": package,
+        "first_release": first.isoformat() if first else None,
+        "latest_stable": str(max(stable)) if stable else None,
+        "requires": requires,
+    }
+
+
+def fetch_facts(packages: list[str], workers: int = 6, timeout: int = 30) -> dict[str, dict | None]:
+    """The whole-history summary of each package, None for one PyPI cannot give."""
+    def one(package: str) -> dict | None:
+        try:
+            response = requests.get(f"{PYPI_API}/{package}/json", timeout=timeout,
+                                    headers={"Accept": "application/json", "Accept-Encoding": "gzip"})
+
+            if response.status_code != 200:
+                return None
+
+            return summarise(package, response.json())
+        except (requests.RequestException, ValueError):
+            return None
+
+    with ThreadPoolExecutor(max_workers=workers) as pool:
+        return dict(zip(packages, pool.map(one, packages)))
 
 
 def fetch_one(package: str, since: datetime, timeout: int = 30) -> dict:

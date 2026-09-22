@@ -148,3 +148,26 @@ def test_concepts_are_counted_apart_from_packages(tmp_path):
     assert counts["concepts"] == len(payload["concepts"])
     assert counts["concept_lessons"] == sum(1 for c in payload["concepts"] if c["action"] == "add_new_lesson")
     assert counts["new_lesson"] == sum(1 for i in payload["items"] if i["action"] == "add_new_lesson")
+
+
+def test_each_card_carries_its_feasibility_factors_in_both_languages(tmp_path):
+    build_run(tmp_path)
+    score = Score(trend_id="trend_001", chapter_id="C19", confidence=0.7, priority=3.4,
+                  dimensions={"relevance": 5, "maturity": 5, "prerequisites": 5, "difficulty": 1},
+                  provenance={"relevance": "measured", "maturity": "measured", "prerequisites": "measured",
+                              "difficulty": "measured"},
+                  feasibility=4.7,
+                  factors={"maturity": {"first_release": "2023-08-01", "age_years": 3.1, "latest_stable": "1.2.11",
+                                        "major": 1, "steady": True},
+                           "prerequisites": {"basis": "taught"},
+                           "difficulty": {"new_material": False, "edit_lines": 0, "chapters": 0, "breaking": 0,
+                                          "deprecation": 0}})
+    runio.save_artifact(tmp_path, "scores", [score])
+
+    payload = build_payload(tmp_path)
+    item = payload["items"][0]
+
+    assert item["feasibility"] == 4.7
+    assert set(item["factors"]) == {"maturity", "prerequisites", "difficulty"}
+    assert all(factor["why"] and factor["why_ar"] for factor in item["factors"].values())
+    assert payload["scoring"]["priority"]["relevance"] == 0.25

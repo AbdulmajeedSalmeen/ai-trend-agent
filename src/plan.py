@@ -9,7 +9,7 @@ plan always have the same steps in the same order.
 
 from collections import Counter
 
-from src import arabic, gap
+from src import arabic, feasibility, gap
 from src.changes import is_prerelease
 
 HIGHLIGHT_LIMIT = 80
@@ -136,6 +136,9 @@ def chosen(subject: str, score, action: str, assessment: dict, edits: list[dict]
     if score.confidence < 0.5:
         return [("wait_confirm", {}), ("recheck_notes", {"subject": subject})]
 
+    if feasibility.immature(score):
+        return [("wait_stable", {"subject": subject}), ("recheck_notes", {"subject": subject})]
+
     if score.chapter_id is None:
         found = [("nothing_new", {})] if score.changes and not teachable(score) else []
 
@@ -250,6 +253,9 @@ def english(key: str, facts: dict) -> str:
 
     if key == "wait_confirm":
         return "Wait for an official release to confirm the claims before acting."
+
+    if key == "wait_stable":
+        return f"Revisit once {facts['subject']} has a stable release and a year of history."
 
     if key == "recheck_notes":
         return f"Read the notes of the next {facts['subject']} release before the next cohort."

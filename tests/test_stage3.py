@@ -157,11 +157,16 @@ def test_score_trend_uses_the_v2_rules():
         "relevance": 5,
         "impact": 4,
         "educational_value": 3,
-        "difficulty": 2,
         "market_relevance": 5,
+        "maturity": 3,
+        "prerequisites": 3,
+        "difficulty": 1,
     }
     assert score.provenance["impact"] == "measured"
     assert score.provenance["market_relevance"] == "measured"
+    assert score.provenance["maturity"] == "default"
+    assert score.priority == 4.25
+    assert score.feasibility == round((3 + 3 + 5) / 3, 1)
     assert score.market["jobs"] == 24
     assert score.changes["feature"] == 3
 
