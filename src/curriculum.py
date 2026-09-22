@@ -4,7 +4,9 @@ import re
 from collections import Counter, defaultdict
 from pathlib import Path
 
-from src import material
+import requests
+
+from src import concepts, material
 from src.notebooks import NOTEBOOK_DIR, scan_all
 
 CURRICULUM_PATH = Path("fixtures/curriculum.json")
@@ -157,6 +159,20 @@ def main() -> None:
             "replacement found the same way. runs_as_pinned is true when the notebook's own pin keeps it "
             "on the old line, so the edit is for the day the course moves, not a break today."
         )
+
+        # The concept check lists folders through the GitHub API, which allows
+        # sixty unauthenticated requests an hour. Failing it keeps what is on file.
+        try:
+            new = concepts.find(files)
+            data["concepts"] = new["concepts"]
+            data["concepts_checked"] = new["checked"]
+            data["concepts_note"] = (
+                "concepts are read by `python -m src.curriculum`: modules the newest release of a tool the "
+                "course teaches added since the newest version the course's pins allow, each described by "
+                "its own docstring, with job posts counted only for a name distinct enough to search."
+            )
+        except requests.RequestException as error:
+            print(f"concepts not read ({error}); keeping the ones on file")
 
     if not args.dry_run:
         CURRICULUM_PATH.write_text(json.dumps(data, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")

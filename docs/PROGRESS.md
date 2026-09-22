@@ -1,6 +1,6 @@
 # Progress
 
-**Last updated:** 2026-09-22 · **Tests:** 341 passing · **Demo:** Sep 26–27
+**Last updated:** 2026-09-22 · **Tests:** 352 passing · **Demo:** Sep 26–27
 
 The pipeline runs end to end, live, from a web app. A model reads, judges and writes;
 rules still decide what counts as confirmed, and every recommendation now carries the reason
@@ -143,6 +143,11 @@ behind it: what the chapter teaches, which version it runs, and how far the rele
   kept their reasons word for word. Each card now records whether the model or the rules
   wrote its English reason; 17 of 37 were the rules.
 - A server stopped mid-run no longer leaves a lock that refuses every run after it.
+- Concepts the course does not teach (`src/concepts.py`): the module lists of langchain and
+  langgraph at the course's version and at the newest release, read at their tags. langchain
+  1.4.2 added `langchain.mcp`; 20 job posts named MCP in three months, 0 of 89 notebooks
+  mention it: a new lesson. Five other new modules are watched, their names too common to
+  count in job posts.
 
 ### 2026-09-21
 - The lead asked the right question: would a school care about every langchain version, or

@@ -22,7 +22,8 @@ run_20260921T104824Z` and they come back the same, because replay never touches 
 | Course notebooks read | 89, across six weeks |
 | Chapters installing something with no version bound | 19 of 25 |
 | Import lines to change | 85 in 39 notebooks across 11 chapters, checked against langchain 1.4.2; 3 break on today's install |
-| Tests | 341. None calls a model or the network |
+| Concepts the course does not teach | MCP, a new lesson: 20 job posts in three months, 0 of 89 notebooks |
+| Tests | 352. None calls a model or the network |
 
 ---
 
@@ -206,6 +207,24 @@ Every step is built by rules from facts the run holds, so the Arabic plan has th
 and the same numbers. A plan never asks to pin a pre-release: dspy's newest confirmed version
 is 3.4.0b1, so its plan says to pin the newest stable release instead.
 
+## "Is there a new idea the course should teach, not just a new version?"
+
+Yes, and it is found the same way the edits are: from the tools' own source, not from what
+people say about them. For each tool the course teaches, the agent lists the modules at the
+newest version the course's pins allow, and at the newest release, both read at their tags on
+GitHub. What the newest release added is a candidate, described by its own docstring.
+
+langchain went from 0.3.30 to 1.4.2 and gained `langchain.mcp`: "LangChain MCP adapters for
+connecting MCP servers with LangChain applications". 20 job posts named MCP in the last three
+"Who is hiring?" threads, and none of the 89 notebooks mentions it, in code or in prose. That
+makes it a new lesson.
+
+Five more modules are new, among them `langgraph.stream` and `langchain.rate_limiters`. They
+are listed and watched, not counted: a name like "stream" would match every job post, so
+demand is left unmeasured rather than invented. The release notes of this run never mention
+MCP at all, and Hacker News titled it twice; reading the code found what reading the chatter
+missed.
+
 ## "The removed-API list - is that verified too?"
 
 For LangChain, yes, and checking it corrected us. The first version matched names from a
@@ -240,6 +259,6 @@ Two fallbacks. Both were run with the network and the model switched off, on 202
   covers by name.
 - Flag pins that fight each other. One lab pins `langchain==0.0.352` in one cell and installs
   the 1.x family in the next.
-- Name the concepts the course does not teach yet. No notebook of the 89 uses MCP, and
-  langchain 1.4.2 itself now ships a `langchain.mcp` module.
+- Read more tools for new concepts than langchain and langgraph, and find a way to measure
+  demand for concepts whose names are common words, such as streaming.
 - Difficulty is still a constant 2 in the score. Either measure it or drop the dimension.

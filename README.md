@@ -31,6 +31,11 @@ replacement it proposes was read from a release too.
 Every edit names the notebook, the cell, the current line and the proposed one, with a link to
 the file at the release tag that proves it.
 
+It also reads what the tools grew. langchain 1.4.2 has a module the course's 0.3.30 does not:
+`langchain.mcp`, "LangChain MCP adapters for connecting MCP servers with LangChain
+applications" in its own docstring. **20 job posts named MCP in the last three months, and none
+of the 89 notebooks mentions it**, so the agent recommends a new lesson on it.
+
 ## How it decides
 
 ```mermaid
@@ -114,8 +119,9 @@ instead. The run log says so when it happens.
 | Job posts searched | the last three "Ask HN: Who is hiring?" threads, about 1,200 posts |
 | Recommendations | 4 update a chapter, 1 course-wide change, 2 new lesson, 2 optional, 28 watch |
 | Import lines to change | 85 in 39 notebooks, checked against langchain 1.4.2; 3 break today |
+| Concepts the course does not teach | MCP, a new lesson: 20 job posts, 0 of 89 notebooks |
 | Chapters with something to act on | 11 of 25 |
-| Tests | 341, none of which calls a model or the network |
+| Tests | 352, none of which calls a model or the network |
 
 Cross-source is zero because no discussion post this week stated anything a release page
 could check. That is a property of the data, not a gap in the checker, and the page prints

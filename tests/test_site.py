@@ -125,3 +125,15 @@ def test_payload_survives_a_run_without_recommendations(tmp_path):
 
     assert payload["items"] == []
     assert payload["counts"]["signals"] == 0
+
+
+def test_the_concepts_the_course_does_not_teach_arrive_with_their_reason_in_both_languages(tmp_path):
+    build_run(tmp_path)
+
+    concepts = build_payload(tmp_path)["concepts"]
+
+    assert concepts, "the curriculum file carries at least one concept"
+    for concept in concepts:
+        assert concept["why"] and concept["why_ar"]
+        assert concept["action"] in {"add_new_lesson", "add_optional_content", "watch"}
+        assert [evidence["what"] for evidence in concept["evidence"]] == ["added", "absent"]

@@ -3144,5 +3144,181 @@
     "langchain-classic": "1.0.8",
     "on": "2026-09-22"
   },
-  "material_note": "material_edits are read by `python -m src.curriculum`: every langchain import in the notebooks, checked against the source of the newest release at its tag on GitHub, with the replacement found the same way. runs_as_pinned is true when the notebook's own pin keeps it on the old line, so the edit is for the day the course moves, not a break today."
+  "material_note": "material_edits are read by `python -m src.curriculum`: every langchain import in the notebooks, checked against the source of the newest release at its tag on GitHub, with the replacement found the same way. runs_as_pinned is true when the notebook's own pin keeps it on the old line, so the edit is for the day the course moves, not a break today.",
+  "concepts": [
+    {
+      "concept": "MCP",
+      "module": "langchain.mcp",
+      "tool": "langchain",
+      "summary": "LangChain MCP adapters for connecting MCP servers with LangChain applications.",
+      "latest": "1.4.2",
+      "course_version": "0.3.30",
+      "term": "MCP",
+      "jobs": 20,
+      "months": 3,
+      "notebooks": 0,
+      "notebooks_read": 89,
+      "evidence": [
+        {
+          "what": "added",
+          "release": "langchain 1.4.2",
+          "url": "https://github.com/langchain-ai/langchain/tree/langchain%3D%3D1.4.2/libs/langchain_v1/langchain/mcp"
+        },
+        {
+          "what": "absent",
+          "release": "langchain 0.3.30",
+          "url": "https://github.com/langchain-ai/langchain/tree/langchain%3D%3D0.3.30/libs/langchain/langchain"
+        }
+      ],
+      "suggested_chapter": null,
+      "action": "add_new_lesson"
+    },
+    {
+      "concept": "langchain.messages",
+      "module": "langchain.messages",
+      "tool": "langchain",
+      "summary": "Message and message content types.",
+      "latest": "1.4.2",
+      "course_version": "0.3.30",
+      "term": null,
+      "jobs": null,
+      "months": 3,
+      "notebooks": 0,
+      "notebooks_read": 89,
+      "evidence": [
+        {
+          "what": "added",
+          "release": "langchain 1.4.2",
+          "url": "https://github.com/langchain-ai/langchain/tree/langchain%3D%3D1.4.2/libs/langchain_v1/langchain/messages"
+        },
+        {
+          "what": "absent",
+          "release": "langchain 0.3.30",
+          "url": "https://github.com/langchain-ai/langchain/tree/langchain%3D%3D0.3.30/libs/langchain/langchain"
+        }
+      ],
+      "suggested_chapter": null,
+      "action": "watch"
+    },
+    {
+      "concept": "langchain.rate_limiters",
+      "module": "langchain.rate_limiters",
+      "tool": "langchain",
+      "summary": "Base abstraction and in-memory implementation of rate limiters.",
+      "latest": "1.4.2",
+      "course_version": "0.3.30",
+      "term": null,
+      "jobs": null,
+      "months": 3,
+      "notebooks": 0,
+      "notebooks_read": 89,
+      "evidence": [
+        {
+          "what": "added",
+          "release": "langchain 1.4.2",
+          "url": "https://github.com/langchain-ai/langchain/tree/langchain%3D%3D1.4.2/libs/langchain_v1/langchain/rate_limiters"
+        },
+        {
+          "what": "absent",
+          "release": "langchain 0.3.30",
+          "url": "https://github.com/langchain-ai/langchain/tree/langchain%3D%3D0.3.30/libs/langchain/langchain"
+        }
+      ],
+      "suggested_chapter": null,
+      "action": "watch"
+    },
+    {
+      "concept": "langgraph.callbacks",
+      "module": "langgraph.callbacks",
+      "tool": "langgraph",
+      "summary": "Graph lifecycle callback interfaces and event payloads.",
+      "latest": "1.2.12",
+      "course_version": "0.2.76",
+      "term": null,
+      "jobs": null,
+      "months": 3,
+      "notebooks": 0,
+      "notebooks_read": 89,
+      "evidence": [
+        {
+          "what": "added",
+          "release": "langgraph 1.2.12",
+          "url": "https://github.com/langchain-ai/langgraph/tree/1.2.12/libs/langgraph/langgraph/callbacks"
+        },
+        {
+          "what": "absent",
+          "release": "langgraph 0.2.76",
+          "url": "https://github.com/langchain-ai/langgraph/tree/0.2.76/libs/langgraph/langgraph"
+        }
+      ],
+      "suggested_chapter": null,
+      "action": "watch"
+    },
+    {
+      "concept": "langgraph.stream",
+      "module": "langgraph.stream",
+      "tool": "langgraph",
+      "summary": "Streaming infrastructure for LangGraph.",
+      "latest": "1.2.12",
+      "course_version": "0.2.76",
+      "term": null,
+      "jobs": null,
+      "months": 3,
+      "notebooks": 0,
+      "notebooks_read": 89,
+      "evidence": [
+        {
+          "what": "added",
+          "release": "langgraph 1.2.12",
+          "url": "https://github.com/langchain-ai/langgraph/tree/1.2.12/libs/langgraph/langgraph/stream"
+        },
+        {
+          "what": "absent",
+          "release": "langgraph 0.2.76",
+          "url": "https://github.com/langchain-ai/langgraph/tree/0.2.76/libs/langgraph/langgraph"
+        }
+      ],
+      "suggested_chapter": null,
+      "action": "watch"
+    },
+    {
+      "concept": "langgraph.warnings",
+      "module": "langgraph.warnings",
+      "tool": "langgraph",
+      "summary": "LangGraph specific warnings.",
+      "latest": "1.2.12",
+      "course_version": "0.2.76",
+      "term": null,
+      "jobs": null,
+      "months": 3,
+      "notebooks": 0,
+      "notebooks_read": 89,
+      "evidence": [
+        {
+          "what": "added",
+          "release": "langgraph 1.2.12",
+          "url": "https://github.com/langchain-ai/langgraph/tree/1.2.12/libs/langgraph/langgraph/warnings"
+        },
+        {
+          "what": "absent",
+          "release": "langgraph 0.2.76",
+          "url": "https://github.com/langchain-ai/langgraph/tree/0.2.76/libs/langgraph/langgraph"
+        }
+      ],
+      "suggested_chapter": null,
+      "action": "watch"
+    }
+  ],
+  "concepts_checked": {
+    "langchain": {
+      "course": "0.3.30",
+      "latest": "1.4.2"
+    },
+    "langgraph": {
+      "course": "0.2.76",
+      "latest": "1.2.12"
+    },
+    "on": "2026-09-22"
+  },
+  "concepts_note": "concepts are read by `python -m src.curriculum`: modules the newest release of a tool the course teaches added since the newest version the course's pins allow, each described by its own docstring, with job posts counted only for a name distinct enough to search."
 }

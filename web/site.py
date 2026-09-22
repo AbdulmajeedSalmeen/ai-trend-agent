@@ -2,7 +2,7 @@ import argparse
 import json
 from pathlib import Path
 
-from src import memory, runio
+from src import concepts, memory, runio
 from src.schema import Recommendation, Score, Signal, Trend
 
 CURRICULUM_PATH = Path("fixtures/curriculum.json")
@@ -172,9 +172,12 @@ def build_payload(run_dir: Path) -> dict:
         },
         "previous_run": previous,
         "material_checked": curriculum.get("material_checked"),
+        "concepts_checked": curriculum.get("concepts_checked"),
         "trace": read_trace(run_dir),
         "items": items,
         "chapters": chapters,
+        "concepts": [dict(zip(("why", "why_ar"), concepts.why(concept)), **concept)
+                     for concept in curriculum.get("concepts", [])],
     }
 
 
