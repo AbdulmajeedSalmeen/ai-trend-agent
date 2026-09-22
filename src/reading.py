@@ -45,8 +45,21 @@ WRITE_SYSTEM = (
     "number from the Staleness line exactly. "
     "If the input says the version the chapter teaches is not recorded, say that instead of "
     "asserting the chapter is outdated. "
+    "Say the action exactly as it is described to you: optional material is not a new lesson, "
+    "and watching is not a change. "
+    "Every item on the Must appear line has to appear in your sentence exactly as written. "
     'Answer with one JSON object: {"sentence": <two sentences at most, under 45 words>}.'
 )
+
+# What each action asks of a teacher, in the words the writer should use. The bare
+# key let the model turn "add_optional_content" into "a new chapter should be added".
+ACTION_MEANING = {
+    "update_existing_material": "update the existing chapter",
+    "add_new_lesson": "add a new lesson",
+    "add_optional_content": "offer optional material outside the core path, not a new lesson",
+    "investigate_larger_change": "decide once for the whole course, since the change reaches several chapters",
+    "watch": "change nothing now and keep watching",
+}
 
 
 def read_claim(signal: Signal, known_subjects: list[str]) -> dict | None:
@@ -156,9 +169,9 @@ def write_recommendation(subject: str, action: str, chapter: str | None, confirm
     answer = model.ask_json(
         WRITE_SYSTEM,
         f"Package: {subject}\n"
-        f"Action decided by our rules: {action}\n"
+        f"Action decided by our rules: {ACTION_MEANING.get(action, action)}\n"
         f"Chapter: {chapter or 'none, this is a curriculum gap'}\n"
-        f"What that chapter teaches: {teaches or 'not recorded'}\n"
+        f"What that chapter teaches: {teaches or ('no chapter covers it' if chapter is None else 'not recorded')}\n"
         f"Version distance: {gap_sentence or 'not measured'}\n"
         f"Staleness: {staleness or 'the chapter is not measurably behind'}\n"
         f"Old API still in the notebooks: {legacy or 'none found'}\n"
@@ -166,7 +179,8 @@ def write_recommendation(subject: str, action: str, chapter: str | None, confirm
         f"Market demand: {demand or 'not measured'}\n"
         f"Release claims:\n- {changes}\n"
         f"Evidence: {confirmed} confirmed claims, {unverified} unverified\n"
-        f"Priority score: {priority:.2f}",
+        f"Priority score: {priority:.2f}\n"
+        f"Must appear, exactly as written: {', '.join(must_mention or []) or 'nothing'}",
         max_tokens=380,
         action="write_reason",
     )
