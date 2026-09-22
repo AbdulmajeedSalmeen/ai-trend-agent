@@ -118,3 +118,24 @@ def test_a_finished_process_is_not_alive_and_this_one_is():
 
     assert runner._alive(os.getpid())
     assert not runner._alive(finished.pid)
+
+
+def test_the_tab_icon_is_the_one_the_page_declares(tmp_path, monkeypatch):
+    page = tmp_path / "template.html"
+    page.write_text('<head><link rel="icon" type="image/svg+xml" href="data:image/svg+xml,'
+                    "%3Csvg xmlns='http://www.w3.org/2000/svg'%3E%3C/svg%3E\"></head>", encoding="utf-8")
+    monkeypatch.setattr(server.site, "TEMPLATE_PATH", page)
+
+    response = TestClient(server.app).get("/favicon.ico")
+
+    assert response.status_code == 200
+    assert response.headers["content-type"].startswith("image/svg+xml")
+    assert response.text == "<svg xmlns='http://www.w3.org/2000/svg'></svg>"
+
+
+def test_a_page_without_an_icon_answers_the_tab_with_no_content(tmp_path, monkeypatch):
+    bare = tmp_path / "template.html"
+    bare.write_text("<html><head><title>x</title></head></html>", encoding="utf-8")
+    monkeypatch.setattr(server.site, "TEMPLATE_PATH", bare)
+
+    assert TestClient(server.app).get("/favicon.ico").status_code == 204

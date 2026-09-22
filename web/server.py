@@ -1,13 +1,17 @@
+import re
 from pathlib import Path
+from urllib.parse import unquote
 
 from fastapi import FastAPI, HTTPException
-from fastapi.responses import HTMLResponse, JSONResponse
+from fastapi.responses import HTMLResponse, JSONResponse, Response
 from pydantic import BaseModel
 
 from src import runio
 from web import runner, site
 
 app = FastAPI(title="AI Trend Agent")
+
+ICON_RE = re.compile(r'<link rel="icon" type="image/svg\+xml" href="data:image/svg\+xml,([^"]+)"')
 
 
 class RunRequest(BaseModel):
@@ -24,6 +28,19 @@ def page() -> str:
 @app.get("/", response_class=HTMLResponse)
 def index() -> str:
     return page()
+
+
+@app.get("/favicon.ico", include_in_schema=False)
+def favicon() -> Response:
+    """The icon the page declares, for tabs that ask the server rather than the
+    page: the Claude app's browser pane, and a browser opening /api/* directly.
+    Read from the template, so the design stays in one place."""
+    found = ICON_RE.search(site.TEMPLATE_PATH.read_text(encoding="utf-8"))
+
+    if found is None:
+        return Response(status_code=204)
+
+    return Response(unquote(found.group(1)), media_type="image/svg+xml")
 
 
 @app.get("/api/runs")
