@@ -121,3 +121,14 @@ def test_the_previous_run_is_the_one_just_before(tmp_path):
 
 def test_the_first_run_ever_has_no_previous(tmp_path):
     assert memory.previous_run("run_20260920T000000Z", tmp_path) is None
+
+
+def test_a_run_stopped_halfway_neither_breaks_a_streak_nor_counts_as_the_last_run(tmp_path):
+    make_run(tmp_path, "run_20260901T000000Z", {"langchain": ("update_existing_material", "1.4.2")})
+    make_run(tmp_path, "run_20260908T000000Z", {"langchain": ("update_existing_material", "1.4.2")})
+    stopped = tmp_path / "run_20260915T000000Z"
+    stopped.mkdir()
+    (stopped / "signals.json").write_text("[]", encoding="utf-8")
+
+    assert memory.history("run_20260922T000000Z", tmp_path)["langchain"]["runs"] == 2
+    assert memory.previous_run("run_20260922T000000Z", tmp_path) == "run_20260908T000000Z"

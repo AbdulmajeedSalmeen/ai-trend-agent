@@ -1,3 +1,6 @@
+import os
+import subprocess
+import sys
 from datetime import datetime, timezone
 
 from fastapi.testclient import TestClient
@@ -77,3 +80,41 @@ def test_a_browser_run_gets_its_own_trace_and_resets_the_breaker(tmp_path, monke
     assert model_adapter.halted() is None
     assert trace.current.run_id == "run_20260920T090000Z"
     assert (tmp_path / "run_20260920T090000Z" / "trace.json").exists()
+
+
+def test_a_lock_left_by_a_stopped_server_is_taken_over(tmp_path, monkeypatch):
+    lock = tmp_path / ".run.lock"
+    lock.write_text("run_20260921T220316Z 2026-09-21T22:03:16+00:00 424242", encoding="utf-8")
+    monkeypatch.setattr(runner, "LOCK_PATH", lock)
+    monkeypatch.setattr(runner, "_alive", lambda pid: False)
+
+    assert runner._acquire_lock("run_20260922T000000Z")
+
+    run_id, _, pid = lock.read_text(encoding="utf-8").split()
+    assert run_id == "run_20260922T000000Z"
+    assert pid == str(os.getpid())
+
+
+def test_a_lock_whose_server_is_still_running_is_respected(tmp_path, monkeypatch):
+    lock = tmp_path / ".run.lock"
+    lock.write_text(f"run_20260922T000000Z 2026-09-22T00:00:00+00:00 {os.getpid()}", encoding="utf-8")
+    monkeypatch.setattr(runner, "LOCK_PATH", lock)
+
+    assert not runner._acquire_lock("run_20260922T010000Z")
+    assert lock.read_text(encoding="utf-8").startswith("run_20260922T000000Z")
+
+
+def test_a_lock_that_names_no_owner_is_treated_as_abandoned(tmp_path, monkeypatch):
+    lock = tmp_path / ".run.lock"
+    lock.write_text("run_20260921T220316Z 2026-09-21T22:03:16+00:00", encoding="utf-8")
+    monkeypatch.setattr(runner, "LOCK_PATH", lock)
+
+    assert runner._acquire_lock("run_20260922T000000Z")
+
+
+def test_a_finished_process_is_not_alive_and_this_one_is():
+    with subprocess.Popen([sys.executable, "-c", "pass"]) as finished:
+        finished.wait()
+
+    assert runner._alive(os.getpid())
+    assert not runner._alive(finished.pid)

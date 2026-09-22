@@ -12,13 +12,18 @@ def earlier_runs(run_id: str, runs_dir: Path | None = None, limit: int = LOOKBAC
     Read from the run folders themselves rather than a memory file that a replay
     would mutate. Replaying a run therefore sees exactly the history it saw the
     first time, and a teammate with no saved runs simply has no history.
+
+    A run that never finished decided nothing, so it is skipped: it neither
+    breaks a streak nor counts as the last run. A server stopped mid-run leaves
+    one behind, and counting it reset every streak on the run after.
     """
     root = runs_dir or runio.RUNS_DIR
 
     if not root.exists():
         return []
 
-    older = [path for path in sorted(root.glob("run_*")) if path.name < run_id]
+    older = [path for path in sorted(root.glob("run_*"))
+             if path.name < run_id and (path / "recommendations.json").exists()]
 
     return list(reversed(older))[:limit]
 

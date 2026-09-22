@@ -1,6 +1,7 @@
 import contextlib
 import io
 import os
+import subprocess
 import threading
 import time
 from datetime import datetime, timezone
@@ -77,15 +78,57 @@ def github_budget(token: str | None = None) -> int:
     return response.json()["resources"]["core"]["remaining"]
 
 
+def _alive(pid: int) -> bool:
+    if os.name != "nt":
+        try:
+            os.kill(pid, 0)
+        except ProcessLookupError:
+            return False
+        except PermissionError:
+            return True
+        return True
+
+    # On Windows os.kill(pid, 0) terminates the process instead of testing it,
+    # so ask the task list. When it cannot answer, assume alive: a refused run
+    # can be retried, two runs writing into one folder cannot be undone.
+    try:
+        listing = subprocess.run(["tasklist", "/FI", f"PID eq {pid}", "/NH"], capture_output=True,
+                                 text=True, errors="replace", timeout=10).stdout
+    except (OSError, subprocess.SubprocessError):
+        return True
+
+    return str(pid) in listing.split()
+
+
+def _lock_owner_alive() -> bool:
+    """A lock names the server process that took it. When that process is gone,
+    the server was stopped mid-run and nothing else will ever remove the lock:
+    before this check, one restart during a run refused every run after it."""
+    try:
+        fields = LOCK_PATH.read_text(encoding="utf-8").split()
+    except OSError:
+        return False
+
+    return len(fields) >= 3 and fields[2].isdigit() and _alive(int(fields[2]))
+
+
 def _acquire_lock(run_id: str) -> bool:
     LOCK_PATH.parent.mkdir(parents=True, exist_ok=True)
-    try:
-        fd = os.open(LOCK_PATH, os.O_CREAT | os.O_EXCL | os.O_WRONLY)
-    except FileExistsError:
-        return False
-    with os.fdopen(fd, "w", encoding="utf-8") as handle:
-        handle.write(f"{run_id} {datetime.now(timezone.utc).isoformat()}")
-    return True
+
+    for _ in range(2):
+        try:
+            fd = os.open(LOCK_PATH, os.O_CREAT | os.O_EXCL | os.O_WRONLY)
+        except FileExistsError:
+            if _lock_owner_alive():
+                return False
+            LOCK_PATH.unlink(missing_ok=True)
+            continue
+
+        with os.fdopen(fd, "w", encoding="utf-8") as handle:
+            handle.write(f"{run_id} {datetime.now(timezone.utc).isoformat()} {os.getpid()}")
+        return True
+
+    return False
 
 
 def _release_lock() -> None:
