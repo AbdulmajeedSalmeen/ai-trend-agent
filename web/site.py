@@ -169,6 +169,13 @@ def build_payload(run_dir: Path) -> dict:
             "fresh_signals": fresh,
             "new_asks": sum(1 for i in items if i["action"] != "watch" and i["runs_flagged"] == 1),
             "standing_asks": sum(1 for i in items if i["action"] != "watch" and i["runs_flagged"] > 1),
+            # Concepts are counted apart from packages, so the page can add them to
+            # the lessons it reports without the two ever being confused in the data.
+            "concepts": len(curriculum.get("concepts", [])),
+            "concept_lessons": sum(1 for concept in curriculum.get("concepts", [])
+                                   if concept["action"] == "add_new_lesson"),
+            "concept_optional": sum(1 for concept in curriculum.get("concepts", [])
+                                    if concept["action"] == "add_optional_content"),
         },
         "previous_run": previous,
         "material_checked": curriculum.get("material_checked"),

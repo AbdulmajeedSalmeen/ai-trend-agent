@@ -137,3 +137,14 @@ def test_the_concepts_the_course_does_not_teach_arrive_with_their_reason_in_both
         assert concept["why"] and concept["why_ar"]
         assert concept["action"] in {"add_new_lesson", "add_optional_content", "watch"}
         assert [evidence["what"] for evidence in concept["evidence"]] == ["added", "absent"]
+
+
+def test_concepts_are_counted_apart_from_packages(tmp_path):
+    build_run(tmp_path)
+
+    payload = build_payload(tmp_path)
+    counts = payload["counts"]
+
+    assert counts["concepts"] == len(payload["concepts"])
+    assert counts["concept_lessons"] == sum(1 for c in payload["concepts"] if c["action"] == "add_new_lesson")
+    assert counts["new_lesson"] == sum(1 for i in payload["items"] if i["action"] == "add_new_lesson")
