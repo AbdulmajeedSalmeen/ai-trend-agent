@@ -1,5 +1,5 @@
 import json
-from datetime import datetime
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
 import requests
@@ -7,6 +7,8 @@ import requests
 from src.schema import Signal
 
 GITHUB_API = "https://api.github.com/repos"
+PER_PAGE = 100
+MAX_PAGES = 3
 
 WATCHLIST = [
     "langchain-ai/langgraph",
@@ -55,41 +57,73 @@ def parse_release(repo: str, release: dict) -> Signal:
     )
 
 
+def published(release: dict) -> datetime | None:
+    stamp = release.get("published_at")
+    return datetime.fromisoformat(stamp.replace("Z", "+00:00")) if stamp else None
+
+
 def fetch_github_releases(
-    token: str | None, raw_dir: Path | None = None
+    token: str | None, raw_dir: Path | None = None, days: int = 30, now: datetime | None = None
 ) -> tuple[list[dict], list[Signal]]:
-    """Header: {'Authorization': f'Bearer {token}'} if token else {}.
-    Prints X-RateLimit-Remaining after each repo. Stops with a warning if < 5.
-    A 403 response (rate limited or forbidden) stops the loop and returns
-    whatever signals were already collected instead of crashing - partial
-    data beats a crash.
-    If raw_dir is given, each repo's raw response is saved to disk BEFORE it is
-    parsed, so a parse crash never loses data that was already fetched."""
+    """Every release of each watched repo published in the last `days`.
+
+    A fixed count per repo used to be read instead: the last 10. That gave every
+    run exactly 80 signals, and gave each repo a different span of time, nine
+    days of openai-python against six months of llama_index, while PyPI read a
+    30-day window. A window reads the same stretch of time for every repo, and a
+    monorepo such as langchain-ai/langchain, which ships a dozen packages, is
+    read in full rather than cut at its tenth release.
+
+    Pages are read newest first until one reaches past the window. A 403 (rate
+    limited or forbidden) stops the loop and returns what was already collected:
+    partial data beats a crash. Stops early, with a warning, when fewer than 5
+    requests remain. If raw_dir is given, each repo's releases are saved before
+    they are parsed, so a parse crash never loses data already fetched."""
     headers = {"Authorization": f"Bearer {token}"} if token else {}
+    since = (now or datetime.now(timezone.utc)) - timedelta(days=days)
     raw_responses: list[dict] = []
     signals: list[Signal] = []
+    stopped = False
 
     for i, repo in enumerate(WATCHLIST):
-        response = requests.get(
-            f"{GITHUB_API}/{repo}/releases",
-            params={"per_page": 10},
-            headers=headers,
-            timeout=30,
-        )
-        remaining = response.headers.get("X-RateLimit-Remaining")
-        print(f"{repo}: X-RateLimit-Remaining={remaining}")
+        in_window = []
+        remaining = None
 
-        if response.status_code == 403:
-            print(f"WARNING: {repo} returned 403 (rate limited or forbidden), stopping early")
+        for page in range(1, MAX_PAGES + 1):
+            response = requests.get(
+                f"{GITHUB_API}/{repo}/releases",
+                params={"per_page": PER_PAGE, "page": page},
+                headers=headers,
+                timeout=30,
+            )
+            remaining = response.headers.get("X-RateLimit-Remaining")
+            print(f"{repo}: X-RateLimit-Remaining={remaining}")
+
+            if response.status_code == 403:
+                print(f"WARNING: {repo} returned 403 (rate limited or forbidden), stopping early")
+                stopped = True
+                break
+
+            releases = response.json()
+            fresh = [release for release in releases
+                     if published(release) is not None and published(release) >= since]
+            in_window.extend(fresh)
+
+            if len(fresh) < len(releases) or len(releases) < PER_PAGE:
+                break
+
+        if stopped and not in_window:
             break
 
-        releases = response.json()
-        entry = {"repo": repo, "releases": releases}
+        entry = {"repo": repo, "since": since.isoformat(), "releases": in_window}
         raw_responses.append(entry)
         if raw_dir is not None:
             (raw_dir / f"github_{i}.json").write_text(json.dumps(entry), encoding="utf-8")
 
-        signals.extend(parse_release(repo, release) for release in releases)
+        signals.extend(parse_release(repo, release) for release in in_window)
+
+        if stopped:
+            break
 
         if remaining is not None and int(remaining) < 5:
             print(f"WARNING: GitHub rate limit low ({remaining} remaining), stopping")

@@ -1,5 +1,5 @@
 import json
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
 import requests
@@ -26,10 +26,11 @@ def parse_hn_hit(hit: dict) -> Signal:
     )
 
 
-def _fetch_page(query: str, page: int) -> dict:
+def _fetch_page(query: str, page: int, since: datetime) -> dict:
     response = requests.get(
         ALGOLIA_URL,
-        params={"query": query, "tags": "story", "hitsPerPage": 20, "page": page},
+        params={"query": query, "tags": "story", "hitsPerPage": 20, "page": page,
+                "numericFilters": f"created_at_i>{int(since.timestamp())}"},
         timeout=30,
     )
     response.raise_for_status()
@@ -42,19 +43,22 @@ def _save_raw(raw_dir: Path | None, name: str, data: dict) -> None:
 
 
 def fetch_hackernews(
-    queries: list[str], max_pages: int = 3, raw_dir: Path | None = None
+    queries: list[str], max_pages: int = 3, raw_dir: Path | None = None,
+    days: int = 30, now: datetime | None = None,
 ) -> tuple[list[dict], list[Signal]]:
-    """Returns (raw_responses, signals). Loops queries, pages through results.
+    """Returns (raw_responses, signals). Loops queries, pages through results,
+    reading only stories from the last `days`, the window PyPI and GitHub read.
     Prints 'TRUNCATED query=<q>' when a query has more pages than max_pages,
     so we can see when we are sampling instead of reading everything.
     If raw_dir is given, each raw page is saved to disk BEFORE it is parsed,
     so a parse crash never loses data that was already fetched."""
+    since = (now or datetime.now(timezone.utc)) - timedelta(days=days)
     raw_responses: list[dict] = []
     signals: list[Signal] = []
     page_count = 0
 
     for query in queries:
-        data = _fetch_page(query, page=0)
+        data = _fetch_page(query, page=0, since=since)
         raw_responses.append(data)
         _save_raw(raw_dir, f"hn_{page_count}", data)
         page_count += 1
@@ -65,7 +69,7 @@ def fetch_hackernews(
             print(f"TRUNCATED query={query}")
 
         for page in range(1, min(nb_pages, max_pages)):
-            data = _fetch_page(query, page=page)
+            data = _fetch_page(query, page=page, since=since)
             raw_responses.append(data)
             _save_raw(raw_dir, f"hn_{page_count}", data)
             page_count += 1

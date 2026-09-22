@@ -10,6 +10,10 @@ from src.sources import github_releases, hackernews, market, pypi
 
 HN_QUERIES = ["langgraph", "langchain", "openai", "claude", "hugging face", "ai agent"]
 
+# Every source reads the same stretch of time, so a busy project and a quiet one
+# are compared over the same days.
+WINDOW_DAYS = 30
+
 
 def dedupe_by_url(signals: list[Signal]) -> list[Signal]:
     """Two HN queries (or an HN post and its own GitHub release) can point at the
@@ -29,12 +33,12 @@ def run(run_dir: Path) -> None:
     token = os.environ.get("GITHUB_TOKEN")
     raw_dir = run_dir / "raw"
 
-    _hn_raw, hn_signals = hackernews.fetch_hackernews(HN_QUERIES, raw_dir=raw_dir)
-    _gh_raw, gh_signals = github_releases.fetch_github_releases(token, raw_dir=raw_dir)
+    _hn_raw, hn_signals = hackernews.fetch_hackernews(HN_QUERIES, raw_dir=raw_dir, days=WINDOW_DAYS)
+    _gh_raw, gh_signals = github_releases.fetch_github_releases(token, raw_dir=raw_dir, days=WINDOW_DAYS)
 
     packages = tracked_packages()
     print(f"pypi: following {len(packages)} packages the course installs")
-    _pypi_raw, pypi_signals = pypi.fetch_pypi(packages, raw_dir=raw_dir)
+    _pypi_raw, pypi_signals = pypi.fetch_pypi(packages, days=WINDOW_DAYS, raw_dir=raw_dir)
 
     signals = dedupe_by_url(gh_signals + pypi_signals + hn_signals)
 
