@@ -1,29 +1,30 @@
 # Demo answers
 
-Every number here comes from `run_20260921T104824Z`. Re-run `python -m src.pipeline --run-id
-run_20260921T104824Z` and they come back the same, because replay never touches the network.
+Every number here comes from `run_20260922T102800Z`. Re-run `python -m src.pipeline --run-id
+run_20260922T102800Z` and they come back the same, because replay never touches the network.
 
 ## The run, in numbers
 
 | | |
 |---|---|
-| Signals collected | 483 - 315 Hacker News, 88 PyPI releases, 80 GitHub releases |
-| Packages followed | 53 when collected; the course notebooks now install 56 |
+| Signals collected | 407 over the same 30 days - 235 Hacker News, 93 PyPI releases, 79 GitHub releases |
+| Packages followed | 56, every one the course notebooks install |
 | Subjects tracked | 37 |
-| Checkable claims | 156 |
-| Confirmed by the release itself | 139 |
-| Carried by a second registry | 13 |
+| Checkable claims | 148 |
+| Confirmed by the release itself | 121 |
+| Carried by a second registry | 24 |
 | Confirmed by an independent source | 0 |
-| Unverified | 4 |
-| Release-note lines read | 2,933 - 17 breaking, 2 deprecations, 308 features, 948 fixes, 1,658 chores |
-| Job posts searched | about 1,200, the last three "Ask HN: Who is hiring?" threads |
+| Unverified | 3 |
+| Release-note lines read | 2,120 - 8 breaking, 2 deprecations, 370 features, 795 fixes, 945 chores |
+| Job posts searched | the last three "Ask HN: Who is hiring?" threads |
 | Recommendations | 4 update a chapter, 1 course-wide change, 2 new lesson, 2 optional, 28 watch |
 | Chapters with something to act on | 11 of 25 |
 | Course notebooks read | 89, across six weeks |
 | Chapters installing something with no version bound | 19 of 25 |
 | Import lines to change | 85 in 39 notebooks across 11 chapters, checked against langchain 1.4.2; 3 break on today's install |
 | Concepts the course does not teach | MCP, a new lesson: 20 job posts in three months, 0 of 89 notebooks |
-| Tests | 352. None calls a model or the network |
+| Teaching feasibility | 3.3 to 5.0 of 5; 2 tools watched as not stable enough to teach |
+| Tests | 372. None calls a model or the network |
 
 ---
 
@@ -46,7 +47,7 @@ A school asks three different questions, and the agent now answers each from dat
 | Do employers want it? | job posts naming the tool in the last three "Who is hiring?" threads, and PyPI installs |
 
 The release notes were already being collected and thrown away. Read now, they show why
-versions mislead: of 2,933 lines, nine in ten are fixes or chores. About one line in nine is
+versions mislead: of 2,120 lines, four in five are fixes or chores. About one line in six is
 something a teacher would read.
 
 What changed as a result, in the same data:
@@ -69,6 +70,32 @@ What changed as a result, in the same data:
 The result: 4 chapter updates, 1 course-wide change, 2 new lessons and 2 optional notebooks,
 each with a reason a teacher would accept and a two or three step plan, out of 37 packages
 that shipped something.
+
+## "Why did every run have exactly 80 GitHub releases?"
+
+Because we asked for exactly 80: the last 10 releases of each of 8 repositories. It was not a
+GitHub limit, and the data was real, but the same 10 releases covered 9 days of openai-python
+and 189 days of llama_index, while PyPI read a 30-day window. "llama_index added 89 features"
+measured six months against nine days.
+
+Every source now reads the same 30 days. The langchain monorepo went from 10 releases to 26,
+across 8 packages, three of which had never been seen; llama_index went from 10 to 1. The total
+happened to land on 79, which is why a fixed count is easy to miss.
+
+## "How do you judge whether something can be taught, not only whether it matters?"
+
+With three factors the brief names, each measured, kept apart from the priority as a
+feasibility score. Maturity comes from the package's whole history on PyPI; prerequisites
+from what the course already teaches; difficulty from the lines to change and how far they
+reach. On this run feasibility runs from 3.3 to 5.0.
+
+- **langchain-typesafe** was "update C8" on its version alone. It has only pre-releases and is
+  days old: maturity 1, not stable enough to teach, so it is watched.
+- **langchain** matters most, priority 4.75, and is the hardest to act on: 85 lines across 11
+  chapters, difficulty 5, feasibility 3.3. The plan starts with the one notebook that breaks.
+- **anthropic-sdk-python** gets no prerequisites score, marked default. Nothing in the data links
+  it to what the course teaches, though the course does teach the OpenAI SDK, which works the
+  same way. Calling that a missing prerequisite would be a claim we cannot back.
 
 ## "Why is cross-source zero? Is the checker broken?"
 
@@ -243,12 +270,14 @@ from our table. It no longer reads comments, and a name must match whole.
 
 ## "What happens if the wifi dies during the demo?"
 
-Two fallbacks. Both were run with the network and the model switched off, on 2026-09-19:
+Two fallbacks. Both were run with the network and the model switched off, on 2026-09-22:
 
-1. **Re-analyse** in the web app replays the saved signals of any past run. Replaying the
-   frozen run with no model and no network produced the same 17 recommendations and the same
-   4 chapter updates, with the reasons intact. Without a model the sentences come from the
-   rules instead of being rewritten, and the page says which.
+1. **Re-analyse** in the web app replays the saved signals of any past run. Replaying a copy of
+   the frozen run with no model and no network gave the same 37 recommendations and the same
+   verdicts on every claim, and 36 of 37 actions were identical. The one that moved,
+   openai-python, went from watch to update: without the judge its teaching value defaults to 3,
+   and its priority crosses the line. Without a model the sentences come from the rules, and
+   each card says who wrote its reason.
 2. `web/dist/site.html` is a single file with the run and the fonts embedded. It opens on any
    machine with no server and no network.
 

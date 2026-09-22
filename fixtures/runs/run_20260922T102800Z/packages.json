@@ -1,0 +1,585 @@
+[
+  {
+    "subject": "accelerate",
+    "pypi": "accelerate",
+    "first_release": "2020-10-30T13:43:42.744106Z",
+    "latest_stable": "1.15.0",
+    "requires": [
+      "numpy",
+      "packaging",
+      "psutil",
+      "pyyaml",
+      "torch",
+      "huggingface-hub",
+      "safetensors"
+    ]
+  },
+  {
+    "subject": "anthropic-sdk-python",
+    "pypi": "anthropic",
+    "first_release": "2023-02-09T06:19:01.733591Z",
+    "latest_stable": "1.7.0",
+    "requires": [
+      "anyio",
+      "docstring-parser",
+      "httpx2",
+      "jiter",
+      "pydantic",
+      "sniffio",
+      "typing-extensions"
+    ]
+  },
+  {
+    "subject": "bitsandbytes",
+    "pypi": "bitsandbytes",
+    "first_release": "2022-08-09T02:58:52.824972Z",
+    "latest_stable": "0.50.2",
+    "requires": [
+      "torch",
+      "numpy",
+      "packaging"
+    ]
+  },
+  {
+    "subject": "crewai",
+    "pypi": "crewai",
+    "first_release": "2023-11-14T12:34:49.155108Z",
+    "latest_stable": "1.15.22",
+    "requires": [
+      "aiofiles",
+      "aiosqlite",
+      "appdirs",
+      "cel-python",
+      "chromadb",
+      "click",
+      "crewai-cli",
+      "crewai-core",
+      "httpx",
+      "instructor",
+      "json-repair",
+      "json5",
+      "jsonref",
+      "lancedb",
+      "mcp",
+      "openai",
+      "openpyxl",
+      "opentelemetry-api",
+      "opentelemetry-exporter-otlp-proto-http",
+      "opentelemetry-sdk",
+      "pdfplumber",
+      "portalocker",
+      "pydantic-settings",
+      "pydantic",
+      "pyjwt",
+      "python-dotenv",
+      "pyyaml",
+      "regex",
+      "tokenizers",
+      "tomli-w",
+      "tomli"
+    ]
+  },
+  {
+    "subject": "ddgs",
+    "pypi": "ddgs",
+    "first_release": "2025-07-06T15:43:49.564453Z",
+    "latest_stable": "9.16.0",
+    "requires": [
+      "click",
+      "primp",
+      "lxml"
+    ]
+  },
+  {
+    "subject": "dspy",
+    "pypi": "dspy",
+    "first_release": "2024-04-14T22:02:23.271271Z",
+    "latest_stable": "3.3.1",
+    "requires": [
+      "openai",
+      "regex",
+      "orjson",
+      "tqdm",
+      "requests",
+      "pydantic",
+      "litellm",
+      "diskcache",
+      "json-repair",
+      "tenacity",
+      "anyio",
+      "cachetools",
+      "cloudpickle",
+      "gepa"
+    ]
+  },
+  {
+    "subject": "evidently",
+    "pypi": "evidently",
+    "first_release": "2020-11-25T18:03:02.318910Z",
+    "latest_stable": "0.7.23",
+    "requires": [
+      "certifi",
+      "cryptography",
+      "deprecation",
+      "dynaconf",
+      "fsspec",
+      "iterative-telemetry",
+      "litestar",
+      "nltk",
+      "numpy",
+      "opentelemetry-proto",
+      "pandas",
+      "plotly",
+      "pydantic",
+      "pyyaml",
+      "requests",
+      "rich",
+      "scikit-learn",
+      "scipy",
+      "statsmodels",
+      "typer",
+      "typing-inspect",
+      "ujson",
+      "urllib3",
+      "uuid6",
+      "uvicorn",
+      "watchdog"
+    ]
+  },
+  {
+    "subject": "faiss-cpu",
+    "pypi": "faiss-cpu",
+    "first_release": "2019-07-17T05:18:53.812095Z",
+    "latest_stable": "1.15.1",
+    "requires": [
+      "numpy",
+      "packaging"
+    ]
+  },
+  {
+    "subject": "langchain",
+    "pypi": "langchain",
+    "first_release": "2022-10-25T04:10:02.367794Z",
+    "latest_stable": "1.4.2",
+    "requires": [
+      "langchain-core",
+      "langgraph",
+      "pydantic"
+    ]
+  },
+  {
+    "subject": "langchain-anthropic",
+    "pypi": "langchain-anthropic",
+    "first_release": "2023-12-20T17:45:39.549198Z",
+    "latest_stable": "1.7.2",
+    "requires": [
+      "anthropic",
+      "langchain-core",
+      "pydantic"
+    ]
+  },
+  {
+    "subject": "langchain-core",
+    "pypi": "langchain-core",
+    "first_release": "2023-11-20T21:11:56.275364Z",
+    "latest_stable": "1.6.4",
+    "requires": [
+      "httpx",
+      "jsonpatch",
+      "langchain-protocol",
+      "langsmith",
+      "packaging",
+      "pydantic",
+      "pyyaml",
+      "tenacity",
+      "typing-extensions",
+      "uuid-utils"
+    ]
+  },
+  {
+    "subject": "langchain-deepseek",
+    "pypi": "langchain-deepseek",
+    "first_release": "2025-02-04T18:42:40.157102Z",
+    "latest_stable": "1.1.1",
+    "requires": [
+      "langchain-core",
+      "langchain-openai"
+    ]
+  },
+  {
+    "subject": "langchain-fireworks",
+    "pypi": "langchain-fireworks",
+    "first_release": "2024-02-23T22:36:05.149556Z",
+    "latest_stable": "1.6.2",
+    "requires": [
+      "aiohttp",
+      "fireworks-ai",
+      "langchain-core",
+      "openai",
+      "requests"
+    ]
+  },
+  {
+    "subject": "langchain-openai",
+    "pypi": "langchain-openai",
+    "first_release": "2024-01-05T23:12:54.088128Z",
+    "latest_stable": "1.6.3",
+    "requires": [
+      "certifi",
+      "langchain-core",
+      "openai",
+      "tiktoken"
+    ]
+  },
+  {
+    "subject": "langchain-openrouter",
+    "pypi": "langchain-openrouter",
+    "first_release": "2026-02-15T07:56:00.769793Z",
+    "latest_stable": "0.2.9",
+    "requires": [
+      "langchain-core",
+      "openrouter"
+    ]
+  },
+  {
+    "subject": "langchain-typesafe",
+    "pypi": "langchain-typesafe",
+    "first_release": "2026-09-17T18:06:46.349700Z",
+    "latest_stable": null,
+    "requires": [
+      "httpx2",
+      "langchain-core"
+    ]
+  },
+  {
+    "subject": "langgraph",
+    "pypi": "langgraph",
+    "first_release": "2024-01-08T16:30:59.571602Z",
+    "latest_stable": "1.2.12",
+    "requires": [
+      "langchain-core",
+      "langgraph-checkpoint",
+      "langgraph-prebuilt",
+      "langgraph-sdk",
+      "pydantic",
+      "xxhash"
+    ]
+  },
+  {
+    "subject": "langgraph-sdk",
+    "pypi": "langgraph-sdk",
+    "first_release": "2024-05-02T18:57:00.967666Z",
+    "latest_stable": "0.4.5",
+    "requires": [
+      "httpx",
+      "langchain-core",
+      "langchain-protocol",
+      "orjson",
+      "websockets"
+    ]
+  },
+  {
+    "subject": "langsmith",
+    "pypi": "langsmith",
+    "first_release": "2023-06-26T22:04:38.023664Z",
+    "latest_stable": "0.14.0",
+    "requires": [
+      "anyio",
+      "distro",
+      "httpx2",
+      "orjson",
+      "packaging",
+      "pydantic",
+      "requests-toolbelt",
+      "requests",
+      "sniffio",
+      "typing-extensions",
+      "uuid-utils",
+      "websockets",
+      "xxhash",
+      "zstandard"
+    ]
+  },
+  {
+    "subject": "litellm",
+    "pypi": "litellm",
+    "first_release": "2023-07-27T00:36:16.462525Z",
+    "latest_stable": "1.102.0",
+    "requires": [
+      "fastuuid",
+      "httpx",
+      "openai",
+      "python-dotenv",
+      "tiktoken",
+      "importlib-metadata",
+      "tokenizers",
+      "click",
+      "jinja2",
+      "aiohttp",
+      "pydantic",
+      "pydantic-settings",
+      "jsonschema",
+      "boto3"
+    ]
+  },
+  {
+    "subject": "llama_index",
+    "pypi": "llama-index",
+    "first_release": "2023-02-16T21:37:36.084911Z",
+    "latest_stable": "0.14.25",
+    "requires": [
+      "llama-index-core",
+      "llama-index-embeddings-openai",
+      "llama-index-llms-openai",
+      "nltk"
+    ]
+  },
+  {
+    "subject": "matplotlib",
+    "pypi": "matplotlib",
+    "first_release": "2006-01-09T14:02:01Z",
+    "latest_stable": "3.11.2",
+    "requires": [
+      "contourpy",
+      "cycler",
+      "fonttools",
+      "kiwisolver",
+      "numpy",
+      "packaging",
+      "pillow",
+      "pyparsing",
+      "python-dateutil"
+    ]
+  },
+  {
+    "subject": "openai",
+    "pypi": "openai",
+    "first_release": "2020-02-18T19:41:36.681685Z",
+    "latest_stable": "3.17.0",
+    "requires": [
+      "anyio",
+      "httpx2",
+      "jiter",
+      "pydantic",
+      "sniffio",
+      "typing-extensions"
+    ]
+  },
+  {
+    "subject": "openai-python",
+    "pypi": "openai",
+    "first_release": "2020-02-18T19:41:36.681685Z",
+    "latest_stable": "3.17.0",
+    "requires": [
+      "anyio",
+      "httpx2",
+      "jiter",
+      "pydantic",
+      "sniffio",
+      "typing-extensions"
+    ]
+  },
+  {
+    "subject": "pandas",
+    "pypi": "pandas",
+    "first_release": "2009-12-25T23:58:31.560462Z",
+    "latest_stable": "3.0.6",
+    "requires": [
+      "numpy",
+      "python-dateutil",
+      "tzdata"
+    ]
+  },
+  {
+    "subject": "peft",
+    "pypi": "peft",
+    "first_release": "2023-01-19T16:41:25.146082Z",
+    "latest_stable": "0.21.0",
+    "requires": [
+      "numpy",
+      "packaging",
+      "psutil",
+      "pyyaml",
+      "torch",
+      "transformers",
+      "tqdm",
+      "accelerate",
+      "safetensors",
+      "huggingface-hub"
+    ]
+  },
+  {
+    "subject": "pydantic-ai",
+    "pypi": "pydantic-ai",
+    "first_release": "2024-05-20T00:08:05.260573Z",
+    "latest_stable": "2.47.0",
+    "requires": [
+      "pydantic-ai-slim"
+    ]
+  },
+  {
+    "subject": "pypdf",
+    "pypi": "pypdf",
+    "first_release": "2014-05-17T22:40:49.200819Z",
+    "latest_stable": "6.19.0",
+    "requires": [
+      "typing-extensions"
+    ]
+  },
+  {
+    "subject": "rapidfuzz",
+    "pypi": "rapidfuzz",
+    "first_release": "2020-03-18T16:47:34.819286Z",
+    "latest_stable": "3.14.6",
+    "requires": []
+  },
+  {
+    "subject": "scikit-learn",
+    "pypi": "scikit-learn",
+    "first_release": "2011-09-22T00:03:10.112867Z",
+    "latest_stable": "1.9.1",
+    "requires": [
+      "numpy",
+      "scipy",
+      "joblib",
+      "narwhals",
+      "threadpoolctl"
+    ]
+  },
+  {
+    "subject": "sentence-transformers",
+    "pypi": "sentence-transformers",
+    "first_release": "2019-07-25T08:09:22.676208Z",
+    "latest_stable": "6.1.0",
+    "requires": [
+      "transformers",
+      "tokenizers",
+      "huggingface-hub",
+      "torch",
+      "numpy",
+      "scikit-learn",
+      "scipy",
+      "typing-extensions",
+      "tqdm"
+    ]
+  },
+  {
+    "subject": "streamlit",
+    "pypi": "streamlit",
+    "first_release": "2018-03-20T18:00:56.464089Z",
+    "latest_stable": "1.64.0",
+    "requires": [
+      "altair",
+      "click",
+      "numpy",
+      "packaging",
+      "pandas",
+      "pillow",
+      "pydeck",
+      "protobuf",
+      "pyarrow",
+      "requests",
+      "toml",
+      "typing-extensions",
+      "starlette",
+      "uvicorn",
+      "httptools",
+      "anyio",
+      "python-multipart",
+      "websockets",
+      "itsdangerous",
+      "watchdog"
+    ]
+  },
+  {
+    "subject": "torch",
+    "pypi": "torch",
+    "first_release": "2018-12-07T18:56:01.203127Z",
+    "latest_stable": "2.14.0",
+    "requires": [
+      "filelock",
+      "typing-extensions",
+      "setuptools",
+      "sympy",
+      "networkx",
+      "jinja2",
+      "fsspec",
+      "cuda-toolkit",
+      "cuda-bindings",
+      "nvidia-cudnn-cu13",
+      "nvidia-cusparselt-cu13",
+      "nvidia-nccl-cu13",
+      "nvidia-nvshmem-cu13",
+      "triton"
+    ]
+  },
+  {
+    "subject": "torchvision",
+    "pypi": "torchvision",
+    "first_release": "2019-05-22T21:10:33.669861Z",
+    "latest_stable": "0.29.0",
+    "requires": [
+      "numpy",
+      "torch",
+      "pillow"
+    ]
+  },
+  {
+    "subject": "tqdm",
+    "pypi": "tqdm",
+    "first_release": "2013-10-26T20:06:45.223855Z",
+    "latest_stable": "4.70.1",
+    "requires": [
+      "colorama"
+    ]
+  },
+  {
+    "subject": "transformers",
+    "pypi": "transformers",
+    "first_release": "2016-08-17T06:13:12.929751Z",
+    "latest_stable": "5.17.0",
+    "requires": [
+      "huggingface-hub",
+      "numpy",
+      "packaging",
+      "pyyaml",
+      "regex",
+      "tokenizers",
+      "typer",
+      "safetensors",
+      "tqdm"
+    ]
+  },
+  {
+    "subject": "unstructured",
+    "pypi": "unstructured",
+    "first_release": "2022-09-06T20:08:36.204064Z",
+    "latest_stable": "0.27.8",
+    "requires": [
+      "beautifulsoup4",
+      "charset-normalizer",
+      "emoji",
+      "filelock",
+      "filetype",
+      "html5lib",
+      "installer",
+      "langdetect",
+      "lxml",
+      "nh3",
+      "numba",
+      "numpy",
+      "psutil",
+      "python-iso639",
+      "python-magic",
+      "python-oxmsg",
+      "rapidfuzz",
+      "regex",
+      "requests",
+      "spacy",
+      "tqdm",
+      "typing-extensions",
+      "unstructured-client",
+      "wrapt"
+    ]
+  }
+]

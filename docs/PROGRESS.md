@@ -1,6 +1,6 @@
 # Progress
 
-**Last updated:** 2026-09-22 · **Tests:** 352 passing · **Demo:** Sep 26–27
+**Last updated:** 2026-09-22 · **Tests:** 372 passing · **Demo:** Sep 26–27
 
 The pipeline runs end to end, live, from a web app. A model reads, judges and writes;
 rules still decide what counts as confirmed, and every recommendation now carries the reason
@@ -148,6 +148,19 @@ behind it: what the chapter teaches, which version it runs, and how far the rele
   1.4.2 added `langchain.mcp`; 20 job posts named MCP in three months, 0 of 89 notebooks
   mention it: a new lesson. Five other new modules are watched, their names too common to
   count in job posts.
+- Every run had exactly 80 GitHub signals: 10 releases from each of 8 repos, 9 days of one and
+  189 of another. GitHub and Hacker News now read the same 30 days as PyPI; the langchain
+  monorepo went from 10 releases to 26 across 8 packages.
+- The writer kept 8 of 37 sentences; the rest dropped the version, and one called optional
+  content "a new chapter". The prompt now lists the facts that must appear and says what each
+  action means. On the new run 4 were refused instead of 29.
+- The brief's three missing factors are measured (`src/feasibility.py`): maturity from PyPI
+  history, prerequisites from what the course teaches, difficulty from the lines to change.
+  They score feasibility beside the priority, not inside it, and maturity gates the decision:
+  langchain-typesafe, pre-releases only, went from "update C8" to watch.
+- Frozen run replaced by `run_20260922T102800Z`. pypistats refused during collection; install
+  counts were filled afterwards for 18 of 37 subjects, the rest stay unmeasured. To do on
+  Sep 23: fill the remaining 19, replay from score, check the numbers here still hold.
 
 ### 2026-09-21
 - The lead asked the right question: would a school care about every langchain version, or

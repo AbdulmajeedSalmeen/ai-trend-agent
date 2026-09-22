@@ -3,182 +3,175 @@
     "subject": "accelerate",
     "job_term": null,
     "jobs": null,
-    "downloads": 17184661,
+    "downloads": 17221282,
     "months": 3
   },
   {
     "subject": "anthropic-sdk-python",
     "job_term": "anthropic",
     "jobs": 12,
-    "downloads": 139463073,
+    "downloads": 138780642,
     "months": 3
   },
   {
     "subject": "bitsandbytes",
     "job_term": "bitsandbytes",
     "jobs": 0,
-    "downloads": 3522889,
+    "downloads": 3484123,
     "months": 3
   },
   {
     "subject": "crewai",
     "job_term": "crewai",
     "jobs": 4,
-    "downloads": 6453644,
+    "downloads": 4913081,
     "months": 3
   },
   {
     "subject": "ddgs",
     "job_term": null,
     "jobs": null,
-    "downloads": 5082274,
+    "downloads": 5056373,
     "months": 3
   },
   {
     "subject": "dspy",
     "job_term": "dspy",
     "jobs": 0,
-    "downloads": 4860735,
+    "downloads": 4885309,
     "months": 3
   },
   {
     "subject": "evidently",
     "job_term": null,
     "jobs": null,
-    "downloads": 863013,
+    "downloads": 856903,
     "months": 3
   },
   {
     "subject": "faiss-cpu",
     "job_term": "faiss",
     "jobs": 0,
-    "downloads": 11499184,
+    "downloads": 11554254,
     "months": 3
   },
   {
     "subject": "langchain",
     "job_term": "langchain",
     "jobs": 17,
-    "downloads": 176686980,
+    "downloads": 175109180,
     "months": 3
   },
   {
     "subject": "langchain-anthropic",
     "job_term": "langchain",
     "jobs": 17,
-    "downloads": 16958827,
+    "downloads": 17141852,
     "months": 3
   },
   {
     "subject": "langchain-core",
     "job_term": "langchain",
     "jobs": 17,
-    "downloads": 146753919,
+    "downloads": 146477959,
+    "months": 3
+  },
+  {
+    "subject": "langchain-deepseek",
+    "job_term": "langchain",
+    "jobs": 17,
+    "downloads": 562011,
+    "months": 3
+  },
+  {
+    "subject": "langchain-fireworks",
+    "job_term": "langchain",
+    "jobs": 17,
+    "downloads": 578803,
     "months": 3
   },
   {
     "subject": "langchain-openai",
     "job_term": "langchain",
     "jobs": 17,
-    "downloads": 40856844,
+    "downloads": 40076985,
+    "months": 3
+  },
+  {
+    "subject": "langchain-openrouter",
+    "job_term": "langchain",
+    "jobs": 17,
+    "downloads": 833066,
     "months": 3
   },
   {
     "subject": "langchain-typesafe",
     "job_term": "langchain",
     "jobs": 17,
-    "downloads": 1359,
+    "downloads": 2186,
     "months": 3
   },
   {
     "subject": "langgraph",
     "job_term": "langgraph",
     "jobs": 14,
-    "downloads": 43805978,
-    "months": 3
-  },
-  {
-    "subject": "langgraph-checkpoint",
-    "job_term": "langgraph",
-    "jobs": 14,
-    "downloads": 40349212,
-    "months": 3
-  },
-  {
-    "subject": "langgraph-checkpointpostgres",
-    "job_term": "langgraph",
-    "jobs": 14,
-    "downloads": 7445566,
-    "months": 3
-  },
-  {
-    "subject": "langgraph-checkpointsqlite",
-    "job_term": "langgraph",
-    "jobs": 14,
-    "downloads": 2427838,
-    "months": 3
-  },
-  {
-    "subject": "langgraph-cli",
-    "job_term": "langgraph",
-    "jobs": 14,
-    "downloads": 2573329,
+    "downloads": 43810916,
     "months": 3
   },
   {
     "subject": "langgraph-sdk",
     "job_term": "langgraph",
     "jobs": 14,
-    "downloads": 41476658,
+    "downloads": 41770537,
     "months": 3
   },
   {
     "subject": "langsmith",
     "job_term": "langsmith",
     "jobs": 2,
-    "downloads": 80021305,
+    "downloads": null,
     "months": 3
   },
   {
     "subject": "litellm",
     "job_term": "litellm",
     "jobs": 0,
-    "downloads": 141593074,
+    "downloads": null,
     "months": 3
   },
   {
     "subject": "llama_index",
     "job_term": "llamaindex",
     "jobs": 5,
-    "downloads": 3462409,
+    "downloads": null,
     "months": 3
   },
   {
     "subject": "matplotlib",
     "job_term": "matplotlib",
     "jobs": 1,
-    "downloads": 156605194,
+    "downloads": null,
     "months": 3
   },
   {
     "subject": "openai",
     "job_term": "openai",
     "jobs": 19,
-    "downloads": 286423757,
+    "downloads": null,
     "months": 3
   },
   {
     "subject": "openai-python",
     "job_term": "openai",
     "jobs": 19,
-    "downloads": 286423757,
+    "downloads": null,
     "months": 3
   },
   {
     "subject": "pandas",
     "job_term": "pandas",
     "jobs": 10,
-    "downloads": 524772986,
+    "downloads": null,
     "months": 3
   },
   {
@@ -192,70 +185,77 @@
     "subject": "pydantic-ai",
     "job_term": "pydantic",
     "jobs": 1,
-    "downloads": 5575469,
+    "downloads": null,
     "months": 3
   },
   {
     "subject": "pypdf",
     "job_term": "pypdf",
     "jobs": 0,
-    "downloads": 115340494,
+    "downloads": null,
     "months": 3
   },
   {
     "subject": "rapidfuzz",
     "job_term": "rapidfuzz",
     "jobs": 0,
-    "downloads": 117050160,
+    "downloads": null,
     "months": 3
   },
   {
     "subject": "scikit-learn",
     "job_term": "scikit-learn",
     "jobs": 1,
-    "downloads": 185452344,
+    "downloads": null,
     "months": 3
   },
   {
     "subject": "sentence-transformers",
     "job_term": "sentence-transformers",
     "jobs": 3,
-    "downloads": 23459498,
+    "downloads": null,
     "months": 3
   },
   {
     "subject": "streamlit",
     "job_term": "streamlit",
     "jobs": 3,
-    "downloads": 19293493,
+    "downloads": null,
     "months": 3
   },
   {
     "subject": "torch",
     "job_term": "pytorch",
     "jobs": 19,
-    "downloads": 61900457,
+    "downloads": null,
     "months": 3
   },
   {
     "subject": "torchvision",
     "job_term": "pytorch",
     "jobs": 19,
-    "downloads": 17263735,
+    "downloads": null,
+    "months": 3
+  },
+  {
+    "subject": "tqdm",
+    "job_term": "tqdm",
+    "jobs": 0,
+    "downloads": null,
     "months": 3
   },
   {
     "subject": "transformers",
     "job_term": "hugging face",
     "jobs": 8,
-    "downloads": 98762799,
+    "downloads": null,
     "months": 3
   },
   {
     "subject": "unstructured",
     "job_term": null,
     "jobs": null,
-    "downloads": 2639288,
+    "downloads": null,
     "months": 3
   }
 ]

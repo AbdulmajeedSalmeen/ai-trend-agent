@@ -65,7 +65,7 @@ version.** Three rules keep that honest:
    are not independent, so they do not get to count as a cross-source check.
 
 **It decides the way a school would, not the way a changelog does.** Most of what ships is
-not teachable: of 2,933 lines in the release notes of the frozen run, nine in ten are fixes or
+not teachable: of 2,120 lines in the release notes of the frozen run, four in five are fixes or
 chores. So the agent reads the notes and sorts every line into breaking, deprecation,
 feature, fix or chore, the judge is shown what changed rather than the version number, and
 market demand comes from real job posts and real installs rather than from how much a tool
@@ -83,6 +83,7 @@ verdict comes from what the notebooks install and what the releases changed:
 | A minor gap, and the notes show only fixes and chores | watch: the pinned notebook still runs |
 | No bound, and the releases add something the chapter should teach | rewrite |
 | No bound, and nothing read shows a change worth teaching | watch, and pin the version |
+| The tool is not stable enough to teach: maturity 2 of 5 or less | watch, unless a removed import breaks the course's own notebook |
 | Notebooks in two or more chapters import names the newest release removed | investigate a larger change: one decision for the course |
 | No chapter, and employers ask for it | a new lesson |
 | No chapter, some employers ask for it, and the releases add something to teach | optional content |
@@ -90,6 +91,22 @@ verdict comes from what the notebooks install and what the releases changed:
 
 Every recommendation carries a two or three step action plan, in English and Arabic, built
 from the same facts: which lines to change, what to pin, what the release added.
+
+**How much it matters and how ready we are to teach it are scored apart.** Priority is the
+mean of relevance, impact, educational value and market demand. Feasibility is the mean of the
+three factors the brief names, each measured from data the run holds:
+
+- **maturity**, from the package's whole history on PyPI: a year old, three years old, a 1.0
+  or later release, and no breaking change or pre-release in this run;
+- **prerequisites**: 5 when the course teaches the package, 4 when it teaches its family or
+  something the package builds on, otherwise unmeasured, since finding no link is not finding
+  a gap;
+- **difficulty**, 1 to 5: for existing material, the import lines to change and how many
+  chapters they reach, plus breaking changes; new material starts at 3.
+
+Folded into the priority, an easy version pin outranked a real change, so feasibility stays
+beside it. A tool at maturity 2 or below is watched whatever else it scores, the brief's own
+test for watching. Every card shows both numbers, and each factor says what it came from.
 
 ### Where the model is allowed to decide
 
@@ -103,25 +120,27 @@ instead. The run log says so when it happens.
 
 ## Numbers from the frozen run
 
-`run_20260921T104824Z` travels with the repo, so anyone can replay it with no network.
+`run_20260922T102800Z` travels with the repo, so anyone can replay it with no network.
 
 | | |
 |---|---|
-| Signals collected | 483, being 315 Hacker News, 88 PyPI and 80 GitHub |
-| Packages followed | 53 when collected; the course notebooks now install 56 |
+| Signals collected | 407 over the same 30 days: 235 Hacker News, 93 PyPI and 79 GitHub |
+| Packages followed | 56, every one the course notebooks install |
 | Subjects tracked | 37 |
-| Checkable claims | 156 |
-| Confirmed by the release itself | 139 |
-| Carried by a second registry | 13 |
+| Checkable claims | 148 |
+| Confirmed by the release itself | 121 |
+| Carried by a second registry | 24 |
 | Confirmed by an independent source | 0 |
-| Unverified | 4 |
-| Release-note lines read | 2,933: 17 breaking, 2 deprecations, 308 features, 948 fixes, 1,658 chores |
-| Job posts searched | the last three "Ask HN: Who is hiring?" threads, about 1,200 posts |
+| Unverified | 3 |
+| Release-note lines read | 2,120: 8 breaking, 2 deprecations, 370 features, 795 fixes, 945 chores |
+| Job posts searched | the last three "Ask HN: Who is hiring?" threads |
 | Recommendations | 4 update a chapter, 1 course-wide change, 2 new lesson, 2 optional, 28 watch |
 | Import lines to change | 85 in 39 notebooks, checked against langchain 1.4.2; 3 break today |
 | Concepts the course does not teach | MCP, a new lesson: 20 job posts, 0 of 89 notebooks |
+| Teaching feasibility | 3.3 to 5.0 of 5; 2 tools watched as not stable enough to teach |
+| Written reasons | 33 of 37 by the model, checked for the facts; 4 by the rules |
 | Chapters with something to act on | 11 of 25 |
-| Tests | 352, none of which calls a model or the network |
+| Tests | 372, none of which calls a model or the network |
 
 Cross-source is zero because no discussion post this week stated anything a release page
 could check. That is a property of the data, not a gap in the checker, and the page prints

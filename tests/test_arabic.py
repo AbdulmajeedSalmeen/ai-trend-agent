@@ -9,7 +9,7 @@ from src.schema import Claim, Recommendation, Score, Signal, Trend
 from src.stages import stage4_act
 from src.stages.stage4_act import build_rationale, course_edits, decide, decide_action, load_chapters, redecide
 
-FROZEN = Path("fixtures/runs/run_20260921T104824Z")
+FROZEN = Path("fixtures/runs/run_20260922T102800Z")
 
 # A version, a date, a priority, a compact install count, or a plain count.
 NUMBER = re.compile(r"\d+(?:[.\-]\d+)*(?:[A-Za-z]+\d*)?")
