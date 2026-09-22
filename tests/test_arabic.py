@@ -4,10 +4,10 @@ import shutil
 from collections import Counter
 from pathlib import Path
 
-from src import arabic, gap, runio
+from src import arabic, gap, plan, runio
 from src.schema import Claim, Recommendation, Score, Signal, Trend
 from src.stages import stage4_act
-from src.stages.stage4_act import assess_trend, build_rationale, decide_action, fill_arabic, load_chapters
+from src.stages.stage4_act import build_rationale, course_edits, decide, decide_action, load_chapters, redecide
 
 FROZEN = Path("fixtures/runs/run_20260921T104824Z")
 
@@ -36,20 +36,22 @@ def same_numbers(english: str, arabic_reason: str) -> bool:
 
 
 def frozen_reasons():
-    """Both languages' rules reason for every card in the frozen run."""
+    """Both languages' rules reason for every card in the frozen run, decided the
+    way stage 4 decides it."""
     trends = {trend.id: trend for trend in runio.load_artifact(FROZEN, "trends", Trend)}
     scores = {score.trend_id: score for score in runio.load_artifact(FROZEN, "scores", Score)}
     signals = runio.load_artifact(FROZEN, "signals", Signal)
     published = {signal.id: signal.published_at.isoformat() for signal in signals}
     chapters = load_chapters()
+    edits_by_package = course_edits(chapters)
 
     for rec in runio.load_artifact(FROZEN, "recommendations", Recommendation):
         trend, score = trends[rec.trend_id], scores[rec.trend_id]
-        chapter = chapters.get(score.chapter_id)
-        assessment = assess_trend(trend, chapter, published)
+        decided = decide(trend, score, chapters, published, edits_by_package)
+        facts = (trend, score, decided["action"], decided["assessment"], decided["chapter"])
         yield (trend.subject,
-               build_rationale(trend, score, rec.action, assessment, chapter),
-               build_rationale(trend, score, rec.action, assessment, chapter, lang="ar"))
+               build_rationale(*facts, edits=decided["edits"]),
+               build_rationale(*facts, lang="ar", edits=decided["edits"]))
 
 
 def test_counts_agree_with_their_noun_the_way_arabic_requires():
@@ -147,15 +149,20 @@ def every_card():
         )
         action = decide_action(score, assessment)
         card = chapter if has_chapter else None
+        steps, steps_ar = plan.build(SUBJECT, score, action, assessment, [])
 
         yield (build_rationale(trend, score, action, assessment, card),
-               build_rationale(trend, score, action, assessment, card, lang="ar"))
+               build_rationale(trend, score, action, assessment, card, lang="ar"), steps, steps_ar)
+
+
+# The page sets each step on a line of its own.
+STEP_LIMIT = 160
 
 
 def test_the_arabic_reason_never_says_a_figure_the_english_does_not():
     checked = 0
 
-    for english, arabic_reason in every_card():
+    for english, arabic_reason, _, _ in every_card():
         assert same_numbers(english, arabic_reason), (english, arabic_reason)
         assert SUBJECT in arabic_reason
         assert not DASH.search(arabic_reason), arabic_reason
@@ -163,6 +170,17 @@ def test_the_arabic_reason_never_says_a_figure_the_english_does_not():
         checked += 1
 
     assert checked > 10_000
+
+
+def test_every_plan_has_the_same_steps_and_figures_in_both_languages():
+    for _, _, steps, steps_ar in every_card():
+        assert 2 <= len(steps) == len(steps_ar) <= 3, steps
+
+        for step, step_ar in zip(steps, steps_ar):
+            assert same_numbers(step, step_ar), (step, step_ar)
+            assert ARABIC_LETTER.search(step_ar), step_ar
+            assert not DASH.search(step + step_ar), step
+            assert len(step) <= STEP_LIMIT and len(step_ar) <= STEP_LIMIT, (step, step_ar)
 
 
 def test_every_card_in_the_frozen_run_carries_the_same_figures_in_both_languages():
@@ -219,18 +237,24 @@ def refuse(*args, **kwargs):
     raise AssertionError("the Arabic reason asked the model")
 
 
-def test_filling_the_arabic_asks_no_model_and_touches_nothing_else(tmp_path, monkeypatch):
+def test_redeciding_a_saved_run_asks_no_model_and_keeps_what_it_remembered(tmp_path, monkeypatch):
     monkeypatch.setattr("src.adapters.model.ask_json", refuse)
     run_dir = copy_of_frozen_run(tmp_path)
-    before = runio.load_artifact(run_dir, "recommendations", Recommendation)
+    before = {rec.trend_id: rec for rec in runio.load_artifact(run_dir, "recommendations", Recommendation)}
 
-    filled = fill_arabic(run_dir)
+    redecide(run_dir)
     after = runio.load_artifact(run_dir, "recommendations", Recommendation)
 
-    assert filled == len(before) == 37
-    for old, new in zip(before, after):
-        assert new.model_dump(exclude={"rationale_ar"}) == old.model_dump(exclude={"rationale_ar"})
-        assert ARABIC_LETTER.search(new.rationale_ar)
+    assert len(after) == 37
+    for rec in after:
+        old = before[rec.trend_id]
+        assert (rec.runs_flagged, rec.first_seen_run, rec.version_moved) == \
+            (old.runs_flagged, old.first_seen_run, old.version_moved)
+        assert ARABIC_LETTER.search(rec.rationale_ar)
+        assert 2 <= len(rec.action_plan) == len(rec.action_plan_ar) <= 3
+
+        if rec.action == old.action:
+            assert rec.rationale == old.rationale
 
 
 def test_when_the_model_writes_the_english_the_arabic_is_still_the_rules(tmp_path, monkeypatch):

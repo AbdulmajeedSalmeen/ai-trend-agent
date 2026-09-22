@@ -87,7 +87,11 @@ def build_payload(run_dir: Path) -> dict:
                 "action": rec.action,
                 "chapter_id": rec.chapter_id,
                 "rationale": rec.rationale,
+                "rationale_by": rec.rationale_by,
                 "rationale_ar": rec.rationale_ar,
+                "action_plan": rec.action_plan,
+                "action_plan_ar": rec.action_plan_ar,
+                "edits": rec.edits,
                 "chapter_version": rec.chapter_version,
                 "latest_version": rec.latest_version,
                 "gap_kind": rec.gap_kind,
@@ -135,6 +139,9 @@ def build_payload(run_dir: Path) -> dict:
                 "legacy_api": chapter.get("legacy_api", []),
                 "notebooks": len(chapter.get("notebooks", [])),
                 "last_updated": chapter.get("last_updated"),
+                "edits": len(chapter.get("material_edits", [])),
+                "edits_breaking": sum(1 for edit in chapter.get("material_edits", [])
+                                      if edit["runs_as_pinned"] is False),
             }
         )
 
@@ -150,6 +157,10 @@ def build_payload(run_dir: Path) -> dict:
             "recommendations": len(items),
             "update": sum(1 for i in items if i["action"] == "update_existing_material"),
             "new_lesson": sum(1 for i in items if i["action"] == "add_new_lesson"),
+            "optional": sum(1 for i in items if i["action"] == "add_optional_content"),
+            "investigate": sum(1 for i in items if i["action"] == "investigate_larger_change"),
+            "edits": sum(len(i["edits"]) for i in items),
+            "edits_breaking": sum(1 for i in items for edit in i["edits"] if edit["runs_as_pinned"] is False),
             "not_taught": sum(1 for i in items if not i["chapter_id"]),
             "watch": sum(1 for i in items if i["action"] == "watch"),
             "kinds": kinds,
@@ -160,6 +171,7 @@ def build_payload(run_dir: Path) -> dict:
             "standing_asks": sum(1 for i in items if i["action"] != "watch" and i["runs_flagged"] > 1),
         },
         "previous_run": previous,
+        "material_checked": curriculum.get("material_checked"),
         "trace": read_trace(run_dir),
         "items": items,
         "chapters": chapters,

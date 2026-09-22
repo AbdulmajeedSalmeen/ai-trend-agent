@@ -2,7 +2,7 @@ import json
 import re
 from pathlib import Path
 
-from src import arabic, gap, memory, runio
+from src import arabic, gap, memory, plan, runio
 from src.reading import write_recommendation
 from src.schema import Recommendation, Score, Signal, Trend
 
@@ -13,6 +13,10 @@ CURRICULUM_PATH = Path("fixtures/curriculum.json")
 # tool, not only a tool existing. 3 on the market scale is roughly five job posts
 # over three months, or a million installs a month.
 NEW_LESSON_MARKET_FLOOR = 3
+
+# Below that, a tool some employers already name is worth optional material: an
+# elective a teacher can offer without rewriting the core path.
+OPTIONAL_MARKET_FLOOR = 2
 
 
 def teachable_changes(score: Score) -> int:
@@ -33,13 +37,23 @@ def market_wants_it(score: Score) -> bool | None:
     return score.dimensions.get("market_relevance", 0) >= NEW_LESSON_MARKET_FLOOR
 
 
-def decide_action(score: Score, assessment: dict | None = None) -> str:
+def decide_action(score: Score, assessment: dict | None = None, chapters_affected: int = 0) -> str:
     if score.confidence < 0.5:
         return "watch"
 
+    # A release that removed names the notebooks import in several chapters is
+    # one decision for the whole course, not an edit per chapter.
+    if chapters_affected >= 2:
+        return "investigate_larger_change"
+
     if score.chapter_id is None:
-        if market_wants_it(score) is False or maintenance_only(score):
+        if maintenance_only(score):
             return "watch"
+
+        if market_wants_it(score) is False:
+            some_demand = score.dimensions.get("market_relevance", 0) >= OPTIONAL_MARKET_FLOOR
+            worth_it = some_demand and teachable_changes(score) > 0 and score.priority >= 2.5
+            return "add_optional_content" if worth_it else "watch"
 
         return "add_new_lesson" if score.priority >= 2.5 else "watch"
 
@@ -143,11 +157,19 @@ CLOSINGS = {
     "behind_minor": ("The notebook pins its version, so it runs for a student exactly as written, "
                      "and nothing read from the releases shows the approach it teaches has changed."),
     "not_wanted": "Not a new lesson until more employers ask for it.",
+    "optional": "Worth optional material, not a core lesson, until more employers ask for it.",
+    "course_wide": "The same release reaches beyond this chapter: plan the move once, for the whole course.",
 }
 
 
 def closing_for(score: Score, action: str, assessment: dict) -> str | None:
-    """Which closing a watch gets. Decided once for both languages."""
+    """Which closing a reason gets. Decided once for both languages."""
+    if action == "investigate_larger_change":
+        return "course_wide"
+
+    if action == "add_optional_content":
+        return "optional"
+
     if action != "watch":
         return None
 
@@ -169,9 +191,14 @@ def closing_for(score: Score, action: str, assessment: dict) -> str | None:
     return None
 
 
+def spread_sentence(subject: str, latest: str, notebooks: int, chapters: int) -> str:
+    return (f"Across the course, {plan.plural(notebooks, 'notebook')} in {plan.plural(chapters, 'chapter')} "
+            f"import names that {subject} {latest} no longer has.")
+
+
 def build_rationale(trend: Trend, score: Score, action: str,
                     assessment: dict | None = None, chapter: dict | None = None,
-                    lang: str = "en") -> str:
+                    lang: str = "en", edits: list[dict] | None = None) -> str:
     """The rules' reason, in English or Arabic.
 
     Which sentences a reason holds, in what order, and which closing it ends
@@ -210,10 +237,17 @@ def build_rationale(trend: Trend, score: Score, action: str,
         stale = gap.staleness_sentence(assessment)
         opening = f"Chapter {score.chapter_id} teaches: {chapter['teaches']}" if chapter else ""
 
+    spread = ""
+
+    if action == "investigate_larger_change" and edits and assessment["latest"]:
+        counts = (trend.subject, assessment["latest"], len({edit["notebook"] for edit in edits}),
+                  len({edit["chapter_id"] for edit in edits}))
+        spread = arabic.spread_sentence(*counts) if ar else spread_sentence(*counts)
+
     if score.chapter_id is None:
         parts = [sentence, changed, demand]
     else:
-        parts = [opening, sentence, legacy, changed, demand, stale]
+        parts = [opening, sentence, legacy, spread, changed, demand, stale]
 
     closing = closing_for(score, action, assessment)
 
@@ -250,12 +284,30 @@ def teaches_package(chapter: dict, subject: str) -> bool:
     return root in re.findall(r"[a-z0-9]+", text)
 
 
-def assess_trend(trend: Trend, chapter: dict | None, published: dict) -> dict:
+def verified_markers(edits: list[dict]) -> list[dict]:
+    """The names a chapter's notebooks import from a path the release no longer
+    has, one marker each, in the shape the gap check reads."""
+    markers, seen = [], set()
+
+    for edit in edits:
+        if not edit["moved_to"]:
+            continue
+
+        for name in edit["names"]:
+            if name not in seen:
+                seen.add(name)
+                markers.append({"package": edit["package"], "uses": name, "checked": edit["checked"],
+                                "module": edit["moved_to"][0]["module"], "verified": True})
+
+    return markers
+
+
+def assess_trend(trend: Trend, chapter: dict | None, published: dict, edits: list[dict] | None = None) -> dict:
     confirmed = [claim for claim in trend.claims if claim.verdict == "confirmed"]
     has_chapter = chapter is not None
     chapter = chapter or {}
     legacy = [marker for marker in chapter.get("legacy_api", [])
-              if marker["package"] == trend.subject]
+              if marker["package"] == trend.subject] + verified_markers(edits or [])
 
     return gap.assess(
         trend.subject,
@@ -270,11 +322,42 @@ def assess_trend(trend: Trend, chapter: dict | None, published: dict) -> dict:
     )
 
 
+def course_edits(chapters: dict) -> dict[str, list[dict]]:
+    """Every checked edit in the curriculum, by the package whose release it answers to."""
+    found: dict[str, list[dict]] = {}
+
+    for chapter in chapters.values():
+        for edit in chapter.get("material_edits", []):
+            found.setdefault(edit["package"], []).append(edit)
+
+    return found
+
+
+def decide(trend: Trend, score: Score, chapters: dict, published: dict, edits_by_package: dict) -> dict:
+    """Everything the rules decide about one trend. A new run and a redecided saved
+    run both come through here, so they cannot disagree."""
+    chapter = chapters.get(score.chapter_id)
+    edits = edits_by_package.get(trend.subject, [])
+    own = [edit for edit in edits if edit["chapter_id"] == score.chapter_id]
+    assessment = assess_trend(trend, chapter, published, own)
+    action = decide_action(score, assessment, chapters_affected=len({edit["chapter_id"] for edit in edits}))
+
+    # A course-wide decision shows every line it covers; a chapter update only its own.
+    if action != "investigate_larger_change":
+        edits = own
+
+    steps, steps_ar = plan.build(trend.subject, score, action, assessment, edits)
+
+    return {"chapter": chapter, "assessment": assessment, "action": action, "edits": edits,
+            "action_plan": steps, "action_plan_ar": steps_ar}
+
+
 def run(run_dir: Path) -> None:
     trends = runio.load_artifact(run_dir, "trends", Trend)
     scores = runio.load_artifact(run_dir, "scores", Score)
     signals = runio.load_artifact(run_dir, "signals", Signal)
     chapters = load_chapters()
+    edits_by_package = course_edits(chapters)
 
     published = {signal.id: signal.published_at.isoformat() for signal in signals}
     scores_by_trend = {score.trend_id: score for score in scores}
@@ -290,9 +373,8 @@ def run(run_dir: Path) -> None:
             skipped += 1
             continue
 
-        chapter = chapters.get(score.chapter_id)
-        assessment = assess_trend(trend, chapter, published)
-        action = decide_action(score, assessment)
+        decided = decide(trend, score, chapters, published, edits_by_package)
+        chapter, assessment, action = decided["chapter"], decided["assessment"], decided["action"]
 
         confirmed = sum(1 for claim in trend.claims if claim.verdict == "confirmed")
         written = write_recommendation(
@@ -315,8 +397,14 @@ def run(run_dir: Path) -> None:
                 trend_id=trend.id,
                 action=action,
                 chapter_id=score.chapter_id,
-                rationale=written or build_rationale(trend, score, action, assessment, chapter),
-                rationale_ar=build_rationale(trend, score, action, assessment, chapter, lang="ar"),
+                rationale=written or build_rationale(trend, score, action, assessment, chapter,
+                                                     edits=decided["edits"]),
+                rationale_by="model" if written else "rules",
+                rationale_ar=build_rationale(trend, score, action, assessment, chapter, lang="ar",
+                                             edits=decided["edits"]),
+                action_plan=decided["action_plan"],
+                action_plan_ar=decided["action_plan_ar"],
+                edits=decided["edits"],
                 chapter_version=assessment["pinned"],
                 latest_version=assessment["latest"],
                 gap_kind=assessment["kind"],
@@ -332,33 +420,58 @@ def run(run_dir: Path) -> None:
     print(f"{len(recommendations)} recommendations, {skipped} trends skipped, {repeats} repeated from earlier runs")
 
 
-def fill_arabic(run_dir: Path) -> int:
-    """Add the Arabic reason to a run that was decided before it existed.
+def redecide(run_dir: Path) -> dict[str, tuple[str, str]]:
+    """Run the decision again over a saved run, with the rules as they are now.
 
-    Recomputes nothing the English depends on and calls no model: each
-    recommendation keeps its action and its English reason, and gains the rules'
-    Arabic for the same facts. Returns how many were filled.
+    Calls no model. Every field the rules own is rebuilt: the action, the Arabic
+    reason, the plan, the edit list and any English reason the rules wrote. A
+    reason the model wrote is kept only where the action it explains still
+    stands; elsewhere the rules' reason takes its place. What the run remembered about earlier runs is left as it was.
+    Returns the actions that changed, by subject.
     """
     trends = {trend.id: trend for trend in runio.load_artifact(run_dir, "trends", Trend)}
     scores = {score.trend_id: score for score in runio.load_artifact(run_dir, "scores", Score)}
     signals = runio.load_artifact(run_dir, "signals", Signal)
     recommendations = runio.load_artifact(run_dir, "recommendations", Recommendation)
     chapters = load_chapters()
+    edits_by_package = course_edits(chapters)
     published = {signal.id: signal.published_at.isoformat() for signal in signals}
 
-    filled = []
+    rebuilt, changed = [], {}
 
     for rec in recommendations:
         trend, score = trends.get(rec.trend_id), scores.get(rec.trend_id)
 
         if trend is None or score is None:
-            filled.append(rec)
+            rebuilt.append(rec)
             continue
 
-        chapter = chapters.get(score.chapter_id)
-        assessment = assess_trend(trend, chapter, published)
-        arabic_reason = build_rationale(trend, score, rec.action, assessment, chapter, lang="ar")
-        filled.append(rec.model_copy(update={"rationale_ar": arabic_reason}))
+        decided = decide(trend, score, chapters, published, edits_by_package)
+        action, assessment, chapter, edits = (decided["action"], decided["assessment"],
+                                              decided["chapter"], decided["edits"])
 
-    runio.save_artifact(run_dir, "recommendations", filled)
-    return sum(1 for rec in filled if rec.rationale_ar)
+        if action != rec.action:
+            changed[trend.subject] = (rec.action, action)
+
+        # The rules' own English is always rebuilt. The model's is kept while the
+        # action it explains stands, since no model is asked here to rewrite it.
+        keep = action == rec.action and rec.rationale_by != "rules"
+
+        rebuilt.append(rec.model_copy(update={
+            "action": action,
+            "rationale": rec.rationale if keep
+            else build_rationale(trend, score, action, assessment, chapter, edits=edits),
+            "rationale_by": rec.rationale_by if keep else "rules",
+            "rationale_ar": build_rationale(trend, score, action, assessment, chapter, lang="ar", edits=edits),
+            "action_plan": decided["action_plan"],
+            "action_plan_ar": decided["action_plan_ar"],
+            "edits": edits,
+            "chapter_version": assessment["pinned"],
+            "latest_version": assessment["latest"],
+            "gap_kind": assessment["kind"],
+            "releases_since": assessment["released_since"],
+            "legacy_uses": [marker["uses"] for marker in assessment["legacy"]],
+        }))
+
+    runio.save_artifact(run_dir, "recommendations", rebuilt)
+    return changed

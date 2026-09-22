@@ -140,18 +140,43 @@ def assess(subject: str, versions: list[str | None], pinned: str | None,
 
 
 def legacy_sentence(assessment: dict) -> str:
-    markers = assessment["legacy"]
+    """What the notebooks still use that a release removed. An import checked
+    against the release itself is said as a finding; a name matched against our
+    own pattern table is said as the table's claim."""
+    verified = [marker for marker in assessment["legacy"] if marker.get("verified")]
+    typed = [marker for marker in assessment["legacy"] if not marker.get("verified")]
 
+    return " ".join(part for part in (verified_sentence(verified), typed_sentence(typed)) if part)
+
+
+def spelled(names: list[str]) -> str:
+    return names[0] if len(names) == 1 else ", ".join(names[:-1]) + f" and {names[-1]}"
+
+
+def verified_sentence(markers: list[dict]) -> str:
     if not markers:
         return ""
 
     names = [marker["uses"] for marker in markers[:4]]
-    listed = names[0] if len(names) == 1 else ", ".join(names[:-1]) + f" and {names[-1]}"
 
     if len(names) == 1:
-        return f"The notebooks still call {listed}, and our pattern table says {markers[0]['note']}."
+        return (f"The notebooks still import {names[0]} from a path {markers[0]['checked']} no longer has; "
+                f"it now comes from {markers[0]['module']}.")
 
-    return (f"The notebooks still call {listed} - calls our pattern table marks as removed or "
+    return (f"The notebooks still import {spelled(names)} from paths {markers[0]['checked']} no longer has; "
+            f"the edit list shows where each one went.")
+
+
+def typed_sentence(markers: list[dict]) -> str:
+    if not markers:
+        return ""
+
+    names = [marker["uses"] for marker in markers[:4]]
+
+    if len(names) == 1:
+        return f"The notebooks still call {names[0]}, and our pattern table says {markers[0]['note']}."
+
+    return (f"The notebooks still call {spelled(names)} - calls our pattern table marks as removed or "
             f"moved in a later major release.")
 
 

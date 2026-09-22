@@ -4,6 +4,7 @@ import re
 from collections import Counter, defaultdict
 from pathlib import Path
 
+from src import material
 from src.notebooks import NOTEBOOK_DIR, scan_all
 
 CURRICULUM_PATH = Path("fixtures/curriculum.json")
@@ -122,6 +123,8 @@ def main() -> None:
     parser = argparse.ArgumentParser(description="Read the course notebooks into the curriculum file.")
     parser.add_argument("--notebooks", default=str(NOTEBOOK_DIR))
     parser.add_argument("--dry-run", action="store_true")
+    parser.add_argument("--offline", action="store_true",
+                        help="do not read releases; keep the material edits already in the file")
     args = parser.parse_args()
 
     data = json.loads(CURRICULUM_PATH.read_text(encoding="utf-8"))
@@ -137,6 +140,23 @@ def main() -> None:
         "`python -m src.curriculum`. A package under installs_unpinned has no version bound in the "
         "notebook, so a student installs whatever is newest on the day they run it."
     )
+
+    if not args.offline:
+        root = Path(args.notebooks)
+        files = sorted(root.rglob("*.ipynb")) if root.is_dir() else [root]
+        found = material.check_all(files, lambda path: assign({"file": path.name, "week": path.parent.name},
+                                                              chapters), material.releases_now())
+
+        for chapter in chapters:
+            chapter["material_edits"] = found["edits"].get(chapter["chapter_id"], [])
+
+        data["material_checked"] = found["checked"]
+        data["material_note"] = (
+            "material_edits are read by `python -m src.curriculum`: every langchain import in the "
+            "notebooks, checked against the source of the newest release at its tag on GitHub, with the "
+            "replacement found the same way. runs_as_pinned is true when the notebook's own pin keeps it "
+            "on the old line, so the edit is for the day the course moves, not a break today."
+        )
 
     if not args.dry_run:
         CURRICULUM_PATH.write_text(json.dumps(data, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
@@ -155,6 +175,13 @@ def main() -> None:
 
         for legacy in chapter["legacy_api"]:
             print(f"  legacy    {legacy['uses']} - {legacy['note']}")
+
+        edits = chapter.get("material_edits", [])
+
+        if edits:
+            breaking = sum(1 for edit in edits if edit["runs_as_pinned"] is False)
+            print(f"  edits     {len(edits)} lines in {len({edit['notebook'] for edit in edits})} notebooks, "
+                  f"{breaking} break on today's install")
 
     if unplaced:
         print("\nnot placed in any chapter:")

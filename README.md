@@ -13,17 +13,23 @@ never the reason on its own.
 
 ## What it found
 
-Chapter C8 teaches document QA on LangChain across eight notebooks.
+The agent checked every `langchain` import in the 89 course notebooks against the source of
+**langchain 1.4.2**, the release a student installs today, read file by file at its tag on
+GitHub. It then looked for each missing name in the packages LangChain moved code into, so the
+replacement it proposes was read from a release too.
 
-- Seven install `langchain` with **no version bound at all**.
-- One pins `langchain==0.0.352` and `openai==0.28`.
-- The code calls `RetrievalQA`, `LLMChain`, `load_qa_chain` and `openai.ChatCompletion`.
+- **85 import lines in 39 notebooks across 11 chapters** name something 1.4.2 no longer has:
+  `AgentExecutor` and `create_react_agent` (38 notebooks), `PromptTemplate` (21 lines), `hub`
+  (14), and the old memory and chain classes.
+- **One notebook breaks on today's install.** `Demo_LangChain_Document_Chat` in C8 installs
+  `langchain` with no bound and still has `from langchain.chains import RetrievalQA` in cell 88.
+  It now lives in `langchain_classic.chains`.
+- **The other 38 run as written**, because they pin `langchain==0.3.*` or `<1.0`. They teach
+  the 0.3 agent API, which 1.x replaced with `create_agent`. That is one decision for the whole
+  course, not an edit per chapter, so the agent recommends investigating a larger change.
 
-All four are gone in 1.x. The newest confirmed release is **langchain 1.4.2**. A student who
-opens that notebook today installs 1.4.2, and the material does not run.
-
-The rest of the course pins `langchain==0.3.*`, `langchain-openai==0.2.*` and
-`langgraph==0.2.*`, one major version behind every confirmed release in the run.
+Every edit names the notebook, the cell, the current line and the proposed one, with a link to
+the file at the release tag that proves it.
 
 ## How it decides
 
@@ -65,14 +71,20 @@ verdict comes from what the notebooks install and what the releases changed:
 
 | What the scan finds | Verdict |
 |---|---|
-| The notebook calls an API a newer release removed | rewrite: the material does not run |
+| A notebook imports a name the newest release removed, and installs with no bound | rewrite: it does not run on today's install |
+| The same import, in a notebook that pins the old line | an edit for the day the course moves |
 | A major release since the pinned version | rewrite: semver says a major breaks things |
 | A minor gap, and the notes show a breaking change or a new concept | rewrite |
 | A minor gap, and the notes show only fixes and chores | watch: the pinned notebook still runs |
 | No bound, and the releases add something the chapter should teach | rewrite |
 | No bound, and nothing read shows a change worth teaching | watch, and pin the version |
+| Notebooks in two or more chapters import names the newest release removed | investigate a larger change: one decision for the course |
 | No chapter, and employers ask for it | a new lesson |
-| No chapter, and few employers ask for it | watch |
+| No chapter, some employers ask for it, and the releases add something to teach | optional content |
+| No chapter, and no employer asks for it | watch |
+
+Every recommendation carries a two or three step action plan, in English and Arabic, built
+from the same facts: which lines to change, what to pin, what the release added.
 
 ### Where the model is allowed to decide
 
@@ -91,7 +103,7 @@ instead. The run log says so when it happens.
 | | |
 |---|---|
 | Signals collected | 483, being 315 Hacker News, 88 PyPI and 80 GitHub |
-| Packages followed | 53, every one the course notebooks install |
+| Packages followed | 53 when collected; the course notebooks now install 56 |
 | Subjects tracked | 37 |
 | Checkable claims | 156 |
 | Confirmed by the release itself | 139 |
@@ -100,9 +112,10 @@ instead. The run log says so when it happens.
 | Unverified | 4 |
 | Release-note lines read | 2,933: 17 breaking, 2 deprecations, 308 features, 948 fixes, 1,658 chores |
 | Job posts searched | the last three "Ask HN: Who is hiring?" threads, about 1,200 posts |
-| Recommendations | 5 update a chapter, 2 new lesson, 30 watch |
+| Recommendations | 4 update a chapter, 1 course-wide change, 2 new lesson, 2 optional, 28 watch |
+| Import lines to change | 85 in 39 notebooks, checked against langchain 1.4.2; 3 break today |
 | Chapters with something to act on | 11 of 25 |
-| Tests | 285, none of which calls a model or the network |
+| Tests | 341, none of which calls a model or the network |
 
 Cross-source is zero because no discussion post this week stated anything a release page
 could check. That is a property of the data, not a gap in the checker, and the page prints
@@ -120,11 +133,13 @@ never passed off as independent support.
 PowerShell uses `;` between commands and `.\.venv\Scripts\python.exe`; Git Bash uses `&&`
 and `.venv/Scripts/python.exe`.
 
-To switch the model on, put a key in `.env`:
+To switch the model on, put a key in `.env`, and name the providers to try in order:
 
-    OPENAI_API_KEY=sk-...
+    GROQ_API_KEY=gsk_...
+    MODEL_ORDER=groq-fast,groq
 
-Without it the stages fall back to rules and say so on the page.
+`OPENAI_API_KEY` and `NVIDIA_API_KEY` work the same way. Without a key the stages fall back
+to rules and say so on the page.
 
 ## Running it
 
@@ -160,8 +175,10 @@ from the notebooks themselves.
 
 Put each week's material in `notebooks/week <n>/` first. The scan records, per chapter, the
 version bound each `pip install` line carries, the packages installed with no bound at all,
-and the API calls a later major release removed. `notebooks/` is gitignored: the course
-files stay on your machine.
+and every `langchain` import checked against the newest release (`src/material.py`). That
+check reads GitHub and PyPI; `--offline` skips it and keeps the edits already recorded.
+`notebooks/` is gitignored: the course files stay on your machine, and the edits travel in
+`fixtures/curriculum.json`.
 
     python -m src.notebooks --by-week    # what the scan sees, before it is written
     python -m src.pin                    # what each chapter is recorded as running

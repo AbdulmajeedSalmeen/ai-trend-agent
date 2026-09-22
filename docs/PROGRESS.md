@@ -1,6 +1,6 @@
 # Progress
 
-**Last updated:** 2026-09-21 · **Tests:** 285 passing · **Demo:** Sep 26–27
+**Last updated:** 2026-09-22 · **Tests:** 341 passing · **Demo:** Sep 26–27
 
 The pipeline runs end to end, live, from a web app. A model reads, judges and writes;
 rules still decide what counts as confirmed, and every recommendation now carries the reason
@@ -9,11 +9,11 @@ behind it: what the chapter teaches, which version it runs, and how far the rele
 ## Next actions
 
 1. **Lead:** push the day's work, then merge `dev` into `main` (it is ~50 commits behind).
-2. **Everyone:** `pip install -r requirements.txt` (fastapi, uvicorn, httpx are new) and create a
-   `.env` with `OPENAI_API_KEY=...` — without it the stages fall back to rules and say so.
+2. **Everyone:** `pip install -r requirements.txt` and create a `.env` with `GROQ_API_KEY=...`
+   and `MODEL_ORDER=groq-fast,groq`. Without a key the stages fall back to rules and say so.
 3. **Everyone:** when a new week is published, drop its notebooks into `notebooks/<week n>/` and run
-   `python -m src.curriculum`. That reads the pins, the unpinned installs and the old API calls
-   straight out of the material. The folder is gitignored; the course files never leave the machine.
+   `python -m src.curriculum`. That reads the pins and the unpinned installs straight out of the
+   material, and checks every `langchain` import against the newest release on GitHub. The folder is gitignored; the course files never leave the machine.
 4. **Whole team:** Sep 25–26, two timed rehearsals and one offline fallback drill. Read
    `docs/DEMO-QA.md` first; every answer in it is backed by the frozen run.
 
@@ -122,6 +122,27 @@ behind it: what the chapter teaches, which version it runs, and how far the rele
 - [ ] Optional: GitHub token per member (60 requests/hour without one)
 
 ## Standup log
+
+### 2026-09-22
+- The lead asked for what a teacher actually needs: not "a package moved", but what to change
+  in the material itself. Measured the brief against the build: no recommendation carried the
+  initial action plan it asks for, and two of its five actions were missing.
+- `src/material.py` checks every `langchain` import in the 89 notebooks against the source of
+  langchain 1.4.2, read file by file at its release tag, and finds where each missing name
+  went the same way. 85 lines in 39 notebooks across 11 chapters; one C8 notebook breaks on
+  today's install, the other 38 pin LangChain 0.3 and teach its agent API.
+- The check corrected our own pattern table. It had flagged four removed APIs in C8; three
+  were false: imported from `langchain_classic` where they still work, a longer class name
+  (`LLMChainExtractor`), and a comment. The table no longer matches LangChain names, reads no
+  comments, and matches whole names only.
+- Every recommendation now carries a two or three step plan in English and Arabic
+  (`src/plan.py`), and the two missing actions exist: "investigate a larger change" when one
+  release reaches several chapters (langchain), and "add optional content" when a tool has
+  some demand and something to teach (crewai, pydantic-ai).
+- Frozen run redecided with no model and no network: 3 actions changed, the other 34 cards
+  kept their reasons word for word. Each card now records whether the model or the rules
+  wrote its English reason; 17 of 37 were the rules.
+- A server stopped mid-run no longer leaves a lock that refuses every run after it.
 
 ### 2026-09-21
 - The lead asked the right question: would a school care about every langchain version, or

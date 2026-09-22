@@ -75,10 +75,26 @@ def test_a_commented_out_install_is_ignored():
 
 
 def test_a_removed_api_is_flagged_with_its_package():
-    found = read_patterns(["chain = RetrievalQA.from_chain_type(llm=llm)"])
+    found = read_patterns(["reply = openai.ChatCompletion.create(model=m)"])
 
-    assert found[0]["package"] == "langchain"
+    assert found[0]["package"] == "openai"
     assert found[0]["legacy"] is True
+
+
+def test_a_comment_that_names_an_old_api_is_not_a_call():
+    assert read_patterns(["# Note the change from `openai.ChatCompletion.create` to the client"]) == []
+
+
+def test_a_longer_name_is_not_the_removed_one():
+    assert read_patterns(["graph = MessageGraphBuilder()"]) == []
+
+
+def test_langchain_imports_are_left_to_the_release_check():
+    """Matched by name, RetrievalQA read as removed even when the notebook
+    imported it from langchain_classic, where it still works."""
+    found = read_patterns(["from langchain_classic.chains import RetrievalQA\nqa = RetrievalQA.from_chain_type(llm)"])
+
+    assert [pattern for pattern in found if pattern["legacy"]] == []
 
 
 def test_a_current_api_is_not_flagged():
@@ -94,7 +110,7 @@ def test_prose_about_an_old_api_is_not_code():
 
 
 def test_scanning_reports_installs_and_patterns_together():
-    report = scan(notebook("!pip install langchain==0.0.352\n", "qa = RetrievalQA.from_chain_type(llm)\n"))
+    report = scan(notebook("!pip install openai==0.28\n", "reply = openai.ChatCompletion.create()\n"))
 
-    assert report["pinned"] == {"langchain": "0.0.352"}
-    assert report["patterns"][0]["uses"] == "RetrievalQA"
+    assert report["pinned"] == {"openai": "0.28"}
+    assert report["patterns"][0]["uses"] == "openai.ChatCompletion"

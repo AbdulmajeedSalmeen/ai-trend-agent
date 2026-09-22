@@ -111,7 +111,83 @@ def test_a_new_lesson_needs_employers_to_ask_for_it():
     rarely_hired = measured_score(chapter_id=None, market_relevance=2,
                                   changes_found={"feature": 30, "fix": 10, "highlights": []})
 
-    assert decide_action(rarely_hired) == "watch"
+    assert decide_action(rarely_hired) == "add_optional_content"
+
+
+def test_a_tool_no_employer_asks_for_is_only_watched():
+    unwanted = measured_score(chapter_id=None, market_relevance=1,
+                              changes_found={"feature": 30, "highlights": []})
+
+    assert decide_action(unwanted) == "watch"
+
+
+def test_optional_content_still_needs_something_to_teach():
+    maintenance = measured_score(chapter_id=None, market_relevance=2,
+                                 changes_found={"fix": 9, "noise": 4, "highlights": []})
+
+    assert decide_action(maintenance) == "watch"
+
+
+def test_a_release_that_breaks_imports_in_several_chapters_is_one_decision_for_the_course():
+    score = measured_score(changes_found={"feature": 2, "highlights": ["feature: add create_agent"]})
+    assessment = make_assessment(gap.UNPINNED, pinned=None)
+
+    assert decide_action(score, assessment, chapters_affected=11) == "investigate_larger_change"
+    assert decide_action(score, assessment, chapters_affected=1) == "update_existing_material"
+    assert decide_action(make_score(confidence=0.4), assessment, chapters_affected=11) == "watch"
+
+
+from src import plan
+
+
+def edit(chapter_id, notebook, runs_as_pinned, installs):
+    return {"chapter_id": chapter_id, "notebook": notebook, "runs_as_pinned": runs_as_pinned, "installs": installs}
+
+
+COURSE_EDITS = [
+    edit("C8", "notebooks/week 3/qa.ipynb", False, "unpinned"),
+    edit("C12", "notebooks/week 4/loop.ipynb", True, "0.3.*"),
+    edit("C13", "notebooks/week 4/tools.ipynb", True, "0.3.*"),
+]
+
+
+def test_a_course_wide_plan_fixes_what_breaks_first_then_asks_for_one_decision():
+    score = measured_score()
+    assessment = make_assessment(gap.UNPINNED, pinned=None)
+
+    steps, steps_ar = plan.build("langchain", score, "investigate_larger_change", assessment, COURSE_EDITS)
+
+    assert steps == [
+        "First fix what breaks on today's install: 1 import line in 1 notebook (C8).",
+        "Decide once, for the whole course: stay on the langchain line 2 notebooks pin (0.3.*), or move to langchain 1.4.2.",
+        "To move, change 3 import lines in 3 notebooks across 3 chapters; the edit list names each cell.",
+    ]
+    assert steps_ar[1] == ("قرّر مرة واحدة للمقرر كله: البقاء على خط langchain الذي يثبّته نوتبوكان (0.3.*)، "
+                           "أو الانتقال إلى langchain 1.4.2.")
+    assert steps_ar[2] == "للانتقال: تغيير 3 أسطر استيراد في 3 نوتبوكات من 3 فصول، وقائمة التعديلات تسمّي كل خلية."
+
+
+def test_two_after_a_preposition_take_the_oblique_dual():
+    two_broken = [edit("C8", "notebooks/a.ipynb", False, "unpinned"), edit("C12", "notebooks/b.ipynb", False, "unpinned")]
+    _, steps_ar = plan.build("langchain", measured_score(), "investigate_larger_change",
+                             make_assessment(gap.UNPINNED, pinned=None), two_broken)
+
+    assert steps_ar[0] == "أصلح أولاً ما يتعطل عند التثبيت اليوم: سطرا استيراد في نوتبوكين (C8، C12)."
+
+
+def test_the_rationale_of_a_course_wide_decision_says_how_far_it_reaches():
+    trend = Trend(id="trend_007", subject="langchain", signal_ids=["gh_1"],
+                  claims=[Claim(text="langchain version 1.4.2 was released", subject="langchain",
+                                version="1.4.2", verdict="confirmed", confidence=0.9)])
+    chapter = {"chapter_id": "C8", "teaches": "Rebuild document QA on LangChain.", "teaches_ar": "إعادة بناء."}
+    facts = (trend, measured_score(), "investigate_larger_change", make_assessment(gap.UNPINNED, pinned=None), chapter)
+
+    english = build_rationale(*facts, edits=COURSE_EDITS)
+    arabic_reason = build_rationale(*facts, lang="ar", edits=COURSE_EDITS)
+
+    assert "Across the course, 3 notebooks in 3 chapters import names that langchain 1.4.2 no longer has." in english
+    assert "plan the move once, for the whole course" in english
+    assert "يستوردها 3 نوتبوكات في 3 فصول" in arabic_reason
 
 
 def test_a_new_lesson_is_recommended_when_employers_ask_and_there_is_something_to_teach():
@@ -236,3 +312,13 @@ def test_a_major_gap_is_rewritten_even_with_no_notes():
     score = make_score(chapter_id="C8", priority=3.4)
 
     assert decide_action(score, make_assessment(gap.BEHIND_MAJOR, pinned="0.1.0")) == "update_existing_material"
+
+
+def test_a_plan_never_asks_to_pin_a_pre_release():
+    beta = measured_score(changes_found={"fix": 2, "highlights": []})
+    assessment = make_assessment(gap.UNPINNED, pinned=None, latest="3.4.0b1")
+
+    steps, steps_ar = plan.build("dspy", beta, "watch", assessment, [])
+
+    assert steps[0] == "Pin dspy to its newest stable release in the install cell; 3.4.0b1 is a pre-release."
+    assert steps_ar[0] == "ثبّت dspy على أحدث إصدار مستقر في خلية التثبيت، فـ3.4.0b1 إصدار تجريبي."

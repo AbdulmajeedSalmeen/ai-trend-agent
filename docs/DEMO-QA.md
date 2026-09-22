@@ -8,7 +8,7 @@ run_20260921T104824Z` and they come back the same, because replay never touches 
 | | |
 |---|---|
 | Signals collected | 483 - 315 Hacker News, 88 PyPI releases, 80 GitHub releases |
-| Packages followed | 53, every one the course notebooks install |
+| Packages followed | 53 when collected; the course notebooks now install 56 |
 | Subjects tracked | 37 |
 | Checkable claims | 156 |
 | Confirmed by the release itself | 139 |
@@ -17,12 +17,12 @@ run_20260921T104824Z` and they come back the same, because replay never touches 
 | Unverified | 4 |
 | Release-note lines read | 2,933 - 17 breaking, 2 deprecations, 308 features, 948 fixes, 1,658 chores |
 | Job posts searched | about 1,200, the last three "Ask HN: Who is hiring?" threads |
-| Recommendations | 5 update a chapter, 2 new lesson, 30 watch |
+| Recommendations | 4 update a chapter, 1 course-wide change, 2 new lesson, 2 optional, 28 watch |
 | Chapters with something to act on | 11 of 25 |
 | Course notebooks read | 89, across six weeks |
 | Chapters installing something with no version bound | 19 of 25 |
-| Removed APIs still called in the material | 7 |
-| Tests | 285. None calls a model or the network |
+| Import lines to change | 85 in 39 notebooks across 11 chapters, checked against langchain 1.4.2; 3 break on today's install |
+| Tests | 341. None calls a model or the network |
 
 ---
 
@@ -50,8 +50,8 @@ something a teacher would read.
 
 What changed as a result, in the same data:
 
-- **crewai** had been "add a new lesson". Four job posts in three months. It is now watched,
-  with the reason "few employers ask for it yet".
+- **crewai** had been "add a new lesson". Four job posts in three months. It is now optional
+  content: an elective notebook outside the core path, until more employers ask for it.
 - **torch and torchvision** had been "update chapter C4" because the notebook pins 2.5.1 and
   2.14.0 exists. The
   notebook is pinned, so it runs for a student exactly as written, and nothing in what we read
@@ -59,12 +59,15 @@ What changed as a result, in the same data:
 - **Six more PyPI-only packages** (dspy, evidently, faiss-cpu, openai, peft, streamlit) had
   been "update the chapter" with no release notes to read at all: the version was the only
   reason. They are watched, with advice to pin.
-- **langchain** is still "update chapter C8", even though its recent releases scored 1 out of 5
-  for teaching. That is correct: the notebooks call `RetrievalQA`, which 1.x removed, so the
-  material does not run. A broken notebook is a teaching problem whatever the release notes say.
+- **langchain** is a course-wide decision, even though its recent releases scored 1 out of 5
+  for teaching. Checked against the langchain 1.4.2 source, 85 import lines in 39 notebooks
+  across 11 chapters name something the release no longer has. One notebook breaks on today's
+  install; the other 38 pin LangChain 0.3 and teach its agent API. A broken or outdated
+  notebook is a teaching problem whatever the release notes say.
 
-The result: 5 chapter updates and 2 new lessons, each with a reason a teacher would accept,
-out of 37 packages that shipped something.
+The result: 4 chapter updates, 1 course-wide change, 2 new lessons and 2 optional notebooks,
+each with a reason a teacher would accept and a two or three step plan, out of 37 packages
+that shipped something.
 
 ## "Why is cross-source zero? Is the checker broken?"
 
@@ -144,20 +147,23 @@ curriculum.
 
 It was, until we read the notebooks. `python -m src.curriculum` reads all 89 and records three
 things per chapter: the version bound each `pip install` line carries, the packages installed
-with no bound at all, and the API calls a later major release removed.
+with no bound at all, and every `langchain` import, checked against the newest release.
 
 Then the verdict is arithmetic:
 
 | What we find | Verdict |
 |---|---|
-| The notebook calls an API a newer release removed | rewrite - the material does not run |
+| A notebook imports a name the newest release removed, with no bound | rewrite - it does not run on today's install |
+| The same import in a notebook that pins the old line | an edit for the day the course moves |
 | A major release since the pinned version | rewrite - semver says a major breaks things |
 | A minor gap, with a breaking change or new concept in the notes | rewrite |
 | A minor gap, with only fixes and chores in the notes | watch - the pinned notebook still runs |
 | No bound, and the releases add something worth teaching | rewrite |
 | No bound, and nothing read shows a change worth teaching | watch, and pin it |
+| Notebooks in two or more chapters import names the release removed | investigate a larger change |
 | No chapter, and employers ask for it | a new lesson |
-| No chapter, and few employers ask | watch |
+| No chapter, some employers ask, and there is something to teach | optional content |
+| No chapter, and no employer asks | watch |
 
 That last distinction matters. Without it the run produced 24 chapter updates, including
 "update chapter C24" because pandas moved. Pandas moving is a dependency-hygiene problem;
@@ -169,23 +175,52 @@ same minor line.
 
 ## "Give us one finding that actually matters."
 
-Chapter C8, document QA on LangChain, eight notebooks.
+The course teaches LangChain 0.3's agent API, and LangChain 1.x removed it.
 
-- Seven install `langchain` with **no version bound**.
-- One pins `langchain==0.0.352` and `openai==0.28`.
-- The code calls `RetrievalQA`, `LLMChain`, `load_qa_chain` and `openai.ChatCompletion`.
+- 38 notebooks import `AgentExecutor` and `create_react_agent` from `langchain.agents`. In
+  langchain 1.4.2 that module exports two names, `create_agent` and `AgentState`. The page links
+  the file at the release tag, so anyone can open it and count.
+- They still run, because they pin `langchain==0.3.*` or `<1.0`. Nothing breaks today; the
+  students learn an API the current release no longer has.
+- One notebook does break today. `Demo_LangChain_Document_Chat` in C8 installs `langchain` with
+  no bound, and cell 88 still says `from langchain.chains import RetrievalQA`. The proposed line,
+  `from langchain_classic.chains import RetrievalQA`, was read from langchain-classic 1.0.8.
 
-All four are gone in 1.x. The newest confirmed release this run is **langchain 1.4.2**. A
-student who runs that notebook today installs 1.4.2, and the material does not run.
+So the recommendation is not "update C8". It is: fix that one notebook now, then decide once,
+for the whole course, whether to stay on 0.3 or move to 1.x, with the 85 lines listed cell by
+cell for the day it moves.
 
-The rest of the course pins `langchain==0.3.*`, `langchain-openai==0.2.*`, `langgraph==0.2.*`
-- one major version behind every confirmed release in this run.
+## "Does it tell a teacher what to change in the material?"
+
+Yes. Each recommendation carries a plan of two or three steps, and a course-wide one carries
+the edit list: notebook, cell, the current line, the proposed line, and why, in English and
+Arabic. For langchain the plan reads:
+
+1. First fix what breaks on today's install: 3 import lines in 1 notebook (C8).
+2. Decide once, for the whole course: stay on the langchain line 38 notebooks pin (0.3.*,
+   >=0.1.0,<1.0), or move to langchain 1.4.2.
+3. To move, change 85 import lines in 39 notebooks across 11 chapters; the edit list names
+   each cell.
+
+Every step is built by rules from facts the run holds, so the Arabic plan has the same steps
+and the same numbers. A plan never asks to pin a pre-release: dspy's newest confirmed version
+is 3.4.0b1, so its plan says to pin the newest stable release instead.
 
 ## "The removed-API list - is that verified too?"
 
-No, and the page says so. Those come from a pattern table we wrote, so they are labelled as
-coming from our table, never mixed with confirmed evidence. It is a flag for a human to check,
-not a verdict.
+For LangChain, yes, and checking it corrected us. The first version matched names from a
+pattern table we typed, and flagged four removed APIs in C8: `RetrievalQA`, `LLMChain`,
+`load_qa_chain` and `openai.ChatCompletion`. Checked against the release:
+
+- `RetrievalQA` and `load_qa_chain` were imported from `langchain_classic` in five notebooks,
+  where they still work. One line imported `RetrievalQA` from the old path, and that one is real.
+- `LLMChain` only matched inside `LLMChainExtractor`, a different class.
+- `openai.ChatCompletion` only appeared in a comment explaining the change to the new client.
+
+So every `langchain` import is now checked against the source of the newest release, read at
+its tag on GitHub, and the name it moved to is found the same way. The table still covers a
+few calls outside LangChain, such as `openai.ChatCompletion`, and those are labelled as coming
+from our table. It no longer reads comments, and a name must match whole.
 
 ## "What happens if the wifi dies during the demo?"
 
@@ -201,6 +236,10 @@ Two fallbacks. Both were run with the network and the model switched off, on 202
 ## "What would you do with another two weeks?"
 
 - Widen the collection window so cross-source has a chance to be non-zero.
-- Replace the pattern table with a real check: read the release notes for removal notices
-  instead of matching names we typed ourselves.
+- Extend the release check past LangChain, to the openai and langgraph calls the table still
+  covers by name.
+- Flag pins that fight each other. One lab pins `langchain==0.0.352` in one cell and installs
+  the 1.x family in the next.
+- Name the concepts the course does not teach yet. No notebook of the 89 uses MCP, and
+  langchain 1.4.2 itself now ships a `langchain.mcp` module.
 - Difficulty is still a constant 2 in the score. Either measure it or drop the dimension.

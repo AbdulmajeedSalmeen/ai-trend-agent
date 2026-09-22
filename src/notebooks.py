@@ -14,13 +14,10 @@ BOUND_RE = re.compile(r"(\d+(?:\.\d+)*)")
 SKIP_TOKENS = {"install", "pip", "pip3", "-r", "requirements.txt", "/dev/null"}
 
 PATTERNS = {
+    # What the notebooks import from langchain is checked against the release
+    # itself by src/material.py. Matching names here called RetrievalQA removed
+    # when a notebook already imported it from langchain_classic, where it works.
     "langchain": [
-        ("RetrievalQA", "RetrievalQA", "removed in langchain 1.x, replaced by create_retrieval_chain"),
-        ("load_qa_chain", "load_qa_chain", "removed in langchain 1.x"),
-        ("initialize_agent", "initialize_agent", "removed in langchain 1.x, replaced by langgraph agents"),
-        ("LLMChain", "LLMChain", "removed in langchain 1.x, replaced by the LCEL pipe"),
-        ("ConversationBufferMemory", "ConversationBufferMemory", "removed in langchain 1.x"),
-        ("langchain.chains", "langchain.chains imports", "most of it moved to langchain-classic in 1.x"),
         ("create_retrieval_chain", "create_retrieval_chain", "current"),
         ("create_react_agent", "create_react_agent", "current"),
     ],
@@ -112,14 +109,25 @@ def read_installs(sources: list[str]) -> dict:
     return {"pinned": pinned, "unpinned": sorted(unpinned - set(pinned))}
 
 
+def without_comments(source: str) -> str:
+    return "\n".join(line.split("#")[0] for line in source.splitlines())
+
+
 def read_patterns(sources: list[str]) -> list[dict]:
-    code = "\n".join(sources)
+    """Which recorded API calls the code makes. Comments are not code: one C8
+    notebook names openai.ChatCompletion only to say it has been replaced. A
+    removed call must match as a whole name, or LLMChainExtractor, a different
+    class, reads as LLMChain."""
+    code = "\n".join(without_comments(source) for source in sources)
     found = []
 
     for package, markers in PATTERNS.items():
         for needle, name, note in markers:
-            if needle in code:
-                found.append({"package": package, "uses": name, "note": note, "legacy": note != "current"})
+            legacy = note != "current"
+            pattern = rf"(?<![\w.]){re.escape(needle)}" + (r"(?!\w)" if legacy else "")
+
+            if re.search(pattern, code):
+                found.append({"package": package, "uses": name, "note": note, "legacy": legacy})
 
     return found
 

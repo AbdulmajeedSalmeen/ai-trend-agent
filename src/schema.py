@@ -65,11 +65,19 @@ class Score(BaseModel):
 
 class Recommendation(BaseModel):
     trend_id: str
-    action: Literal['update_existing_material', 'add_new_lesson', 'watch']
+    action: Literal['update_existing_material', 'add_new_lesson', 'add_optional_content',
+                    'investigate_larger_change', 'watch']
     chapter_id: Optional[str] = None
     rationale: str
+    # Who wrote the English reason: the model, checked for the facts, or the rules.
+    rationale_by: Optional[Literal['model', 'rules']] = None
     # The same reason in Arabic, always built from the rules, never the model.
     rationale_ar: Optional[str] = None
+    # The first steps a teacher takes, step for step in both languages, from the rules.
+    action_plan: list[str] = []
+    action_plan_ar: list[str] = []
+    # Lines in the course notebooks to change, each checked against a release.
+    edits: list[dict] = []
     chapter_version: Optional[str] = None
     latest_version: Optional[str] = None
     gap_kind: Optional[str] = None
