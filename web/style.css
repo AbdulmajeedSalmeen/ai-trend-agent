@@ -56,6 +56,11 @@
   --viz-unverified: #4F7290;
   --viz-official:   #D9A43C;
   --viz-discussion: #4F7290;
+  /* The radar's three action hues, validated as drawn (every pair, every
+     deficiency) on this plate's card surface: update, lesson, watch. */
+  --viz-act-update: #c48800;
+  --viz-act-lesson: #d02b31;
+  --viz-act-watch:  #706e6b;
 
   --shadow-hue: 260 30% 2%;
   --shadow-1: 0 1px 2px hsl(var(--shadow-hue) / .34), 0 2px 8px hsl(var(--shadow-hue) / .26);
@@ -123,6 +128,9 @@
   --viz-unverified: #7C9AB8;
   --viz-official:   #7A5A12;
   --viz-discussion: #7C9AB8;
+  --viz-act-update: #9c771f;
+  --viz-act-lesson: #b32228;
+  --viz-act-watch:  #8f8c85;
 
   --shadow-hue: 40 18% 55%;
   --grain: .022;
@@ -142,7 +150,6 @@
 
 html {
   -webkit-text-size-adjust: 100%;
-  scroll-behavior: smooth;
   /* No overflow clamp here. One was added when a mirrored layout left a sliver
      of horizontal drag, but the cause was a header row that could not shrink;
      fixing that removed the drag at source. A clip on the root outlives its
@@ -193,6 +200,27 @@ a { color: var(--gold-ink); text-underline-offset: .22em; text-decoration-thickn
   position: fixed; inset: 0; z-index: 0; width: 100%; height: 100%;
   display: block; pointer-events: none;
 }
+/* The two deep layers, each drawn once into a canvas a little larger than the
+   window and moved here, so the compositor moves them and no script runs for
+   them per frame. --pad is set on each layer by the script, never on a parent.
+
+   Each layer circles at a constant speed rather than sliding back and forth.
+   An eased back-and-forth crawled below half a pixel a second for a third of
+   every pass, which read as the background freezing; a circle never slows and
+   never turns back. Rotate, translate, counter-rotate moves the layer round the
+   circle without turning it. Both layers share one period, so they always drift
+   the same way, the deeper one at under half the speed: about 2.2 and 4.7
+   pixels a second. */
+.field-deep {
+  position: fixed; z-index: 0; pointer-events: none; display: block;
+  left: calc(var(--pad, 0px) * -1); top: calc(var(--pad, 0px) * -1);
+  will-change: transform;
+  animation: fieldOrbit 180s linear infinite;
+}
+@keyframes fieldOrbit {
+  from { transform: rotate(0deg) translateX(calc(var(--pad) * .9)) rotate(0deg); }
+  to   { transform: rotate(360deg) translateX(calc(var(--pad) * .9)) rotate(-360deg); }
+}
 .wash { position: fixed; inset: 0; z-index: 1; pointer-events: none; overflow: clip; }
 .wash::before {
   content: ""; position: absolute; inset: -22%;
@@ -224,46 +252,37 @@ header { position: relative; z-index: 25; background: transparent; }
 
 .brandline { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
 
-/* The three bars are the project's existing mark and stay. Only the colour
-   changes, so the tallest bar is the one that was verified. */
-/* The mark is a course in miniature: one cell per chapter, quiet except for the
-   one this week touched. It is the same picture the coverage strip draws
-   further down the page, which is the most particular graphic this product has.
-   A generic rising bar chart said analytics, which is not what this does. */
+/* The mark is the week's sky joined into a trend: the points the agent read,
+   drawn as stars like the field behind the page, rising with one dip to the
+   one it found, in gold. The line stops short of each star, as on a star
+   chart, so they read as stars rather than as markers on a graph. Stars and
+   line take the ink rather than a fixed hex, so they sit the same distance
+   below the page on either plate, and gold stays the one thing confirmed.
+   It is a logo, so it does not mirror in Arabic. */
 .mark { width: 22px; height: 22px; display: block; flex: none; overflow: visible; }
-/* Derived from the ink rather than pinned to a hex, so the quiet chapters stay
-   the same distance below the page on either plate. At full --neutral-mark the
-   grid disappeared at 22px; at full ink it competed with the gold. */
-.mk-cell { fill: color-mix(in srgb, var(--ink-faint) 42%, transparent); }
-.mk-found {
-  fill: var(--gold);
-  /* Parked on the chapter nearest the wordmark, so the mark leans into the name
-     rather than away from it. The brand block mirrors, so the home corner has
-     to mirror with it or the lean points the wrong way in Arabic. */
-  --mk-home: 18px;
-  transform: translate(var(--mk-home), 0);
+.mk-line { fill: none; stroke: color-mix(in srgb, var(--ink-faint) 78%, transparent); stroke-width: 1.1; stroke-linecap: round; }
+.mk-star { fill: var(--ink-soft); }
+.mk-found { fill: var(--gold); transform-box: fill-box; transform-origin: center; }
+.mk-run {
+  fill: none; stroke: var(--gold); stroke-width: 1.6; stroke-linecap: round;
+  stroke-dasharray: 18 200; stroke-dashoffset: 18; opacity: 0;
 }
-body[dir="rtl"] .mk-found { --mk-home: 0px; }
 
-/* Hovering runs the search the agent actually performs: it reads along the
-   course, chapter by chapter, looking for the one that moved. Held at each
-   cell rather than gliding, because it is checking them, not sliding past. */
-@media (hover: hover) and (pointer: fine) {
-  .brandbtn:hover .mk-found { animation: markScan 2.4s steps(1, end) infinite; }
+/* The spark crosses the mark on the page's in-and-out curve, because it
+   travels across it rather than arriving, and fades as it goes under the
+   last star. The gold star flares as the spark reaches it, 470ms in, and
+   every part ends where it rests, so clearing the class moves nothing. */
+.brandbtn.tracing .mk-run { animation: markTrace 720ms var(--ease-in-out); }
+.brandbtn.tracing .mk-found { animation: markFlare 460ms 470ms var(--ease-out) both; }
+@keyframes markTrace {
+  0%   { stroke-dashoffset: 18; opacity: 1; }
+  88%  { opacity: 1; }
+  100% { stroke-dashoffset: -100; opacity: 0; }
 }
-.brandbtn:focus-visible .mk-found { animation: markScan 2.4s steps(1, end) infinite; }
-
-@keyframes markScan {
-  0%,   9%  { transform: translate(var(--mk-home), 0); }
-  10%, 19%  { transform: translate(9px, 0); }
-  20%, 29%  { transform: translate(0, 0); }
-  30%, 39%  { transform: translate(0, 9px); }
-  40%, 49%  { transform: translate(9px, 9px); }
-  50%, 59%  { transform: translate(18px, 9px); }
-  60%, 69%  { transform: translate(18px, 18px); }
-  70%, 79%  { transform: translate(9px, 18px); }
-  80%, 92%  { transform: translate(0, 18px); }
-  93%, 100% { transform: translate(var(--mk-home), 0); }
+@keyframes markFlare {
+  0%   { transform: scale(1); }
+  35%  { transform: scale(1.45); }
+  100% { transform: scale(1); }
 }
 
 h1 {
@@ -277,13 +296,13 @@ h1 {
   font: inherit; color: inherit; letter-spacing: inherit;
   background: none; border: 0; padding: 0; cursor: pointer;
   display: inline-flex; align-items: center; gap: 11px;
-  transition: color 160ms ease;
+  transition: color 160ms ease, transform 120ms var(--ease-out);
 }
 .brandname { line-height: 1; }
 @media (hover: hover) and (pointer: fine) {
   .brandbtn:hover { color: var(--gold-ink); }
 }
-.brandbtn:active { color: var(--gold-ink); }
+.brandbtn:active { color: var(--gold-ink); transform: scale(.97); }
 body[dir="rtl"] h1 { font-family: var(--ar); font-weight: 600; font-size: 20px; letter-spacing: 0; }
 
 .runid {
@@ -315,7 +334,7 @@ body[dir="rtl"] h1 { font-family: var(--ar); font-weight: 600; font-size: 20px; 
   font-family: var(--display); font-weight: 600;
   font-size: clamp(30px, 1.4rem + 2.6vw, 54px);
   line-height: 1.08; letter-spacing: -.02em;
-  margin: 26px 0 12px; max-width: 900px; text-wrap: balance;
+  margin: 26px 0 12px; max-width: 1000px; text-wrap: balance;
   font-variant-numeric: lining-nums; padding-block-end: .06em;
 }
 body[dir="rtl"] .headline {
@@ -323,6 +342,8 @@ body[dir="rtl"] .headline {
   line-height: 1.34; font-size: clamp(24px, 1.2rem + 1.9vw, 40px); max-width: 820px;
 }
 .headline b { font-weight: inherit; color: var(--gold-ink); }
+/* A compound that must not break at its hyphen. */
+.nw { white-space: nowrap; }
 .headline .warn { color: var(--crit-ink); font-weight: inherit; }
 
 .sub { color: var(--ink-soft); margin: 0 0 28px; max-width: 62ch; font-size: 14px; }
@@ -338,23 +359,26 @@ body[dir="rtl"] .headline {
   box-shadow: inset 0 1px 0 var(--line-soft);
 }
 .tabbar-inner { max-width: 1060px; margin: 0 auto; padding: 0 22px; }
-.tabs { display: flex; gap: 4px; overflow-x: auto; scrollbar-width: none; }
+.tabs { display: flex; gap: 4px; overflow-x: auto; scrollbar-width: none; position: relative; }
 .tabs::-webkit-scrollbar { display: none; }
 .tabs button {
   border: 0; background: transparent; color: var(--ink-faint); cursor: pointer;
   font: 600 13px/1 var(--sans); padding: 15px 12px; min-height: 48px;
   display: inline-flex; align-items: center; gap: 7px; white-space: nowrap;
-  position: relative; transition: color 160ms ease;
+  position: relative; transition: color 160ms ease, transform 120ms var(--ease-out);
 }
+.tabs button:active { transform: scale(.97); }
 body[dir="rtl"] .tabs button { font-family: var(--ar); }
-.tabs button::after {
-  content: ""; position: absolute; inset-inline: 10px; bottom: 0; height: 2px;
-  background: var(--gold); border-radius: var(--r-mark);
-  transform: scaleX(0); transform-origin: center;
-  transition: transform 220ms var(--ease-out);
+/* One underline that travels to the chosen tab. Two lines, one collapsing and
+   one growing, was two motions for a single change. It is a 1px line sized and
+   placed by transform from the tab's own box, so it moves on the compositor. */
+.tab-ink {
+  position: absolute; left: 0; bottom: 0; width: 1px; height: 2px;
+  background: var(--gold); transform-origin: left center; pointer-events: none;
+  opacity: 0;
 }
+.tab-ink[data-ready] { opacity: 1; transition: transform 260ms var(--ease-in-out); }
 .tabs button[aria-selected="true"] { color: var(--ink); }
-.tabs button[aria-selected="true"]::after { transform: scaleX(1); }
 @media (hover: hover) and (pointer: fine) { .tabs button:hover { color: var(--ink); } }
 
 .count {
@@ -547,13 +571,14 @@ body[dir="rtl"] .filters button { font-family: var(--ar); font-weight: 600; }
   box-shadow: var(--shadow-1);
   transition: border-color 200ms var(--ease-out), box-shadow 200ms var(--ease-out);
 }
+/* Hover is shown by the edge and the shadow, not by movement. This list is
+   swept many times a visit, and a lift there also made a card hop up just after
+   it closed under the pointer. The press lives on the header. The curriculum
+   map's chapters take no hover motion either: they are not clickable. */
 @media (hover: hover) and (pointer: fine) {
-  .card:hover { border-color: var(--edge); box-shadow: var(--shadow-2); transform: translateY(-2px); }
-  .chapter:hover { transform: translateY(-2px); }
+  .card:hover { border-color: var(--edge); box-shadow: var(--shadow-2); }
   .note:hover { border-color: var(--edge); }
 }
-.card, .chapter { transition: border-color 200ms var(--ease-out), box-shadow 200ms var(--ease-out), transform 180ms var(--ease-out); }
-.card:active { transform: scale(.995); }
 .card > summary {
   list-style: none; cursor: pointer; padding-block: 18px; padding-inline: 20px 46px;
   display: grid; gap: 6px; position: relative;
@@ -577,9 +602,7 @@ body[dir="rtl"] .filters button { font-family: var(--ar); font-weight: 600; }
    and can be measured. The chevron follows the reader's intent, not that
    bookkeeping, so it turns back the moment they click. */
 .card[open][data-closing] > summary::after { transform: rotate(45deg); border-color: var(--ink-faint); }
-.card > .body { will-change: height; }
 .card[open] > summary { border-bottom: 1px solid var(--line-soft); }
-.card[open] .body { animation: enter 220ms var(--ease-out) both; }
 
 .row1 { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
 .subject { font: 500 15px/1.3 var(--mono); letter-spacing: -.02em; color: var(--ink); }
@@ -592,6 +615,12 @@ body[dir="rtl"] .chip { font-family: var(--ar); }
 .chip.update { background: var(--gold-soft); color: var(--gold-ink); border-color: var(--gold-edge); }
 .chip.add { background: var(--crit-soft); color: var(--crit-ink); border-color: var(--crit-edge); }
 .chip.watch { background: var(--gray-soft); color: var(--ink-soft); border-color: var(--line); }
+/* A change across the course names APIs the notebooks still call, some of which
+   break on today's install, so it takes the alert hue; outlined rather than
+   filled, so it does not read as a new lesson. Optional content asks nothing,
+   so it is the quietest action chip. */
+.chip.coursewide { background: transparent; color: var(--crit-ink); border-color: var(--crit-edge); }
+.chip.optional { background: transparent; color: var(--ink-soft); border-color: var(--edge); }
 .chip.chapter {
   background: var(--gray-soft); color: var(--ink-soft); font-family: var(--mono); font-weight: 500; border-color: var(--line);
   /* The curriculum map's chapter cards share this class name. A chip must not
@@ -844,11 +873,12 @@ body[dir="rtl"] .empty strong { font-family: var(--ar); }
   background: var(--raised); border: 1px solid var(--line);
   border-radius: var(--r-card); box-shadow: var(--shadow-2);
   padding: 5px; display: grid; gap: 2px;
-  transform-origin: top center;
+  transform-origin: top left;
   opacity: 0; transform: translateY(-4px) scale(.97);
   transition: opacity 170ms var(--ease-out), transform 170ms var(--ease-out);
 }
 .pk[data-open] .pk-list { opacity: 1; transform: none; }
+body[dir="rtl"] .pk-list { transform-origin: top right; }
 
 .pk-opt {
   display: grid; gap: 3px; justify-items: start; text-align: start;
@@ -911,6 +941,13 @@ body[dir="rtl"] .runbtn { font-family: var(--ar); }
 .thm .moon { opacity: 0; transform: rotate(-65deg) scale(.55); }
 :root[data-theme="light"] .thm .sun  { opacity: 0; transform: rotate(65deg) scale(.55); }
 :root[data-theme="light"] .thm .moon { opacity: 1; transform: none; }
+/* The theme crossfade (see the theme button in the script): the browser's own
+   fade from the old page to the new one, on the page's ease-out curve. */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 260ms;
+  animation-timing-function: var(--ease-out, cubic-bezier(.23, 1, .32, 1));
+}
 
 .runbtn.busy { position: relative; color: transparent; }
 .runbtn.busy::after {
@@ -920,14 +957,20 @@ body[dir="rtl"] .runbtn { font-family: var(--ar); }
 }
 @keyframes spin { to { transform: rotate(360deg); } }
 
+/* In and out on transitions rather than keyframes, so a run that starts while
+   the last panel is leaving turns the exit around instead of restarting it.
+   Leaving is quicker than arriving: the panel is getting out of the way. */
 .runpanel {
   margin: 22px 0 6px; padding: 19px 21px 17px; background: var(--surface);
   border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow-1);
-  animation: panelIn 300ms var(--ease-out) both;
+  opacity: 1; transform: none;
+  transition: opacity 300ms var(--ease-out), transform 300ms var(--ease-out);
 }
-@keyframes panelIn { from { opacity: 0; transform: translateY(-6px) scale(.985); } to { opacity: 1; transform: none; } }
-.runpanel.leaving { animation: panelOut 320ms var(--ease-out) both; }
-@keyframes panelOut { to { opacity: 0; transform: translateY(-6px) scale(.985); } }
+@starting-style { .runpanel { opacity: 0; transform: translateY(-6px) scale(.985); } }
+.runpanel.leaving {
+  opacity: 0; transform: translateY(-6px) scale(.985);
+  transition-duration: 200ms;
+}
 /* A sweeping line used to run across the top of this panel while a run was in
    flight. It was added before the stages had figures of their own, and once
    they did it was a second, vaguer answer to a question the working machine,
@@ -940,7 +983,7 @@ body[dir="rtl"] .runbtn { font-family: var(--ar); }
 
 /* The run landing. Rare enough to earn a little overshoot, and it plays once
    because the panel is dismissed straight afterwards. */
-.runpanel[data-state="done"] { animation: settle 420ms var(--ease-out) both; }
+.runpanel[data-state="done"] { animation: settle 420ms var(--ease-out); }
 @keyframes settle {
   0%   { transform: scale(.994); }
   55%  { transform: scale(1.004); }
@@ -973,7 +1016,6 @@ body[dir="rtl"] .runtitle { font-family: var(--ar); }
 }
 body[dir="rtl"] .node::after { transform-origin: right center; }
 .node[data-state="done"]::after { transform: scaleX(1); }
-.node[data-state="active"]::after { transform: scaleX(.45); }
 .node:last-child::before, .node:last-child::after { inset-inline-end: 10px; }
 
 /* The stage figure sits in a disc that masks the connector line running behind
@@ -1073,16 +1115,6 @@ body[dir="rtl"] .node::after { transform-origin: right center; }
 .node[data-state="done"] .fig-ingest .fall,
 .node[data-state="done"] .fig-cluster .mv { opacity: 1; }
 
-.pip::after {
-  content: ""; position: absolute; inset: -3px; border-radius: var(--r-pill);
-  border: 1.5px solid var(--gold); opacity: 0; transform: scale(.7);
-}
-.node[data-state="active"] .pip::after { animation: ring 1600ms var(--ease-out) infinite; }
-@keyframes ring {
-  0% { opacity: .5; transform: scale(.55); }
-  70% { opacity: 0; transform: scale(1.15); }
-  100% { opacity: 0; transform: scale(1.15); }
-}
 .nlabel { font: 600 12px/1 var(--sans); color: var(--ink-faint); transition: color 220ms var(--ease-out); }
 body[dir="rtl"] .nlabel { font-family: var(--ar); }
 .node[data-state="active"] .nlabel, .node[data-state="done"] .nlabel { color: var(--ink); }
@@ -1121,14 +1153,17 @@ body[dir="rtl"] .nlabel { font-family: var(--ar); }
 @starting-style { .thought { opacity: 0; transform: translateY(-4px); filter: blur(2px); } }
 
 main.wrap { transition: opacity 240ms var(--ease-out); }
-main.wrap.swapping { opacity: .45; }
+main.wrap.swapping { opacity: .45; transition-delay: 120ms; }
 
 .skeleton {
   height: 96px; margin-bottom: 10px; border-radius: var(--radius);
-  background: linear-gradient(100deg, var(--gray-soft) 30%, var(--raised) 45%, var(--gray-soft) 60%);
-  background-size: 300% 100%; animation: shimmer 1400ms linear infinite;
+  background: var(--gray-soft);
+  animation: skeletonPulse 1100ms var(--ease-in-out) infinite alternate;
 }
-@keyframes shimmer { to { background-position: -150% 0; } }
+/* Waiting is shown as a slow pulse on opacity, which the compositor runs. It
+   replaced a sheen swept across a repainted background, and a sliding sheen
+   reads as a ticker rather than as a page that is still arriving. */
+@keyframes skeletonPulse { from { opacity: .5; } to { opacity: 1; } }
 
 /* ------------------------------------------------------------------- tip -- */
 
@@ -1145,60 +1180,84 @@ body[dir="rtl"] .tip { font-family: var(--ar); }
 
 /* ---------------------------------------------------------------- reveal -- */
 
-/* Scroll entry. This is the one place a duration over 300ms is allowed: it is
-   explanatory motion tied to reading position, not a response to a click. The
-   blur is what stops it reading as a plain fade, and it is small enough and
-   short enough not to cost a frame. */
-/* Scoped to html.js, which the script adds to itself on boot. Without that
-   guard the page ships its content at opacity 0 and stays blank if the script
-   never runs, and this file has to open from disk on a machine nobody has
-   checked. Visible is the default; hidden is the enhancement. */
-html.js .reveal { opacity: 0; transform: translateY(18px); filter: blur(8px); }
-html.js .reveal.in {
-  opacity: 1; transform: none; filter: blur(0);
+/* Scroll entry. Scoped to html.js, which the script adds to itself on boot:
+   without that guard the page ships its content at opacity 0 and stays blank
+   if the script never runs, and this file has to open from disk on a machine
+   nobody has checked. Visible is the default; hidden is the enhancement.
+
+   It moves on the individual translate property, not transform. It used to set
+   transform and transition, and at its specificity it overrode every
+   component's own for good: the card lift and press never ran and hover
+   colours snapped. Now its transition applies only while a block is arriving.
+   Once .settled lands a beat later, the end values stand on their own, any
+   transition a backgrounded tab left parked is dropped, and the component's
+   own transitions are back. */
+html.js .reveal { opacity: 0; translate: 0 12px; filter: blur(4px); }
+html.js .reveal.in { opacity: 1; translate: none; filter: none; }
+html.js .reveal.in:not(.settled) {
+  transition: opacity 480ms var(--ease-out),
+              translate 480ms var(--ease-out),
+              filter 360ms var(--ease-out);
+  transition-delay: var(--d, 0ms);
+}
+
+/* The opening screen is the one authored moment, read once, so it keeps the
+   long form. Everything after it is content the reader came for. */
+html.js .overture .reveal { translate: 0 18px; filter: blur(8px); }
+html.js .overture .reveal.in { translate: none; filter: none; }
+html.js .overture .reveal.in:not(.settled) {
   transition: opacity 720ms var(--ease-out),
-              transform 720ms var(--ease-out),
+              translate 720ms var(--ease-out),
               filter 560ms var(--ease-out);
   transition-delay: var(--d, 0ms);
 }
 
-/* The guarantee. A transition only reaches its end value if it actually runs,
-   and a backgrounded tab can leave one parked at its start value indefinitely.
-   This is applied a beat after the reveal and states the finished values
-   outright, so no path through the page can leave content invisible. */
-html.js .reveal.in.settled,
-html.js .reveal.quick.in.settled {
-  opacity: 1; transform: none; filter: none; transition: none;
-}
-
 /* Re-rendered content: a short fade, well inside the budget for something the
    reader just asked for by clicking. */
-html.js .reveal.quick { transform: none; filter: none; }
-html.js .reveal.quick.in {
+html.js .reveal.quick { translate: none; filter: none; }
+html.js .reveal.quick.in:not(.settled) {
   transition: opacity 200ms var(--ease-out);
   transition-delay: 0ms;
 }
 
 /* A stat is a number that was counted, so it arrives a little tighter than the
    block around it and does not blur, which would make the digits mush. */
-html.js .stat.reveal { transform: translateY(12px); filter: none; }
-html.js .stat.reveal.in { transition: opacity 520ms var(--ease-out), transform 520ms var(--ease-out); transition-delay: var(--d, 0ms); }
+html.js .stat.reveal { translate: 0 10px; filter: none; }
+html.js .stat.reveal.in:not(.settled) {
+  transition: opacity 480ms var(--ease-out), translate 480ms var(--ease-out);
+  transition-delay: var(--d, 0ms);
+}
 
-/* Bars and stacks draw themselves rather than appearing already full. */
+/* Bars and stacks draw themselves on the first read. A re-render shows them
+   already finished: a filter or a language switch that redrew every chart read
+   as the page starting over. */
 html.js .stack span { transform: scaleX(0); transform-origin: left center; }
-html.js .reveal.in .stack span, html.js .stack.in span {
-  transform: scaleX(1);
+html.js .reveal.in .stack span, html.js .stack.in span { transform: scaleX(1); }
+html.js .reveal.in:not(.settled):not(.quick) .stack span {
   transition: transform 760ms var(--ease-out);
   transition-delay: calc(var(--d, 0ms) + var(--sd, 0ms));
 }
+html.js .reveal.quick .stack span { transform: scaleX(1); }
 body[dir="rtl"] .stack span { transform-origin: right center; }
 
-html.js .cell { transform: scale(.4); opacity: 0; }
-html.js .reveal.in .cell {
-  transform: none; opacity: 1;
-  transition: transform 420ms var(--ease-out), opacity 300ms var(--ease-out);
+/* Cells land in course order from just under full size, on the scale property,
+   so a cell's own hover lift keeps working on transform. */
+html.js .cell { scale: .9; opacity: 0; }
+html.js .reveal.in .cell, html.js .reveal.quick .cell { scale: none; opacity: 1; }
+html.js .reveal.in:not(.settled):not(.quick) .cell {
+  transition: scale 420ms var(--ease-out), opacity 300ms var(--ease-out);
   transition-delay: calc(var(--d, 0ms) + var(--cd, 0ms));
 }
+html.js .reveal.quick .bar i, html.js .reveal.quick .dtrack i { animation: none; }
+/* Priority and distance bars grow as their block arrives, the way the stacked
+   bars do, instead of when the page renders: below the fold they used to finish
+   before anyone could see them. Paused, they hold at zero; the extra 120ms lets
+   the block's fade get under way first. Re-rendered blocks are covered by the
+   quick rule above and show their bars finished. */
+html.js .reveal:not(.in) .bar i,
+html.js .reveal:not(.in) .dtrack i { animation-play-state: paused; }
+html.js .reveal.in .bar i,
+html.js .reveal.in .dtrack i { animation-delay: calc(var(--d, 0ms) + 120ms); }
 
 /* -------------------------------------------------------------- overture -- */
 
@@ -1213,7 +1272,7 @@ html.js .reveal.in .cell {
   background: color-mix(in srgb, var(--paper) 72%, transparent);
   backdrop-filter: blur(22px) saturate(130%);
   -webkit-backdrop-filter: blur(22px) saturate(130%);
-  transition: opacity 420ms var(--ease-out), transform 420ms var(--ease-out);
+  transition: opacity 260ms var(--ease-out), transform 260ms var(--ease-out);
 }
 .overture.closing { opacity: 0; transform: scale(1.03); pointer-events: none; }
 .ov-inner { width: min(980px, 100%); }
@@ -1284,30 +1343,39 @@ bdi { unicode-bidi: isolate; }
   .wash, .grain { display: none; }
 }
 
-/* Reduced motion means fewer and gentler, not none. Opacity changes stay
-   because they carry meaning; everything that travels in space stops. */
+/* Reduced motion means fewer and gentler, not none. Animations end at once.
+   Transitions keep their authored length but are narrowed to the properties
+   that do not move anything, so fades and colour changes stay and every
+   travel stops. The old rule cut every transition to nothing, which also erased
+   the fades this block meant to keep. */
 @media (prefers-reduced-motion: reduce) {
-  html { scroll-behavior: auto; }
   *, *::before, *::after {
     animation-duration: .01ms !important; animation-iteration-count: 1 !important;
-    transition-duration: .01ms !important;
+    transition-property: opacity, color, background-color, border-color, box-shadow !important;
   }
-  html.js .reveal, html.js .reveal.in { opacity: 1; transform: none; filter: none; }
+  html.js .reveal, html.js .overture .reveal, html.js .stat.reveal { translate: none; filter: none; }
+  html.js .reveal.in:not(.settled),
+  html.js .overture .reveal.in:not(.settled),
+  html.js .stat.reveal.in:not(.settled) { transition-duration: 200ms; transition-delay: 0ms; }
   html.js .stack span, html.js .reveal.in .stack span { transform: scaleX(1); }
-  html.js .cell, html.js .reveal.in .cell { transform: none; opacity: 1; }
+  html.js .cell, html.js .reveal.in .cell { scale: none; opacity: 1; }
+  .cell:hover { transform: none; }
   .node.landed .pip::before { animation: none; opacity: 0; }
   .ov-rule { transform: scaleX(1); }
-  .wash::before { animation: none; }
-  .node[data-state="active"] .pip::after, .skeleton, .runbtn.busy::after { animation: none; }
+  .wash::before, .field-deep { animation: none; }
+  .skeleton { animation: none; }
+  .runbtn.busy::after { animation: none; }
+  .runpanel.leaving { transform: none; }
   .fig *, .node[data-state="active"] .fig * { animation: none !important; transform: none !important; }
   .fig .fall, .fig .mv { opacity: 1; }
   .fig-act .mark { opacity: 1; }
   .thought { transition: none; }
   .thm .sun, .thm .moon { transition: opacity 180ms ease; transform: none !important; }
-  .brandbtn:hover .mk-found, .brandbtn:focus-visible .mk-found { animation: none; }
   .pk-list { transition: opacity 140ms ease; transform: none !important; }
   .pk-caret { transition: none; }
   .dtrack i, .bar i { animation: none; transform: scaleX(1); }
+  ::view-transition-old(root),
+  ::view-transition-new(root) { animation-duration: 160ms; }
 }
 
 /* ------------------------------------------------------------ responsive -- */
@@ -1504,4 +1572,216 @@ body[dir="rtl"] .wg-note { font-family: var(--ar); }
 }
 @media (prefers-reduced-motion: reduce) {
   .mk-track i, .mk-mag i.on { animation: none; transform: none; opacity: 1; }
+}
+
+/* ------------------------------------------------------------ next steps -- */
+
+/* What to do, in two or three short steps, first in the card body. Numbered in
+   the display face so the order reads at a glance. */
+.plan { margin: 4px 0 16px; display: grid; gap: 11px; }
+.plan-steps { list-style: none; margin: 0; padding: 0; display: grid; gap: 9px; }
+.plan-steps li { display: grid; grid-template-columns: 20px minmax(0, 1fr); gap: 10px; align-items: baseline; }
+.plan-n {
+  font: 600 21px/1 var(--display); color: var(--ink-faint);
+  font-variant-numeric: lining-nums tabular-nums;
+}
+.plan-s { font-size: 13.5px; line-height: 1.55; color: var(--ink); min-width: 0; overflow-wrap: anywhere; }
+body[dir="rtl"] .plan-s { font-family: var(--ar); font-size: 14px; line-height: 1.75; }
+
+/* Who wrote the explanation above it. */
+.byline { margin: -9px 0 15px; padding-inline-start: 13px; font-size: 11.5px; color: var(--ink-faint); }
+body[dir="rtl"] .byline { font-family: var(--ar); }
+
+/* ------------------------------------------------------------ cell edits -- */
+
+/* The named edits, folded by chapter and then by notebook, on hairlines rather
+   than boxes: a box inside a card is a card inside a card. */
+.edits { margin: 0 0 16px; border-block: 1px solid var(--line-soft); }
+.edits > summary, .ed-ch > summary {
+  list-style: none; cursor: pointer; position: relative;
+  display: flex; flex-wrap: wrap; align-items: baseline; gap: 5px 14px;
+  padding-inline: 0 30px;
+  transition: transform 140ms var(--ease-out);
+}
+.edits > summary { padding-block: 13px; }
+.ed-ch > summary { padding-block: 10px; }
+.edits > summary::-webkit-details-marker, .ed-ch > summary::-webkit-details-marker { display: none; }
+.edits > summary:active, .ed-ch > summary:active { transform: scale(.995); }
+.edits > summary::after, .ed-ch > summary::after {
+  content: ""; position: absolute; inset-inline-end: 8px; top: 50%; margin-top: -5px;
+  width: 6px; height: 6px;
+  border-right: 1.5px solid var(--ink-faint); border-bottom: 1.5px solid var(--ink-faint);
+  transform: rotate(45deg); transform-origin: center;
+  transition: transform 220ms var(--ease-out), border-color 200ms ease;
+}
+.edits[open] > summary::after, .ed-ch[open] > summary::after { transform: rotate(-135deg); border-color: var(--ink); }
+.edits[open][data-closing] > summary::after,
+.ed-ch[open][data-closing] > summary::after { transform: rotate(45deg); border-color: var(--ink-faint); }
+@media (hover: hover) and (pointer: fine) {
+  .edits > summary:hover::after, .ed-ch > summary:hover::after { border-color: var(--ink); }
+}
+.ed-n { font-size: 13px; color: var(--ink-soft); }
+body[dir="rtl"] .ed-n, body[dir="rtl"] .ed-brk, body[dir="rtl"] .ed-checked { font-family: var(--ar); }
+.ed-brk { font-size: 12.5px; font-weight: 600; color: var(--crit-ink); }
+.ed-checked { margin: 2px 0 10px; font-size: 12px; line-height: 1.5; color: var(--ink-faint); }
+
+.ed-ch { border-top: 1px solid var(--line-soft); }
+.ed-ch-title { flex: 1 1 220px; min-width: 0; font-size: 13px; color: var(--ink-soft); }
+body[dir="rtl"] .ed-ch-title { font-family: var(--ar); }
+.ed-ch-n { font: 500 11.5px/1 var(--mono); color: var(--ink-faint); }
+body[dir="rtl"] .ed-ch-n { font-family: var(--ar); }
+
+.ed-nb { margin: 2px 0 16px; padding-inline-start: 13px; border-inline-start: 1px solid var(--line); }
+.ed-nb-head { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 12px; margin-bottom: 10px; }
+.ed-nb-name { font: 500 12px/1.45 var(--mono); color: var(--ink); overflow-wrap: anywhere; min-width: 0; }
+.ed-pin { font: 500 11px/1.3 var(--mono); color: var(--ink-faint); }
+.ed-state { font-size: 11.5px; color: var(--ink-faint); }
+.ed-state[data-breaks="true"] { color: var(--crit-ink); font-weight: 600; }
+body[dir="rtl"] .ed-state, body[dir="rtl"] .ed-pin { font-family: var(--ar); }
+
+.ed-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 14px; }
+.ed { display: grid; gap: 6px; }
+.ed-cell {
+  font: 600 10.5px/1.2 var(--sans); letter-spacing: .07em; text-transform: uppercase;
+  color: var(--ink-faint);
+}
+body[dir="rtl"] .ed-cell { font: 600 11.5px/1.3 var(--ar); letter-spacing: 0; text-transform: none; }
+.ed-diff { display: grid; grid-template-columns: max-content minmax(0, 1fr); gap: 5px 10px; align-items: baseline; }
+.ed-k { font-size: 11px; color: var(--ink-faint); }
+body[dir="rtl"] .ed-k { font-family: var(--ar); font-size: 11.5px; }
+.ed-diff code {
+  justify-self: start; max-width: 100%;
+  font: 500 12px/1.5 var(--mono); padding: 2px 7px; border-radius: var(--r-mark);
+  overflow-wrap: anywhere; text-align: left;
+}
+.ed-old { background: var(--gray-soft); color: var(--ink-soft); }
+/* The replacement was found at a release tag, so it takes the page's colour for
+   a checked fact. A current line that breaks on today's install takes the
+   alert hue. */
+.ed-new { background: var(--gold-soft); color: var(--gold-ink); }
+.ed[data-breaks="true"] .ed-old { background: var(--crit-soft); color: var(--crit-ink); }
+.ed-reason { margin: 0; font-size: 12.5px; line-height: 1.55; color: var(--ink-soft); }
+body[dir="rtl"] .ed-reason[lang="ar"] { font-family: var(--ar); line-height: 1.8; }
+.ed-links { display: flex; flex-wrap: wrap; gap: 3px 14px; font-size: 11.5px; }
+
+/* The curriculum map says how much of each chapter the edits touch. */
+.ch-edits { display: flex; flex-wrap: wrap; gap: 4px 12px; margin: 0 0 10px; font-size: 12px; color: var(--ink-soft); }
+body[dir="rtl"] .ch-edits { font-family: var(--ar); }
+
+/* -------------------------------------------------------------- concepts -- */
+
+/* Concepts the course does not teach yet. Cards like the others; a concept on
+   watch sits on the page's ground, the way watched packages do, so the one that
+   asks for a lesson is the brighter card. */
+.concepts { margin-top: 34px; }
+.concepts .sub { margin-bottom: 16px; }
+body[dir="rtl"] .concepts .sub { font-family: var(--ar); }
+.concept[data-action="watch"] { background: var(--paper); border-color: var(--line-soft); box-shadow: none; }
+
+/* The module's own description, quoted as released: English, left to right,
+   on both pages. */
+.cq { margin: 0 0 12px; }
+.cq blockquote {
+  margin: 0; padding-inline-start: 13px; border-inline-start: 2px solid var(--line);
+  font: italic 400 17px/1.4 var(--display); color: var(--ink);
+}
+.cq figcaption { margin-top: 6px; font-size: 11.5px; color: var(--ink-faint); }
+body[dir="rtl"] .cq figcaption { font-family: var(--ar); }
+
+/* ----------------------------------------------------------------- radar -- */
+
+.radar { margin: 4px 0 6px; }
+.radar-svg { display: block; width: 100%; height: auto; overflow: visible; }
+.rd-grid { stroke: var(--line-soft); stroke-width: 1; }
+.rd-split { stroke: var(--edge); stroke-width: 1; opacity: .7; }
+.rd-tick { font: 500 10.5px var(--mono); fill: var(--ink-faint); }
+.rd-axis { font: 600 11px var(--sans); fill: var(--ink-soft); }
+.rd-q { font: 600 10px var(--sans); letter-spacing: .08em; text-transform: uppercase; fill: var(--ink-faint); }
+body[dir="rtl"] .rd-axis, body[dir="rtl"] .rd-q { font-family: var(--ar); letter-spacing: 0; text-transform: none; font-size: 11.5px; }
+.rd-label { font: 500 11px var(--mono); fill: var(--ink-soft); pointer-events: none; }
+.rd-leader { stroke: var(--edge); stroke-width: 1; pointer-events: none; }
+
+/* Marks: a surface halo, then the dot or ring. The halo keeps dots that
+   touch apart; the hit circle is larger than the mark and invisible. */
+.rd-hit { fill: transparent; }
+.rd-halo { fill: var(--surface); }
+.blip[data-tone="update"] { --tone: var(--viz-act-update); }
+.blip[data-tone="lesson"] { --tone: var(--viz-act-lesson); }
+.blip[data-tone="watch"] { --tone: var(--viz-act-watch); }
+.blip .rd-mark { fill: var(--tone); }
+.blip[data-ring] .rd-mark { fill: var(--surface); stroke: var(--tone); stroke-width: 2.2; }
+.radar .blip { cursor: pointer; }
+@media (hover: hover) and (pointer: fine) {
+  .radar .blip:hover .rd-halo { fill: var(--ink-faint); }
+}
+
+/* The dots land in priority order on the first read, from just under full
+   size; a redraw or a re-render shows them at once. */
+html.js .radar .blip { opacity: 0; scale: .6; transform-box: fill-box; transform-origin: center; }
+html.js .reveal.in .radar .blip, html.js .reveal.quick .radar .blip { opacity: 1; scale: none; }
+html.js .reveal.in:not(.settled):not(.quick) .radar .blip {
+  transition: opacity 260ms var(--ease-out), scale 320ms var(--ease-out);
+  transition-delay: calc(var(--d, 0ms) + 200ms + var(--bd, 0ms));
+}
+
+.rd-legend { margin-top: 12px; }
+.rd-key { width: 14px; height: 14px; flex: none; overflow: visible; }
+.rd-key.wide { width: 28px; }
+.rd-legend .rd-size { color: var(--ink-faint); }
+.rd-table { margin-top: 12px; }
+.rd-table > summary { cursor: pointer; font-size: 12px; color: var(--ink-faint); width: fit-content; }
+.rd-table > summary:hover { color: var(--ink-soft); }
+.rd-table table { margin-top: 10px; }
+.rd-table td.num { font-variant-numeric: tabular-nums; }
+body[dir="rtl"] .rd-table > summary { font-family: var(--ar); }
+
+/* --------------------------------------------------------------- scoring -- */
+
+/* How a card's two numbers were reached. Neutral like the why block: a score
+   is neither a confirmation nor a gap. Where a value came from is said in
+   words; a default, which measured nothing, borrows the dashed outline the
+   page uses for an absence. */
+.score { margin: 0 0 14px; padding-bottom: 14px; border-bottom: 1px solid var(--line-soft); }
+.sc-title { display: block; margin-bottom: 10px; }
+.sc-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+.sc-col { min-width: 0; display: grid; align-content: start; gap: 9px; }
+.sc-col:not(:last-child) { padding-inline-end: 24px; }
+.sc-col + .sc-col { padding-inline-start: 24px; border-inline-start: 1px solid var(--line-soft); }
+.sc-head { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 10px; }
+.sc-total { font: 600 26px/1 var(--display); color: var(--ink); font-variant-numeric: lining-nums tabular-nums; }
+.sc-math { font: 500 11.5px/1.3 var(--mono); color: var(--ink-faint); }
+.sc-rows { list-style: none; margin: 0; padding: 0; display: grid; gap: 7px; }
+/* A fixed column for where each score came from, so the meters line up down
+   the column whatever the word beside them. */
+.sc-rows li { display: grid; grid-template-columns: minmax(0, 1fr) auto 14px 76px; align-items: center; gap: 4px 10px; }
+.sc-name { font-size: 12.5px; color: var(--ink-soft); min-width: 0; }
+body[dir="rtl"] .sc-name { font-family: var(--ar); }
+.sc-meter { display: inline-flex; gap: 2px; }
+.sc-meter i { display: block; width: 8px; height: 8px; border-radius: 2px; background: var(--neutral-mark); }
+.sc-meter i.on { background: var(--ink-soft); }
+.sc-v { font: 600 13px/1 var(--sans); color: var(--ink); text-align: end; font-variant-numeric: tabular-nums; }
+.sc-prov {
+  justify-self: start; font: 500 10.5px/1 var(--sans); color: var(--ink-soft);
+  padding: 3px 7px; border: 1px solid var(--line); border-radius: var(--r-pill);
+}
+body[dir="rtl"] .sc-prov { font-family: var(--ar); }
+.sc-prov[data-p="judged"] { background: var(--gray-soft); }
+.sc-prov[data-p="default"] { color: var(--ink-faint); border-style: dashed; border-color: var(--edge); }
+.sc-why { grid-column: 1 / -1; margin: 0; font-size: 11.5px; line-height: 1.5; color: var(--ink-faint); }
+body[dir="rtl"] .sc-why[lang="ar"] { font-family: var(--ar); line-height: 1.7; }
+.sc-note { margin: 0; font-size: 11.5px; color: var(--ink-faint); }
+body[dir="rtl"] .sc-note { font-family: var(--ar); }
+.sc-warn { color: var(--ink-soft); }
+.chip.immature { background: transparent; color: var(--ink-soft); border-color: var(--edge); }
+
+@media (max-width: 640px) {
+  .sc-grid { grid-template-columns: minmax(0, 1fr); }
+  .sc-col:not(:last-child) { padding-inline-end: 0; }
+  .sc-col + .sc-col {
+    padding-inline-start: 0; border-inline-start: 0;
+    margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--line-soft);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  html.js .radar .blip { opacity: 1; scale: none; }
 }

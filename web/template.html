@@ -4,6 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>AI Trend Agent</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%23101014'/%3E%3Cg transform='translate%284 4%29'%3E%3Cpath d='M3 18.5 8 13.5 13 16 16.5 9 21 4.5' fill='none' stroke='%2374716c' stroke-width='1.8' stroke-linejoin='round'/%3E%3Ccircle cx='3' cy='18.5' r='2' fill='%23b3b0aa'/%3E%3Ccircle cx='8' cy='13.5' r='2' fill='%23b3b0aa'/%3E%3Ccircle cx='13' cy='16' r='2' fill='%23b3b0aa'/%3E%3Ccircle cx='16.5' cy='9' r='2' fill='%23b3b0aa'/%3E%3Ccircle cx='21' cy='4.5' r='3' fill='%23e8b54b'/%3E%3C/g%3E%3C/svg%3E">
 <style>
 __FONTS__
 __STYLE__
@@ -36,8 +37,10 @@ __STYLE__
     <div class="brandline">
       <h1><button type="button" class="brandbtn" id="btnAbout" data-i18n-label="ov_replay">
         <svg class="mark" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-          <rect class="mk-cell" x="0" y="0" width="6" height="6" rx="1.5"/><rect class="mk-cell" x="9" y="0" width="6" height="6" rx="1.5"/><rect class="mk-cell" x="18" y="0" width="6" height="6" rx="1.5"/><rect class="mk-cell" x="0" y="9" width="6" height="6" rx="1.5"/><rect class="mk-cell" x="9" y="9" width="6" height="6" rx="1.5"/><rect class="mk-cell" x="18" y="9" width="6" height="6" rx="1.5"/><rect class="mk-cell" x="0" y="18" width="6" height="6" rx="1.5"/><rect class="mk-cell" x="9" y="18" width="6" height="6" rx="1.5"/><rect class="mk-cell" x="18" y="18" width="6" height="6" rx="1.5"/>
-          <rect class="mk-found" x="0" y="0" width="6" height="6" rx="1.5"/>
+          <path class="mk-line" d="M4.59 16.91 6.41 15.09M10.01 14.51 10.99 14.99M14.01 13.99 15.49 11.01M18.09 7.41 18.77 6.73"/>
+          <path class="mk-run" d="M3 18.5 8 13.5 13 16 16.5 9 21 4.5" pathLength="100"/>
+          <circle class="mk-star" cx="3" cy="18.5" r="1.5"/><circle class="mk-star" cx="8" cy="13.5" r="1.5"/><circle class="mk-star" cx="13" cy="16" r="1.5"/><circle class="mk-star" cx="16.5" cy="9" r="1.5"/>
+          <circle class="mk-found" cx="21" cy="4.5" r="2.4"/>
         </svg>
         <span class="brandname">AI Trend Agent</span>
       </button></h1>
@@ -99,6 +102,11 @@ __STYLE__
     <h2 data-i18n="h_act"></h2>
     <div class="filters" id="actFilters"></div>
     <div id="actList"></div>
+    <section class="concepts" id="concepts" hidden>
+      <h2 data-i18n="h_concepts"></h2>
+      <p class="sub" id="conceptsNote"></p>
+      <div id="conceptList"></div>
+    </section>
   </section>
 
   <section class="panel" data-panel="map">
@@ -186,6 +194,37 @@ const T = {
     wg_title: "Watching, nothing to change yet",
     wg_note: "Packages the agent checked and found no reason to touch the course this week. Each card says why.",
     en_only: "The text is in English",
+    add_optional_content: "Optional content", investigate_larger_change: "Course-wide change",
+    f_optional: "Optional content", f_investigate: "Course-wide change",
+    h_concepts: "Concepts the course does not teach yet",
+    viz_radar_t: "Trend radar",
+    viz_radar_c: "How much each subject matters (priority, up) against how ready the course is to teach it (feasibility, right). Colour is the agent's decision; a larger dot is a surer one. The lines split both scales at 3.",
+    viz_radar_empty: "Every subject this week scores at least {min} for feasibility, so the left half is empty.",
+    q_act: "Act now", q_plan: "Plan it", q_quick: "Quick wins", q_watch: "Watch",
+    ax_x: "Ready to teach (feasibility)", ax_y: "Matters (priority)",
+    rd_size: "larger dot, more confidence", rd_table: "Show the numbers", rd_subject: "Subject", rd_decision: "Decision",
+    rd_note: "{action}. Priority {p}, feasibility {f}, confidence {c}.",
+    feasibility: "feasibility",
+    sc_title: "How it was scored", sc_priority: "Priority", sc_feasibility: "Feasibility",
+    sc_weights: "Each counts equally, weighted {w}.", sc_ease: "Ease is 6 minus difficulty, {d} here.",
+    dim_relevance: "Relevance", dim_impact: "Impact", dim_educational_value: "Educational value", dim_market_relevance: "Market relevance",
+    dim_maturity: "Maturity", dim_prerequisites: "Prerequisites", dim_ease: "Ease",
+    prov_measured: "measured", prov_judged: "judged", prov_default: "default",
+    immature: "Not stable yet", im_note: "Maturity {n} or lower: watched until it is stable enough to teach.",
+    cn_note: "Read from the tools' own source, comparing the newest release with the newest version the course's pins allow: {list}. Checked on {date}.",
+    cn_pair: "{tool} {latest} against {course}",
+    cn_new_in: "new in {release}", cn_jobs_none: "job posts not measured",
+    cn_notebooks: "in {n} of {read} notebooks",
+    cn_quote: "The module's own description, as released: {module}",
+    cn_added: "added in {release}", cn_absent: "absent from {release}",
+    plan_title: "Next steps",
+    by_model: "Written by the model from the checked facts.", by_rules: "Written from the rules.",
+    ed_title: "Cell edits", ed_in: "in", ed_across: "across",
+    ed_checked: "Checked against {list} on {date}.",
+    ed_cell: "cell {n}", ed_now: "Now", ed_to: "Change to",
+    ed_gone: "gone in {checked}", ed_moved: "now in {module}, {release}",
+    ed_breaks: "breaks on today's install", ed_runs: "runs as pinned",
+    ed_pin: "pins {pin}", ed_unpinned: "no version bound",
     mk_jobs: "job posts, last {m} months", mk_installs: "installs last month", mk_title: "Does the market want it",
     mk_few: "few employers ask for it yet",
     m_repeat: "asked for since", m_runs: "{n} runs in a row", m_moved: "new version since the last run",
@@ -256,6 +295,37 @@ const T = {
     wg_title: "تحت المراقبة، لا تغيير بعد",
     wg_note: "حزم فحصها الوكيل ولم يجد هذا الأسبوع ما يستدعي تعديل المقرر. كل بطاقة تذكر السبب.",
     en_only: "النص بالإنجليزية",
+    add_optional_content: "محتوى اختياري", investigate_larger_change: "تغيير على مستوى المقرر",
+    f_optional: "محتوى اختياري", f_investigate: "تغيير على مستوى المقرر",
+    h_concepts: "مفاهيم لا يدرّسها المقرر بعد",
+    viz_radar_t: "رادار الاتجاهات",
+    viz_radar_c: "مدى أهمية كل موضوع (الأولوية، للأعلى) مقابل جاهزية المقرر لتدريسه (الجاهزية، لليمين). اللون قرار الوكيل، والنقطة الأكبر أوثق. الخطّان يقسمان المقياسين عند 3.",
+    viz_radar_empty: "كل موضوع هذا الأسبوع نال {min} أو أكثر في الجاهزية، لذا النصف الأيسر فارغ.",
+    q_act: "تحرّك الآن", q_plan: "خطّط له", q_quick: "مكاسب سريعة", q_watch: "راقب",
+    ax_x: "جاهز للتدريس (الجاهزية)", ax_y: "مهم (الأولوية)",
+    rd_size: "النقطة الأكبر، ثقة أعلى", rd_table: "اعرض الأرقام", rd_subject: "الموضوع", rd_decision: "القرار",
+    rd_note: "{action}. الأولوية {p}، الجاهزية {f}، الثقة {c}.",
+    feasibility: "الجاهزية",
+    sc_title: "كيف قُدّرت", sc_priority: "الأولوية", sc_feasibility: "الجاهزية",
+    sc_weights: "لكلٍّ منها الوزن نفسه: {w}.", sc_ease: "السهولة هي 6 ناقص الصعوبة، وهي هنا {d}.",
+    dim_relevance: "الصلة بالمقرر", dim_impact: "الأثر", dim_educational_value: "القيمة التعليمية", dim_market_relevance: "الطلب في السوق",
+    dim_maturity: "النضج", dim_prerequisites: "المتطلبات السابقة", dim_ease: "السهولة",
+    prov_measured: "مقيس", prov_judged: "مقدَّر", prov_default: "افتراضي",
+    immature: "غير مستقر بعد", im_note: "نضج {n} أو أقل: تحت المراقبة حتى يستقر بما يكفي للتدريس.",
+    cn_note: "مقروءة من مصدر الأدوات نفسها، بمقارنة أحدث إصدار بأحدث نسخة تسمح بها تثبيتات المقرر: {list}. رُوجعت في {date}.",
+    cn_pair: "{tool} {latest} مقابل {course}",
+    cn_new_in: "جديد في {release}", cn_jobs_none: "لم تُحصَ الوظائف",
+    cn_notebooks: "في {n} من {read} نوتبوكاً",
+    cn_quote: "وصف الوحدة كما صدر، بالإنجليزية: {module}",
+    cn_added: "أُضيف في {release}", cn_absent: "غائب عن {release}",
+    plan_title: "الخطوات التالية",
+    by_model: "كتبه النموذج من الوقائع المؤكدة.", by_rules: "مكتوب من القواعد.",
+    ed_title: "تعديلات الخلايا", ed_in: "في", ed_across: "من",
+    ed_checked: "رُوجعت مقابل {list} في {date}.",
+    ed_cell: "الخلية {n}", ed_now: "الحالي", ed_to: "غيّرها إلى",
+    ed_gone: "لم يعد في {checked}", ed_moved: "صار في {module}، {release}",
+    ed_breaks: "يتعطل عند التثبيت اليوم", ed_runs: "يعمل كما ثُبّت",
+    ed_pin: "يثبّت {pin}", ed_unpinned: "بلا تحديد نسخة",
     mk_jobs: "وظيفة، آخر {m} أشهر", mk_installs: "تثبيت الشهر الماضي", mk_title: "هل يطلبه السوق",
     mk_few: "قلّة من أصحاب العمل يطلبونه",
     m_repeat: "مطلوب منذ", m_runs: "عدد التشغيلات المتتالية: {n}", m_moved: "نسخة جديدة منذ آخر تشغيلة",
@@ -281,7 +351,11 @@ let evFilter = "all";
 const t = (k) => T[lang][k] || k;
 const esc = (s) => String(s == null ? "" : s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
 const fill = (s, vars) => s.replace(/\{(\w+)\}/g, (_, k) => vars[k]);
-const actionClass = (a) => a === "update_existing_material" ? "update" : a === "add_new_lesson" ? "add" : "watch";
+const ACTION_CLASS = {
+  update_existing_material: "update", add_new_lesson: "add",
+  investigate_larger_change: "coursewide", add_optional_content: "optional"
+};
+const actionClass = (a) => ACTION_CLASS[a] || "watch";
 
 function renderStats() {
   const c = DATA.counts;
@@ -289,7 +363,7 @@ function renderStats() {
     { n: c.signals, l: t("s_signals") },
     { n: c.trends, l: t("s_trends") },
     { n: c.update, l: t("s_update"), cls: "good" },
-    { n: c.new_lesson, l: t("s_gaps"), cls: "gap" },
+    { n: c.new_lesson + (c.concept_lessons || 0), l: t("s_gaps"), cls: "gap" },
     { n: c.claims, l: t("s_claims") }
   ];
   document.getElementById("stats").innerHTML = cards.map((s) =>
@@ -449,11 +523,191 @@ function whyLine(item) {
    the run's Arabic when the run carries it; otherwise it shows the English
    with a note saying so, so an untranslated paragraph reads as known rather
    than as a slip of the language switch. */
+/* Arabic sentences here carry code: package names, versions, and pins such as
+   >=0.1.0,<1.0. Characters like <, > and = have no direction of their own, so
+   inside Arabic they are reordered and a pin reads backwards. Each run of Latin
+   text is isolated left to right. A sentence's own full stop, and a bracket that
+   belongs to the sentence rather than to the code, stay outside the run. */
+function arText(text) {
+  const run = /[\x21-\x7E]+(?: [\x21-\x7E]+)*/g;
+  const count = (str, ch) => str.split(ch).length - 1;
+  let html = "", at = 0, m;
+  while ((m = run.exec(text))) {
+    let body = m[0], lead = "", tail = "";
+    while (/^[(\["'.,;:!? ]/.test(body) && (body[0] !== "(" || count(body, "(") > count(body, ")"))) {
+      lead += body[0]; body = body.slice(1);
+    }
+    while (/[.,;:!?)\]"' ]$/.test(body) && (body.slice(-1) !== ")" || count(body, ")") > count(body, "("))) {
+      tail = body.slice(-1) + tail; body = body.slice(0, -1);
+    }
+    html += esc(text.slice(at, m.index)) + esc(lead)
+      + (/[A-Za-z0-9<>=*]/.test(body) ? `<span dir="ltr">${esc(body)}</span>` : esc(body)) + esc(tail);
+    at = m.index + m[0].length;
+  }
+  return html + esc(text.slice(at));
+}
+
 function agentText(en, ar, tag, cls) {
   if (lang !== "ar") return `<${tag} class="${cls}" dir="auto">${esc(en)}</${tag}>`;
-  if (ar) return `<${tag} class="${cls}" dir="rtl" lang="ar">${esc(ar)}</${tag}>`;
+  if (ar) return `<${tag} class="${cls}" dir="rtl" lang="ar">${arText(ar)}</${tag}>`;
   return `<${tag} class="${cls} in-en" dir="ltr" lang="en"><span class="en-note" dir="rtl" lang="ar">${
     esc(t("en_only"))}</span>${esc(en)}</${tag}>`;
+}
+
+/* Counted nouns. Arabic agrees with the number: one and two have forms of their
+   own, three to ten take the plural, and eleven and up the singular. */
+const COUNTED = {
+  edit: { en: ["edit", "edits"], ar: ["تعديل واحد", "تعديلان", "تعديلات", "تعديلاً"] },
+  notebook: { en: ["notebook", "notebooks"], ar: ["نوتبوك واحد", "نوتبوكان", "نوتبوكات", "نوتبوكاً"] },
+  chapter: { en: ["chapter", "chapters"], ar: ["فصل واحد", "فصلان", "فصول", "فصلاً"] },
+  tool: { en: ["tool", "tools"], ar: ["أداة واحدة", "أداتان", "أدوات", "أداة"] },
+  concept: { en: ["concept", "concepts"], ar: ["مفهوم واحد", "مفهومان", "مفاهيم", "مفهوماً"] }
+};
+function counted(kind, n) {
+  const w = COUNTED[kind];
+  if (lang !== "ar") return `${n} ${n === 1 ? w.en[0] : w.en[1]}`;
+  if (n === 1) return w.ar[0];
+  if (n === 2) return w.ar[1];
+  return `${n} ${n >= 3 && n <= 10 ? w.ar[2] : w.ar[3]}`;
+}
+const breaksText = (n) => lang === "ar"
+  ? `يتعطل منها ${n} عند التثبيت اليوم` : `${n} break${n === 1 ? "s" : ""} on today's install`;
+
+/* The steps come first in a card: the chip says what to do, the steps say how,
+   and the evidence follows. The Arabic steps are built from the same rules,
+   step for step. */
+function planBlock(item) {
+  const ar = lang === "ar" && (item.action_plan_ar || []).length;
+  const steps = ar ? item.action_plan_ar : (item.action_plan || []);
+  if (!steps.length) return "";
+  return `<div class="plan"><span class="why-t">${esc(t("plan_title"))}</span>
+    <ol class="plan-steps"${ar ? ' lang="ar"' : ""}>${steps.map((s, i) =>
+      `<li><span class="plan-n">${i + 1}</span><span class="plan-s" dir="${ar ? "rtl" : "auto"}">${ar ? arText(s) : esc(s)}</span></li>`).join("")}</ol></div>`;
+}
+
+/* One named edit: the cell, the line as it is, the line to write instead, why,
+   and where that was checked. A line that breaks on today's install carries
+   the alert hue; the replacement carries gold, because it was found at a
+   release tag. */
+function editRow(e) {
+  const ar = lang === "ar" && e.reason_ar;
+  const link = (url, text) => url
+    ? `<a href="${esc(url)}" target="_blank" rel="noopener" dir="auto">${esc(text)}</a>` : `<span dir="auto">${esc(text)}</span>`;
+  const gone = e.checked ? link(e.evidence_url, fill(t("ed_gone"), { checked: e.checked })) : "";
+  const moved = (e.moved_to || []).map((m) => link(m.url, fill(t("ed_moved"), { module: m.module, release: m.release }))).join("");
+  return `<li class="ed" data-breaks="${e.runs_as_pinned === false}">
+    <span class="ed-cell">${esc(fill(t("ed_cell"), { n: e.cell }))}</span>
+    <div class="ed-diff">
+      <span class="ed-k">${esc(t("ed_now"))}</span><code class="ed-old" dir="ltr">${esc(e.current)}</code>
+      <span class="ed-k">${esc(t("ed_to"))}</span><code class="ed-new" dir="ltr">${esc(e.proposed)}</code>
+    </div>
+    <p class="ed-reason"${ar ? ' lang="ar" dir="rtl"' : ' dir="auto"'}>${ar ? arText(e.reason_ar) : esc(e.reason)}</p>
+    ${gone || moved ? `<div class="ed-links">${gone}${moved}</div>` : ""}
+  </li>`;
+}
+
+/* The concrete edits. They can run to dozens across a whole course, so they
+   fold twice: by chapter, then by notebook. A chapter holding a line that
+   breaks on today's install opens by default, so the urgent ones are in view
+   the moment the list is. */
+function editsBlock(item) {
+  const edits = item.edits || [];
+  if (!edits.length) return "";
+  const num = (id) => parseInt(String(id).replace(/\D/g, ""), 10) || 0;
+  const group = (list, key) => {
+    const m = new Map();
+    list.forEach((e) => { const k = key(e); if (!m.has(k)) m.set(k, []); m.get(k).push(e); });
+    return [...m.entries()];
+  };
+  const title = (id) => (DATA.chapters.find((c) => c.chapter_id === id) || {}).title || "";
+  const breaking = edits.filter((e) => e.runs_as_pinned === false).length;
+  const notebooks = new Set(edits.map((e) => e.notebook)).size;
+  const chapters = group(edits, (e) => e.chapter_id || "").sort((a, b) => num(a[0]) - num(b[0]));
+
+  const checked = DATA.material_checked || null;
+  const versions = checked ? Object.entries(checked).filter(([k]) => k !== "on").map(([k, v]) => `${k} ${v}`) : [];
+  const checkedLine = versions.length
+    ? `<p class="ed-checked">${(lang === "ar" ? arText : esc)(fill(t("ed_checked"), { list: versions.join(lang === "ar" ? "، " : ", "), date: checked.on || "" }))}</p>` : "";
+
+  const blocks = chapters.map(([id, list]) => {
+    const brk = list.filter((e) => e.runs_as_pinned === false).length;
+    const nbs = group(list, (e) => e.notebook).sort((a, b) => a[0].localeCompare(b[0])).map(([nb, rows]) => {
+      rows.sort((a, b) => a.cell - b.cell);
+      const pin = rows[0].installs;
+      const breaks = rows.some((e) => e.runs_as_pinned === false);
+      return `<div class="ed-nb">
+        <div class="ed-nb-head"><span class="ed-nb-name" dir="ltr">${esc(String(nb).replace(/^notebooks\//, ""))}</span>
+          <span class="ed-pin" dir="auto">${esc(!pin || pin === "unpinned" ? t("ed_unpinned") : fill(t("ed_pin"), { pin }))}</span>
+          <span class="ed-state" data-breaks="${breaks}">${esc(t(breaks ? "ed_breaks" : "ed_runs"))}</span></div>
+        <ol class="ed-list">${rows.map(editRow).join("")}</ol>
+      </div>`;
+    }).join("");
+    return `<details class="ed-ch"${brk ? " open" : ""}><summary>
+        <span class="cid">${esc(id)}</span><span class="ed-ch-title" dir="auto">${esc(title(id))}</span>
+        <span class="ed-ch-n">${esc(counted("edit", list.length))}</span>${brk ? `<span class="ed-brk">${esc(breaksText(brk))}</span>` : ""}
+      </summary><div class="ed-body">${nbs}</div></details>`;
+  }).join("");
+
+  return `<details class="edits"><summary>
+      <span class="why-t">${esc(t("ed_title"))}</span>
+      <span class="ed-n">${esc(counted("edit", edits.length))} ${esc(t("ed_in"))} ${esc(counted("notebook", notebooks))} ${esc(t("ed_across"))} ${esc(counted("chapter", chapters.length))}</span>
+      ${breaking ? `<span class="ed-brk">${esc(breaksText(breaking))}</span>` : ""}
+    </summary><div class="ed-body">${checkedLine}${blocks}</div></details>`;
+}
+
+/* How a card's two numbers were reached: every factor, its score, where the
+   score came from (measured, judged, or a default when nothing could be
+   measured), and the arithmetic with the weights, so the reader can check the
+   total rather than take it. */
+function scoreBlock(item) {
+  const sc = DATA.scoring;
+  if (!sc || !item.dimensions) return "";
+  const ar = lang === "ar";
+  const meter = (v) => `<span class="sc-meter" aria-hidden="true">${[1, 2, 3, 4, 5].map((k) => `<i${k <= v ? ' class="on"' : ""}></i>`).join("")}</span>`;
+  const prov = (p) => p ? `<span class="sc-prov" data-p="${esc(p)}">${esc(t("prov_" + p))}</span>` : "";
+  const row = (name, v, p, why) => `<li><span class="sc-name">${esc(name)}</span>${meter(v)}<b class="sc-v">${v}</b>${prov(p)}${why
+    ? `<p class="sc-why"${ar ? ' lang="ar" dir="rtl"' : ' dir="auto"'}>${ar ? arText(why) : esc(why)}</p>` : ""}</li>`;
+  const math = (s) => `<span class="sc-math" dir="ltr">${esc(s)}</span>`;
+
+  const weights = Object.entries(sc.priority || {});
+  const pRows = weights.map(([k]) => row(t("dim_" + k), item.dimensions[k], (item.provenance || {})[k], "")).join("");
+  const same = weights.length && weights.every(([, w]) => w === weights[0][1]);
+  const pMath = same
+    ? `= ${weights[0][1]} × (${weights.map(([k]) => item.dimensions[k]).join(" + ")})`
+    : "= " + weights.map(([k, w]) => `${w} × ${item.dimensions[k]}`).join(" + ");
+  const pCol = `<div class="sc-col"><div class="sc-head"><span class="why-t">${esc(t("sc_priority"))}</span>
+      <b class="sc-total">${item.priority.toFixed(2)}</b>${math(pMath)}</div>
+      <ul class="sc-rows">${pRows}</ul>
+      ${same ? `<p class="sc-note">${esc(fill(t("sc_weights"), { w: weights[0][1] }))}</p>` : ""}</div>`;
+
+  let fCol = "";
+  const f = item.factors;
+  if (f && typeof item.feasibility === "number") {
+    const why = (x) => x ? (ar ? x.why_ar || x.why : x.why) : "";
+    const diff = f.difficulty ? f.difficulty.score : null;
+    const ease = diff === null ? null : 6 - diff;
+    const parts = [f.maturity && f.maturity.score, f.prerequisites && f.prerequisites.score, ease].filter((v) => typeof v === "number");
+    const threshold = sc.feasibility && sc.feasibility.immature_at_or_below;
+    const immature = f.maturity && typeof threshold === "number" && f.maturity.score <= threshold;
+    fCol = `<div class="sc-col"><div class="sc-head"><span class="why-t">${esc(t("sc_feasibility"))}</span>
+      <b class="sc-total">${item.feasibility.toFixed(1)}</b>${math(`= (${parts.join(" + ")}) ÷ ${parts.length}`)}</div>
+      <ul class="sc-rows">
+        ${f.maturity ? row(t("dim_maturity"), f.maturity.score, f.maturity.provenance, why(f.maturity)) : ""}
+        ${f.prerequisites ? row(t("dim_prerequisites"), f.prerequisites.score, f.prerequisites.provenance, why(f.prerequisites)) : ""}
+        ${ease !== null ? row(t("dim_ease"), ease, f.difficulty.provenance, why(f.difficulty)) : ""}
+      </ul>
+      ${ease !== null ? `<p class="sc-note">${esc(fill(t("sc_ease"), { d: diff }))}</p>` : ""}
+      ${immature ? `<p class="sc-note sc-warn">${esc(fill(t("im_note"), { n: threshold }))}</p>` : ""}</div>`;
+  }
+  return `<div class="score"><span class="why-t sc-title">${esc(t("sc_title"))}</span><div class="sc-grid">${pCol}${fCol}</div></div>`;
+}
+
+/* Who wrote the explanation. The English is the model's or the rules'; the
+   Arabic is always built from the rules, so the line follows what is shown. */
+function byline(item) {
+  if (!item.rationale_by) return "";
+  const rules = (lang === "ar" && item.rationale_ar) || item.rationale_by === "rules";
+  return `<p class="byline">${esc(t(rules ? "by_rules" : "by_model"))}</p>`;
 }
 
 function memberBlock(item, showName) {
@@ -462,11 +716,16 @@ function memberBlock(item, showName) {
        <span class="chip ${actionClass(item.action)}">${esc(t(item.action))}</span>
        <span class="mprio">${esc(t("priority"))} ${item.priority.toFixed(2)}</span></div>`
     : "";
-  return `${name}${whyLine(item)}${gapLine(item)}${agentText(item.rationale, item.rationale_ar, "p", "reason")}${claimsTable(item)}`;
+  return `${name}${planBlock(item)}${editsBlock(item)}${whyLine(item)}${scoreBlock(item)}${gapLine(item)}${agentText(item.rationale, item.rationale_ar, "p", "reason")}${byline(item)}${claimsTable(item)}`;
 }
 
 function renderAct() {
-  const filters = [["all", "f_all"], ["new", "f_new"], ["update_existing_material", "f_update"], ["add_new_lesson", "f_add"], ["watch", "f_watch"]];
+  const has = (a) => DATA.items.some((i) => i.action === a);
+  const filters = [["all", "f_all"], ["new", "f_new"],
+    ...(has("investigate_larger_change") ? [["investigate_larger_change", "f_investigate"]] : []),
+    ["update_existing_material", "f_update"], ["add_new_lesson", "f_add"],
+    ...(has("add_optional_content") ? [["add_optional_content", "f_optional"]] : []),
+    ["watch", "f_watch"]];
   document.getElementById("actFilters").innerHTML = filters.map(([v, k]) =>
     `<button type="button" data-act="${v}" aria-pressed="${actFilter === v}">${esc(t(k))}</button>`).join("");
 
@@ -496,17 +755,22 @@ function renderAct() {
           ? `${esc(t("m_repeat"))} <span dir="ltr">${esc(lead.asked_since)}</span>`
           : esc(fill(t("m_runs"), { n: lead.runs_flagged }))}</span>` : "";
     const moved = lead.version_moved ? `<span class="chip moved">${esc(t("m_moved"))}</span>` : "";
-    return `<details class="card">
+    const threshold = DATA.scoring && DATA.scoring.feasibility && DATA.scoring.feasibility.immature_at_or_below;
+    const immature = g.members.some((m) => m.factors && m.factors.maturity && typeof threshold === "number"
+      && m.factors.maturity.score <= threshold)
+      ? `<span class="chip immature">${esc(t("immature"))}</span>` : "";
+    return `<details class="card" data-subjects="${esc(g.members.map((m) => m.subject).join(" "))}">
       <summary>
         <div class="row1">
           <span class="chip ${actionClass(lead.action)}">${esc(t(lead.action))}</span>
-          ${streak}
+          ${streak}${immature}
           <span class="subject">${esc(g.family)}</span>
           ${chapter}${extra}${moved}
         </div>
         <div class="meta">
           <span>${esc(t("priority"))} <b>${lead.priority.toFixed(2)}</b></span>
           <span class="bar" aria-hidden="true"><i style="width:${Math.min(100, lead.priority / 5 * 100)}%"></i></span>
+          ${typeof lead.feasibility === "number" ? `<span>${esc(t("feasibility"))} <b>${lead.feasibility.toFixed(1)}</b></span>` : ""}
           <span>${esc(t("confidence"))} <b>${lead.confidence.toFixed(2)}</b></span>
           <span><b>${g.confirmed}</b> ${esc(t("confirmed"))} · <b>${g.unverified}</b> ${esc(t("unverified"))}</span>
           <span><b>${g.signals}</b> ${esc(t("signals"))}</span>
@@ -541,6 +805,55 @@ function renderAct() {
     : `<p class="empty"><strong>${esc(t("empty_t"))}</strong><span>${esc(t("empty_b"))}</span></p>`;
 }
 
+/* Concepts the course does not teach yet: modules a tool has added since the
+   newest version the course's pins allow, read from the tools' own source. The
+   module's own description is a quote from the release, so it stays in English
+   and left to right on both pages; everything around it is translated. */
+function renderConcepts() {
+  const list = DATA.concepts || [];
+  const section = document.getElementById("concepts");
+  section.hidden = !list.length;
+  if (!list.length) return;
+
+  const checked = DATA.concepts_checked || {};
+  const pairs = Object.entries(checked).filter(([k]) => k !== "on")
+    .map(([tool, v]) => fill(t("cn_pair"), { tool, latest: v.latest, course: v.course }));
+  const note = pairs.length
+    ? fill(t("cn_note"), { list: pairs.join(lang === "ar" ? "، " : ", "), date: checked.on || "" }) : "";
+  document.getElementById("conceptsNote").innerHTML = lang === "ar" ? arText(note) : esc(note);
+
+  const link = (url, text) => url
+    ? `<a href="${esc(url)}" target="_blank" rel="noopener" dir="auto">${esc(text)}</a>` : `<span dir="auto">${esc(text)}</span>`;
+  document.getElementById("conceptList").innerHTML = list.map((k) => {
+    const added = (k.evidence || []).find((e) => e.what === "added");
+    const jobs = k.jobs === null || k.jobs === undefined
+      ? `<span>${esc(t("cn_jobs_none"))}</span>`
+      : `<span><b>${k.jobs}</b> ${esc(fill(t("mk_jobs"), { m: k.months || 3 }))}</span>`;
+    const evidence = (k.evidence || []).map((e) =>
+      link(e.url, fill(t(e.what === "added" ? "cn_added" : "cn_absent"), { release: e.release }))).join("");
+    return `<details class="card concept" data-action="${esc(k.action)}">
+      <summary>
+        <div class="row1">
+          <span class="chip ${actionClass(k.action)}">${esc(t(k.action))}</span>
+          <span class="subject">${esc(k.concept)}</span>
+          ${k.module && k.module !== k.concept ? `<span class="chip pkgs" dir="ltr">${esc(k.module)}</span>` : ""}
+        </div>
+        <div class="meta">
+          ${added ? `<span dir="auto">${esc(fill(t("cn_new_in"), { release: added.release }))}</span>` : ""}
+          ${jobs}
+          <span>${esc(fill(t("cn_notebooks"), { n: k.notebooks, read: k.notebooks_read }))}</span>
+        </div>
+      </summary>
+      <div class="body">
+        ${agentText(k.why, k.why_ar, "p", "reason")}
+        ${k.summary ? `<figure class="cq"><blockquote dir="ltr" lang="en">${esc(k.summary)}</blockquote>
+          <figcaption>${lang === "ar" ? arText(fill(t("cn_quote"), { module: k.module })) : esc(fill(t("cn_quote"), { module: k.module }))}</figcaption></figure>` : ""}
+        ${evidence ? `<div class="ed-links">${evidence}</div>` : ""}
+      </div>
+    </details>`;
+  }).join("");
+}
+
 function renderMap() {
   const byChapter = {};
   DATA.items.forEach((i) => {
@@ -558,6 +871,9 @@ function renderMap() {
     const touched = byChapter[ch.chapter_id] || [];
     const tools = ch.tools.length ? `<div class="tools">${ch.tools.map((x) => `<span class="tool">${esc(x)}</span>`).join("")}</div>` : "";
     const teaches = ch.teaches ? agentText(ch.teaches, ch.teaches_ar, "p", "teaches") : "";
+    const edits = ch.edits
+      ? `<div class="ch-edits"><span>${esc(counted("edit", ch.edits))}</span>${ch.edits_breaking
+          ? `<span class="ed-brk">${esc(breaksText(ch.edits_breaking))}</span>` : ""}</div>` : "";
     const pinned = Object.entries(ch.pins || {});
     const pins = pinned.length
       ? `<div class="pins"><span class="pinlabel">${esc(t("g_pinned"))}</span>${pinned.map(([pkg, v]) =>
@@ -580,7 +896,7 @@ function renderMap() {
     const updated = ch.last_updated ? `${esc(t("stale"))} <span dir="ltr">${esc(ch.last_updated)}</span>` : esc(t("never"));
     html += `<div class="chapter ${touched.length ? "touched" : ""}">
         <div class="ctitle"><span class="cid">${esc(ch.chapter_id)}</span><h3>${esc(ch.title)}</h3></div>
-        ${teaches}${tools}${pins}${unbound}${legacy}${list}${read}
+        ${teaches}${edits}${tools}${pins}${unbound}${legacy}${list}${read}
         <div class="stale">${updated}</div>
       </div>`;
   });
@@ -702,6 +1018,211 @@ function figure(title, caption, inner) {
   return `<figure class="viz reveal"><figcaption>${esc(title)}</figcaption><div class="cap">${esc(caption)}</div>${inner}</figure>`;
 }
 
+/* The trend radar: every subject by how much it matters (priority, up) and
+   how ready the course is to teach it (feasibility, right), split at the
+   middle of both scales. Colour and fill are the agent's decision, the same
+   pairing as the action chips: gold for an update, red for a new lesson (a red
+   ring for a change across the course), grey for watch (a grey ring for
+   optional content). Three hues is the most a scatter can carry, so the other
+   distinctions ride on fill. Dot area follows confidence. Subjects with the
+   same two scores sit side by side instead of on top of one another. Drawn at
+   the width it is shown at, and redrawn when that changes. */
+const RADAR_MARK = {
+  update_existing_material: { tone: "update", ring: false, rank: 3 },
+  add_new_lesson: { tone: "lesson", ring: false, rank: 4 },
+  investigate_larger_change: { tone: "lesson", ring: true, rank: 5 },
+  add_optional_content: { tone: "watch", ring: true, rank: 2 },
+  watch: { tone: "watch", ring: false, rank: 1 }
+};
+const radarItems = () => DATA.items.filter((i) => typeof i.feasibility === "number" && typeof i.priority === "number");
+const markOf = (a) => RADAR_MARK[a] || RADAR_MARK.watch;
+const dotR = (conf) => 6 * Math.sqrt(Math.max(0.3, Math.min(1, conf || 0.5)));
+
+function radarSvg(width) {
+  const items = radarItems();
+  const W = Math.max(300, Math.round(width || 900));
+  const narrow = W < 560;
+  const H = Math.round(Math.min(470, Math.max(320, W * (narrow ? 1.0 : 0.5))));
+  const pad = { l: 34, r: 12, t: 30, b: 42 };
+  const pw = W - pad.l - pad.r, ph = H - pad.t - pad.b;
+  const X = (v) => pad.l + ((v - 1) / 4) * pw;
+  const Y = (v) => pad.t + ((5 - v) / 4) * ph;
+  const ar = lang === "ar";
+  /* Under direction rtl an SVG text's start is its right edge, so the anchors
+     swap for Arabic to keep each label on the same side of its point. */
+  const flip = (a) => !ar || a === "middle" ? a : a === "start" ? "end" : "start";
+  const txt = (x, y, cls, anchor, s, q) => `<text class="${cls}" x="${x.toFixed(1)}" y="${y.toFixed(1)}" text-anchor="${flip(anchor)}"${q ? ` data-q="${q}"` : ""}${ar ? ' direction="rtl"' : ""}>${esc(s)}</text>`;
+
+  let grid = "";
+  for (let v = 1; v <= 5; v += 1) {
+    grid += `<line class="rd-grid" x1="${X(v)}" y1="${pad.t}" x2="${X(v)}" y2="${pad.t + ph}"/>`;
+    grid += `<line class="rd-grid" x1="${pad.l}" y1="${Y(v)}" x2="${pad.l + pw}" y2="${Y(v)}"/>`;
+    grid += `<text class="rd-tick" x="${X(v)}" y="${pad.t + ph + 15}" text-anchor="middle">${v}</text>`;
+    grid += `<text class="rd-tick" x="${pad.l - 9}" y="${Y(v) + 3.5}" text-anchor="end">${v}</text>`;
+  }
+  grid += `<line class="rd-split" x1="${X(3)}" y1="${pad.t}" x2="${X(3)}" y2="${pad.t + ph}"/>`;
+  grid += `<line class="rd-split" x1="${pad.l}" y1="${Y(3)}" x2="${pad.l + pw}" y2="${Y(3)}"/>`;
+  const q = 9;
+  grid += txt(pad.l + pw - q, pad.t + q + 8, "rd-q", "end", t("q_act"), "tr");
+  grid += txt(pad.l + q, pad.t + q + 8, "rd-q", "start", t("q_plan"), "tl");
+  grid += txt(pad.l + pw - q, pad.t + ph - q, "rd-q", "end", t("q_quick"), "br");
+  grid += txt(pad.l + q, pad.t + ph - q, "rd-q", "start", t("q_watch"), "bl");
+  grid += txt(pad.l + pw, pad.t + ph + 34, "rd-axis", "end", t("ax_x"));
+  grid += txt(pad.l, pad.t - 12, "rd-axis", "start", t("ax_y"));
+
+  const groups = new Map();
+  items.forEach((i) => {
+    const k = `${i.priority}|${i.feasibility}`;
+    if (!groups.has(k)) groups.set(k, []);
+    groups.get(k).push(i);
+  });
+  const pts = [];
+  groups.forEach((list) => {
+    list.sort((a, b) => markOf(b.action).rank - markOf(a.action).rank);
+    const n = list.length;
+    const ring = n === 1 ? 0 : 4 + n * 2.2;
+    list.forEach((it, k) => {
+      const ang = (2 * Math.PI * k) / n - Math.PI / 2;
+      pts.push({ it, r: dotR(it.confidence), cx: X(it.feasibility) + Math.cos(ang) * ring, cy: Y(it.priority) + Math.sin(ang) * ring });
+    });
+  });
+  pts.sort((a, b) => markOf(a.it.action).rank - markOf(b.it.action).rank);
+
+  const order = [...pts].sort((a, b) => b.it.priority - a.it.priority);
+  const marks = pts.map((p) => {
+    const m = markOf(p.it.action);
+    const note = fill(t("rd_note"), { action: t(p.it.action), p: p.it.priority.toFixed(2), f: p.it.feasibility.toFixed(1), c: p.it.confidence.toFixed(2) });
+    return `<g class="blip" data-tone="${m.tone}"${m.ring ? ' data-ring=""' : ""} data-p="${p.it.priority}" data-subject="${esc(p.it.subject)}" data-tip="${esc(p.it.subject)}" data-note="${esc(note)}" style="--bd:${order.indexOf(p) * 14}ms">
+      <circle class="rd-hit" cx="${p.cx.toFixed(1)}" cy="${p.cy.toFixed(1)}" r="12"/>
+      <circle class="rd-halo" cx="${p.cx.toFixed(1)}" cy="${p.cy.toFixed(1)}" r="${(p.r + 2).toFixed(2)}"/>
+      <circle class="rd-mark" cx="${p.cx.toFixed(1)}" cy="${p.cy.toFixed(1)}" r="${(m.ring ? p.r - 1 : p.r).toFixed(2)}"/></g>`;
+  }).join("");
+
+  return `<svg class="radar-svg" viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" role="img" aria-label="${esc(t("viz_radar_t"))}"
+    data-plot="${pad.l},${pad.t},${pad.l + pw},${pad.t + ph}">${grid}${marks}</svg>`;
+}
+
+function radarFigure() {
+  const items = radarItems();
+  if (!items.length) return "";
+  const minF = Math.min(...items.map((i) => i.feasibility));
+  const cap = t("viz_radar_c") + (minF > 3 ? " " + fill(t("viz_radar_empty"), { min: minF.toFixed(1) }) : "");
+  const count = (a) => items.filter((i) => i.action === a).length;
+  const keys = Object.keys(RADAR_MARK).filter((a) => count(a)).sort((a, b) => markOf(b).rank - markOf(a).rank);
+  const swatch = (m) => `<svg class="rd-key" viewBox="0 0 14 14" aria-hidden="true"><g class="blip" data-tone="${m.tone}"${m.ring ? ' data-ring=""' : ""}><circle class="rd-mark" cx="7" cy="7" r="${m.ring ? 4.2 : 5}"/></g></svg>`;
+  const legend = keys.map((a) => `<li>${swatch(markOf(a))}${esc(t(a))} <b>${count(a)}</b></li>`).join("")
+    + `<li class="rd-size"><svg class="rd-key wide" viewBox="0 0 28 14" aria-hidden="true"><g class="blip" data-tone="watch"><circle class="rd-mark" cx="6" cy="7" r="${dotR(0.5)}"/><circle class="rd-mark" cx="20" cy="7" r="${dotR(1)}"/></g></svg>${esc(t("rd_size"))}</li>`;
+  const rows = [...items].sort((a, b) => b.priority - a.priority || b.feasibility - a.feasibility).map((i) =>
+    `<tr><td><span class="ver">${esc(i.subject)}</span></td><td>${esc(t(i.action))}</td><td class="num">${i.priority.toFixed(2)}</td><td class="num">${i.feasibility.toFixed(1)}</td><td class="num">${i.confidence.toFixed(2)}</td></tr>`).join("");
+  const table = `<details class="rd-table"><summary>${esc(t("rd_table"))}</summary>
+    <table class="claims"><thead><tr><th>${esc(t("rd_subject"))}</th><th>${esc(t("rd_decision"))}</th><th>${esc(t("priority"))}</th><th>${esc(t("feasibility"))}</th><th>${esc(t("confidence"))}</th></tr></thead>
+    <tbody>${rows}</tbody></table></details>`;
+  return figure(t("viz_radar_t"), cap, `<div class="radar" id="radarHost"></div><ul class="legend rd-legend">${legend}</ul>${table}`);
+}
+
+/* Drawn at the width it is shown at. The observer watches the radar's own box,
+   so it also draws when a hidden tab is opened and the box first gets a width. */
+let radarWidth = 0;
+function drawRadar() {
+  const host = document.getElementById("radarHost");
+  if (!host) return;
+  const w = Math.round(host.clientWidth);
+  if (!w || w === radarWidth && host.firstChild) return;
+  radarWidth = w;
+  host.innerHTML = radarSvg(w);
+  labelRadar(host.querySelector("svg"));
+}
+
+/* Direct labels for the subjects that ask for something, placed after the
+   chart is drawn, from the labels' real rendered boxes: beside the dot if it
+   fits, else on another side, and not at all if nothing fits. A subject left
+   unlabelled is still in the tooltip and the table. */
+function labelRadar(svg) {
+  if (!svg) return;
+  const NS = "http://www.w3.org/2000/svg";
+  const [x0, y0, x1, y1] = svg.dataset.plot.split(",").map(Number);
+  const taken = [...svg.querySelectorAll(".blip .rd-mark")].map((c) => {
+    const r = Number(c.getAttribute("r")) + 2;
+    return { x: Number(c.getAttribute("cx")) - r, y: Number(c.getAttribute("cy")) - r, w: 2 * r, h: 2 * r };
+  });
+  const clash = (a) => taken.some((o) => a.x < o.x + o.w && o.x < a.x + a.w && a.y < o.y + o.h && o.y < a.y + a.h);
+  const boxOf = (el) => { const b = el.getBBox(); return { x: b.x - 3, y: b.y - 2, w: b.width + 6, h: b.height + 4 }; };
+  /* A quadrant's name is furniture, so it gives way to the data: moved along
+     its edge toward the middle until nothing is under it, or left out. */
+  svg.querySelectorAll(".rd-q").forEach((el) => {
+    const x = Number(el.getAttribute("x")), y = Number(el.getAttribute("y"));
+    const down = el.dataset.q[0] === "t" ? 1 : -1, inward = el.dataset.q[1] === "r" ? -1 : 1;
+    const moves = [];
+    for (let k = 0; k <= 6; k += 1) moves.push([0, down * 14 * k]);
+    for (let k = 1; k <= 6; k += 1) moves.push([inward * 16 * k, 0]);
+    const ok = moves.some(([dx, dy]) => {
+      el.setAttribute("x", (x + dx).toFixed(1));
+      el.setAttribute("y", (y + dy).toFixed(1));
+      return !clash(boxOf(el));
+    });
+    if (ok) taken.push(boxOf(el)); else el.remove();
+  });
+  svg.querySelectorAll(".rd-axis").forEach((el) => taken.push(boxOf(el)));
+  const asks = [...svg.querySelectorAll(".blip")]
+    .filter((b) => b.dataset.tone !== "watch" || b.hasAttribute("data-ring"))
+    .sort((a, b) => Number(b.dataset.p) - Number(a.dataset.p));
+  asks.forEach((blip) => {
+    const dot = blip.querySelector(".rd-mark");
+    const cx = Number(dot.getAttribute("cx")), cy = Number(dot.getAttribute("cy")), r = Number(dot.getAttribute("r")) + 5;
+    const label = document.createElementNS(NS, "text");
+    label.setAttribute("class", "rd-label");
+    label.setAttribute("direction", "ltr");
+    label.textContent = blip.dataset.subject;
+    svg.appendChild(label);
+    /* Beside the dot first; failing that, further out along the same eight
+       directions with a hairline back to the dot, the way a crowded chart is
+       labelled without covering anything. */
+    const dirs = [[1, 0], [-1, 0], [0, -1], [0, 1], [1, -1], [-1, -1], [1, 1], [-1, 1]];
+    const spots = [];
+    [0, 16, 32, 50].forEach((d) => dirs.forEach(([dx, dy]) => {
+      const len = Math.hypot(dx, dy), ux = dx / len, uy = dy / len;
+      spots.push({ d, ux, uy, x: cx + ux * (r + d), y: cy + uy * (r + d) + (dy === 0 ? 4 : dy > 0 ? 10 : -3),
+        anchor: dx > 0 ? "start" : dx < 0 ? "end" : "middle" });
+    }));
+    const spot = spots.find((s) => {
+      label.setAttribute("x", s.x.toFixed(1));
+      label.setAttribute("y", s.y.toFixed(1));
+      label.setAttribute("text-anchor", s.anchor);
+      const b = label.getBBox();
+      const box = { x: b.x - 2, y: b.y - 1, w: b.width + 4, h: b.height + 2 };
+      if (box.x < x0 || box.x + box.w > x1 || box.y < y0 || box.y + box.h > y1 || clash(box)) return false;
+      taken.push(box);
+      return true;
+    });
+    if (!spot) { label.remove(); return; }
+    if (spot.d) {
+      const leader = document.createElementNS(NS, "line");
+      leader.setAttribute("class", "rd-leader");
+      leader.setAttribute("x1", (cx + spot.ux * (r - 3)).toFixed(1));
+      leader.setAttribute("y1", (cy + spot.uy * (r - 3)).toFixed(1));
+      leader.setAttribute("x2", (cx + spot.ux * (r + spot.d - 3)).toFixed(1));
+      leader.setAttribute("y2", (cy + spot.uy * (r + spot.d - 3)).toFixed(1));
+      svg.insertBefore(leader, svg.querySelector(".blip"));
+    }
+  });
+}
+const radarWatch = "ResizeObserver" in window ? new ResizeObserver(() => drawRadar()) : null;
+
+/* A dot on the radar opens its card, even when it sits in the watch group. */
+document.addEventListener("click", (e) => {
+  const blip = e.target.closest(".radar .blip[data-subject]");
+  if (!blip) return;
+  if (actFilter !== "all") { actFilter = "all"; renderAct(); }
+  const subject = blip.dataset.subject;
+  const card = [...document.querySelectorAll("#actList details.card")]
+    .find((el) => (el.dataset.subjects || "").split(" ").includes(subject));
+  if (!card) return;
+  const group = card.closest("details.watchgroup");
+  if (group) group.open = true;
+  card.open = true;
+  window.scrollTo({ top: card.getBoundingClientRect().top + window.scrollY - 70, behavior: "instant" });
+});
+
 function renderActViz() {
   const c = DATA.counts;
   const evidence = stacked([
@@ -718,8 +1239,13 @@ function renderActViz() {
     hatched: k === "pypi"
   })), srcTotal);
   document.getElementById("actViz").innerHTML =
+    radarFigure() +
     figure(t("viz_ev_t").replace("82", c.claims), t("viz_ev_c"), evidence) +
     figure(t("viz_src_t"), t("viz_src_c"), sources);
+  radarWidth = 0;
+  drawRadar();
+  const host = document.getElementById("radarHost");
+  if (radarWatch && host) { radarWatch.disconnect(); radarWatch.observe(host); }
 }
 
 function majorOf(version) {
@@ -799,9 +1325,13 @@ function renderMapViz() {
 }
 
 const tip = document.getElementById("tip");
+/* Hiding waits a moment, so crossing the gap between two cells keeps the tip up
+   and moves it, rather than fading it out and back in on every gap. */
+let tipHide = 0;
 document.addEventListener("pointerover", (e) => {
-  const cell = e.target.closest(".cell[data-tip]");
+  const cell = e.target.closest("[data-tip]");
   if (!cell) return;
+  clearTimeout(tipHide);
   tip.innerHTML = `<b>${esc(cell.dataset.tip)}</b>${esc(cell.dataset.note)}`;
   const r = cell.getBoundingClientRect();
   tip.setAttribute("data-show", "");
@@ -810,7 +1340,9 @@ document.addEventListener("pointerover", (e) => {
   tip.style.left = `${Math.min(window.innerWidth - w - 10, Math.max(10, r.left + r.width / 2 - w / 2))}px`;
 });
 document.addEventListener("pointerout", (e) => {
-  if (e.target.closest(".cell[data-tip]")) tip.removeAttribute("data-show");
+  if (!e.target.closest("[data-tip]")) return;
+  clearTimeout(tipHide);
+  tipHide = setTimeout(() => tip.removeAttribute("data-show"), 90);
 });
 
 let observer = null;
@@ -820,7 +1352,7 @@ let observer = null;
 const REVEAL_TARGETS = [
   "#stats > .stat",
   "#actViz > .viz", "#mapViz > .viz",
-  "#actList > .card", "#actList > .watchgroup", "#evList > .card",
+  "#actList > .card", "#actList > .watchgroup", "#conceptList > .card", "#evList > .card",
   "#mapList > .chapter", "#mapList > .weekhead",
   "#runNotes > .note"
 ];
@@ -843,7 +1375,7 @@ function revealWhatIsOnScreen() {
     if (r.bottom < 0 || r.top > window.innerHeight) return;
     el.classList.add("in");
     const n = el.querySelector && el.querySelector(".n[data-count]");
-    if (n) countUp(n);
+    if (n && !el.classList.contains("quick")) countUp(n);
     setTimeout(() => el.classList.add("settled"), 1400);
   });
 }
@@ -860,14 +1392,20 @@ const safetyTimer = setInterval(() => {
 let firstRevealPass = true;
 
 function markReveals() {
-  REVEAL_TARGETS.forEach((selector) => {
-    document.querySelectorAll(selector).forEach((el) => {
-      if (!el.classList.contains("reveal") && !el.classList.contains("in")) {
-        el.classList.add("reveal");
-        if (!firstRevealPass) el.classList.add("quick");
-      }
-    });
-  });
+  /* Each block is judged once, the first time a pass sees it. Blocks seen on
+     the first pass get the full entrance; anything created later is a
+     re-render and gets the quick fade, including the charts, whose markup
+     ships with the reveal class already and so used to slip past this check
+     and replay their whole draw-in. */
+  const judge = (el) => {
+    if (el.dataset.seen) return;
+    el.dataset.seen = "1";
+    if (el.classList.contains("in")) return;
+    el.classList.add("reveal");
+    if (!firstRevealPass) el.classList.add("quick");
+  };
+  REVEAL_TARGETS.forEach((selector) => document.querySelectorAll(selector).forEach(judge));
+  document.querySelectorAll("main .reveal").forEach(judge);
   /* Segments inside a stacked bar draw one after another, and cells in the
      coverage grid land in course order, so each gets its own offset off the
      block's delay rather than a second observer. */
@@ -889,7 +1427,7 @@ function countUp(el) {
     el.textContent = String(target);
     return;
   }
-  const duration = 1100;
+  const duration = 600;
   const start = performance.now();
   /* The zero is written inside the first frame, never before it. Frame
      callbacks are frozen while a tab is in the background, and setting the
@@ -913,7 +1451,9 @@ function revealOnScroll() {
   const finish = (el) => {
     el.classList.add("in");
     const n = el.querySelector?.(".n[data-count]");
-    if (n) countUp(n);
+    /* A re-rendered figure already shows its real value; counting it up
+       again from zero would be the replay the quick fade exists to avoid. */
+    if (n && !el.classList.contains("quick")) countUp(n);
     setTimeout(() => el.classList.add("settled"), 1400);
   };
 
@@ -977,6 +1517,7 @@ function stageResults(log) {
 }
 
 let elapsedTimer = null;
+let dismissTimer = 0;
 let runStartedAt = 0;
 let shownThoughts = 0;
 
@@ -1133,9 +1674,17 @@ function setProgress(state) {
   if (!state || state.state === "idle") { panel.hidden = true; return; }
 
   const wasHidden = panel.hidden;
+  /* A run starting while the last one's panel is still up is a new run, not
+     more of the old one: it cancels the pending dismissal and starts its own
+     clock and thoughts. */
+  const restarted = state.state === "running" && panel.dataset.state !== "running";
+  if (state.state === "running") {
+    clearTimeout(dismissTimer);
+    panel.classList.remove("leaving");
+  }
   panel.hidden = false;
   panel.dataset.state = state.state;
-  if (wasHidden) {
+  if (wasHidden || restarted) {
     panel.classList.remove("leaving");
     runStartedAt = Date.now();
     shownThoughts = 0;
@@ -1164,11 +1713,19 @@ function setProgress(state) {
   if (state.state === "running") elapsedTimer = setInterval(tick, 1000);
 }
 
+/* One pending dismissal at a time. A timer left over from the last run used to
+   fire into the next one: the exit played on a live panel, the panel hid, and
+   the next poll brought it back with its clock and thoughts reset. */
 function dismissProgress(delay) {
-  setTimeout(() => {
+  clearTimeout(dismissTimer);
+  dismissTimer = setTimeout(() => {
     const panel = document.getElementById("runpanel");
     panel.classList.add("leaving");
-    setTimeout(() => { panel.hidden = true; panel.classList.remove("leaving"); }, 340);
+    dismissTimer = setTimeout(() => {
+      if (!panel.classList.contains("leaving")) return;
+      panel.hidden = true;
+      panel.classList.remove("leaving");
+    }, 220);
   }, delay);
 }
 
@@ -1189,12 +1746,18 @@ async function loadRuns(preferred) {
   await loadRun(target);
 }
 
+/* The page dims while the next run is fetched, not after it has arrived. The
+   dim waits a beat before it starts (main.wrap.swapping), so a fetch that
+   comes straight back never flickers. */
 async function loadRun(runId) {
-  DATA = await api(`/api/run/${runId}`);
   const main = document.querySelector("main.wrap");
   main.classList.add("swapping");
-  renderAll();
-  requestAnimationFrame(() => main.classList.remove("swapping"));
+  try {
+    DATA = await api(`/api/run/${runId}`);
+    renderAll();
+  } finally {
+    main.classList.remove("swapping");
+  }
 }
 
 let polling = false;
@@ -1273,17 +1836,34 @@ function renderAll() {
 
   const c = DATA.counts;
   document.getElementById("runid").textContent = DATA.run_id;
+  /* New lessons are tools plus concepts. The data keeps the two apart; the page
+     adds them, and says which is which, rather than counting both against a
+     "not taught" total that means packages only. A run with no concept lessons
+     keeps the old ending. */
+  const lessons = c.new_lesson + (c.concept_lessons || 0);
+  const split = c.concept_lessons && c.new_lesson
+    ? (lang === "ar"
+      ? `، ${counted("tool", c.new_lesson)} و${counted("concept", c.concept_lessons)}`
+      : `, ${counted("tool", c.new_lesson)} and ${counted("concept", c.concept_lessons)}`)
+    : c.not_taught > c.new_lesson && !c.concept_lessons
+      ? (lang === "ar" ? ` من أصل ${c.not_taught} لا يغطيها المنهج` : `, of ${c.not_taught} the course does not teach`)
+      : "";
   document.getElementById("headline").innerHTML = lang === "ar"
-    ? `${c.trends} موضوعاً هذا الأسبوع، منها <b>${c.update}</b> تستدعي تحديث فصل، و<span class="warn">${c.new_lesson}</span> تستحق درساً جديداً${c.not_taught > c.new_lesson ? ` من أصل ${c.not_taught} لا يغطيها المنهج` : ""}.`
-    : `${c.trends} subjects this week: <b>${c.update}</b> call for a chapter update and <span class="warn">${c.new_lesson}</span> deserve a new lesson${c.not_taught > c.new_lesson ? `, of ${c.not_taught} the course does not teach` : ""}.`;
-  /* The tab counts what it asks of the reader, the same number the headline
-     gives, not every row it lists: most rows are on the watch list. */
-  document.getElementById("c_act").textContent = DATA.items.filter((i) => i.action !== "watch").length;
+    ? `${c.trends} موضوعاً هذا الأسبوع، منها <b>${c.update}</b> تستدعي تحديث فصل،${c.investigate
+        ? ` و<b>${c.investigate}</b> تستدعي تغييراً على مستوى المقرر،` : ""} و<span class="warn">${lessons}</span> تستحق درساً جديداً${split}.`
+    : `${c.trends} subjects this week: <b>${c.update}</b> ${c.update === 1 ? "calls" : "call"} for a chapter update${c.investigate
+        ? `, <b>${c.investigate}</b> for a <span class="nw">course-wide change</span>,` : ""} and <span class="warn">${lessons}</span> ${lessons === 1 ? "deserves" : "deserve"} a new lesson${split}.`;
+  /* The tab counts what it asks of the reader, the same numbers the headline
+     gives, not every row it lists: most rows are on the watch list, and
+     optional content asks nothing. */
+  const asks = ["update_existing_material", "investigate_larger_change", "add_new_lesson"];
+  document.getElementById("c_act").textContent =
+    DATA.items.filter((i) => asks.includes(i.action)).length + (c.concept_lessons || 0);
   document.getElementById("c_map").textContent = c.chapters;
   document.getElementById("c_ev").textContent = c.claims;
   document.getElementById("foot").textContent = fill(t("foot"), { run: DATA.run_id });
 
-  renderStats(); renderActViz(); renderAct(); renderMapViz(); renderMap(); renderEvidence(); renderRun();
+  renderStats(); renderActViz(); renderAct(); renderConcepts(); renderMapViz(); renderMap(); renderEvidence(); renderRun();
   requestAnimationFrame(revealOnScroll);
 }
 
@@ -1302,10 +1882,38 @@ document.querySelector("nav.tabs").addEventListener("click", (e) => {
   document.querySelectorAll(".panel").forEach((p) => {
     if (p.dataset.panel === b.dataset.tab) p.setAttribute("data-open", ""); else p.removeAttribute("data-open");
   });
+  if (window.placeTabInk) window.placeTabInk();
   requestAnimationFrame(revealOnScroll);
+  /* A jump, not a glide. A click that drags the page thousands of pixels
+     reads as slow; the panel's own entrance already carries the change. */
   const top = document.querySelector("main.wrap").offsetTop - 12;
-  if (window.scrollY > top) window.scrollTo({ top, behavior: "smooth" });
+  if (window.scrollY > top) window.scrollTo({ top, behavior: "instant" });
 });
+
+/* The tab underline is one mark that travels to the chosen tab. It is placed
+   and sized by transform from the tab's own box, and measured again whenever a
+   tab changes width: a language switch, a count arriving, the face loading. */
+(function initTabInk() {
+  const nav = document.querySelector("nav.tabs");
+  if (!nav || !("ResizeObserver" in window)) return;
+  const ink = document.createElement("span");
+  ink.className = "tab-ink";
+  ink.setAttribute("aria-hidden", "true");
+  nav.appendChild(ink);
+  const INSET = 10;
+  function place() {
+    const on = nav.querySelector('button[aria-selected="true"]');
+    if (!on) return;
+    const width = Math.max(0, on.offsetWidth - INSET * 2);
+    ink.style.transform = `translateX(${on.offsetLeft + INSET}px) scaleX(${width})`;
+    /* The first placement lands without travelling in from the corner. */
+    if (!ink.hasAttribute("data-ready")) requestAnimationFrame(() => ink.setAttribute("data-ready", ""));
+  }
+  const watch = new ResizeObserver(place);
+  nav.querySelectorAll("button[data-tab]").forEach((b) => watch.observe(b));
+  window.placeTabInk = place;
+  place();
+})();
 
 document.getElementById("actFilters").addEventListener("click", (e) => {
   const b = e.target.closest("button[data-act]");
@@ -1343,14 +1951,46 @@ function paintThemeButton() {
   try { saved = localStorage.getItem("ata_theme"); } catch (err) {}
   if (saved === "light") document.documentElement.dataset.theme = "light";
   document.getElementById("btnTheme").addEventListener("click", () => {
-    const toLight = document.documentElement.dataset.theme !== "light";
-    if (toLight) document.documentElement.dataset.theme = "light";
-    else delete document.documentElement.dataset.theme;
-    try { localStorage.setItem("ata_theme", toLight ? "light" : "dark"); } catch (err) {}
-    paintThemeButton();
-    if (window.FIELD) window.FIELD.retheme();
+    const flip = () => {
+      const toLight = document.documentElement.dataset.theme !== "light";
+      if (toLight) document.documentElement.dataset.theme = "light";
+      else delete document.documentElement.dataset.theme;
+      try { localStorage.setItem("ata_theme", toLight ? "light" : "dark"); } catch (err) {}
+      paintThemeButton();
+      if (window.FIELD) window.FIELD.retheme();
+    };
+    /* The plate change is the largest jump on the page, every surface at once,
+       so where the browser can, the old page fades into the new one instead of
+       being swapped in a single frame. Where it cannot, the swap stays instant.
+       A click during a fade ends that fade and starts the next one from where
+       the page is, so rapid clicks never leave it half-changed. A fade that is
+       skipped, by that second click or by a hidden tab, rejects its ready
+       promise; the switch itself still happens, so that is caught rather than
+       reported as an error. */
+    if (document.startViewTransition) document.startViewTransition(flip).ready.catch(() => {});
+    else flip();
   });
   paintThemeButton();
+})();
+
+/* ------------------------------------------------------------------- mark -- */
+
+/* Arriving on the brand with a mouse sends a spark along the constellation,
+   star to star, to the gold one, which flares as it lands: the agent reading
+   the week's points and arriving at the one that matters. A class runs it
+   rather than :hover, so leaving early does not cut it off halfway and
+   arriving again mid-trace does not restart it. A touch has no hover to
+   answer, and a tap on the brand opens the opening screen instead. */
+(function initMark() {
+  const brand = document.getElementById("btnAbout");
+  const found = brand && brand.querySelector(".mk-found");
+  if (!found) return;
+  brand.addEventListener("pointerenter", (e) => {
+    if (e.pointerType === "touch" || brand.classList.contains("tracing")) return;
+    if (matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    brand.classList.add("tracing");
+  });
+  found.addEventListener("animationend", () => brand.classList.remove("tracing"));
 })();
 
 /* --------------------------------------------------------------- overture -- */
@@ -1364,7 +2004,17 @@ function paintThemeButton() {
   const steps = Array.from(ov.querySelectorAll("[data-step]"))
     .sort((a, b) => Number(a.dataset.step) - Number(b.dataset.step));
 
+  /* Every open and every close is a generation. A timer left from an earlier
+     one checks the number and stands down, so replaying the opening straight
+     after closing it cannot be undone by the old close. */
+  let generation = 0;
+  let timers = [];
+  const later = (fn, ms) => { timers.push(setTimeout(fn, ms)); };
+  const clearTimers = () => { timers.forEach(clearTimeout); timers = []; };
+
   function play() {
+    clearTimers();
+    generation += 1;
     settled = false;
     ov.hidden = false;
     ov.classList.remove("closing");
@@ -1372,27 +2022,35 @@ function paintThemeButton() {
       steps.forEach((el) => el.classList.add("in"));
     } else {
       steps.forEach((el) => el.classList.remove("in"));
-      steps.forEach((el, i) => setTimeout(() => el.classList.add("in"), 150 + i * 145));
+      steps.forEach((el, i) => later(() => el.classList.add("in"), 150 + i * 145));
     }
-    setTimeout(() => document.getElementById("ovEnter").focus({ preventScroll: true }), 700);
+    later(() => document.getElementById("ovEnter").focus({ preventScroll: true }), 700);
   }
 
-  /* Two things race to finish the close: the transition, and a timeout that
-     covers the case where the transition never fires because the tab is
-     hidden. Whichever wins, the body runs once. */
+  /* Two things race to finish the close: the overture's own opacity
+     transition, and a timeout for a tab that is hidden and never runs it. Only
+     the overture's opacity counts. transitionend bubbles, and the button's
+     press, or a line still arriving, used to end the close early and cut the
+     fade off partway. */
   function close() {
+    clearTimers();
     try { localStorage.setItem("ata_seen", "1"); } catch (err) {}
+    const mine = ++generation;
     ov.classList.add("closing");
     const done = () => {
-      if (settled) return;
+      ov.removeEventListener("transitionend", onEnd);
+      if (settled || mine !== generation) return;
       settled = true;
       ov.hidden = true;
       ov.classList.remove("closing");
       const run = document.getElementById("btnRun");
       if (run && !run.disabled) run.focus({ preventScroll: true });
     };
-    ov.addEventListener("transitionend", done, { once: true });
-    setTimeout(done, 460);
+    const onEnd = (event) => {
+      if (event.target === ov && event.propertyName === "opacity") done();
+    };
+    ov.addEventListener("transitionend", onEnd);
+    later(done, 340);
   }
 
   /* Every way out is wired before anything decides whether to open. An early
@@ -1414,16 +2072,37 @@ function paintThemeButton() {
 
 /* The week's traffic, drifting behind the bulletin. It is the corpus this run
    read rather than wallpaper: when a claim is confirmed the field marks a point
-   and lets it fade. Cost is kept low by drawing the two deep layers once into
-   offscreen tiles and then only translating them, so a frame is four drawImage
-   calls plus the few near sparks that actually flicker. */
+   and lets it fade.
+
+   The two deep layers are drawn once each, into canvases of their own a little
+   larger than the window, and a CSS animation drifts them, so the compositor
+   moves them and no script runs for them per frame. This canvas keeps only the
+   near sparks and the confirmation marks, drawn about thirty times a second,
+   which is plenty for points that brighten and fade over seconds. Drawing
+   everything on every frame cost two full-screen blits a frame for layers that
+   move two to five pixels a second. */
 window.FIELD = (function createField() {
   const canvas = document.getElementById("field");
   if (!canvas) return { resolve() {}, retheme() {} };
   const ctx = canvas.getContext("2d", { alpha: true });
   const still = matchMedia("(prefers-reduced-motion: reduce)");
+  const FRAME_MS = 1000 / 30;
 
-  let w = 0, h = 0, dpr = 1, layers = [], near = [], marks = [];
+  /* pad is how far past the window each layer reaches, and so how far it can
+     move: each circles on a radius of nine tenths of its pad. */
+  const deep = [
+    { count: 210, maxR: 0.75, alpha: 0.40, pad: 70 },
+    { count: 85, maxR: 1.2, alpha: 0.55, pad: 150 }
+  ].map((spec, i) => {
+    const el = document.createElement("canvas");
+    el.className = "field-deep field-deep-" + (i + 1);
+    el.setAttribute("aria-hidden", "true");
+    el.style.setProperty("--pad", spec.pad + "px");
+    canvas.parentNode.insertBefore(el, canvas);
+    return Object.assign({ el }, spec);
+  });
+
+  let w = 0, h = 0, dpr = 1, near = [], marks = [];
   let raf = 0, last = 0, clock = 0, running = false;
   let hue = { cool: "240,236,228", warm: "232,181,75" };
 
@@ -1436,19 +2115,26 @@ window.FIELD = (function createField() {
     hue = { cool: cool || hue.cool, warm: warm || hue.warm };
   }
 
-  function tile(count, maxR, alpha, colour) {
-    const c = document.createElement("canvas");
-    c.width = Math.max(1, Math.floor(w * dpr));
-    c.height = Math.max(1, Math.floor(h * dpr));
-    const g = c.getContext("2d");
-    g.scale(dpr, dpr);
-    for (let i = 0; i < count; i += 1) {
-      g.beginPath();
-      g.arc(Math.random() * w, Math.random() * h, rand(maxR * 0.35, maxR), 0, Math.PI * 2);
-      g.fillStyle = "rgba(" + colour + "," + rand(alpha * 0.4, alpha).toFixed(3) + ")";
-      g.fill();
+  function paintDeep(scale) {
+    for (const L of deep) {
+      /* pad on every side, because a circle reaches every side. */
+      const W = w + L.pad * 2, H = h + L.pad * 2;
+      L.el.style.width = W + "px";
+      L.el.style.height = H + "px";
+      L.el.width = Math.max(1, Math.floor(W * dpr));
+      L.el.height = Math.max(1, Math.floor(H * dpr));
+      const g = L.el.getContext("2d");
+      g.setTransform(dpr, 0, 0, dpr, 0, 0);
+      g.clearRect(0, 0, W, H);
+      /* Same density as the window, over the larger area. */
+      const n = Math.round(L.count * scale * (W * H) / (w * h));
+      for (let i = 0; i < n; i += 1) {
+        g.beginPath();
+        g.arc(Math.random() * W, Math.random() * H, rand(L.maxR * 0.35, L.maxR), 0, Math.PI * 2);
+        g.fillStyle = "rgba(" + hue.cool + "," + rand(L.alpha * 0.4, L.alpha).toFixed(3) + ")";
+        g.fill();
+      }
     }
-    return c;
   }
 
   function build() {
@@ -1456,10 +2142,7 @@ window.FIELD = (function createField() {
     /* Density follows area, so a wide monitor does not look emptier than a
        laptop, and is capped so a very large screen does not pay for it. */
     const scale = Math.min(2.2, Math.max(0.5, (w * h) / (1440 * 900)));
-    layers = [
-      { t: tile(Math.round(210 * scale), 0.75, 0.40, hue.cool), speed: 2.2, x: 0, y: 0 },
-      { t: tile(Math.round(85 * scale), 1.2, 0.55, hue.cool), speed: 5.2, x: 0, y: 0 }
-    ];
+    paintDeep(scale);
     near = [];
     const n = Math.round(58 * Math.min(1.6, scale));
     for (let i = 0; i < n; i += 1) {
@@ -1480,19 +2163,11 @@ window.FIELD = (function createField() {
     canvas.height = Math.floor(h * dpr);
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     build();
-    draw(0);
+    draw();
   }
 
-  function draw(dt) {
+  function draw() {
     ctx.clearRect(0, 0, w, h);
-    for (const L of layers) {
-      if (dt) { L.x += L.speed * dt / 1000; L.y -= L.speed * 0.34 * dt / 1000; }
-      const ox = ((L.x % w) + w) % w, oy = ((L.y % h) + h) % h;
-      ctx.drawImage(L.t, ox - w, oy - h, w, h);
-      ctx.drawImage(L.t, ox, oy - h, w, h);
-      ctx.drawImage(L.t, ox - w, oy, w, h);
-      ctx.drawImage(L.t, ox, oy, w, h);
-    }
     for (const s of near) {
       const a = still.matches ? s.base : s.base + Math.sin(clock * s.rate + s.phase) * 0.22;
       ctx.beginPath();
@@ -1525,16 +2200,17 @@ window.FIELD = (function createField() {
 
   function frame(now) {
     if (!running) return;
-    const dt = Math.min(64, now - (last || now));
-    last = now; clock += dt / 1000;
-    draw(dt);
     raf = requestAnimationFrame(frame);
+    if (last && now - last < FRAME_MS - 1) return;
+    const dt = Math.min(100, now - (last || now));
+    last = now; clock += dt / 1000;
+    draw();
   }
   function start() { if (running || document.hidden) return; running = true; last = 0; raf = requestAnimationFrame(frame); }
   function stop() { running = false; if (raf) cancelAnimationFrame(raf); raf = 0; }
   /* Under reduced motion the field is still drawn, because it is content, but
-     it is drawn once and then left alone. */
-  function apply() { stop(); if (still.matches) draw(0); else start(); }
+     it is drawn once and then left alone; the deep layers stop in the CSS. */
+  function apply() { stop(); if (still.matches) draw(); else start(); }
 
   let timer = 0;
   window.addEventListener("resize", () => { clearTimeout(timer); timer = setTimeout(resize, 140); });
@@ -1548,9 +2224,9 @@ window.FIELD = (function createField() {
     resolve() {
       if (marks.length > 6) marks.shift();
       marks.push({ x: rand(w * 0.08, w * 0.92), y: rand(h * 0.06, h * 0.5), born: performance.now() });
-      if (!running && !still.matches) start(); else if (still.matches) draw(0);
+      if (!running && !still.matches) start(); else if (still.matches) draw();
     },
-    retheme() { build(); draw(0); }
+    retheme() { build(); draw(); }
   };
 })();
 
@@ -1582,15 +2258,18 @@ function markConfirmations(n) {
   const still = () => matchMedia("(prefers-reduced-motion: reduce)").matches;
 
   document.addEventListener("click", (event) => {
-    const summary = event.target.closest("details.card > summary, details.watchgroup > summary");
+    const summary = event.target.closest(
+      "details.card > summary, details.watchgroup > summary, details.edits > summary, details.ed-ch > summary");
     if (!summary) return;
     const card = summary.parentElement;
-    const body = card.querySelector(":scope > .body, :scope > .wg-body");
+    const body = card.querySelector(":scope > .body, :scope > .wg-body, :scope > .ed-body");
     if (!body) return;
 
     /* Reduced motion keeps the native toggle: the state change still reads,
-       it simply does not travel. */
-    if (still()) return;
+       it simply does not travel. So does the keyboard. Enter and Space arrive
+       as a click with no pointer detail, and a keyboard action should answer
+       at once. */
+    if (still() || event.detail === 0) return;
 
     event.preventDefault();
 
@@ -1615,10 +2294,13 @@ function markConfirmations(n) {
     const target = opening ? fullHeight : 0;
 
     body.style.overflow = "hidden";
+    /* The content rises a few pixels as it opens. Reversing mid-flight skips
+       the lift, so a turned-around close does not jump. */
+    const lift = opening && !prev ? "translateY(6px)" : "none";
     const animation = body.animate(
       [
-        { height: startHeight + "px", opacity: opening ? 0.35 : 1 },
-        { height: target + "px", opacity: opening ? 1 : 0 }
+        { height: startHeight + "px", opacity: opening ? 0.35 : 1, transform: lift },
+        { height: target + "px", opacity: opening ? 1 : 0, transform: "none" }
       ],
       { duration: opening ? OPEN_MS : SHUT_MS, easing: EASE, fill: "both" }
     );
