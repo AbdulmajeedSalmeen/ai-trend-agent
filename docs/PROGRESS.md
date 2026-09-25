@@ -1,6 +1,6 @@
 # Progress
 
-**Last updated:** 2026-09-22 · **Tests:** 372 passing · **Demo:** Sep 26–27
+**Last updated:** 2026-09-25 · **Tests:** 372 passing · **Demo:** Sep 26–27
 
 The pipeline runs end to end, live, from a web app. A model reads, judges and writes;
 rules still decide what counts as confirmed, and every recommendation now carries the reason
@@ -123,6 +123,14 @@ behind it: what the chapter teaches, which version it runs, and how far the rele
 
 ## Standup log
 
+### 2026-09-25
+- The 19 install counts pypistats had refused are in: all 37 subjects now carry one, filled one
+  request at a time. Scores and recommendations replayed from the frozen run's own files, no
+  network: no action changed, transformers moved from priority 3.75 to 4.00, and the writer
+  kept 35 of 37 sentences.
+- The frozen run is complete and matches what the docs say. Demo is Sep 26/27; the run was
+  collected on Sep 22.
+
 ### 2026-09-22
 - The lead asked for what a teacher actually needs: not "a package moved", but what to change
   in the material itself. Measured the brief against the build: no recommendation carried the
@@ -159,8 +167,7 @@ behind it: what the chapter teaches, which version it runs, and how far the rele
   They score feasibility beside the priority, not inside it, and maturity gates the decision:
   langchain-typesafe, pre-releases only, went from "update C8" to watch.
 - Frozen run replaced by `run_20260922T102800Z`. pypistats refused during collection; install
-  counts were filled afterwards for 18 of 37 subjects, the rest stay unmeasured. To do on
-  Sep 23: fill the remaining 19, replay from score, check the numbers here still hold.
+  counts were filled afterwards for 18 of 37 subjects, the rest left unmeasured for the day.
 
 ### 2026-09-21
 - The lead asked the right question: would a school care about every langchain version, or

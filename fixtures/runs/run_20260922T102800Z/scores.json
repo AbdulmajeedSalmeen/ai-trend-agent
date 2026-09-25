@@ -268,7 +268,7 @@
     "dimensions": {
       "relevance": 2,
       "impact": 3,
-      "educational_value": 2,
+      "educational_value": 1,
       "market_relevance": 3,
       "maturity": 4,
       "prerequisites": 4,
@@ -283,7 +283,7 @@
       "prerequisites": "measured",
       "difficulty": "measured"
     },
-    "priority": 2.5,
+    "priority": 2.25,
     "changes": {
       "breaking": 0,
       "deprecation": 0,
@@ -680,7 +680,7 @@
       "relevance": 2,
       "impact": 5,
       "educational_value": 5,
-      "market_relevance": 3,
+      "market_relevance": 4,
       "maturity": 4,
       "prerequisites": 5,
       "difficulty": 2
@@ -694,7 +694,7 @@
       "prerequisites": "measured",
       "difficulty": "measured"
     },
-    "priority": 3.75,
+    "priority": 4.0,
     "changes": {
       "breaking": 4,
       "deprecation": 0,
@@ -717,7 +717,7 @@
       "subject": "transformers",
       "job_term": "hugging face",
       "jobs": 8,
-      "downloads": null,
+      "downloads": 92159431,
       "months": 3
     },
     "feasibility": 4.3,
@@ -786,7 +786,7 @@
       "subject": "openai-python",
       "job_term": "openai",
       "jobs": 19,
-      "downloads": null,
+      "downloads": 283218318,
       "months": 3
     },
     "feasibility": 5.0,
@@ -919,7 +919,7 @@
       "subject": "pydantic-ai",
       "job_term": "pydantic",
       "jobs": 1,
-      "downloads": null,
+      "downloads": 5300338,
       "months": 3
     },
     "feasibility": 3.3,
@@ -1049,7 +1049,7 @@
       "subject": "llama_index",
       "job_term": "llamaindex",
       "jobs": 5,
-      "downloads": null,
+      "downloads": 3115339,
       "months": 3
     },
     "feasibility": 3.3,
@@ -1382,7 +1382,7 @@
       "relevance": 2,
       "impact": 2,
       "educational_value": 1,
-      "market_relevance": 2,
+      "market_relevance": 3,
       "maturity": 4,
       "prerequisites": 3,
       "difficulty": 1
@@ -1396,13 +1396,13 @@
       "prerequisites": "default",
       "difficulty": "measured"
     },
-    "priority": 1.75,
+    "priority": 2.0,
     "changes": {},
     "market": {
       "subject": "langsmith",
       "job_term": "langsmith",
       "jobs": 2,
-      "downloads": null,
+      "downloads": 78342994,
       "months": 3
     },
     "feasibility": 4.0,
@@ -1432,7 +1432,7 @@
       "relevance": 2,
       "impact": 2,
       "educational_value": 1,
-      "market_relevance": 1,
+      "market_relevance": 3,
       "maturity": 4,
       "prerequisites": 4,
       "difficulty": 1
@@ -1446,13 +1446,13 @@
       "prerequisites": "measured",
       "difficulty": "measured"
     },
-    "priority": 1.5,
+    "priority": 2.0,
     "changes": {},
     "market": {
       "subject": "litellm",
       "job_term": "litellm",
       "jobs": 0,
-      "downloads": null,
+      "downloads": 88904794,
       "months": 3
     },
     "feasibility": 4.3,
@@ -1487,7 +1487,7 @@
       "relevance": 2,
       "impact": 2,
       "educational_value": 1,
-      "market_relevance": 2,
+      "market_relevance": 3,
       "maturity": 5,
       "prerequisites": 3,
       "difficulty": 1
@@ -1501,13 +1501,13 @@
       "prerequisites": "default",
       "difficulty": "measured"
     },
-    "priority": 1.75,
+    "priority": 2.0,
     "changes": {},
     "market": {
       "subject": "matplotlib",
       "job_term": "matplotlib",
       "jobs": 1,
-      "downloads": null,
+      "downloads": 155772963,
       "months": 3
     },
     "feasibility": 4.3,
@@ -1557,7 +1557,7 @@
       "subject": "openai",
       "job_term": "openai",
       "jobs": 19,
-      "downloads": null,
+      "downloads": 283218318,
       "months": 3
     },
     "feasibility": 5.0,
@@ -1609,7 +1609,7 @@
       "subject": "pandas",
       "job_term": "pandas",
       "jobs": 10,
-      "downloads": null,
+      "downloads": 524669947,
       "months": 3
     },
     "feasibility": 4.3,
@@ -1659,7 +1659,7 @@
       "subject": "peft",
       "job_term": "peft",
       "jobs": 1,
-      "downloads": null,
+      "downloads": 8063014,
       "months": 3
     },
     "feasibility": 4.7,
@@ -1691,7 +1691,7 @@
       "relevance": 2,
       "impact": 2,
       "educational_value": 1,
-      "market_relevance": 1,
+      "market_relevance": 3,
       "maturity": 5,
       "prerequisites": 3,
       "difficulty": 1
@@ -1705,13 +1705,13 @@
       "prerequisites": "default",
       "difficulty": "measured"
     },
-    "priority": 1.5,
+    "priority": 2.0,
     "changes": {},
     "market": {
       "subject": "pypdf",
       "job_term": "pypdf",
       "jobs": 0,
-      "downloads": null,
+      "downloads": 116089379,
       "months": 3
     },
     "feasibility": 4.3,
@@ -1741,7 +1741,7 @@
       "relevance": 2,
       "impact": 2,
       "educational_value": 1,
-      "market_relevance": 1,
+      "market_relevance": 3,
       "maturity": 5,
       "prerequisites": 3,
       "difficulty": 1
@@ -1755,13 +1755,13 @@
       "prerequisites": "default",
       "difficulty": "measured"
     },
-    "priority": 1.5,
+    "priority": 2.0,
     "changes": {},
     "market": {
       "subject": "rapidfuzz",
       "job_term": "rapidfuzz",
       "jobs": 0,
-      "downloads": null,
+      "downloads": 117530110,
       "months": 3
     },
     "feasibility": 4.3,
@@ -1791,7 +1791,7 @@
       "relevance": 2,
       "impact": 2,
       "educational_value": 1,
-      "market_relevance": 2,
+      "market_relevance": 3,
       "maturity": 5,
       "prerequisites": 3,
       "difficulty": 1
@@ -1805,13 +1805,13 @@
       "prerequisites": "default",
       "difficulty": "measured"
     },
-    "priority": 1.75,
+    "priority": 2.0,
     "changes": {},
     "market": {
       "subject": "scikit-learn",
       "job_term": "scikit-learn",
       "jobs": 1,
-      "downloads": null,
+      "downloads": 183826718,
       "months": 3
     },
     "feasibility": 4.3,
@@ -1841,7 +1841,7 @@
       "relevance": 2,
       "impact": 2,
       "educational_value": 1,
-      "market_relevance": 2,
+      "market_relevance": 3,
       "maturity": 5,
       "prerequisites": 4,
       "difficulty": 1
@@ -1855,13 +1855,13 @@
       "prerequisites": "measured",
       "difficulty": "measured"
     },
-    "priority": 1.75,
+    "priority": 2.0,
     "changes": {},
     "market": {
       "subject": "sentence-transformers",
       "job_term": "sentence-transformers",
       "jobs": 3,
-      "downloads": null,
+      "downloads": 22718928,
       "months": 3
     },
     "feasibility": 4.7,
@@ -1896,7 +1896,7 @@
       "relevance": 5,
       "impact": 2,
       "educational_value": 1,
-      "market_relevance": 2,
+      "market_relevance": 3,
       "maturity": 5,
       "prerequisites": 5,
       "difficulty": 1
@@ -1910,13 +1910,13 @@
       "prerequisites": "measured",
       "difficulty": "measured"
     },
-    "priority": 2.5,
+    "priority": 2.75,
     "changes": {},
     "market": {
       "subject": "streamlit",
       "job_term": "streamlit",
       "jobs": 3,
-      "downloads": null,
+      "downloads": 19110072,
       "months": 3
     },
     "feasibility": 5.0,
@@ -1968,7 +1968,7 @@
       "subject": "torch",
       "job_term": "pytorch",
       "jobs": 19,
-      "downloads": null,
+      "downloads": 59904898,
       "months": 3
     },
     "feasibility": 4.3,
@@ -2018,7 +2018,7 @@
       "subject": "torchvision",
       "job_term": "pytorch",
       "jobs": 19,
-      "downloads": null,
+      "downloads": 15858954,
       "months": 3
     },
     "feasibility": 4.0,
@@ -2048,7 +2048,7 @@
       "relevance": 2,
       "impact": 2,
       "educational_value": 1,
-      "market_relevance": 1,
+      "market_relevance": 3,
       "maturity": 5,
       "prerequisites": 3,
       "difficulty": 1
@@ -2062,13 +2062,13 @@
       "prerequisites": "default",
       "difficulty": "measured"
     },
-    "priority": 1.5,
+    "priority": 2.0,
     "changes": {},
     "market": {
       "subject": "tqdm",
       "job_term": "tqdm",
       "jobs": 0,
-      "downloads": null,
+      "downloads": 400710508,
       "months": 3
     },
     "feasibility": 4.3,
@@ -2098,7 +2098,7 @@
       "relevance": 2,
       "impact": 2,
       "educational_value": 1,
-      "market_relevance": 2,
+      "market_relevance": 3,
       "maturity": 4,
       "prerequisites": 3,
       "difficulty": 1
@@ -2107,18 +2107,18 @@
       "relevance": "measured",
       "impact": "default",
       "educational_value": "judged",
-      "market_relevance": "default",
+      "market_relevance": "measured",
       "maturity": "measured",
       "prerequisites": "default",
       "difficulty": "measured"
     },
-    "priority": 1.75,
+    "priority": 2.0,
     "changes": {},
     "market": {
       "subject": "unstructured",
       "job_term": null,
       "jobs": null,
-      "downloads": null,
+      "downloads": 2488273,
       "months": 3
     },
     "feasibility": 4.0,

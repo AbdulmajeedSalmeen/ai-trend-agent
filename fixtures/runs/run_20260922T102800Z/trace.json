@@ -2,28 +2,28 @@
   "summary": {
     "run_id": "run_20260922T102800Z",
     "model": "openai:gpt-4o-mini, groq-fast:qwen/qwen3.8-27b, groq:openai/gpt-oss-120b",
-    "started_at": "2026-09-22T11:30:18.038020+00:00",
+    "started_at": "2026-09-25T15:58:19.388821+00:00",
     "calls": 74,
     "failed_calls": 0,
-    "tokens": 31541,
+    "tokens": 31615,
     "budget": 400000,
-    "budget_spent": 0.0789,
+    "budget_spent": 0.079,
     "cost_usd": 0.0,
     "priced": false,
     "halted": null,
-    "ms": 131442.9,
-    "slowest_ms": 8364.7,
+    "ms": 121750.4,
+    "slowest_ms": 8663.9,
     "by_stage": {
       "score": {
         "calls": 37,
-        "ms": 71147.1,
-        "tokens": 10492,
+        "ms": 64453.2,
+        "tokens": 10502,
         "failed": 0
       },
       "act": {
         "calls": 37,
-        "ms": 60295.8,
-        "tokens": 21049,
+        "ms": 57297.2,
+        "tokens": 21113,
         "failed": 0
       }
     }
@@ -32,16 +32,16 @@
     {
       "stage": "score",
       "action": "judge_value@openai",
-      "ms": 1647.4,
+      "ms": 2610.5,
       "tokens_in": 233,
-      "tokens_out": 29,
+      "tokens_out": 33,
       "ok": true,
       "note": ""
     },
     {
       "stage": "score",
       "action": "judge_value@openai",
-      "ms": 1231.5,
+      "ms": 873.6,
       "tokens_in": 244,
       "tokens_out": 30,
       "ok": true,
@@ -50,7 +50,7 @@
     {
       "stage": "score",
       "action": "judge_value@openai",
-      "ms": 1182.3,
+      "ms": 872.1,
       "tokens_in": 245,
       "tokens_out": 23,
       "ok": true,
@@ -59,7 +59,7 @@
     {
       "stage": "score",
       "action": "judge_value@openai",
-      "ms": 1348.2,
+      "ms": 1083.3,
       "tokens_in": 245,
       "tokens_out": 23,
       "ok": true,
@@ -68,16 +68,16 @@
     {
       "stage": "score",
       "action": "judge_value@openai",
-      "ms": 1079.4,
+      "ms": 7814.3,
       "tokens_in": 248,
-      "tokens_out": 18,
+      "tokens_out": 21,
       "ok": true,
       "note": ""
     },
     {
       "stage": "score",
       "action": "judge_value@openai",
-      "ms": 1058.9,
+      "ms": 1143.9,
       "tokens_in": 242,
       "tokens_out": 23,
       "ok": true,
@@ -86,7 +86,7 @@
     {
       "stage": "score",
       "action": "judge_value@openai",
-      "ms": 903.4,
+      "ms": 1465.3,
       "tokens_in": 258,
       "tokens_out": 23,
       "ok": true,
@@ -95,7 +95,7 @@
     {
       "stage": "score",
       "action": "judge_value@openai",
-      "ms": 1190.0,
+      "ms": 976.1,
       "tokens_in": 263,
       "tokens_out": 28,
       "ok": true,
@@ -104,7 +104,7 @@
     {
       "stage": "score",
       "action": "judge_value@openai",
-      "ms": 1041.7,
+      "ms": 7855.9,
       "tokens_in": 321,
       "tokens_out": 17,
       "ok": true,
@@ -113,16 +113,16 @@
     {
       "stage": "score",
       "action": "judge_value@openai",
-      "ms": 8364.7,
+      "ms": 1107.0,
       "tokens_in": 278,
-      "tokens_out": 20,
+      "tokens_out": 29,
       "ok": true,
       "note": ""
     },
     {
       "stage": "score",
       "action": "judge_value@openai",
-      "ms": 1094.9,
+      "ms": 982.6,
       "tokens_in": 300,
       "tokens_out": 22,
       "ok": true,
@@ -131,25 +131,25 @@
     {
       "stage": "score",
       "action": "judge_value@openai",
-      "ms": 2345.6,
+      "ms": 1080.2,
       "tokens_in": 296,
-      "tokens_out": 24,
+      "tokens_out": 28,
       "ok": true,
       "note": ""
     },
     {
       "stage": "score",
       "action": "judge_value@openai",
-      "ms": 4351.7,
+      "ms": 1110.5,
       "tokens_in": 317,
-      "tokens_out": 30,
+      "tokens_out": 31,
       "ok": true,
       "note": ""
     },
     {
       "stage": "score",
       "action": "judge_value@openai",
-      "ms": 4060.6,
+      "ms": 896.3,
       "tokens_in": 332,
       "tokens_out": 34,
       "ok": true,
@@ -158,53 +158,8 @@
     {
       "stage": "score",
       "action": "judge_value@openai",
-      "ms": 8294.3,
+      "ms": 807.8,
       "tokens_in": 286,
-      "tokens_out": 25,
-      "ok": true,
-      "note": ""
-    },
-    {
-      "stage": "score",
-      "action": "judge_value@openai",
-      "ms": 1139.6,
-      "tokens_in": 246,
-      "tokens_out": 28,
-      "ok": true,
-      "note": ""
-    },
-    {
-      "stage": "score",
-      "action": "judge_value@openai",
-      "ms": 1078.1,
-      "tokens_in": 235,
-      "tokens_out": 18,
-      "ok": true,
-      "note": ""
-    },
-    {
-      "stage": "score",
-      "action": "judge_value@openai",
-      "ms": 1205.3,
-      "tokens_in": 240,
-      "tokens_out": 22,
-      "ok": true,
-      "note": ""
-    },
-    {
-      "stage": "score",
-      "action": "judge_value@openai",
-      "ms": 1311.9,
-      "tokens_in": 235,
-      "tokens_out": 18,
-      "ok": true,
-      "note": ""
-    },
-    {
-      "stage": "score",
-      "action": "judge_value@openai",
-      "ms": 2167.7,
-      "tokens_in": 239,
       "tokens_out": 24,
       "ok": true,
       "note": ""
@@ -212,7 +167,52 @@
     {
       "stage": "score",
       "action": "judge_value@openai",
-      "ms": 1497.0,
+      "ms": 2077.7,
+      "tokens_in": 246,
+      "tokens_out": 31,
+      "ok": true,
+      "note": ""
+    },
+    {
+      "stage": "score",
+      "action": "judge_value@openai",
+      "ms": 883.8,
+      "tokens_in": 235,
+      "tokens_out": 22,
+      "ok": true,
+      "note": ""
+    },
+    {
+      "stage": "score",
+      "action": "judge_value@openai",
+      "ms": 961.3,
+      "tokens_in": 240,
+      "tokens_out": 21,
+      "ok": true,
+      "note": ""
+    },
+    {
+      "stage": "score",
+      "action": "judge_value@openai",
+      "ms": 984.9,
+      "tokens_in": 235,
+      "tokens_out": 18,
+      "ok": true,
+      "note": ""
+    },
+    {
+      "stage": "score",
+      "action": "judge_value@openai",
+      "ms": 862.1,
+      "tokens_in": 239,
+      "tokens_out": 21,
+      "ok": true,
+      "note": ""
+    },
+    {
+      "stage": "score",
+      "action": "judge_value@openai",
+      "ms": 803.3,
       "tokens_in": 233,
       "tokens_out": 19,
       "ok": true,
@@ -221,25 +221,25 @@
     {
       "stage": "score",
       "action": "judge_value@openai",
-      "ms": 1675.0,
+      "ms": 1092.6,
       "tokens_in": 242,
-      "tokens_out": 24,
+      "tokens_out": 16,
       "ok": true,
       "note": ""
     },
     {
       "stage": "score",
       "action": "judge_value@openai",
-      "ms": 991.9,
+      "ms": 1070.9,
       "tokens_in": 300,
-      "tokens_out": 23,
+      "tokens_out": 22,
       "ok": true,
       "note": ""
     },
     {
       "stage": "score",
       "action": "judge_value@openai",
-      "ms": 874.3,
+      "ms": 975.0,
       "tokens_in": 315,
       "tokens_out": 22,
       "ok": true,
@@ -248,7 +248,7 @@
     {
       "stage": "score",
       "action": "judge_value@openai",
-      "ms": 1118.7,
+      "ms": 842.4,
       "tokens_in": 233,
       "tokens_out": 23,
       "ok": true,
@@ -257,7 +257,7 @@
     {
       "stage": "score",
       "action": "judge_value@openai",
-      "ms": 996.0,
+      "ms": 974.4,
       "tokens_in": 302,
       "tokens_out": 22,
       "ok": true,
@@ -266,7 +266,7 @@
     {
       "stage": "score",
       "action": "judge_value@openai",
-      "ms": 919.4,
+      "ms": 761.7,
       "tokens_in": 235,
       "tokens_out": 20,
       "ok": true,
@@ -275,16 +275,16 @@
     {
       "stage": "score",
       "action": "judge_value@openai",
-      "ms": 1048.9,
+      "ms": 1031.8,
       "tokens_in": 238,
-      "tokens_out": 21,
+      "tokens_out": 18,
       "ok": true,
       "note": ""
     },
     {
       "stage": "score",
       "action": "judge_value@openai",
-      "ms": 920.2,
+      "ms": 1820.1,
       "tokens_in": 295,
       "tokens_out": 22,
       "ok": true,
@@ -293,16 +293,16 @@
     {
       "stage": "score",
       "action": "judge_value@openai",
-      "ms": 1086.6,
+      "ms": 1601.0,
       "tokens_in": 237,
-      "tokens_out": 20,
+      "tokens_out": 19,
       "ok": true,
       "note": ""
     },
     {
       "stage": "score",
       "action": "judge_value@openai",
-      "ms": 1046.7,
+      "ms": 867.6,
       "tokens_in": 241,
       "tokens_out": 23,
       "ok": true,
@@ -311,7 +311,7 @@
     {
       "stage": "score",
       "action": "judge_value@openai",
-      "ms": 7880.9,
+      "ms": 3972.7,
       "tokens_in": 254,
       "tokens_out": 22,
       "ok": true,
@@ -320,43 +320,43 @@
     {
       "stage": "score",
       "action": "judge_value@openai",
-      "ms": 989.7,
+      "ms": 7941.8,
       "tokens_in": 251,
-      "tokens_out": 20,
+      "tokens_out": 22,
       "ok": true,
       "note": ""
     },
     {
       "stage": "score",
       "action": "judge_value@openai",
-      "ms": 893.0,
+      "ms": 903.8,
       "tokens_in": 235,
-      "tokens_out": 25,
+      "tokens_out": 22,
       "ok": true,
       "note": ""
     },
     {
       "stage": "score",
       "action": "judge_value@openai",
-      "ms": 1286.9,
+      "ms": 1154.4,
       "tokens_in": 235,
-      "tokens_out": 25,
+      "tokens_out": 21,
       "ok": true,
       "note": ""
     },
     {
       "stage": "score",
       "action": "judge_value@openai",
-      "ms": 855.9,
+      "ms": 1029.7,
       "tokens_in": 235,
-      "tokens_out": 17,
+      "tokens_out": 22,
       "ok": true,
       "note": ""
     },
     {
       "stage": "score",
       "action": "judge_value@openai",
-      "ms": 968.8,
+      "ms": 1160.8,
       "tokens_in": 263,
       "tokens_out": 18,
       "ok": true,
@@ -365,25 +365,25 @@
     {
       "stage": "act",
       "action": "write_reason@openai",
-      "ms": 1390.8,
+      "ms": 1149.7,
       "tokens_in": 519,
-      "tokens_out": 52,
+      "tokens_out": 50,
       "ok": true,
       "note": ""
     },
     {
       "stage": "act",
       "action": "write_reason@openai",
-      "ms": 1312.4,
+      "ms": 1156.7,
       "tokens_in": 532,
-      "tokens_out": 51,
+      "tokens_out": 62,
       "ok": true,
       "note": ""
     },
     {
       "stage": "act",
       "action": "write_reason@openai",
-      "ms": 1371.6,
+      "ms": 1467.3,
       "tokens_in": 511,
       "tokens_out": 52,
       "ok": true,
@@ -392,7 +392,7 @@
     {
       "stage": "act",
       "action": "write_reason@openai",
-      "ms": 1369.6,
+      "ms": 1159.3,
       "tokens_in": 526,
       "tokens_out": 52,
       "ok": true,
@@ -401,53 +401,8 @@
     {
       "stage": "act",
       "action": "write_reason@openai",
-      "ms": 1284.9,
+      "ms": 1263.0,
       "tokens_in": 516,
-      "tokens_out": 56,
-      "ok": true,
-      "note": ""
-    },
-    {
-      "stage": "act",
-      "action": "write_reason@openai",
-      "ms": 4346.4,
-      "tokens_in": 540,
-      "tokens_out": 56,
-      "ok": true,
-      "note": ""
-    },
-    {
-      "stage": "act",
-      "action": "write_reason@openai",
-      "ms": 1449.9,
-      "tokens_in": 554,
-      "tokens_out": 51,
-      "ok": true,
-      "note": ""
-    },
-    {
-      "stage": "act",
-      "action": "write_reason@openai",
-      "ms": 1525.3,
-      "tokens_in": 554,
-      "tokens_out": 55,
-      "ok": true,
-      "note": ""
-    },
-    {
-      "stage": "act",
-      "action": "write_reason@openai",
-      "ms": 1352.8,
-      "tokens_in": 621,
-      "tokens_out": 61,
-      "ok": true,
-      "note": ""
-    },
-    {
-      "stage": "act",
-      "action": "write_reason@openai",
-      "ms": 1081.1,
-      "tokens_in": 562,
       "tokens_out": 53,
       "ok": true,
       "note": ""
@@ -455,17 +410,17 @@
     {
       "stage": "act",
       "action": "write_reason@openai",
-      "ms": 1142.0,
-      "tokens_in": 521,
-      "tokens_out": 52,
+      "ms": 1160.4,
+      "tokens_in": 540,
+      "tokens_out": 61,
       "ok": true,
       "note": ""
     },
     {
       "stage": "act",
       "action": "write_reason@openai",
-      "ms": 1240.8,
-      "tokens_in": 557,
+      "ms": 1103.9,
+      "tokens_in": 554,
       "tokens_out": 51,
       "ok": true,
       "note": ""
@@ -473,17 +428,53 @@
     {
       "stage": "act",
       "action": "write_reason@openai",
-      "ms": 1212.8,
+      "ms": 1762.6,
       "tokens_in": 554,
-      "tokens_out": 57,
+      "tokens_out": 54,
       "ok": true,
       "note": ""
     },
     {
       "stage": "act",
       "action": "write_reason@openai",
-      "ms": 1373.5,
-      "tokens_in": 571,
+      "ms": 1248.1,
+      "tokens_in": 621,
+      "tokens_out": 64,
+      "ok": true,
+      "note": ""
+    },
+    {
+      "stage": "act",
+      "action": "write_reason@openai",
+      "ms": 1082.6,
+      "tokens_in": 562,
+      "tokens_out": 55,
+      "ok": true,
+      "note": ""
+    },
+    {
+      "stage": "act",
+      "action": "write_reason@openai",
+      "ms": 1108.1,
+      "tokens_in": 530,
+      "tokens_out": 54,
+      "ok": true,
+      "note": ""
+    },
+    {
+      "stage": "act",
+      "action": "write_reason@openai",
+      "ms": 1057.3,
+      "tokens_in": 566,
+      "tokens_out": 52,
+      "ok": true,
+      "note": ""
+    },
+    {
+      "stage": "act",
+      "action": "write_reason@openai",
+      "ms": 1095.2,
+      "tokens_in": 554,
       "tokens_out": 58,
       "ok": true,
       "note": ""
@@ -491,7 +482,16 @@
     {
       "stage": "act",
       "action": "write_reason@openai",
-      "ms": 4746.2,
+      "ms": 1544.3,
+      "tokens_in": 580,
+      "tokens_out": 47,
+      "ok": true,
+      "note": ""
+    },
+    {
+      "stage": "act",
+      "action": "write_reason@openai",
+      "ms": 1088.6,
       "tokens_in": 539,
       "tokens_out": 56,
       "ok": true,
@@ -500,34 +500,34 @@
     {
       "stage": "act",
       "action": "write_reason@openai",
-      "ms": 1251.1,
-      "tokens_in": 466,
-      "tokens_out": 55,
+      "ms": 1016.8,
+      "tokens_in": 475,
+      "tokens_out": 60,
       "ok": true,
       "note": ""
     },
     {
       "stage": "act",
       "action": "write_reason@openai",
-      "ms": 1084.0,
+      "ms": 1070.1,
       "tokens_in": 469,
-      "tokens_out": 45,
+      "tokens_out": 48,
       "ok": true,
       "note": ""
     },
     {
       "stage": "act",
       "action": "write_reason@openai",
-      "ms": 1384.4,
+      "ms": 2084.2,
       "tokens_in": 480,
-      "tokens_out": 67,
+      "tokens_out": 42,
       "ok": true,
       "note": ""
     },
     {
       "stage": "act",
       "action": "write_reason@openai",
-      "ms": 1410.7,
+      "ms": 1224.6,
       "tokens_in": 449,
       "tokens_out": 58,
       "ok": true,
@@ -536,7 +536,7 @@
     {
       "stage": "act",
       "action": "write_reason@openai",
-      "ms": 1372.8,
+      "ms": 1238.2,
       "tokens_in": 502,
       "tokens_out": 55,
       "ok": true,
@@ -545,7 +545,7 @@
     {
       "stage": "act",
       "action": "write_reason@openai",
-      "ms": 1397.4,
+      "ms": 1377.5,
       "tokens_in": 477,
       "tokens_out": 51,
       "ok": true,
@@ -554,107 +554,8 @@
     {
       "stage": "act",
       "action": "write_reason@openai",
-      "ms": 1345.7,
+      "ms": 2206.7,
       "tokens_in": 500,
-      "tokens_out": 65,
-      "ok": true,
-      "note": ""
-    },
-    {
-      "stage": "act",
-      "action": "write_reason@openai",
-      "ms": 4632.3,
-      "tokens_in": 531,
-      "tokens_out": 56,
-      "ok": true,
-      "note": ""
-    },
-    {
-      "stage": "act",
-      "action": "write_reason@openai",
-      "ms": 1511.5,
-      "tokens_in": 552,
-      "tokens_out": 54,
-      "ok": true,
-      "note": ""
-    },
-    {
-      "stage": "act",
-      "action": "write_reason@openai",
-      "ms": 2535.3,
-      "tokens_in": 456,
-      "tokens_out": 59,
-      "ok": true,
-      "note": ""
-    },
-    {
-      "stage": "act",
-      "action": "write_reason@openai",
-      "ms": 1314.6,
-      "tokens_in": 532,
-      "tokens_out": 61,
-      "ok": true,
-      "note": ""
-    },
-    {
-      "stage": "act",
-      "action": "write_reason@openai",
-      "ms": 1273.0,
-      "tokens_in": 475,
-      "tokens_out": 55,
-      "ok": true,
-      "note": ""
-    },
-    {
-      "stage": "act",
-      "action": "write_reason@openai",
-      "ms": 1307.2,
-      "tokens_in": 484,
-      "tokens_out": 51,
-      "ok": true,
-      "note": ""
-    },
-    {
-      "stage": "act",
-      "action": "write_reason@openai",
-      "ms": 1381.3,
-      "tokens_in": 548,
-      "tokens_out": 62,
-      "ok": true,
-      "note": ""
-    },
-    {
-      "stage": "act",
-      "action": "write_reason@openai",
-      "ms": 1278.9,
-      "tokens_in": 488,
-      "tokens_out": 58,
-      "ok": true,
-      "note": ""
-    },
-    {
-      "stage": "act",
-      "action": "write_reason@openai",
-      "ms": 1719.1,
-      "tokens_in": 492,
-      "tokens_out": 65,
-      "ok": true,
-      "note": ""
-    },
-    {
-      "stage": "act",
-      "action": "write_reason@openai",
-      "ms": 1128.8,
-      "tokens_in": 502,
-      "tokens_out": 56,
-      "ok": true,
-      "note": ""
-    },
-    {
-      "stage": "act",
-      "action": "write_reason@openai",
-      "ms": 1167.2,
-      "tokens_in": 493,
       "tokens_out": 49,
       "ok": true,
       "note": ""
@@ -662,8 +563,26 @@
     {
       "stage": "act",
       "action": "write_reason@openai",
-      "ms": 1226.5,
-      "tokens_in": 477,
+      "ms": 1159.2,
+      "tokens_in": 533,
+      "tokens_out": 47,
+      "ok": true,
+      "note": ""
+    },
+    {
+      "stage": "act",
+      "action": "write_reason@openai",
+      "ms": 1078.0,
+      "tokens_in": 554,
+      "tokens_out": 62,
+      "ok": true,
+      "note": ""
+    },
+    {
+      "stage": "act",
+      "action": "write_reason@openai",
+      "ms": 1084.2,
+      "tokens_in": 458,
       "tokens_out": 53,
       "ok": true,
       "note": ""
@@ -671,8 +590,71 @@
     {
       "stage": "act",
       "action": "write_reason@openai",
-      "ms": 1600.6,
-      "tokens_in": 477,
+      "ms": 1123.7,
+      "tokens_in": 541,
+      "tokens_out": 62,
+      "ok": true,
+      "note": ""
+    },
+    {
+      "stage": "act",
+      "action": "write_reason@openai",
+      "ms": 2208.0,
+      "tokens_in": 484,
+      "tokens_out": 52,
+      "ok": true,
+      "note": ""
+    },
+    {
+      "stage": "act",
+      "action": "write_reason@openai",
+      "ms": 1061.8,
+      "tokens_in": 493,
+      "tokens_out": 52,
+      "ok": true,
+      "note": ""
+    },
+    {
+      "stage": "act",
+      "action": "write_reason@openai",
+      "ms": 8663.9,
+      "tokens_in": 550,
+      "tokens_out": 51,
+      "ok": true,
+      "note": ""
+    },
+    {
+      "stage": "act",
+      "action": "write_reason@openai",
+      "ms": 2216.2,
+      "tokens_in": 490,
+      "tokens_out": 49,
+      "ok": true,
+      "note": ""
+    },
+    {
+      "stage": "act",
+      "action": "write_reason@openai",
+      "ms": 1518.7,
+      "tokens_in": 494,
+      "tokens_out": 61,
+      "ok": true,
+      "note": ""
+    },
+    {
+      "stage": "act",
+      "action": "write_reason@openai",
+      "ms": 1280.9,
+      "tokens_in": 504,
+      "tokens_out": 64,
+      "ok": true,
+      "note": ""
+    },
+    {
+      "stage": "act",
+      "action": "write_reason@openai",
+      "ms": 2352.2,
+      "tokens_in": 495,
       "tokens_out": 53,
       "ok": true,
       "note": ""
@@ -680,17 +662,35 @@
     {
       "stage": "act",
       "action": "write_reason@openai",
-      "ms": 1407.9,
-      "tokens_in": 482,
-      "tokens_out": 55,
+      "ms": 1113.9,
+      "tokens_in": 486,
+      "tokens_out": 59,
       "ok": true,
       "note": ""
     },
     {
       "stage": "act",
       "action": "write_reason@openai",
-      "ms": 1365.4,
-      "tokens_in": 496,
+      "ms": 1319.8,
+      "tokens_in": 486,
+      "tokens_out": 61,
+      "ok": true,
+      "note": ""
+    },
+    {
+      "stage": "act",
+      "action": "write_reason@openai",
+      "ms": 1191.2,
+      "tokens_in": 484,
+      "tokens_out": 45,
+      "ok": true,
+      "note": ""
+    },
+    {
+      "stage": "act",
+      "action": "write_reason@openai",
+      "ms": 1260.3,
+      "tokens_in": 502,
       "tokens_out": 48,
       "ok": true,
       "note": ""

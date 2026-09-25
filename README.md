@@ -138,7 +138,7 @@ instead. The run log says so when it happens.
 | Import lines to change | 85 in 39 notebooks, checked against langchain 1.4.2; 3 break today |
 | Concepts the course does not teach | MCP, a new lesson: 20 job posts, 0 of 89 notebooks |
 | Teaching feasibility | 3.3 to 5.0 of 5; 2 tools watched as not stable enough to teach |
-| Written reasons | 33 of 37 by the model, checked for the facts; 4 by the rules |
+| Written reasons | 35 of 37 by the model, checked for the facts; 2 by the rules |
 | Chapters with something to act on | 11 of 25 |
 | Tests | 372, none of which calls a model or the network |
 
