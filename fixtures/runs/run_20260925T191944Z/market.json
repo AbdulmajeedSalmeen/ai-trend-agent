@@ -3,126 +3,133 @@
     "subject": "accelerate",
     "job_term": null,
     "jobs": null,
-    "downloads": 17221282,
+    "downloads": 17248651,
     "months": 3
   },
   {
     "subject": "anthropic-sdk-python",
     "job_term": "anthropic",
     "jobs": 12,
-    "downloads": 138780642,
+    "downloads": 138623823,
     "months": 3
   },
   {
     "subject": "bitsandbytes",
     "job_term": "bitsandbytes",
     "jobs": 0,
-    "downloads": 3484123,
+    "downloads": 3405273,
     "months": 3
   },
   {
     "subject": "crewai",
     "job_term": "crewai",
     "jobs": 4,
-    "downloads": 4913081,
+    "downloads": 2435828,
     "months": 3
   },
   {
     "subject": "ddgs",
     "job_term": null,
     "jobs": null,
-    "downloads": 5056373,
+    "downloads": 4986839,
     "months": 3
   },
   {
     "subject": "dspy",
     "job_term": "dspy",
     "jobs": 0,
-    "downloads": 4885309,
+    "downloads": 5110995,
     "months": 3
   },
   {
     "subject": "evidently",
     "job_term": null,
     "jobs": null,
-    "downloads": 856903,
+    "downloads": 818220,
     "months": 3
   },
   {
     "subject": "faiss-cpu",
     "job_term": "faiss",
     "jobs": 0,
-    "downloads": 11554254,
+    "downloads": 11798551,
     "months": 3
   },
   {
     "subject": "langchain",
     "job_term": "langchain",
     "jobs": 17,
-    "downloads": 175109180,
+    "downloads": 170606434,
     "months": 3
   },
   {
     "subject": "langchain-anthropic",
     "job_term": "langchain",
     "jobs": 17,
-    "downloads": 17141852,
+    "downloads": 17338766,
     "months": 3
   },
   {
     "subject": "langchain-core",
     "job_term": "langchain",
     "jobs": 17,
-    "downloads": 146477959,
+    "downloads": 145749027,
     "months": 3
   },
   {
     "subject": "langchain-deepseek",
     "job_term": "langchain",
     "jobs": 17,
-    "downloads": 562011,
+    "downloads": 582572,
     "months": 3
   },
   {
     "subject": "langchain-fireworks",
     "job_term": "langchain",
     "jobs": 17,
-    "downloads": 578803,
+    "downloads": 569727,
     "months": 3
   },
   {
     "subject": "langchain-openai",
     "job_term": "langchain",
     "jobs": 17,
-    "downloads": 40076985,
+    "downloads": 38002484,
     "months": 3
   },
   {
     "subject": "langchain-openrouter",
     "job_term": "langchain",
     "jobs": 17,
-    "downloads": 833066,
+    "downloads": 851725,
     "months": 3
   },
   {
     "subject": "langchain-typesafe",
     "job_term": "langchain",
     "jobs": 17,
-    "downloads": 2186,
+    "downloads": 6392,
     "months": 3
   },
   {
     "subject": "langgraph",
     "job_term": "langgraph",
-    "jobs": 14,
-    "downloads": 43810916,
+    "jobs": 13,
+    "downloads": 43701422,
+    "months": 3
+  },
+  {
+    "subject": "langgraph-cli",
+    "job_term": "langgraph",
+    "jobs": 13,
+    "downloads": 2566214,
     "months": 3
   },
   {
     "subject": "langgraph-sdk",
     "job_term": "langgraph",
-    "jobs": 14,
-    "downloads": 41770537,
+    "jobs": 13,
+    "downloads": 42069314,
     "months": 3
   },
   {

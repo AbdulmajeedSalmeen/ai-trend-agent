@@ -2,6 +2,76 @@
   {
     "trend_id": "trend_001",
     "chapter_id": "C19",
+    "confidence": 0.8,
+    "dimensions": {
+      "relevance": 2,
+      "impact": 4,
+      "educational_value": 4,
+      "market_relevance": 4,
+      "maturity": 3,
+      "prerequisites": 4,
+      "difficulty": 1
+    },
+    "provenance": {
+      "relevance": "measured",
+      "impact": "measured",
+      "educational_value": "judged",
+      "market_relevance": "measured",
+      "maturity": "measured",
+      "prerequisites": "measured",
+      "difficulty": "measured"
+    },
+    "priority": 3.5,
+    "changes": {
+      "breaking": 0,
+      "deprecation": 0,
+      "feature": 4,
+      "fix": 2,
+      "noise": 21,
+      "other": 0,
+      "highlights": [
+        "feature: place self-hosted deployments on a listener",
+        "feature: clarify agent flags and support env defaults",
+        "feature: Update langgraph deploy command to use agent_id and environment args",
+        "feature: add --image-uri flag for self-hosted deployments"
+      ],
+      "teachable": 4,
+      "lines": 27
+    },
+    "market": {
+      "subject": "langgraph-cli",
+      "job_term": "langgraph",
+      "jobs": 13,
+      "downloads": 2566214,
+      "months": 3
+    },
+    "feasibility": 4.0,
+    "factors": {
+      "maturity": {
+        "first_release": "2024-05-02",
+        "age_years": 2.4,
+        "latest_stable": "0.4.32",
+        "major": 0,
+        "steady": true
+      },
+      "prerequisites": {
+        "basis": "family",
+        "via": [
+          "langgraph"
+        ]
+      },
+      "difficulty": {
+        "new_material": false,
+        "edit_lines": 0,
+        "chapters": 0,
+        "breaking": 0,
+        "deprecation": 0
+      }
+    }
+  },
+  {
+    "trend_id": "trend_002",
+    "chapter_id": "C19",
     "confidence": 0.5,
     "dimensions": {
       "relevance": 2,
@@ -38,8 +108,8 @@
     "market": {
       "subject": "langgraph",
       "job_term": "langgraph",
-      "jobs": 14,
-      "downloads": 43810916,
+      "jobs": 13,
+      "downloads": 43701422,
       "months": 3
     },
     "feasibility": 4.7,
@@ -64,7 +134,7 @@
     }
   },
   {
-    "trend_id": "trend_002",
+    "trend_id": "trend_003",
     "chapter_id": "C19",
     "confidence": 0.7,
     "dimensions": {
@@ -103,8 +173,8 @@
     "market": {
       "subject": "langgraph-sdk",
       "job_term": "langgraph",
-      "jobs": 14,
-      "downloads": 41770537,
+      "jobs": 13,
+      "downloads": 42069314,
       "months": 3
     },
     "feasibility": 4.0,
@@ -132,7 +202,279 @@
     }
   },
   {
-    "trend_id": "trend_003",
+    "trend_id": "trend_004",
+    "chapter_id": "C8",
+    "confidence": 0.6999999999999998,
+    "dimensions": {
+      "relevance": 2,
+      "impact": 2,
+      "educational_value": 1,
+      "market_relevance": 3,
+      "maturity": 4,
+      "prerequisites": 4,
+      "difficulty": 1
+    },
+    "provenance": {
+      "relevance": "measured",
+      "impact": "measured",
+      "educational_value": "judged",
+      "market_relevance": "measured",
+      "maturity": "measured",
+      "prerequisites": "measured",
+      "difficulty": "measured"
+    },
+    "priority": 2.0,
+    "changes": {
+      "breaking": 0,
+      "deprecation": 0,
+      "feature": 0,
+      "fix": 5,
+      "noise": 13,
+      "other": 0,
+      "highlights": [],
+      "teachable": 0,
+      "lines": 18
+    },
+    "market": {
+      "subject": "langchain-fireworks",
+      "job_term": "langchain",
+      "jobs": 17,
+      "downloads": 569727,
+      "months": 3
+    },
+    "feasibility": 4.3,
+    "factors": {
+      "maturity": {
+        "first_release": "2024-02-23",
+        "age_years": 2.6,
+        "latest_stable": "1.6.3",
+        "major": 1,
+        "steady": true
+      },
+      "prerequisites": {
+        "basis": "family",
+        "via": [
+          "langchain"
+        ]
+      },
+      "difficulty": {
+        "new_material": false,
+        "edit_lines": 0,
+        "chapters": 0,
+        "breaking": 0,
+        "deprecation": 0
+      }
+    }
+  },
+  {
+    "trend_id": "trend_005",
+    "chapter_id": "C8",
+    "confidence": 0.8,
+    "dimensions": {
+      "relevance": 2,
+      "impact": 4,
+      "educational_value": 4,
+      "market_relevance": 4,
+      "maturity": 4,
+      "prerequisites": 4,
+      "difficulty": 1
+    },
+    "provenance": {
+      "relevance": "measured",
+      "impact": "measured",
+      "educational_value": "judged",
+      "market_relevance": "measured",
+      "maturity": "measured",
+      "prerequisites": "measured",
+      "difficulty": "measured"
+    },
+    "priority": 3.5,
+    "changes": {
+      "breaking": 0,
+      "deprecation": 0,
+      "feature": 3,
+      "fix": 5,
+      "noise": 15,
+      "other": 0,
+      "highlights": [
+        "feature: Allow model name and provider tracing metadata override based on gateway response",
+        "feature: support async tools",
+        "feature: propagate gateway information on error path"
+      ],
+      "teachable": 3,
+      "lines": 23
+    },
+    "market": {
+      "subject": "langchain-core",
+      "job_term": "langchain",
+      "jobs": 17,
+      "downloads": 145749027,
+      "months": 3
+    },
+    "feasibility": 4.3,
+    "factors": {
+      "maturity": {
+        "first_release": "2023-11-20",
+        "age_years": 2.8,
+        "latest_stable": "1.6.5",
+        "major": 1,
+        "steady": true
+      },
+      "prerequisites": {
+        "basis": "family",
+        "via": [
+          "langchain"
+        ]
+      },
+      "difficulty": {
+        "new_material": false,
+        "edit_lines": 0,
+        "chapters": 0,
+        "breaking": 0,
+        "deprecation": 0
+      }
+    }
+  },
+  {
+    "trend_id": "trend_006",
+    "chapter_id": "C8",
+    "confidence": 0.8000000000000002,
+    "dimensions": {
+      "relevance": 2,
+      "impact": 4,
+      "educational_value": 4,
+      "market_relevance": 4,
+      "maturity": 4,
+      "prerequisites": 5,
+      "difficulty": 1
+    },
+    "provenance": {
+      "relevance": "measured",
+      "impact": "measured",
+      "educational_value": "judged",
+      "market_relevance": "measured",
+      "maturity": "measured",
+      "prerequisites": "measured",
+      "difficulty": "measured"
+    },
+    "priority": 3.5,
+    "changes": {
+      "breaking": 0,
+      "deprecation": 0,
+      "feature": 3,
+      "fix": 9,
+      "noise": 11,
+      "other": 0,
+      "highlights": [
+        "feature: mid-conversation tool changes on `SystemMessage`",
+        "feature: support async tools",
+        "feature: support `configuration_update`"
+      ],
+      "teachable": 3,
+      "lines": 23
+    },
+    "market": {
+      "subject": "langchain-openai",
+      "job_term": "langchain",
+      "jobs": 17,
+      "downloads": 38002484,
+      "months": 3
+    },
+    "feasibility": 4.7,
+    "factors": {
+      "maturity": {
+        "first_release": "2024-01-05",
+        "age_years": 2.7,
+        "latest_stable": "1.6.6",
+        "major": 1,
+        "steady": true
+      },
+      "prerequisites": {
+        "basis": "taught"
+      },
+      "difficulty": {
+        "new_material": false,
+        "edit_lines": 0,
+        "chapters": 0,
+        "breaking": 0,
+        "deprecation": 0
+      }
+    }
+  },
+  {
+    "trend_id": "trend_007",
+    "chapter_id": "C8",
+    "confidence": 0.7,
+    "dimensions": {
+      "relevance": 2,
+      "impact": 4,
+      "educational_value": 4,
+      "market_relevance": 4,
+      "maturity": 4,
+      "prerequisites": 4,
+      "difficulty": 1
+    },
+    "provenance": {
+      "relevance": "measured",
+      "impact": "measured",
+      "educational_value": "judged",
+      "market_relevance": "measured",
+      "maturity": "measured",
+      "prerequisites": "measured",
+      "difficulty": "measured"
+    },
+    "priority": 3.5,
+    "changes": {
+      "breaking": 0,
+      "deprecation": 0,
+      "feature": 6,
+      "fix": 5,
+      "noise": 9,
+      "other": 0,
+      "highlights": [
+        "feature: mid-conversation tool changes on `SystemMessage`",
+        "feature: send mid-conversation `SystemMessage`s in place",
+        "feature: add Claude Fable 5.1 support",
+        "feature: support top-level param for skills via `container`; `updates` thinking display mode",
+        "feature: support 1.0 sdk",
+        "feature: surface gateway response metadata"
+      ],
+      "teachable": 6,
+      "lines": 20
+    },
+    "market": {
+      "subject": "langchain-anthropic",
+      "job_term": "langchain",
+      "jobs": 17,
+      "downloads": 17338766,
+      "months": 3
+    },
+    "feasibility": 4.3,
+    "factors": {
+      "maturity": {
+        "first_release": "2023-12-20",
+        "age_years": 2.8,
+        "latest_stable": "1.7.4",
+        "major": 1,
+        "steady": true
+      },
+      "prerequisites": {
+        "basis": "family",
+        "via": [
+          "langchain"
+        ]
+      },
+      "difficulty": {
+        "new_material": false,
+        "edit_lines": 0,
+        "chapters": 0,
+        "breaking": 0,
+        "deprecation": 0
+      }
+    }
+  },
+  {
+    "trend_id": "trend_008",
     "chapter_id": "C8",
     "confidence": 0.7,
     "dimensions": {
@@ -169,7 +511,7 @@
       "subject": "langchain-openrouter",
       "job_term": "langchain",
       "jobs": 17,
-      "downloads": 833066,
+      "downloads": 851725,
       "months": 3
     },
     "feasibility": 3.7,
@@ -197,72 +539,7 @@
     }
   },
   {
-    "trend_id": "trend_004",
-    "chapter_id": "C8",
-    "confidence": 0.7,
-    "dimensions": {
-      "relevance": 2,
-      "impact": 2,
-      "educational_value": 1,
-      "market_relevance": 3,
-      "maturity": 4,
-      "prerequisites": 4,
-      "difficulty": 1
-    },
-    "provenance": {
-      "relevance": "measured",
-      "impact": "measured",
-      "educational_value": "judged",
-      "market_relevance": "measured",
-      "maturity": "measured",
-      "prerequisites": "measured",
-      "difficulty": "measured"
-    },
-    "priority": 2.0,
-    "changes": {
-      "breaking": 0,
-      "deprecation": 0,
-      "feature": 0,
-      "fix": 3,
-      "noise": 11,
-      "other": 0,
-      "highlights": [],
-      "teachable": 0,
-      "lines": 14
-    },
-    "market": {
-      "subject": "langchain-fireworks",
-      "job_term": "langchain",
-      "jobs": 17,
-      "downloads": 578803,
-      "months": 3
-    },
-    "feasibility": 4.3,
-    "factors": {
-      "maturity": {
-        "first_release": "2024-02-23",
-        "age_years": 2.6,
-        "latest_stable": "1.6.2",
-        "major": 1,
-        "steady": true
-      },
-      "prerequisites": {
-        "basis": "family",
-        "via": [
-          "langchain"
-        ]
-      },
-      "difficulty": {
-        "new_material": false,
-        "edit_lines": 0,
-        "chapters": 0,
-        "breaking": 0,
-        "deprecation": 0
-      }
-    }
-  },
-  {
-    "trend_id": "trend_005",
+    "trend_id": "trend_009",
     "chapter_id": "C8",
     "confidence": 0.7,
     "dimensions": {
@@ -302,7 +579,7 @@
       "subject": "langchain-deepseek",
       "job_term": "langchain",
       "jobs": 17,
-      "downloads": 562011,
+      "downloads": 582572,
       "months": 3
     },
     "feasibility": 4.3,
@@ -330,141 +607,7 @@
     }
   },
   {
-    "trend_id": "trend_006",
-    "chapter_id": "C8",
-    "confidence": 0.8000000000000002,
-    "dimensions": {
-      "relevance": 2,
-      "impact": 3,
-      "educational_value": 4,
-      "market_relevance": 4,
-      "maturity": 4,
-      "prerequisites": 5,
-      "difficulty": 1
-    },
-    "provenance": {
-      "relevance": "measured",
-      "impact": "measured",
-      "educational_value": "judged",
-      "market_relevance": "measured",
-      "maturity": "measured",
-      "prerequisites": "measured",
-      "difficulty": "measured"
-    },
-    "priority": 3.25,
-    "changes": {
-      "breaking": 0,
-      "deprecation": 0,
-      "feature": 2,
-      "fix": 7,
-      "noise": 7,
-      "other": 0,
-      "highlights": [
-        "feature: support async tools",
-        "feature: support `configuration_update`"
-      ],
-      "teachable": 2,
-      "lines": 16
-    },
-    "market": {
-      "subject": "langchain-openai",
-      "job_term": "langchain",
-      "jobs": 17,
-      "downloads": 40076985,
-      "months": 3
-    },
-    "feasibility": 4.7,
-    "factors": {
-      "maturity": {
-        "first_release": "2024-01-05",
-        "age_years": 2.7,
-        "latest_stable": "1.6.3",
-        "major": 1,
-        "steady": true
-      },
-      "prerequisites": {
-        "basis": "taught"
-      },
-      "difficulty": {
-        "new_material": false,
-        "edit_lines": 0,
-        "chapters": 0,
-        "breaking": 0,
-        "deprecation": 0
-      }
-    }
-  },
-  {
-    "trend_id": "trend_007",
-    "chapter_id": "C8",
-    "confidence": 0.8,
-    "dimensions": {
-      "relevance": 2,
-      "impact": 4,
-      "educational_value": 4,
-      "market_relevance": 4,
-      "maturity": 4,
-      "prerequisites": 4,
-      "difficulty": 1
-    },
-    "provenance": {
-      "relevance": "measured",
-      "impact": "measured",
-      "educational_value": "judged",
-      "market_relevance": "measured",
-      "maturity": "measured",
-      "prerequisites": "measured",
-      "difficulty": "measured"
-    },
-    "priority": 3.5,
-    "changes": {
-      "breaking": 0,
-      "deprecation": 0,
-      "feature": 3,
-      "fix": 4,
-      "noise": 14,
-      "other": 0,
-      "highlights": [
-        "feature: Allow model name and provider tracing metadata override based on gateway response",
-        "feature: support async tools",
-        "feature: propagate gateway information on error path"
-      ],
-      "teachable": 3,
-      "lines": 21
-    },
-    "market": {
-      "subject": "langchain-core",
-      "job_term": "langchain",
-      "jobs": 17,
-      "downloads": 146477959,
-      "months": 3
-    },
-    "feasibility": 4.3,
-    "factors": {
-      "maturity": {
-        "first_release": "2023-11-20",
-        "age_years": 2.8,
-        "latest_stable": "1.6.4",
-        "major": 1,
-        "steady": true
-      },
-      "prerequisites": {
-        "basis": "family",
-        "via": [
-          "langchain"
-        ]
-      },
-      "difficulty": {
-        "new_material": false,
-        "edit_lines": 0,
-        "chapters": 0,
-        "breaking": 0,
-        "deprecation": 0
-      }
-    }
-  },
-  {
-    "trend_id": "trend_008",
+    "trend_id": "trend_010",
     "chapter_id": "C8",
     "confidence": 0.6999999999999998,
     "dimensions": {
@@ -506,7 +649,7 @@
       "subject": "langchain-typesafe",
       "job_term": "langchain",
       "jobs": 17,
-      "downloads": 2186,
+      "downloads": 6392,
       "months": 3
     },
     "feasibility": 3.3,
@@ -534,9 +677,9 @@
     }
   },
   {
-    "trend_id": "trend_009",
+    "trend_id": "trend_011",
     "chapter_id": "C8",
-    "confidence": 0.74,
+    "confidence": 0.7333333333333334,
     "dimensions": {
       "relevance": 5,
       "impact": 5,
@@ -560,8 +703,8 @@
       "breaking": 4,
       "deprecation": 0,
       "feature": 195,
-      "fix": 303,
-      "noise": 740,
+      "fix": 302,
+      "noise": 738,
       "other": 9,
       "highlights": [
         "breaking: remove globals from langchain-v1, update globals in langchain-classic, langchain-core",
@@ -572,13 +715,13 @@
         "feature: accept a `ClientGroup` as an `MCPAdapter` target"
       ],
       "teachable": 199,
-      "lines": 1251
+      "lines": 1248
     },
     "market": {
       "subject": "langchain",
       "job_term": "langchain",
       "jobs": 17,
-      "downloads": 175109180,
+      "downloads": 170606434,
       "months": 3
     },
     "feasibility": 3.3,
@@ -603,79 +746,9 @@
     }
   },
   {
-    "trend_id": "trend_010",
-    "chapter_id": "C8",
-    "confidence": 0.6999999999999998,
-    "dimensions": {
-      "relevance": 2,
-      "impact": 4,
-      "educational_value": 4,
-      "market_relevance": 4,
-      "maturity": 4,
-      "prerequisites": 4,
-      "difficulty": 1
-    },
-    "provenance": {
-      "relevance": "measured",
-      "impact": "measured",
-      "educational_value": "judged",
-      "market_relevance": "measured",
-      "maturity": "measured",
-      "prerequisites": "measured",
-      "difficulty": "measured"
-    },
-    "priority": 3.5,
-    "changes": {
-      "breaking": 0,
-      "deprecation": 0,
-      "feature": 4,
-      "fix": 3,
-      "noise": 3,
-      "other": 0,
-      "highlights": [
-        "feature: add Claude Fable 5.1 support",
-        "feature: support top-level param for skills via `container`; `updates` thinking display mode",
-        "feature: support 1.0 sdk",
-        "feature: surface gateway response metadata"
-      ],
-      "teachable": 4,
-      "lines": 10
-    },
-    "market": {
-      "subject": "langchain-anthropic",
-      "job_term": "langchain",
-      "jobs": 17,
-      "downloads": 17141852,
-      "months": 3
-    },
-    "feasibility": 4.3,
-    "factors": {
-      "maturity": {
-        "first_release": "2023-12-20",
-        "age_years": 2.8,
-        "latest_stable": "1.7.2",
-        "major": 1,
-        "steady": true
-      },
-      "prerequisites": {
-        "basis": "family",
-        "via": [
-          "langchain"
-        ]
-      },
-      "difficulty": {
-        "new_material": false,
-        "edit_lines": 0,
-        "chapters": 0,
-        "breaking": 0,
-        "deprecation": 0
-      }
-    }
-  },
-  {
-    "trend_id": "trend_011",
+    "trend_id": "trend_012",
     "chapter_id": "C4",
-    "confidence": 0.8000000000000002,
+    "confidence": 0.5,
     "dimensions": {
       "relevance": 2,
       "impact": 5,
@@ -696,22 +769,21 @@
     },
     "priority": 4.0,
     "changes": {
-      "breaking": 4,
+      "breaking": 1,
       "deprecation": 0,
-      "feature": 10,
-      "fix": 229,
-      "noise": 14,
-      "other": 81,
+      "feature": 5,
+      "fix": 113,
+      "noise": 5,
+      "other": 42,
       "highlights": [
         "breaking: Vision (2d/3d) rotary embeddings",
-        "breaking: TP dtensor API inference + training",
-        "breaking: [wav2vec2] Support attn_implementation=sdpa dispatch",
-        "breaking: Leftover processors",
         "feature: Add NeoMME and NeoMME-Retriever",
-        "feature: Add Fun-ASR-Nano model"
+        "feature: Add Fun-ASR-Nano model",
+        "feature: Add support for NeuCodec",
+        "feature: Support nested FLA kernel imports for fla-core"
       ],
-      "teachable": 14,
-      "lines": 338
+      "teachable": 6,
+      "lines": 166
     },
     "market": {
       "subject": "transformers",
@@ -736,19 +808,19 @@
         "new_material": false,
         "edit_lines": 0,
         "chapters": 0,
-        "breaking": 4,
+        "breaking": 1,
         "deprecation": 0
       }
     }
   },
   {
-    "trend_id": "trend_012",
+    "trend_id": "trend_013",
     "chapter_id": "C5",
     "confidence": 0.7,
     "dimensions": {
       "relevance": 2,
       "impact": 4,
-      "educational_value": 1,
+      "educational_value": 3,
       "market_relevance": 4,
       "maturity": 5,
       "prerequisites": 5,
@@ -763,24 +835,24 @@
       "prerequisites": "measured",
       "difficulty": "measured"
     },
-    "priority": 2.75,
+    "priority": 3.25,
     "changes": {
       "breaking": 0,
       "deprecation": 0,
-      "feature": 26,
-      "fix": 42,
-      "noise": 52,
+      "feature": 29,
+      "fix": 50,
+      "noise": 57,
       "other": 0,
       "highlights": [
+        "feature: api: add GCP external storage support",
+        "feature: api: add GPT-Rosalind research model",
+        "feature: api: add GPT-6 Sol and Luna model identifiers",
         "feature: api: add external storage configuration management",
         "feature: api: add safety case retrieval",
-        "feature: api: add safety warning and deactivation webhook events",
-        "feature: api: add session environment reset events",
-        "feature: api: add SIP media security to incoming call events",
-        "feature: api: support environment variable vault credentials"
+        "feature: api: add safety warning and deactivation webhook events"
       ],
-      "teachable": 26,
-      "lines": 120
+      "teachable": 29,
+      "lines": 136
     },
     "market": {
       "subject": "openai-python",
@@ -794,7 +866,7 @@
       "maturity": {
         "first_release": "2020-02-18",
         "age_years": 6.6,
-        "latest_stable": "3.17.0",
+        "latest_stable": "3.19.2",
         "major": 3,
         "steady": true
       },
@@ -811,7 +883,7 @@
     }
   },
   {
-    "trend_id": "trend_013",
+    "trend_id": "trend_014",
     "chapter_id": null,
     "confidence": 0.7,
     "dimensions": {
@@ -836,26 +908,26 @@
     "changes": {
       "breaking": 0,
       "deprecation": 1,
-      "feature": 25,
-      "fix": 30,
-      "noise": 45,
+      "feature": 23,
+      "fix": 32,
+      "noise": 50,
       "other": 0,
       "highlights": [
         "deprecation: api: add group with display_name to rate limits, deprecate group_type",
+        "feature: api: add support for claude-opus-5-5, inline tool definitions and MCP tool-list pinning (beta)",
         "feature: tools: add compact_before_next_turn() to the tool runner",
         "feature: api: add auto mode tool permissions for Managed Agents",
         "feature: api: add compaction parameter and signed compaction blocks (beta)",
-        "feature: api: add enum types for workspace data-residency geo fields",
-        "feature: api: add thinking_mismatch_allowed entries to input_transformations (beta)"
+        "feature: api: add enum types for workspace data-residency geo fields"
       ],
-      "teachable": 26,
-      "lines": 101
+      "teachable": 24,
+      "lines": 106
     },
     "market": {
       "subject": "anthropic-sdk-python",
       "job_term": "anthropic",
       "jobs": 12,
-      "downloads": 138780642,
+      "downloads": 138623823,
       "months": 3
     },
     "feasibility": 3.7,
@@ -863,7 +935,7 @@
       "maturity": {
         "first_release": "2023-02-09",
         "age_years": 3.6,
-        "latest_stable": "1.7.0",
+        "latest_stable": "1.8.0",
         "major": 1,
         "steady": true
       },
@@ -875,13 +947,13 @@
     }
   },
   {
-    "trend_id": "trend_014",
+    "trend_id": "trend_015",
     "chapter_id": null,
     "confidence": 0.7,
     "dimensions": {
       "relevance": 2,
       "impact": 4,
-      "educational_value": 3,
+      "educational_value": 4,
       "market_relevance": 2,
       "maturity": 4,
       "prerequisites": 3,
@@ -896,24 +968,24 @@
       "prerequisites": "default",
       "difficulty": "measured"
     },
-    "priority": 2.75,
+    "priority": 3.0,
     "changes": {
       "breaking": 0,
       "deprecation": 1,
-      "feature": 65,
-      "fix": 107,
-      "noise": 2,
-      "other": 11,
+      "feature": 74,
+      "fix": 127,
+      "noise": 3,
+      "other": 12,
       "highlights": [
         "deprecation: Deprecate `fallback_model` in favor of `fallback_subagent_model` on `ImageGeneration` and `XSearch`",
-        "feature: Ask three more field types `TypeSafeModel` can already answer",
-        "feature: huynguyengl99 made their first contribution in",
-        "feature: xyi74976-del made their first contribution in",
-        "feature: Let `TypeSafeModel` fill a tool's arguments when Jev can express them",
-        "feature: Add `RealtimeSession.wait_for_playback()` and let the docs examples finish the reply before closing"
+        "feature: Expose OpenAI `service_tier` in provider details by @pydanty in",
+        "feature: Add `DecisionModel`, a base for Decisions-protocol models, and make `TypeSafeModel` one",
+        "feature: Add `RunContext.in_durable_context` so hooks can tell they run in durable workflow code",
+        "feature: Add `gemini-3.8-live` and `gemini-3.8-live-extended-thinking` realtime support",
+        "feature: Ask a `DecisionModel`'s route fields with the route question under a route premise, with nested-field `context` and a `done` state after tool calls"
       ],
-      "teachable": 66,
-      "lines": 186
+      "teachable": 75,
+      "lines": 217
     },
     "market": {
       "subject": "pydantic-ai",
@@ -926,8 +998,8 @@
     "factors": {
       "maturity": {
         "first_release": "2024-05-20",
-        "age_years": 2.3,
-        "latest_stable": "2.47.0",
+        "age_years": 2.4,
+        "latest_stable": "2.50.0",
         "major": 2,
         "steady": true
       },
@@ -939,7 +1011,7 @@
     }
   },
   {
-    "trend_id": "trend_015",
+    "trend_id": "trend_016",
     "chapter_id": null,
     "confidence": 0.7,
     "dimensions": {
@@ -983,7 +1055,7 @@
       "subject": "crewai",
       "job_term": "crewai",
       "jobs": 4,
-      "downloads": 4913081,
+      "downloads": 2435828,
       "months": 3
     },
     "feasibility": 3.7,
@@ -1008,7 +1080,7 @@
     }
   },
   {
-    "trend_id": "trend_016",
+    "trend_id": "trend_017",
     "chapter_id": null,
     "confidence": 0.7,
     "dimensions": {
@@ -1069,7 +1141,7 @@
     }
   },
   {
-    "trend_id": "trend_017",
+    "trend_id": "trend_018",
     "chapter_id": "C4",
     "confidence": 0.7,
     "dimensions": {
@@ -1096,7 +1168,7 @@
       "subject": "accelerate",
       "job_term": null,
       "jobs": null,
-      "downloads": 17221282,
+      "downloads": 17248651,
       "months": 3
     },
     "feasibility": 4.3,
@@ -1119,7 +1191,7 @@
     }
   },
   {
-    "trend_id": "trend_018",
+    "trend_id": "trend_019",
     "chapter_id": "C9",
     "confidence": 0.7,
     "dimensions": {
@@ -1146,7 +1218,7 @@
       "subject": "bitsandbytes",
       "job_term": "bitsandbytes",
       "jobs": 0,
-      "downloads": 3484123,
+      "downloads": 3405273,
       "months": 3
     },
     "feasibility": 4.0,
@@ -1169,7 +1241,7 @@
     }
   },
   {
-    "trend_id": "trend_019",
+    "trend_id": "trend_020",
     "chapter_id": "C14",
     "confidence": 0.7,
     "dimensions": {
@@ -1196,7 +1268,7 @@
       "subject": "ddgs",
       "job_term": null,
       "jobs": null,
-      "downloads": 5056373,
+      "downloads": 4986839,
       "months": 3
     },
     "feasibility": 4.0,
@@ -1219,7 +1291,7 @@
     }
   },
   {
-    "trend_id": "trend_020",
+    "trend_id": "trend_021",
     "chapter_id": "C5",
     "confidence": 0.7,
     "dimensions": {
@@ -1246,7 +1318,7 @@
       "subject": "dspy",
       "job_term": "dspy",
       "jobs": 0,
-      "downloads": 4885309,
+      "downloads": 5110995,
       "months": 3
     },
     "feasibility": 4.3,
@@ -1254,7 +1326,7 @@
       "maturity": {
         "first_release": "2024-04-14",
         "age_years": 2.4,
-        "latest_stable": "3.3.1",
+        "latest_stable": "3.4.0",
         "major": 3,
         "steady": false
       },
@@ -1271,7 +1343,7 @@
     }
   },
   {
-    "trend_id": "trend_021",
+    "trend_id": "trend_022",
     "chapter_id": "C7",
     "confidence": 0.7,
     "dimensions": {
@@ -1298,7 +1370,7 @@
       "subject": "evidently",
       "job_term": null,
       "jobs": null,
-      "downloads": 856903,
+      "downloads": 818220,
       "months": 3
     },
     "feasibility": 4.7,
@@ -1323,7 +1395,7 @@
     }
   },
   {
-    "trend_id": "trend_022",
+    "trend_id": "trend_023",
     "chapter_id": "C6",
     "confidence": 0.7,
     "dimensions": {
@@ -1350,7 +1422,7 @@
       "subject": "faiss-cpu",
       "job_term": "faiss",
       "jobs": 0,
-      "downloads": 11554254,
+      "downloads": 11798551,
       "months": 3
     },
     "feasibility": 5.0,
@@ -1375,7 +1447,7 @@
     }
   },
   {
-    "trend_id": "trend_023",
+    "trend_id": "trend_024",
     "chapter_id": "C13",
     "confidence": 0.7,
     "dimensions": {
@@ -1410,7 +1482,7 @@
       "maturity": {
         "first_release": "2023-06-26",
         "age_years": 3.2,
-        "latest_stable": "0.14.0",
+        "latest_stable": "0.14.1",
         "major": 0,
         "steady": true
       },
@@ -1425,15 +1497,15 @@
     }
   },
   {
-    "trend_id": "trend_024",
+    "trend_id": "trend_025",
     "chapter_id": "C7",
-    "confidence": 0.7307692307692307,
+    "confidence": 0.7217391304347825,
     "dimensions": {
       "relevance": 2,
       "impact": 2,
       "educational_value": 1,
       "market_relevance": 3,
-      "maturity": 4,
+      "maturity": 5,
       "prerequisites": 4,
       "difficulty": 1
     },
@@ -1455,14 +1527,14 @@
       "downloads": 88904794,
       "months": 3
     },
-    "feasibility": 4.3,
+    "feasibility": 4.7,
     "factors": {
       "maturity": {
         "first_release": "2023-07-27",
         "age_years": 3.2,
-        "latest_stable": "1.102.0",
+        "latest_stable": "1.102.1",
         "major": 1,
-        "steady": false
+        "steady": true
       },
       "prerequisites": {
         "basis": "builds_on",
@@ -1480,7 +1552,7 @@
     }
   },
   {
-    "trend_id": "trend_025",
+    "trend_id": "trend_026",
     "chapter_id": "C24",
     "confidence": 0.7,
     "dimensions": {
@@ -1530,9 +1602,9 @@
     }
   },
   {
-    "trend_id": "trend_026",
+    "trend_id": "trend_027",
     "chapter_id": "C5",
-    "confidence": 0.6722222222222222,
+    "confidence": 0.6772727272727272,
     "dimensions": {
       "relevance": 5,
       "impact": 2,
@@ -1565,7 +1637,7 @@
       "maturity": {
         "first_release": "2020-02-18",
         "age_years": 6.6,
-        "latest_stable": "3.17.0",
+        "latest_stable": "3.19.2",
         "major": 3,
         "steady": true
       },
@@ -1582,7 +1654,7 @@
     }
   },
   {
-    "trend_id": "trend_027",
+    "trend_id": "trend_028",
     "chapter_id": "C5",
     "confidence": 0.7,
     "dimensions": {
@@ -1632,7 +1704,7 @@
     }
   },
   {
-    "trend_id": "trend_028",
+    "trend_id": "trend_029",
     "chapter_id": "C9",
     "confidence": 0.7,
     "dimensions": {
@@ -1684,7 +1756,7 @@
     }
   },
   {
-    "trend_id": "trend_029",
+    "trend_id": "trend_030",
     "chapter_id": "C8",
     "confidence": 0.7,
     "dimensions": {
@@ -1734,7 +1806,7 @@
     }
   },
   {
-    "trend_id": "trend_030",
+    "trend_id": "trend_031",
     "chapter_id": "C7",
     "confidence": 0.7,
     "dimensions": {
@@ -1784,7 +1856,7 @@
     }
   },
   {
-    "trend_id": "trend_031",
+    "trend_id": "trend_032",
     "chapter_id": "C4",
     "confidence": 0.7,
     "dimensions": {
@@ -1834,7 +1906,7 @@
     }
   },
   {
-    "trend_id": "trend_032",
+    "trend_id": "trend_033",
     "chapter_id": "C6",
     "confidence": 0.7,
     "dimensions": {
@@ -1889,7 +1961,7 @@
     }
   },
   {
-    "trend_id": "trend_033",
+    "trend_id": "trend_034",
     "chapter_id": "C10",
     "confidence": 0.7,
     "dimensions": {
@@ -1941,7 +2013,7 @@
     }
   },
   {
-    "trend_id": "trend_034",
+    "trend_id": "trend_035",
     "chapter_id": "C4",
     "confidence": 0.7,
     "dimensions": {
@@ -1991,7 +2063,7 @@
     }
   },
   {
-    "trend_id": "trend_035",
+    "trend_id": "trend_036",
     "chapter_id": "C4",
     "confidence": 0.7,
     "dimensions": {
@@ -2041,7 +2113,7 @@
     }
   },
   {
-    "trend_id": "trend_036",
+    "trend_id": "trend_037",
     "chapter_id": "C5",
     "confidence": 0.7,
     "dimensions": {
@@ -2091,7 +2163,7 @@
     }
   },
   {
-    "trend_id": "trend_037",
+    "trend_id": "trend_038",
     "chapter_id": "C8",
     "confidence": 0.6999999999999998,
     "dimensions": {
@@ -2125,7 +2197,7 @@
     "factors": {
       "maturity": {
         "first_release": "2022-09-06",
-        "age_years": 4.0,
+        "age_years": 4.1,
         "latest_stable": "0.27.8",
         "major": 0,
         "steady": true

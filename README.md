@@ -65,7 +65,7 @@ version.** Three rules keep that honest:
    are not independent, so they do not get to count as a cross-source check.
 
 **It decides the way a school would, not the way a changelog does.** Most of what ships is
-not teachable: of 2,120 lines in the release notes of the frozen run, four in five are fixes or
+not teachable: of 2,085 lines in the release notes of the frozen run, four in five are fixes or
 chores. So the agent reads the notes and sorts every line into breaking, deprecation,
 feature, fix or chore, the judge is shown what changed rather than the version number, and
 market demand comes from real job posts and real installs rather than from how much a tool
@@ -120,25 +120,25 @@ instead. The run log says so when it happens.
 
 ## Numbers from the frozen run
 
-`run_20260922T102800Z` travels with the repo, so anyone can replay it with no network.
+`run_20260925T191944Z` travels with the repo, so anyone can replay it with no network.
 
 | | |
 |---|---|
-| Signals collected | 407 over the same 30 days: 235 Hacker News, 93 PyPI and 79 GitHub |
+| Signals collected | 433 over the same 30 days: 234 Hacker News, 109 PyPI and 90 GitHub |
 | Packages followed | 56, every one the course notebooks install |
-| Subjects tracked | 37 |
-| Checkable claims | 148 |
-| Confirmed by the release itself | 121 |
-| Carried by a second registry | 24 |
+| Subjects tracked | 38 |
+| Checkable claims | 174 |
+| Confirmed by the release itself | 143 |
+| Carried by a second registry | 27 |
 | Confirmed by an independent source | 0 |
-| Unverified | 3 |
-| Release-note lines read | 2,120: 8 breaking, 2 deprecations, 370 features, 795 fixes, 945 chores |
+| Unverified | 4 |
+| Release-note lines read | 2,085: 5 breaking, 2 deprecations, 382 features, 717 fixes, 979 chores |
 | Job posts searched | the last three "Ask HN: Who is hiring?" threads |
-| Recommendations | 4 update a chapter, 1 course-wide change, 2 new lesson, 2 optional, 28 watch |
+| Recommendations | 6 update a chapter, 1 course-wide change, 2 new lesson, 2 optional, 27 watch |
 | Import lines to change | 85 in 39 notebooks, checked against langchain 1.4.2; 3 break today |
 | Concepts the course does not teach | MCP, a new lesson: 20 job posts, 0 of 89 notebooks |
 | Teaching feasibility | 3.3 to 5.0 of 5; 2 tools watched as not stable enough to teach |
-| Written reasons | 35 of 37 by the model, checked for the facts; 2 by the rules |
+| Written reasons | 34 of 38 by the model, checked for the facts; 4 by the rules |
 | Chapters with something to act on | 11 of 25 |
 | Tests | 372, none of which calls a model or the network |
 

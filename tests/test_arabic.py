@@ -9,7 +9,7 @@ from src.schema import Claim, Recommendation, Score, Signal, Trend
 from src.stages import stage4_act
 from src.stages.stage4_act import build_rationale, course_edits, decide, decide_action, load_chapters, redecide
 
-FROZEN = Path("fixtures/runs/run_20260922T102800Z")
+FROZEN = Path("fixtures/runs/run_20260925T191944Z")
 
 # A version, a date, a priority, a compact install count, or a plain count.
 NUMBER = re.compile(r"\d+(?:[.\-]\d+)*(?:[A-Za-z]+\d*)?")
@@ -186,7 +186,7 @@ def test_every_plan_has_the_same_steps_and_figures_in_both_languages():
 def test_every_card_in_the_frozen_run_carries_the_same_figures_in_both_languages():
     reasons = list(frozen_reasons())
 
-    assert len(reasons) == 37
+    assert len(reasons) == 38
 
     for subject, english, arabic_reason in reasons:
         assert same_numbers(english, arabic_reason), subject
@@ -245,7 +245,7 @@ def test_redeciding_a_saved_run_asks_no_model_and_keeps_what_it_remembered(tmp_p
     redecide(run_dir)
     after = runio.load_artifact(run_dir, "recommendations", Recommendation)
 
-    assert len(after) == 37
+    assert len(after) == 38
     for rec in after:
         old = before[rec.trend_id]
         assert (rec.runs_flagged, rec.first_seen_run, rec.version_moved) == \

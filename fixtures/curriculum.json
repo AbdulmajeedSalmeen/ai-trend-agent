@@ -327,15 +327,15 @@
           "names": [
             "ChatOpenAI"
           ],
-          "reason": "langchain.chat_models in langchain 1.4.2 no longer has ChatOpenAI. It now comes from langchain_openai in langchain-openai 1.6.3.",
-          "reason_ar": "لم تعد langchain.chat_models في langchain 1.4.2 تضم ChatOpenAI، وهي الآن من langchain_openai في langchain-openai 1.6.3.",
+          "reason": "langchain.chat_models in langchain 1.4.2 no longer has ChatOpenAI. It now comes from langchain_openai in langchain-openai 1.6.6.",
+          "reason_ar": "لم تعد langchain.chat_models في langchain 1.4.2 تضم ChatOpenAI، وهي الآن من langchain_openai في langchain-openai 1.6.6.",
           "checked": "langchain 1.4.2",
           "evidence_url": "https://github.com/langchain-ai/langchain/blob/langchain%3D%3D1.4.2/libs/langchain_v1/langchain/chat_models/__init__.py",
           "moved_to": [
             {
               "module": "langchain_openai",
-              "release": "langchain-openai 1.6.3",
-              "url": "https://github.com/langchain-ai/langchain/blob/langchain-openai%3D%3D1.6.3/libs/partners/openai/langchain_openai/__init__.py"
+              "release": "langchain-openai 1.6.6",
+              "url": "https://github.com/langchain-ai/langchain/blob/langchain-openai%3D%3D1.6.6/libs/partners/openai/langchain_openai/__init__.py"
             }
           ]
         },
@@ -377,15 +377,15 @@
           "names": [
             "ChatOpenAI"
           ],
-          "reason": "langchain.chat_models in langchain 1.4.2 no longer has ChatOpenAI. It now comes from langchain_openai in langchain-openai 1.6.3.",
-          "reason_ar": "لم تعد langchain.chat_models في langchain 1.4.2 تضم ChatOpenAI، وهي الآن من langchain_openai في langchain-openai 1.6.3.",
+          "reason": "langchain.chat_models in langchain 1.4.2 no longer has ChatOpenAI. It now comes from langchain_openai in langchain-openai 1.6.6.",
+          "reason_ar": "لم تعد langchain.chat_models في langchain 1.4.2 تضم ChatOpenAI، وهي الآن من langchain_openai في langchain-openai 1.6.6.",
           "checked": "langchain 1.4.2",
           "evidence_url": "https://github.com/langchain-ai/langchain/blob/langchain%3D%3D1.4.2/libs/langchain_v1/langchain/chat_models/__init__.py",
           "moved_to": [
             {
               "module": "langchain_openai",
-              "release": "langchain-openai 1.6.3",
-              "url": "https://github.com/langchain-ai/langchain/blob/langchain-openai%3D%3D1.6.3/libs/partners/openai/langchain_openai/__init__.py"
+              "release": "langchain-openai 1.6.6",
+              "url": "https://github.com/langchain-ai/langchain/blob/langchain-openai%3D%3D1.6.6/libs/partners/openai/langchain_openai/__init__.py"
             }
           ]
         }
@@ -601,15 +601,15 @@
           "names": [
             "PromptTemplate"
           ],
-          "reason": "langchain 1.4.2 has no langchain.prompts module. It now comes from langchain_core.prompts in langchain-core 1.6.4.",
-          "reason_ar": "لا توجد وحدة langchain.prompts في langchain 1.4.2، وPromptTemplate الآن من langchain_core.prompts في langchain-core 1.6.4.",
+          "reason": "langchain 1.4.2 has no langchain.prompts module. It now comes from langchain_core.prompts in langchain-core 1.6.5.",
+          "reason_ar": "لا توجد وحدة langchain.prompts في langchain 1.4.2، وPromptTemplate الآن من langchain_core.prompts في langchain-core 1.6.5.",
           "checked": "langchain 1.4.2",
           "evidence_url": "https://github.com/langchain-ai/langchain/tree/langchain%3D%3D1.4.2/libs/langchain_v1/langchain",
           "moved_to": [
             {
               "module": "langchain_core.prompts",
-              "release": "langchain-core 1.6.4",
-              "url": "https://github.com/langchain-ai/langchain/blob/langchain-core%3D%3D1.6.4/libs/core/langchain_core/prompts/__init__.py"
+              "release": "langchain-core 1.6.5",
+              "url": "https://github.com/langchain-ai/langchain/blob/langchain-core%3D%3D1.6.5/libs/core/langchain_core/prompts/__init__.py"
             }
           ]
         },
@@ -626,15 +626,15 @@
           "names": [
             "PromptTemplate"
           ],
-          "reason": "langchain 1.4.2 has no langchain.prompts module. It now comes from langchain_core.prompts in langchain-core 1.6.4.",
-          "reason_ar": "لا توجد وحدة langchain.prompts في langchain 1.4.2، وPromptTemplate الآن من langchain_core.prompts في langchain-core 1.6.4.",
+          "reason": "langchain 1.4.2 has no langchain.prompts module. It now comes from langchain_core.prompts in langchain-core 1.6.5.",
+          "reason_ar": "لا توجد وحدة langchain.prompts في langchain 1.4.2، وPromptTemplate الآن من langchain_core.prompts في langchain-core 1.6.5.",
           "checked": "langchain 1.4.2",
           "evidence_url": "https://github.com/langchain-ai/langchain/tree/langchain%3D%3D1.4.2/libs/langchain_v1/langchain",
           "moved_to": [
             {
               "module": "langchain_core.prompts",
-              "release": "langchain-core 1.6.4",
-              "url": "https://github.com/langchain-ai/langchain/blob/langchain-core%3D%3D1.6.4/libs/core/langchain_core/prompts/__init__.py"
+              "release": "langchain-core 1.6.5",
+              "url": "https://github.com/langchain-ai/langchain/blob/langchain-core%3D%3D1.6.5/libs/core/langchain_core/prompts/__init__.py"
             }
           ]
         },
@@ -651,15 +651,15 @@
           "names": [
             "PromptTemplate"
           ],
-          "reason": "langchain 1.4.2 has no langchain.prompts module. It now comes from langchain_core.prompts in langchain-core 1.6.4.",
-          "reason_ar": "لا توجد وحدة langchain.prompts في langchain 1.4.2، وPromptTemplate الآن من langchain_core.prompts في langchain-core 1.6.4.",
+          "reason": "langchain 1.4.2 has no langchain.prompts module. It now comes from langchain_core.prompts in langchain-core 1.6.5.",
+          "reason_ar": "لا توجد وحدة langchain.prompts في langchain 1.4.2، وPromptTemplate الآن من langchain_core.prompts في langchain-core 1.6.5.",
           "checked": "langchain 1.4.2",
           "evidence_url": "https://github.com/langchain-ai/langchain/tree/langchain%3D%3D1.4.2/libs/langchain_v1/langchain",
           "moved_to": [
             {
               "module": "langchain_core.prompts",
-              "release": "langchain-core 1.6.4",
-              "url": "https://github.com/langchain-ai/langchain/blob/langchain-core%3D%3D1.6.4/libs/core/langchain_core/prompts/__init__.py"
+              "release": "langchain-core 1.6.5",
+              "url": "https://github.com/langchain-ai/langchain/blob/langchain-core%3D%3D1.6.5/libs/core/langchain_core/prompts/__init__.py"
             }
           ]
         },
@@ -676,15 +676,15 @@
           "names": [
             "PromptTemplate"
           ],
-          "reason": "langchain 1.4.2 has no langchain.prompts module. It now comes from langchain_core.prompts in langchain-core 1.6.4.",
-          "reason_ar": "لا توجد وحدة langchain.prompts في langchain 1.4.2، وPromptTemplate الآن من langchain_core.prompts في langchain-core 1.6.4.",
+          "reason": "langchain 1.4.2 has no langchain.prompts module. It now comes from langchain_core.prompts in langchain-core 1.6.5.",
+          "reason_ar": "لا توجد وحدة langchain.prompts في langchain 1.4.2، وPromptTemplate الآن من langchain_core.prompts في langchain-core 1.6.5.",
           "checked": "langchain 1.4.2",
           "evidence_url": "https://github.com/langchain-ai/langchain/tree/langchain%3D%3D1.4.2/libs/langchain_v1/langchain",
           "moved_to": [
             {
               "module": "langchain_core.prompts",
-              "release": "langchain-core 1.6.4",
-              "url": "https://github.com/langchain-ai/langchain/blob/langchain-core%3D%3D1.6.4/libs/core/langchain_core/prompts/__init__.py"
+              "release": "langchain-core 1.6.5",
+              "url": "https://github.com/langchain-ai/langchain/blob/langchain-core%3D%3D1.6.5/libs/core/langchain_core/prompts/__init__.py"
             }
           ]
         },
@@ -701,15 +701,15 @@
           "names": [
             "PromptTemplate"
           ],
-          "reason": "langchain 1.4.2 has no langchain.prompts module. It now comes from langchain_core.prompts in langchain-core 1.6.4.",
-          "reason_ar": "لا توجد وحدة langchain.prompts في langchain 1.4.2، وPromptTemplate الآن من langchain_core.prompts في langchain-core 1.6.4.",
+          "reason": "langchain 1.4.2 has no langchain.prompts module. It now comes from langchain_core.prompts in langchain-core 1.6.5.",
+          "reason_ar": "لا توجد وحدة langchain.prompts في langchain 1.4.2، وPromptTemplate الآن من langchain_core.prompts في langchain-core 1.6.5.",
           "checked": "langchain 1.4.2",
           "evidence_url": "https://github.com/langchain-ai/langchain/tree/langchain%3D%3D1.4.2/libs/langchain_v1/langchain",
           "moved_to": [
             {
               "module": "langchain_core.prompts",
-              "release": "langchain-core 1.6.4",
-              "url": "https://github.com/langchain-ai/langchain/blob/langchain-core%3D%3D1.6.4/libs/core/langchain_core/prompts/__init__.py"
+              "release": "langchain-core 1.6.5",
+              "url": "https://github.com/langchain-ai/langchain/blob/langchain-core%3D%3D1.6.5/libs/core/langchain_core/prompts/__init__.py"
             }
           ]
         },
@@ -752,15 +752,15 @@
           "names": [
             "PromptTemplate"
           ],
-          "reason": "langchain 1.4.2 has no langchain.prompts module. It now comes from langchain_core.prompts in langchain-core 1.6.4.",
-          "reason_ar": "لا توجد وحدة langchain.prompts في langchain 1.4.2، وPromptTemplate الآن من langchain_core.prompts في langchain-core 1.6.4.",
+          "reason": "langchain 1.4.2 has no langchain.prompts module. It now comes from langchain_core.prompts in langchain-core 1.6.5.",
+          "reason_ar": "لا توجد وحدة langchain.prompts في langchain 1.4.2، وPromptTemplate الآن من langchain_core.prompts في langchain-core 1.6.5.",
           "checked": "langchain 1.4.2",
           "evidence_url": "https://github.com/langchain-ai/langchain/tree/langchain%3D%3D1.4.2/libs/langchain_v1/langchain",
           "moved_to": [
             {
               "module": "langchain_core.prompts",
-              "release": "langchain-core 1.6.4",
-              "url": "https://github.com/langchain-ai/langchain/blob/langchain-core%3D%3D1.6.4/libs/core/langchain_core/prompts/__init__.py"
+              "release": "langchain-core 1.6.5",
+              "url": "https://github.com/langchain-ai/langchain/blob/langchain-core%3D%3D1.6.5/libs/core/langchain_core/prompts/__init__.py"
             }
           ]
         }
@@ -872,15 +872,15 @@
           "names": [
             "PromptTemplate"
           ],
-          "reason": "langchain 1.4.2 has no langchain.prompts module. It now comes from langchain_core.prompts in langchain-core 1.6.4.",
-          "reason_ar": "لا توجد وحدة langchain.prompts في langchain 1.4.2، وPromptTemplate الآن من langchain_core.prompts في langchain-core 1.6.4.",
+          "reason": "langchain 1.4.2 has no langchain.prompts module. It now comes from langchain_core.prompts in langchain-core 1.6.5.",
+          "reason_ar": "لا توجد وحدة langchain.prompts في langchain 1.4.2، وPromptTemplate الآن من langchain_core.prompts في langchain-core 1.6.5.",
           "checked": "langchain 1.4.2",
           "evidence_url": "https://github.com/langchain-ai/langchain/tree/langchain%3D%3D1.4.2/libs/langchain_v1/langchain",
           "moved_to": [
             {
               "module": "langchain_core.prompts",
-              "release": "langchain-core 1.6.4",
-              "url": "https://github.com/langchain-ai/langchain/blob/langchain-core%3D%3D1.6.4/libs/core/langchain_core/prompts/__init__.py"
+              "release": "langchain-core 1.6.5",
+              "url": "https://github.com/langchain-ai/langchain/blob/langchain-core%3D%3D1.6.5/libs/core/langchain_core/prompts/__init__.py"
             }
           ]
         },
@@ -948,15 +948,15 @@
           "names": [
             "PromptTemplate"
           ],
-          "reason": "langchain 1.4.2 has no langchain.prompts module. It now comes from langchain_core.prompts in langchain-core 1.6.4.",
-          "reason_ar": "لا توجد وحدة langchain.prompts في langchain 1.4.2، وPromptTemplate الآن من langchain_core.prompts في langchain-core 1.6.4.",
+          "reason": "langchain 1.4.2 has no langchain.prompts module. It now comes from langchain_core.prompts in langchain-core 1.6.5.",
+          "reason_ar": "لا توجد وحدة langchain.prompts في langchain 1.4.2، وPromptTemplate الآن من langchain_core.prompts في langchain-core 1.6.5.",
           "checked": "langchain 1.4.2",
           "evidence_url": "https://github.com/langchain-ai/langchain/tree/langchain%3D%3D1.4.2/libs/langchain_v1/langchain",
           "moved_to": [
             {
               "module": "langchain_core.prompts",
-              "release": "langchain-core 1.6.4",
-              "url": "https://github.com/langchain-ai/langchain/blob/langchain-core%3D%3D1.6.4/libs/core/langchain_core/prompts/__init__.py"
+              "release": "langchain-core 1.6.5",
+              "url": "https://github.com/langchain-ai/langchain/blob/langchain-core%3D%3D1.6.5/libs/core/langchain_core/prompts/__init__.py"
             }
           ]
         },
@@ -1662,15 +1662,15 @@
           "names": [
             "PromptTemplate"
           ],
-          "reason": "langchain 1.4.2 has no langchain.prompts module. It now comes from langchain_core.prompts in langchain-core 1.6.4.",
-          "reason_ar": "لا توجد وحدة langchain.prompts في langchain 1.4.2، وPromptTemplate الآن من langchain_core.prompts في langchain-core 1.6.4.",
+          "reason": "langchain 1.4.2 has no langchain.prompts module. It now comes from langchain_core.prompts in langchain-core 1.6.5.",
+          "reason_ar": "لا توجد وحدة langchain.prompts في langchain 1.4.2، وPromptTemplate الآن من langchain_core.prompts في langchain-core 1.6.5.",
           "checked": "langchain 1.4.2",
           "evidence_url": "https://github.com/langchain-ai/langchain/tree/langchain%3D%3D1.4.2/libs/langchain_v1/langchain",
           "moved_to": [
             {
               "module": "langchain_core.prompts",
-              "release": "langchain-core 1.6.4",
-              "url": "https://github.com/langchain-ai/langchain/blob/langchain-core%3D%3D1.6.4/libs/core/langchain_core/prompts/__init__.py"
+              "release": "langchain-core 1.6.5",
+              "url": "https://github.com/langchain-ai/langchain/blob/langchain-core%3D%3D1.6.5/libs/core/langchain_core/prompts/__init__.py"
             }
           ]
         },
@@ -1738,15 +1738,15 @@
           "names": [
             "PromptTemplate"
           ],
-          "reason": "langchain 1.4.2 has no langchain.prompts module. It now comes from langchain_core.prompts in langchain-core 1.6.4.",
-          "reason_ar": "لا توجد وحدة langchain.prompts في langchain 1.4.2، وPromptTemplate الآن من langchain_core.prompts في langchain-core 1.6.4.",
+          "reason": "langchain 1.4.2 has no langchain.prompts module. It now comes from langchain_core.prompts in langchain-core 1.6.5.",
+          "reason_ar": "لا توجد وحدة langchain.prompts في langchain 1.4.2، وPromptTemplate الآن من langchain_core.prompts في langchain-core 1.6.5.",
           "checked": "langchain 1.4.2",
           "evidence_url": "https://github.com/langchain-ai/langchain/tree/langchain%3D%3D1.4.2/libs/langchain_v1/langchain",
           "moved_to": [
             {
               "module": "langchain_core.prompts",
-              "release": "langchain-core 1.6.4",
-              "url": "https://github.com/langchain-ai/langchain/blob/langchain-core%3D%3D1.6.4/libs/core/langchain_core/prompts/__init__.py"
+              "release": "langchain-core 1.6.5",
+              "url": "https://github.com/langchain-ai/langchain/blob/langchain-core%3D%3D1.6.5/libs/core/langchain_core/prompts/__init__.py"
             }
           ]
         },
@@ -1829,15 +1829,15 @@
           "names": [
             "PromptTemplate"
           ],
-          "reason": "langchain 1.4.2 has no langchain.prompts module. It now comes from langchain_core.prompts in langchain-core 1.6.4.",
-          "reason_ar": "لا توجد وحدة langchain.prompts في langchain 1.4.2، وPromptTemplate الآن من langchain_core.prompts في langchain-core 1.6.4.",
+          "reason": "langchain 1.4.2 has no langchain.prompts module. It now comes from langchain_core.prompts in langchain-core 1.6.5.",
+          "reason_ar": "لا توجد وحدة langchain.prompts في langchain 1.4.2، وPromptTemplate الآن من langchain_core.prompts في langchain-core 1.6.5.",
           "checked": "langchain 1.4.2",
           "evidence_url": "https://github.com/langchain-ai/langchain/tree/langchain%3D%3D1.4.2/libs/langchain_v1/langchain",
           "moved_to": [
             {
               "module": "langchain_core.prompts",
-              "release": "langchain-core 1.6.4",
-              "url": "https://github.com/langchain-ai/langchain/blob/langchain-core%3D%3D1.6.4/libs/core/langchain_core/prompts/__init__.py"
+              "release": "langchain-core 1.6.5",
+              "url": "https://github.com/langchain-ai/langchain/blob/langchain-core%3D%3D1.6.5/libs/core/langchain_core/prompts/__init__.py"
             }
           ]
         },
@@ -2055,15 +2055,15 @@
           "names": [
             "PromptTemplate"
           ],
-          "reason": "langchain 1.4.2 has no langchain.prompts module. It now comes from langchain_core.prompts in langchain-core 1.6.4.",
-          "reason_ar": "لا توجد وحدة langchain.prompts في langchain 1.4.2، وPromptTemplate الآن من langchain_core.prompts في langchain-core 1.6.4.",
+          "reason": "langchain 1.4.2 has no langchain.prompts module. It now comes from langchain_core.prompts in langchain-core 1.6.5.",
+          "reason_ar": "لا توجد وحدة langchain.prompts في langchain 1.4.2، وPromptTemplate الآن من langchain_core.prompts في langchain-core 1.6.5.",
           "checked": "langchain 1.4.2",
           "evidence_url": "https://github.com/langchain-ai/langchain/tree/langchain%3D%3D1.4.2/libs/langchain_v1/langchain",
           "moved_to": [
             {
               "module": "langchain_core.prompts",
-              "release": "langchain-core 1.6.4",
-              "url": "https://github.com/langchain-ai/langchain/blob/langchain-core%3D%3D1.6.4/libs/core/langchain_core/prompts/__init__.py"
+              "release": "langchain-core 1.6.5",
+              "url": "https://github.com/langchain-ai/langchain/blob/langchain-core%3D%3D1.6.5/libs/core/langchain_core/prompts/__init__.py"
             }
           ]
         },
@@ -2106,15 +2106,15 @@
           "names": [
             "PromptTemplate"
           ],
-          "reason": "langchain 1.4.2 has no langchain.prompts module. It now comes from langchain_core.prompts in langchain-core 1.6.4.",
-          "reason_ar": "لا توجد وحدة langchain.prompts في langchain 1.4.2، وPromptTemplate الآن من langchain_core.prompts في langchain-core 1.6.4.",
+          "reason": "langchain 1.4.2 has no langchain.prompts module. It now comes from langchain_core.prompts in langchain-core 1.6.5.",
+          "reason_ar": "لا توجد وحدة langchain.prompts في langchain 1.4.2، وPromptTemplate الآن من langchain_core.prompts في langchain-core 1.6.5.",
           "checked": "langchain 1.4.2",
           "evidence_url": "https://github.com/langchain-ai/langchain/tree/langchain%3D%3D1.4.2/libs/langchain_v1/langchain",
           "moved_to": [
             {
               "module": "langchain_core.prompts",
-              "release": "langchain-core 1.6.4",
-              "url": "https://github.com/langchain-ai/langchain/blob/langchain-core%3D%3D1.6.4/libs/core/langchain_core/prompts/__init__.py"
+              "release": "langchain-core 1.6.5",
+              "url": "https://github.com/langchain-ai/langchain/blob/langchain-core%3D%3D1.6.5/libs/core/langchain_core/prompts/__init__.py"
             }
           ]
         },
@@ -2460,15 +2460,15 @@
           "names": [
             "PromptTemplate"
           ],
-          "reason": "langchain 1.4.2 has no langchain.prompts module. It now comes from langchain_core.prompts in langchain-core 1.6.4.",
-          "reason_ar": "لا توجد وحدة langchain.prompts في langchain 1.4.2، وPromptTemplate الآن من langchain_core.prompts في langchain-core 1.6.4.",
+          "reason": "langchain 1.4.2 has no langchain.prompts module. It now comes from langchain_core.prompts in langchain-core 1.6.5.",
+          "reason_ar": "لا توجد وحدة langchain.prompts في langchain 1.4.2، وPromptTemplate الآن من langchain_core.prompts في langchain-core 1.6.5.",
           "checked": "langchain 1.4.2",
           "evidence_url": "https://github.com/langchain-ai/langchain/tree/langchain%3D%3D1.4.2/libs/langchain_v1/langchain",
           "moved_to": [
             {
               "module": "langchain_core.prompts",
-              "release": "langchain-core 1.6.4",
-              "url": "https://github.com/langchain-ai/langchain/blob/langchain-core%3D%3D1.6.4/libs/core/langchain_core/prompts/__init__.py"
+              "release": "langchain-core 1.6.5",
+              "url": "https://github.com/langchain-ai/langchain/blob/langchain-core%3D%3D1.6.5/libs/core/langchain_core/prompts/__init__.py"
             }
           ]
         },
@@ -2536,15 +2536,15 @@
           "names": [
             "PromptTemplate"
           ],
-          "reason": "langchain 1.4.2 has no langchain.prompts module. It now comes from langchain_core.prompts in langchain-core 1.6.4.",
-          "reason_ar": "لا توجد وحدة langchain.prompts في langchain 1.4.2، وPromptTemplate الآن من langchain_core.prompts في langchain-core 1.6.4.",
+          "reason": "langchain 1.4.2 has no langchain.prompts module. It now comes from langchain_core.prompts in langchain-core 1.6.5.",
+          "reason_ar": "لا توجد وحدة langchain.prompts في langchain 1.4.2، وPromptTemplate الآن من langchain_core.prompts في langchain-core 1.6.5.",
           "checked": "langchain 1.4.2",
           "evidence_url": "https://github.com/langchain-ai/langchain/tree/langchain%3D%3D1.4.2/libs/langchain_v1/langchain",
           "moved_to": [
             {
               "module": "langchain_core.prompts",
-              "release": "langchain-core 1.6.4",
-              "url": "https://github.com/langchain-ai/langchain/blob/langchain-core%3D%3D1.6.4/libs/core/langchain_core/prompts/__init__.py"
+              "release": "langchain-core 1.6.5",
+              "url": "https://github.com/langchain-ai/langchain/blob/langchain-core%3D%3D1.6.5/libs/core/langchain_core/prompts/__init__.py"
             }
           ]
         },
@@ -2587,15 +2587,15 @@
           "names": [
             "PromptTemplate"
           ],
-          "reason": "langchain 1.4.2 has no langchain.prompts module. It now comes from langchain_core.prompts in langchain-core 1.6.4.",
-          "reason_ar": "لا توجد وحدة langchain.prompts في langchain 1.4.2، وPromptTemplate الآن من langchain_core.prompts في langchain-core 1.6.4.",
+          "reason": "langchain 1.4.2 has no langchain.prompts module. It now comes from langchain_core.prompts in langchain-core 1.6.5.",
+          "reason_ar": "لا توجد وحدة langchain.prompts في langchain 1.4.2، وPromptTemplate الآن من langchain_core.prompts في langchain-core 1.6.5.",
           "checked": "langchain 1.4.2",
           "evidence_url": "https://github.com/langchain-ai/langchain/tree/langchain%3D%3D1.4.2/libs/langchain_v1/langchain",
           "moved_to": [
             {
               "module": "langchain_core.prompts",
-              "release": "langchain-core 1.6.4",
-              "url": "https://github.com/langchain-ai/langchain/blob/langchain-core%3D%3D1.6.4/libs/core/langchain_core/prompts/__init__.py"
+              "release": "langchain-core 1.6.5",
+              "url": "https://github.com/langchain-ai/langchain/blob/langchain-core%3D%3D1.6.5/libs/core/langchain_core/prompts/__init__.py"
             }
           ]
         },
@@ -2638,15 +2638,15 @@
           "names": [
             "PromptTemplate"
           ],
-          "reason": "langchain 1.4.2 has no langchain.prompts module. It now comes from langchain_core.prompts in langchain-core 1.6.4.",
-          "reason_ar": "لا توجد وحدة langchain.prompts في langchain 1.4.2، وPromptTemplate الآن من langchain_core.prompts في langchain-core 1.6.4.",
+          "reason": "langchain 1.4.2 has no langchain.prompts module. It now comes from langchain_core.prompts in langchain-core 1.6.5.",
+          "reason_ar": "لا توجد وحدة langchain.prompts في langchain 1.4.2، وPromptTemplate الآن من langchain_core.prompts في langchain-core 1.6.5.",
           "checked": "langchain 1.4.2",
           "evidence_url": "https://github.com/langchain-ai/langchain/tree/langchain%3D%3D1.4.2/libs/langchain_v1/langchain",
           "moved_to": [
             {
               "module": "langchain_core.prompts",
-              "release": "langchain-core 1.6.4",
-              "url": "https://github.com/langchain-ai/langchain/blob/langchain-core%3D%3D1.6.4/libs/core/langchain_core/prompts/__init__.py"
+              "release": "langchain-core 1.6.5",
+              "url": "https://github.com/langchain-ai/langchain/blob/langchain-core%3D%3D1.6.5/libs/core/langchain_core/prompts/__init__.py"
             }
           ]
         },
@@ -2689,15 +2689,15 @@
           "names": [
             "PromptTemplate"
           ],
-          "reason": "langchain 1.4.2 has no langchain.prompts module. It now comes from langchain_core.prompts in langchain-core 1.6.4.",
-          "reason_ar": "لا توجد وحدة langchain.prompts في langchain 1.4.2، وPromptTemplate الآن من langchain_core.prompts في langchain-core 1.6.4.",
+          "reason": "langchain 1.4.2 has no langchain.prompts module. It now comes from langchain_core.prompts in langchain-core 1.6.5.",
+          "reason_ar": "لا توجد وحدة langchain.prompts في langchain 1.4.2، وPromptTemplate الآن من langchain_core.prompts في langchain-core 1.6.5.",
           "checked": "langchain 1.4.2",
           "evidence_url": "https://github.com/langchain-ai/langchain/tree/langchain%3D%3D1.4.2/libs/langchain_v1/langchain",
           "moved_to": [
             {
               "module": "langchain_core.prompts",
-              "release": "langchain-core 1.6.4",
-              "url": "https://github.com/langchain-ai/langchain/blob/langchain-core%3D%3D1.6.4/libs/core/langchain_core/prompts/__init__.py"
+              "release": "langchain-core 1.6.5",
+              "url": "https://github.com/langchain-ai/langchain/blob/langchain-core%3D%3D1.6.5/libs/core/langchain_core/prompts/__init__.py"
             }
           ]
         },
@@ -2740,15 +2740,15 @@
           "names": [
             "PromptTemplate"
           ],
-          "reason": "langchain 1.4.2 has no langchain.prompts module. It now comes from langchain_core.prompts in langchain-core 1.6.4.",
-          "reason_ar": "لا توجد وحدة langchain.prompts في langchain 1.4.2، وPromptTemplate الآن من langchain_core.prompts في langchain-core 1.6.4.",
+          "reason": "langchain 1.4.2 has no langchain.prompts module. It now comes from langchain_core.prompts in langchain-core 1.6.5.",
+          "reason_ar": "لا توجد وحدة langchain.prompts في langchain 1.4.2، وPromptTemplate الآن من langchain_core.prompts في langchain-core 1.6.5.",
           "checked": "langchain 1.4.2",
           "evidence_url": "https://github.com/langchain-ai/langchain/tree/langchain%3D%3D1.4.2/libs/langchain_v1/langchain",
           "moved_to": [
             {
               "module": "langchain_core.prompts",
-              "release": "langchain-core 1.6.4",
-              "url": "https://github.com/langchain-ai/langchain/blob/langchain-core%3D%3D1.6.4/libs/core/langchain_core/prompts/__init__.py"
+              "release": "langchain-core 1.6.5",
+              "url": "https://github.com/langchain-ai/langchain/blob/langchain-core%3D%3D1.6.5/libs/core/langchain_core/prompts/__init__.py"
             }
           ]
         },
@@ -2791,15 +2791,15 @@
           "names": [
             "PromptTemplate"
           ],
-          "reason": "langchain 1.4.2 has no langchain.prompts module. It now comes from langchain_core.prompts in langchain-core 1.6.4.",
-          "reason_ar": "لا توجد وحدة langchain.prompts في langchain 1.4.2، وPromptTemplate الآن من langchain_core.prompts في langchain-core 1.6.4.",
+          "reason": "langchain 1.4.2 has no langchain.prompts module. It now comes from langchain_core.prompts in langchain-core 1.6.5.",
+          "reason_ar": "لا توجد وحدة langchain.prompts في langchain 1.4.2، وPromptTemplate الآن من langchain_core.prompts في langchain-core 1.6.5.",
           "checked": "langchain 1.4.2",
           "evidence_url": "https://github.com/langchain-ai/langchain/tree/langchain%3D%3D1.4.2/libs/langchain_v1/langchain",
           "moved_to": [
             {
               "module": "langchain_core.prompts",
-              "release": "langchain-core 1.6.4",
-              "url": "https://github.com/langchain-ai/langchain/blob/langchain-core%3D%3D1.6.4/libs/core/langchain_core/prompts/__init__.py"
+              "release": "langchain-core 1.6.5",
+              "url": "https://github.com/langchain-ai/langchain/blob/langchain-core%3D%3D1.6.5/libs/core/langchain_core/prompts/__init__.py"
             }
           ]
         },
@@ -2842,15 +2842,15 @@
           "names": [
             "PromptTemplate"
           ],
-          "reason": "langchain 1.4.2 has no langchain.prompts module. It now comes from langchain_core.prompts in langchain-core 1.6.4.",
-          "reason_ar": "لا توجد وحدة langchain.prompts في langchain 1.4.2، وPromptTemplate الآن من langchain_core.prompts في langchain-core 1.6.4.",
+          "reason": "langchain 1.4.2 has no langchain.prompts module. It now comes from langchain_core.prompts in langchain-core 1.6.5.",
+          "reason_ar": "لا توجد وحدة langchain.prompts في langchain 1.4.2، وPromptTemplate الآن من langchain_core.prompts في langchain-core 1.6.5.",
           "checked": "langchain 1.4.2",
           "evidence_url": "https://github.com/langchain-ai/langchain/tree/langchain%3D%3D1.4.2/libs/langchain_v1/langchain",
           "moved_to": [
             {
               "module": "langchain_core.prompts",
-              "release": "langchain-core 1.6.4",
-              "url": "https://github.com/langchain-ai/langchain/blob/langchain-core%3D%3D1.6.4/libs/core/langchain_core/prompts/__init__.py"
+              "release": "langchain-core 1.6.5",
+              "url": "https://github.com/langchain-ai/langchain/blob/langchain-core%3D%3D1.6.5/libs/core/langchain_core/prompts/__init__.py"
             }
           ]
         }
@@ -3139,10 +3139,10 @@
   "pins_note": "pins, installs_unpinned and legacy_api are read from the course notebooks by `python -m src.curriculum`. A package under installs_unpinned has no version bound in the notebook, so a student installs whatever is newest on the day they run it.",
   "material_checked": {
     "langchain": "1.4.2",
-    "langchain-core": "1.6.4",
-    "langchain-openai": "1.6.3",
+    "langchain-core": "1.6.5",
+    "langchain-openai": "1.6.6",
     "langchain-classic": "1.0.8",
-    "on": "2026-09-22"
+    "on": "2026-09-25"
   },
   "material_note": "material_edits are read by `python -m src.curriculum`: every langchain import in the notebooks, checked against the source of the newest release at its tag on GitHub, with the replacement found the same way. runs_as_pinned is true when the notebook's own pin keeps it on the old line, so the edit is for the day the course moves, not a break today.",
   "concepts": [
@@ -3318,7 +3318,7 @@
       "course": "0.2.76",
       "latest": "1.2.12"
     },
-    "on": "2026-09-22"
+    "on": "2026-09-25"
   },
   "concepts_note": "concepts are read by `python -m src.curriculum`: modules the newest release of a tool the course teaches added since the newest version the course's pins allow, each described by its own docstring, with job posts counted only for a name distinct enough to search."
 }

@@ -124,12 +124,15 @@ behind it: what the chapter teaches, which version it runs, and how far the rele
 ## Standup log
 
 ### 2026-09-25
-- The 19 install counts pypistats had refused are in: all 37 subjects now carry one, filled one
-  request at a time. Scores and recommendations replayed from the frozen run's own files, no
-  network: no action changed, transformers moved from priority 3.75 to 4.00, and the writer
-  kept 35 of 37 sentences.
-- The frozen run is complete and matches what the docs say. Demo is Sep 26/27; the run was
-  collected on Sep 22.
+- The 19 install counts pypistats had refused on Sep 22 are in, filled one request at a time.
+  Replayed from that run's own files: no action changed.
+- Then collected the demo run itself, the day before the demo: `run_20260925T191944Z`. 433
+  signals, 38 subjects, 174 claims (143 primary, 27 registry, 0 cross, 4 unverified), install
+  counts for all 38. Decisions: 6 chapter updates, 1 course-wide change, 2 new lessons, 2
+  optional notebooks, 27 watched, plus MCP as a concept lesson. The writer kept 34 of 38.
+- The import check and the concepts were read again the same day: still 85 lines in 39
+  notebooks across 11 chapters, MCP still 20 job posts and 0 of 89 notebooks.
+- Everything pushed, the design work with it.
 
 ### 2026-09-22
 - The lead asked for what a teacher actually needs: not "a package moved", but what to change

@@ -1,23 +1,24 @@
 # Demo answers
 
-Every number here comes from `run_20260922T102800Z`. Re-run `python -m src.pipeline --run-id
-run_20260922T102800Z` and they come back the same, because replay never touches the network.
+Every number here comes from `run_20260925T191944Z`, collected the day before the demo. Re-run
+`python -m src.pipeline --run-id run_20260925T191944Z` and the numbers come back the same,
+because replay never touches the network.
 
 ## The run, in numbers
 
 | | |
 |---|---|
-| Signals collected | 407 over the same 30 days - 235 Hacker News, 93 PyPI releases, 79 GitHub releases |
+| Signals collected | 433 over the same 30 days - 234 Hacker News, 109 PyPI releases, 90 GitHub releases |
 | Packages followed | 56, every one the course notebooks install |
-| Subjects tracked | 37 |
-| Checkable claims | 148 |
-| Confirmed by the release itself | 121 |
-| Carried by a second registry | 24 |
+| Subjects tracked | 38 |
+| Checkable claims | 174 |
+| Confirmed by the release itself | 143 |
+| Carried by a second registry | 27 |
 | Confirmed by an independent source | 0 |
-| Unverified | 3 |
-| Release-note lines read | 2,120 - 8 breaking, 2 deprecations, 370 features, 795 fixes, 945 chores |
+| Unverified | 4 |
+| Release-note lines read | 2,085 - 5 breaking, 2 deprecations, 382 features, 717 fixes, 979 chores |
 | Job posts searched | the last three "Ask HN: Who is hiring?" threads |
-| Recommendations | 4 update a chapter, 1 course-wide change, 2 new lesson, 2 optional, 28 watch |
+| Recommendations | 6 update a chapter, 1 course-wide change, 2 new lesson, 2 optional, 27 watch |
 | Chapters with something to act on | 11 of 25 |
 | Course notebooks read | 89, across six weeks |
 | Chapters installing something with no version bound | 19 of 25 |
@@ -47,7 +48,7 @@ A school asks three different questions, and the agent now answers each from dat
 | Do employers want it? | job posts naming the tool in the last three "Who is hiring?" threads, and PyPI installs |
 
 The release notes were already being collected and thrown away. Read now, they show why
-versions mislead: of 2,120 lines, four in five are fixes or chores. About one line in six is
+versions mislead: of 2,085 lines, four in five are fixes or chores. About one line in five is
 something a teacher would read.
 
 What changed as a result, in the same data:
@@ -67,8 +68,8 @@ What changed as a result, in the same data:
   install; the other 38 pin LangChain 0.3 and teach its agent API. A broken or outdated
   notebook is a teaching problem whatever the release notes say.
 
-The result: 4 chapter updates, 1 course-wide change, 2 new lessons and 2 optional notebooks,
-each with a reason a teacher would accept and a two or three step plan, out of 37 packages
+The result: 6 chapter updates, 1 course-wide change, 2 new lessons and 2 optional notebooks,
+each with a reason a teacher would accept and a two or three step plan, out of 38 packages
 that shipped something.
 
 ## "Why did every run have exactly 80 GitHub releases?"
@@ -78,9 +79,9 @@ GitHub limit, and the data was real, but the same 10 releases covered 9 days of 
 and 189 days of llama_index, while PyPI read a 30-day window. "llama_index added 89 features"
 measured six months against nine days.
 
-Every source now reads the same 30 days. The langchain monorepo went from 10 releases to 26,
-across 8 packages, three of which had never been seen; llama_index went from 10 to 1. The total
-happened to land on 79, which is why a fixed count is easy to miss.
+Every source now reads the same 30 days. In this run the langchain monorepo gives 32 releases
+across its packages, openai-python 21 and pydantic-ai 18, while transformers and llama_index
+give one each: what each project actually shipped in a month, rather than ten of each.
 
 ## "How do you judge whether something can be taught, not only whether it matters?"
 
@@ -270,14 +271,12 @@ from our table. It no longer reads comments, and a name must match whole.
 
 ## "What happens if the wifi dies during the demo?"
 
-Two fallbacks. Both were run with the network and the model switched off, on 2026-09-22:
+Two fallbacks. Both were run with the network and the model switched off, on 2026-09-25:
 
 1. **Re-analyse** in the web app replays the saved signals of any past run. Replaying a copy of
-   the frozen run with no model and no network gave the same 37 recommendations and the same
-   verdicts on every claim, and 36 of 37 actions were identical. The one that moved,
-   openai-python, went from watch to update: without the judge its teaching value defaults to 3,
-   and its priority crosses the line. Without a model the sentences come from the rules, and
-   each card says who wrote its reason.
+   the frozen run with no model and no network gave the same 38 recommendations, the same
+   verdicts on every claim, and every action identical. Without a model the sentences come from
+   the rules instead of being rewritten, and each card says who wrote its reason.
 2. `web/dist/site.html` is a single file with the run and the fonts embedded. It opens on any
    machine with no server and no network.
 
