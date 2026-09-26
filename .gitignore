@@ -2,4 +2,22 @@
 __pycache__/
 *.pyc
 .env
-fixtures/runs/
+fixtures/runs/*
+# the frozen demo run travels with the repo so anyone can replay it offline
+!fixtures/runs/run_20260925T191944Z
+fixtures/runs/run_20260925T191944Z/raw
+.agents/
+.claude/skills/
+.pytest_cache/
+
+# course notebooks, read locally, never published
+notebooks/
+
+# run logs written while testing
+*.log
+
+# the material review describes the course notebooks in detail, and this repo is
+# public: it stays on this machine until the course owners say otherwise
+fixtures/material_review.json
+web/dist/site-material.html
+fixtures/lesson_demand.json

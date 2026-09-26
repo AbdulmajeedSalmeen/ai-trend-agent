@@ -1,0 +1,268 @@
+[
+  {
+    "subject": "accelerate",
+    "job_term": null,
+    "jobs": null,
+    "downloads": 17248651,
+    "months": 3
+  },
+  {
+    "subject": "anthropic-sdk-python",
+    "job_term": "anthropic",
+    "jobs": 12,
+    "downloads": 138623823,
+    "months": 3
+  },
+  {
+    "subject": "bitsandbytes",
+    "job_term": "bitsandbytes",
+    "jobs": 0,
+    "downloads": 3405273,
+    "months": 3
+  },
+  {
+    "subject": "crewai",
+    "job_term": "crewai",
+    "jobs": 4,
+    "downloads": 2435828,
+    "months": 3
+  },
+  {
+    "subject": "ddgs",
+    "job_term": null,
+    "jobs": null,
+    "downloads": 4986839,
+    "months": 3
+  },
+  {
+    "subject": "dspy",
+    "job_term": "dspy",
+    "jobs": 0,
+    "downloads": 5110995,
+    "months": 3
+  },
+  {
+    "subject": "evidently",
+    "job_term": null,
+    "jobs": null,
+    "downloads": 818220,
+    "months": 3
+  },
+  {
+    "subject": "faiss-cpu",
+    "job_term": "faiss",
+    "jobs": 0,
+    "downloads": 11798551,
+    "months": 3
+  },
+  {
+    "subject": "langchain",
+    "job_term": "langchain",
+    "jobs": 17,
+    "downloads": 170606434,
+    "months": 3
+  },
+  {
+    "subject": "langchain-anthropic",
+    "job_term": "langchain",
+    "jobs": 17,
+    "downloads": 17338766,
+    "months": 3
+  },
+  {
+    "subject": "langchain-core",
+    "job_term": "langchain",
+    "jobs": 17,
+    "downloads": 145749027,
+    "months": 3
+  },
+  {
+    "subject": "langchain-deepseek",
+    "job_term": "langchain",
+    "jobs": 17,
+    "downloads": 582572,
+    "months": 3
+  },
+  {
+    "subject": "langchain-fireworks",
+    "job_term": "langchain",
+    "jobs": 17,
+    "downloads": 569727,
+    "months": 3
+  },
+  {
+    "subject": "langchain-openai",
+    "job_term": "langchain",
+    "jobs": 17,
+    "downloads": 38002484,
+    "months": 3
+  },
+  {
+    "subject": "langchain-openrouter",
+    "job_term": "langchain",
+    "jobs": 17,
+    "downloads": 851725,
+    "months": 3
+  },
+  {
+    "subject": "langchain-typesafe",
+    "job_term": "langchain",
+    "jobs": 17,
+    "downloads": 6392,
+    "months": 3
+  },
+  {
+    "subject": "langgraph",
+    "job_term": "langgraph",
+    "jobs": 13,
+    "downloads": 43701422,
+    "months": 3
+  },
+  {
+    "subject": "langgraph-cli",
+    "job_term": "langgraph",
+    "jobs": 13,
+    "downloads": 2566214,
+    "months": 3
+  },
+  {
+    "subject": "langgraph-sdk",
+    "job_term": "langgraph",
+    "jobs": 13,
+    "downloads": 42069314,
+    "months": 3
+  },
+  {
+    "subject": "langsmith",
+    "job_term": "langsmith",
+    "jobs": 2,
+    "downloads": 78342994,
+    "months": 3
+  },
+  {
+    "subject": "litellm",
+    "job_term": "litellm",
+    "jobs": 0,
+    "downloads": 88904794,
+    "months": 3
+  },
+  {
+    "subject": "llama_index",
+    "job_term": "llamaindex",
+    "jobs": 5,
+    "downloads": 3115339,
+    "months": 3
+  },
+  {
+    "subject": "matplotlib",
+    "job_term": "matplotlib",
+    "jobs": 1,
+    "downloads": 155772963,
+    "months": 3
+  },
+  {
+    "subject": "openai",
+    "job_term": "openai",
+    "jobs": 19,
+    "downloads": 283218318,
+    "months": 3
+  },
+  {
+    "subject": "openai-python",
+    "job_term": "openai",
+    "jobs": 19,
+    "downloads": 283218318,
+    "months": 3
+  },
+  {
+    "subject": "pandas",
+    "job_term": "pandas",
+    "jobs": 10,
+    "downloads": 524669947,
+    "months": 3
+  },
+  {
+    "subject": "peft",
+    "job_term": "peft",
+    "jobs": 1,
+    "downloads": 8063014,
+    "months": 3
+  },
+  {
+    "subject": "pydantic-ai",
+    "job_term": "pydantic",
+    "jobs": 1,
+    "downloads": 5300338,
+    "months": 3
+  },
+  {
+    "subject": "pypdf",
+    "job_term": "pypdf",
+    "jobs": 0,
+    "downloads": 116089379,
+    "months": 3
+  },
+  {
+    "subject": "rapidfuzz",
+    "job_term": "rapidfuzz",
+    "jobs": 0,
+    "downloads": 117530110,
+    "months": 3
+  },
+  {
+    "subject": "scikit-learn",
+    "job_term": "scikit-learn",
+    "jobs": 1,
+    "downloads": 183826718,
+    "months": 3
+  },
+  {
+    "subject": "sentence-transformers",
+    "job_term": "sentence-transformers",
+    "jobs": 3,
+    "downloads": 22718928,
+    "months": 3
+  },
+  {
+    "subject": "streamlit",
+    "job_term": "streamlit",
+    "jobs": 3,
+    "downloads": 19110072,
+    "months": 3
+  },
+  {
+    "subject": "torch",
+    "job_term": "pytorch",
+    "jobs": 19,
+    "downloads": 59904898,
+    "months": 3
+  },
+  {
+    "subject": "torchvision",
+    "job_term": "pytorch",
+    "jobs": 19,
+    "downloads": 15858954,
+    "months": 3
+  },
+  {
+    "subject": "tqdm",
+    "job_term": "tqdm",
+    "jobs": 0,
+    "downloads": 400710508,
+    "months": 3
+  },
+  {
+    "subject": "transformers",
+    "job_term": "hugging face",
+    "jobs": 8,
+    "downloads": 92159431,
+    "months": 3
+  },
+  {
+    "subject": "unstructured",
+    "job_term": null,
+    "jobs": null,
+    "downloads": 2488273,
+    "months": 3
+  }
+]

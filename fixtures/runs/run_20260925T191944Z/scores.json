@@ -1,0 +1,2215 @@
+[
+  {
+    "trend_id": "trend_001",
+    "chapter_id": "C19",
+    "confidence": 0.8,
+    "dimensions": {
+      "relevance": 2,
+      "impact": 4,
+      "educational_value": 4,
+      "market_relevance": 4,
+      "maturity": 3,
+      "prerequisites": 4,
+      "difficulty": 1
+    },
+    "provenance": {
+      "relevance": "measured",
+      "impact": "measured",
+      "educational_value": "judged",
+      "market_relevance": "measured",
+      "maturity": "measured",
+      "prerequisites": "measured",
+      "difficulty": "measured"
+    },
+    "priority": 3.5,
+    "changes": {
+      "breaking": 0,
+      "deprecation": 0,
+      "feature": 4,
+      "fix": 2,
+      "noise": 21,
+      "other": 0,
+      "highlights": [
+        "feature: place self-hosted deployments on a listener",
+        "feature: clarify agent flags and support env defaults",
+        "feature: Update langgraph deploy command to use agent_id and environment args",
+        "feature: add --image-uri flag for self-hosted deployments"
+      ],
+      "teachable": 4,
+      "lines": 27
+    },
+    "market": {
+      "subject": "langgraph-cli",
+      "job_term": "langgraph",
+      "jobs": 13,
+      "downloads": 2566214,
+      "months": 3
+    },
+    "feasibility": 4.0,
+    "factors": {
+      "maturity": {
+        "first_release": "2024-05-02",
+        "age_years": 2.4,
+        "latest_stable": "0.4.32",
+        "major": 0,
+        "steady": true
+      },
+      "prerequisites": {
+        "basis": "family",
+        "via": [
+          "langgraph"
+        ]
+      },
+      "difficulty": {
+        "new_material": false,
+        "edit_lines": 0,
+        "chapters": 0,
+        "breaking": 0,
+        "deprecation": 0
+      }
+    }
+  },
+  {
+    "trend_id": "trend_002",
+    "chapter_id": "C19",
+    "confidence": 0.5,
+    "dimensions": {
+      "relevance": 2,
+      "impact": 3,
+      "educational_value": 4,
+      "market_relevance": 4,
+      "maturity": 4,
+      "prerequisites": 5,
+      "difficulty": 1
+    },
+    "provenance": {
+      "relevance": "measured",
+      "impact": "measured",
+      "educational_value": "judged",
+      "market_relevance": "measured",
+      "maturity": "measured",
+      "prerequisites": "measured",
+      "difficulty": "measured"
+    },
+    "priority": 3.25,
+    "changes": {
+      "breaking": 0,
+      "deprecation": 0,
+      "feature": 1,
+      "fix": 2,
+      "noise": 7,
+      "other": 0,
+      "highlights": [
+        "feature: add response_schema to interrupt()"
+      ],
+      "teachable": 1,
+      "lines": 10
+    },
+    "market": {
+      "subject": "langgraph",
+      "job_term": "langgraph",
+      "jobs": 13,
+      "downloads": 43701422,
+      "months": 3
+    },
+    "feasibility": 4.7,
+    "factors": {
+      "maturity": {
+        "first_release": "2024-01-08",
+        "age_years": 2.7,
+        "latest_stable": "1.2.12",
+        "major": 1,
+        "steady": true
+      },
+      "prerequisites": {
+        "basis": "taught"
+      },
+      "difficulty": {
+        "new_material": false,
+        "edit_lines": 0,
+        "chapters": 0,
+        "breaking": 0,
+        "deprecation": 0
+      }
+    }
+  },
+  {
+    "trend_id": "trend_003",
+    "chapter_id": "C19",
+    "confidence": 0.7,
+    "dimensions": {
+      "relevance": 2,
+      "impact": 3,
+      "educational_value": 4,
+      "market_relevance": 4,
+      "maturity": 3,
+      "prerequisites": 4,
+      "difficulty": 1
+    },
+    "provenance": {
+      "relevance": "measured",
+      "impact": "measured",
+      "educational_value": "judged",
+      "market_relevance": "measured",
+      "maturity": "measured",
+      "prerequisites": "measured",
+      "difficulty": "measured"
+    },
+    "priority": 3.25,
+    "changes": {
+      "breaking": 0,
+      "deprecation": 0,
+      "feature": 2,
+      "fix": 0,
+      "noise": 8,
+      "other": 1,
+      "highlights": [
+        "feature: add response_schema to interrupt()",
+        "feature: route LangSmith traces from thread streams"
+      ],
+      "teachable": 2,
+      "lines": 11
+    },
+    "market": {
+      "subject": "langgraph-sdk",
+      "job_term": "langgraph",
+      "jobs": 13,
+      "downloads": 42069314,
+      "months": 3
+    },
+    "feasibility": 4.0,
+    "factors": {
+      "maturity": {
+        "first_release": "2024-05-02",
+        "age_years": 2.4,
+        "latest_stable": "0.4.5",
+        "major": 0,
+        "steady": true
+      },
+      "prerequisites": {
+        "basis": "family",
+        "via": [
+          "langgraph"
+        ]
+      },
+      "difficulty": {
+        "new_material": false,
+        "edit_lines": 0,
+        "chapters": 0,
+        "breaking": 0,
+        "deprecation": 0
+      }
+    }
+  },
+  {
+    "trend_id": "trend_004",
+    "chapter_id": "C8",
+    "confidence": 0.6999999999999998,
+    "dimensions": {
+      "relevance": 2,
+      "impact": 2,
+      "educational_value": 1,
+      "market_relevance": 3,
+      "maturity": 4,
+      "prerequisites": 4,
+      "difficulty": 1
+    },
+    "provenance": {
+      "relevance": "measured",
+      "impact": "measured",
+      "educational_value": "judged",
+      "market_relevance": "measured",
+      "maturity": "measured",
+      "prerequisites": "measured",
+      "difficulty": "measured"
+    },
+    "priority": 2.0,
+    "changes": {
+      "breaking": 0,
+      "deprecation": 0,
+      "feature": 0,
+      "fix": 5,
+      "noise": 13,
+      "other": 0,
+      "highlights": [],
+      "teachable": 0,
+      "lines": 18
+    },
+    "market": {
+      "subject": "langchain-fireworks",
+      "job_term": "langchain",
+      "jobs": 17,
+      "downloads": 569727,
+      "months": 3
+    },
+    "feasibility": 4.3,
+    "factors": {
+      "maturity": {
+        "first_release": "2024-02-23",
+        "age_years": 2.6,
+        "latest_stable": "1.6.3",
+        "major": 1,
+        "steady": true
+      },
+      "prerequisites": {
+        "basis": "family",
+        "via": [
+          "langchain"
+        ]
+      },
+      "difficulty": {
+        "new_material": false,
+        "edit_lines": 0,
+        "chapters": 0,
+        "breaking": 0,
+        "deprecation": 0
+      }
+    }
+  },
+  {
+    "trend_id": "trend_005",
+    "chapter_id": "C8",
+    "confidence": 0.8,
+    "dimensions": {
+      "relevance": 2,
+      "impact": 4,
+      "educational_value": 4,
+      "market_relevance": 4,
+      "maturity": 4,
+      "prerequisites": 4,
+      "difficulty": 1
+    },
+    "provenance": {
+      "relevance": "measured",
+      "impact": "measured",
+      "educational_value": "judged",
+      "market_relevance": "measured",
+      "maturity": "measured",
+      "prerequisites": "measured",
+      "difficulty": "measured"
+    },
+    "priority": 3.5,
+    "changes": {
+      "breaking": 0,
+      "deprecation": 0,
+      "feature": 3,
+      "fix": 5,
+      "noise": 15,
+      "other": 0,
+      "highlights": [
+        "feature: Allow model name and provider tracing metadata override based on gateway response",
+        "feature: support async tools",
+        "feature: propagate gateway information on error path"
+      ],
+      "teachable": 3,
+      "lines": 23
+    },
+    "market": {
+      "subject": "langchain-core",
+      "job_term": "langchain",
+      "jobs": 17,
+      "downloads": 145749027,
+      "months": 3
+    },
+    "feasibility": 4.3,
+    "factors": {
+      "maturity": {
+        "first_release": "2023-11-20",
+        "age_years": 2.8,
+        "latest_stable": "1.6.5",
+        "major": 1,
+        "steady": true
+      },
+      "prerequisites": {
+        "basis": "family",
+        "via": [
+          "langchain"
+        ]
+      },
+      "difficulty": {
+        "new_material": false,
+        "edit_lines": 0,
+        "chapters": 0,
+        "breaking": 0,
+        "deprecation": 0
+      }
+    }
+  },
+  {
+    "trend_id": "trend_006",
+    "chapter_id": "C8",
+    "confidence": 0.8000000000000002,
+    "dimensions": {
+      "relevance": 2,
+      "impact": 4,
+      "educational_value": 4,
+      "market_relevance": 4,
+      "maturity": 4,
+      "prerequisites": 5,
+      "difficulty": 1
+    },
+    "provenance": {
+      "relevance": "measured",
+      "impact": "measured",
+      "educational_value": "judged",
+      "market_relevance": "measured",
+      "maturity": "measured",
+      "prerequisites": "measured",
+      "difficulty": "measured"
+    },
+    "priority": 3.5,
+    "changes": {
+      "breaking": 0,
+      "deprecation": 0,
+      "feature": 3,
+      "fix": 9,
+      "noise": 11,
+      "other": 0,
+      "highlights": [
+        "feature: mid-conversation tool changes on `SystemMessage`",
+        "feature: support async tools",
+        "feature: support `configuration_update`"
+      ],
+      "teachable": 3,
+      "lines": 23
+    },
+    "market": {
+      "subject": "langchain-openai",
+      "job_term": "langchain",
+      "jobs": 17,
+      "downloads": 38002484,
+      "months": 3
+    },
+    "feasibility": 4.7,
+    "factors": {
+      "maturity": {
+        "first_release": "2024-01-05",
+        "age_years": 2.7,
+        "latest_stable": "1.6.6",
+        "major": 1,
+        "steady": true
+      },
+      "prerequisites": {
+        "basis": "taught"
+      },
+      "difficulty": {
+        "new_material": false,
+        "edit_lines": 0,
+        "chapters": 0,
+        "breaking": 0,
+        "deprecation": 0
+      }
+    }
+  },
+  {
+    "trend_id": "trend_007",
+    "chapter_id": "C8",
+    "confidence": 0.7,
+    "dimensions": {
+      "relevance": 2,
+      "impact": 4,
+      "educational_value": 4,
+      "market_relevance": 4,
+      "maturity": 4,
+      "prerequisites": 4,
+      "difficulty": 1
+    },
+    "provenance": {
+      "relevance": "measured",
+      "impact": "measured",
+      "educational_value": "judged",
+      "market_relevance": "measured",
+      "maturity": "measured",
+      "prerequisites": "measured",
+      "difficulty": "measured"
+    },
+    "priority": 3.5,
+    "changes": {
+      "breaking": 0,
+      "deprecation": 0,
+      "feature": 6,
+      "fix": 5,
+      "noise": 9,
+      "other": 0,
+      "highlights": [
+        "feature: mid-conversation tool changes on `SystemMessage`",
+        "feature: send mid-conversation `SystemMessage`s in place",
+        "feature: add Claude Fable 5.1 support",
+        "feature: support top-level param for skills via `container`; `updates` thinking display mode",
+        "feature: support 1.0 sdk",
+        "feature: surface gateway response metadata"
+      ],
+      "teachable": 6,
+      "lines": 20
+    },
+    "market": {
+      "subject": "langchain-anthropic",
+      "job_term": "langchain",
+      "jobs": 17,
+      "downloads": 17338766,
+      "months": 3
+    },
+    "feasibility": 4.3,
+    "factors": {
+      "maturity": {
+        "first_release": "2023-12-20",
+        "age_years": 2.8,
+        "latest_stable": "1.7.4",
+        "major": 1,
+        "steady": true
+      },
+      "prerequisites": {
+        "basis": "family",
+        "via": [
+          "langchain"
+        ]
+      },
+      "difficulty": {
+        "new_material": false,
+        "edit_lines": 0,
+        "chapters": 0,
+        "breaking": 0,
+        "deprecation": 0
+      }
+    }
+  },
+  {
+    "trend_id": "trend_008",
+    "chapter_id": "C8",
+    "confidence": 0.7,
+    "dimensions": {
+      "relevance": 2,
+      "impact": 1,
+      "educational_value": 1,
+      "market_relevance": 3,
+      "maturity": 2,
+      "prerequisites": 4,
+      "difficulty": 1
+    },
+    "provenance": {
+      "relevance": "measured",
+      "impact": "measured",
+      "educational_value": "judged",
+      "market_relevance": "measured",
+      "maturity": "measured",
+      "prerequisites": "measured",
+      "difficulty": "measured"
+    },
+    "priority": 1.75,
+    "changes": {
+      "breaking": 0,
+      "deprecation": 0,
+      "feature": 0,
+      "fix": 0,
+      "noise": 3,
+      "other": 0,
+      "highlights": [],
+      "teachable": 0,
+      "lines": 3
+    },
+    "market": {
+      "subject": "langchain-openrouter",
+      "job_term": "langchain",
+      "jobs": 17,
+      "downloads": 851725,
+      "months": 3
+    },
+    "feasibility": 3.7,
+    "factors": {
+      "maturity": {
+        "first_release": "2026-02-15",
+        "age_years": 0.6,
+        "latest_stable": "0.2.9",
+        "major": 0,
+        "steady": true
+      },
+      "prerequisites": {
+        "basis": "family",
+        "via": [
+          "langchain"
+        ]
+      },
+      "difficulty": {
+        "new_material": false,
+        "edit_lines": 0,
+        "chapters": 0,
+        "breaking": 0,
+        "deprecation": 0
+      }
+    }
+  },
+  {
+    "trend_id": "trend_009",
+    "chapter_id": "C8",
+    "confidence": 0.7,
+    "dimensions": {
+      "relevance": 2,
+      "impact": 3,
+      "educational_value": 1,
+      "market_relevance": 3,
+      "maturity": 4,
+      "prerequisites": 4,
+      "difficulty": 1
+    },
+    "provenance": {
+      "relevance": "measured",
+      "impact": "measured",
+      "educational_value": "judged",
+      "market_relevance": "measured",
+      "maturity": "measured",
+      "prerequisites": "measured",
+      "difficulty": "measured"
+    },
+    "priority": 2.25,
+    "changes": {
+      "breaking": 0,
+      "deprecation": 0,
+      "feature": 2,
+      "fix": 5,
+      "noise": 12,
+      "other": 0,
+      "highlights": [
+        "feature: add package version tracking to tracing metadata",
+        "feature: validate tool call chunks during streaming"
+      ],
+      "teachable": 2,
+      "lines": 19
+    },
+    "market": {
+      "subject": "langchain-deepseek",
+      "job_term": "langchain",
+      "jobs": 17,
+      "downloads": 582572,
+      "months": 3
+    },
+    "feasibility": 4.3,
+    "factors": {
+      "maturity": {
+        "first_release": "2025-02-04",
+        "age_years": 1.6,
+        "latest_stable": "1.1.1",
+        "major": 1,
+        "steady": true
+      },
+      "prerequisites": {
+        "basis": "family",
+        "via": [
+          "langchain"
+        ]
+      },
+      "difficulty": {
+        "new_material": false,
+        "edit_lines": 0,
+        "chapters": 0,
+        "breaking": 0,
+        "deprecation": 0
+      }
+    }
+  },
+  {
+    "trend_id": "trend_010",
+    "chapter_id": "C8",
+    "confidence": 0.6999999999999998,
+    "dimensions": {
+      "relevance": 2,
+      "impact": 3,
+      "educational_value": 4,
+      "market_relevance": 3,
+      "maturity": 1,
+      "prerequisites": 4,
+      "difficulty": 1
+    },
+    "provenance": {
+      "relevance": "measured",
+      "impact": "measured",
+      "educational_value": "judged",
+      "market_relevance": "measured",
+      "maturity": "measured",
+      "prerequisites": "measured",
+      "difficulty": "measured"
+    },
+    "priority": 3.0,
+    "changes": {
+      "breaking": 0,
+      "deprecation": 0,
+      "feature": 8,
+      "fix": 2,
+      "noise": 3,
+      "other": 0,
+      "highlights": [
+        "feature: make classifier questions invocation-scoped",
+        "feature: experimental `AutoModeMiddleware`",
+        "feature: experimental `ModelRouterMiddleware`",
+        "feature: `TypeSafeClassifier`"
+      ],
+      "teachable": 8,
+      "lines": 13
+    },
+    "market": {
+      "subject": "langchain-typesafe",
+      "job_term": "langchain",
+      "jobs": 17,
+      "downloads": 6392,
+      "months": 3
+    },
+    "feasibility": 3.3,
+    "factors": {
+      "maturity": {
+        "first_release": "2026-09-17",
+        "age_years": 0.0,
+        "latest_stable": null,
+        "major": 0,
+        "steady": false
+      },
+      "prerequisites": {
+        "basis": "family",
+        "via": [
+          "langchain"
+        ]
+      },
+      "difficulty": {
+        "new_material": false,
+        "edit_lines": 0,
+        "chapters": 0,
+        "breaking": 0,
+        "deprecation": 0
+      }
+    }
+  },
+  {
+    "trend_id": "trend_011",
+    "chapter_id": "C8",
+    "confidence": 0.7333333333333334,
+    "dimensions": {
+      "relevance": 5,
+      "impact": 5,
+      "educational_value": 5,
+      "market_relevance": 4,
+      "maturity": 4,
+      "prerequisites": 5,
+      "difficulty": 5
+    },
+    "provenance": {
+      "relevance": "measured",
+      "impact": "measured",
+      "educational_value": "judged",
+      "market_relevance": "measured",
+      "maturity": "measured",
+      "prerequisites": "measured",
+      "difficulty": "measured"
+    },
+    "priority": 4.75,
+    "changes": {
+      "breaking": 4,
+      "deprecation": 0,
+      "feature": 195,
+      "fix": 302,
+      "noise": 738,
+      "other": 9,
+      "highlights": [
+        "breaking: remove globals from langchain-v1, update globals in langchain-classic, langchain-core",
+        "breaking: Remove ToolNode from agents",
+        "feature: `langchain.mcp` namespace, `MCPAdapter`",
+        "feature: group MCP tool metadata under an `mcp` namespace",
+        "feature: expose `cache_mode` on `MCPAdapter.get_tools`",
+        "feature: accept a `ClientGroup` as an `MCPAdapter` target"
+      ],
+      "teachable": 199,
+      "lines": 1248
+    },
+    "market": {
+      "subject": "langchain",
+      "job_term": "langchain",
+      "jobs": 17,
+      "downloads": 170606434,
+      "months": 3
+    },
+    "feasibility": 3.3,
+    "factors": {
+      "maturity": {
+        "first_release": "2022-10-25",
+        "age_years": 3.9,
+        "latest_stable": "1.4.2",
+        "major": 1,
+        "steady": false
+      },
+      "prerequisites": {
+        "basis": "taught"
+      },
+      "difficulty": {
+        "new_material": false,
+        "edit_lines": 85,
+        "chapters": 11,
+        "breaking": 4,
+        "deprecation": 0
+      }
+    }
+  },
+  {
+    "trend_id": "trend_012",
+    "chapter_id": "C4",
+    "confidence": 0.5,
+    "dimensions": {
+      "relevance": 2,
+      "impact": 5,
+      "educational_value": 5,
+      "market_relevance": 4,
+      "maturity": 4,
+      "prerequisites": 5,
+      "difficulty": 2
+    },
+    "provenance": {
+      "relevance": "measured",
+      "impact": "measured",
+      "educational_value": "judged",
+      "market_relevance": "measured",
+      "maturity": "measured",
+      "prerequisites": "measured",
+      "difficulty": "measured"
+    },
+    "priority": 4.0,
+    "changes": {
+      "breaking": 1,
+      "deprecation": 0,
+      "feature": 5,
+      "fix": 113,
+      "noise": 5,
+      "other": 42,
+      "highlights": [
+        "breaking: Vision (2d/3d) rotary embeddings",
+        "feature: Add NeoMME and NeoMME-Retriever",
+        "feature: Add Fun-ASR-Nano model",
+        "feature: Add support for NeuCodec",
+        "feature: Support nested FLA kernel imports for fla-core"
+      ],
+      "teachable": 6,
+      "lines": 166
+    },
+    "market": {
+      "subject": "transformers",
+      "job_term": "hugging face",
+      "jobs": 8,
+      "downloads": 92159431,
+      "months": 3
+    },
+    "feasibility": 4.3,
+    "factors": {
+      "maturity": {
+        "first_release": "2016-08-17",
+        "age_years": 10.1,
+        "latest_stable": "5.17.0",
+        "major": 5,
+        "steady": false
+      },
+      "prerequisites": {
+        "basis": "taught"
+      },
+      "difficulty": {
+        "new_material": false,
+        "edit_lines": 0,
+        "chapters": 0,
+        "breaking": 1,
+        "deprecation": 0
+      }
+    }
+  },
+  {
+    "trend_id": "trend_013",
+    "chapter_id": "C5",
+    "confidence": 0.7,
+    "dimensions": {
+      "relevance": 2,
+      "impact": 4,
+      "educational_value": 3,
+      "market_relevance": 4,
+      "maturity": 5,
+      "prerequisites": 5,
+      "difficulty": 1
+    },
+    "provenance": {
+      "relevance": "measured",
+      "impact": "measured",
+      "educational_value": "judged",
+      "market_relevance": "measured",
+      "maturity": "measured",
+      "prerequisites": "measured",
+      "difficulty": "measured"
+    },
+    "priority": 3.25,
+    "changes": {
+      "breaking": 0,
+      "deprecation": 0,
+      "feature": 29,
+      "fix": 50,
+      "noise": 57,
+      "other": 0,
+      "highlights": [
+        "feature: api: add GCP external storage support",
+        "feature: api: add GPT-Rosalind research model",
+        "feature: api: add GPT-6 Sol and Luna model identifiers",
+        "feature: api: add external storage configuration management",
+        "feature: api: add safety case retrieval",
+        "feature: api: add safety warning and deactivation webhook events"
+      ],
+      "teachable": 29,
+      "lines": 136
+    },
+    "market": {
+      "subject": "openai-python",
+      "job_term": "openai",
+      "jobs": 19,
+      "downloads": 283218318,
+      "months": 3
+    },
+    "feasibility": 5.0,
+    "factors": {
+      "maturity": {
+        "first_release": "2020-02-18",
+        "age_years": 6.6,
+        "latest_stable": "3.19.2",
+        "major": 3,
+        "steady": true
+      },
+      "prerequisites": {
+        "basis": "taught"
+      },
+      "difficulty": {
+        "new_material": false,
+        "edit_lines": 0,
+        "chapters": 0,
+        "breaking": 0,
+        "deprecation": 0
+      }
+    }
+  },
+  {
+    "trend_id": "trend_014",
+    "chapter_id": null,
+    "confidence": 0.7,
+    "dimensions": {
+      "relevance": 2,
+      "impact": 4,
+      "educational_value": 4,
+      "market_relevance": 4,
+      "maturity": 5,
+      "prerequisites": 3,
+      "difficulty": 3
+    },
+    "provenance": {
+      "relevance": "measured",
+      "impact": "measured",
+      "educational_value": "judged",
+      "market_relevance": "measured",
+      "maturity": "measured",
+      "prerequisites": "default",
+      "difficulty": "measured"
+    },
+    "priority": 3.5,
+    "changes": {
+      "breaking": 0,
+      "deprecation": 1,
+      "feature": 23,
+      "fix": 32,
+      "noise": 50,
+      "other": 0,
+      "highlights": [
+        "deprecation: api: add group with display_name to rate limits, deprecate group_type",
+        "feature: api: add support for claude-opus-5-5, inline tool definitions and MCP tool-list pinning (beta)",
+        "feature: tools: add compact_before_next_turn() to the tool runner",
+        "feature: api: add auto mode tool permissions for Managed Agents",
+        "feature: api: add compaction parameter and signed compaction blocks (beta)",
+        "feature: api: add enum types for workspace data-residency geo fields"
+      ],
+      "teachable": 24,
+      "lines": 106
+    },
+    "market": {
+      "subject": "anthropic-sdk-python",
+      "job_term": "anthropic",
+      "jobs": 12,
+      "downloads": 138623823,
+      "months": 3
+    },
+    "feasibility": 3.7,
+    "factors": {
+      "maturity": {
+        "first_release": "2023-02-09",
+        "age_years": 3.6,
+        "latest_stable": "1.8.0",
+        "major": 1,
+        "steady": true
+      },
+      "prerequisites": {},
+      "difficulty": {
+        "new_material": true,
+        "moving": false
+      }
+    }
+  },
+  {
+    "trend_id": "trend_015",
+    "chapter_id": null,
+    "confidence": 0.7,
+    "dimensions": {
+      "relevance": 2,
+      "impact": 4,
+      "educational_value": 4,
+      "market_relevance": 2,
+      "maturity": 4,
+      "prerequisites": 3,
+      "difficulty": 3
+    },
+    "provenance": {
+      "relevance": "measured",
+      "impact": "measured",
+      "educational_value": "judged",
+      "market_relevance": "measured",
+      "maturity": "measured",
+      "prerequisites": "default",
+      "difficulty": "measured"
+    },
+    "priority": 3.0,
+    "changes": {
+      "breaking": 0,
+      "deprecation": 1,
+      "feature": 74,
+      "fix": 127,
+      "noise": 3,
+      "other": 12,
+      "highlights": [
+        "deprecation: Deprecate `fallback_model` in favor of `fallback_subagent_model` on `ImageGeneration` and `XSearch`",
+        "feature: Expose OpenAI `service_tier` in provider details by @pydanty in",
+        "feature: Add `DecisionModel`, a base for Decisions-protocol models, and make `TypeSafeModel` one",
+        "feature: Add `RunContext.in_durable_context` so hooks can tell they run in durable workflow code",
+        "feature: Add `gemini-3.8-live` and `gemini-3.8-live-extended-thinking` realtime support",
+        "feature: Ask a `DecisionModel`'s route fields with the route question under a route premise, with nested-field `context` and a `done` state after tool calls"
+      ],
+      "teachable": 75,
+      "lines": 217
+    },
+    "market": {
+      "subject": "pydantic-ai",
+      "job_term": "pydantic",
+      "jobs": 1,
+      "downloads": 5300338,
+      "months": 3
+    },
+    "feasibility": 3.3,
+    "factors": {
+      "maturity": {
+        "first_release": "2024-05-20",
+        "age_years": 2.4,
+        "latest_stable": "2.50.0",
+        "major": 2,
+        "steady": true
+      },
+      "prerequisites": {},
+      "difficulty": {
+        "new_material": true,
+        "moving": false
+      }
+    }
+  },
+  {
+    "trend_id": "trend_016",
+    "chapter_id": null,
+    "confidence": 0.7,
+    "dimensions": {
+      "relevance": 2,
+      "impact": 4,
+      "educational_value": 4,
+      "market_relevance": 2,
+      "maturity": 4,
+      "prerequisites": 4,
+      "difficulty": 3
+    },
+    "provenance": {
+      "relevance": "measured",
+      "impact": "measured",
+      "educational_value": "judged",
+      "market_relevance": "measured",
+      "maturity": "measured",
+      "prerequisites": "measured",
+      "difficulty": "measured"
+    },
+    "priority": 3.0,
+    "changes": {
+      "breaking": 0,
+      "deprecation": 0,
+      "feature": 24,
+      "fix": 49,
+      "noise": 13,
+      "other": 0,
+      "highlights": [
+        "feature: Support aliases as connection identifiers",
+        "feature: Record reasons for deployment creation failures",
+        "feature: Collect human feedback and pause events in tracing",
+        "feature: Add `llm_overlay` context variable to route agent roles to models",
+        "feature: Carry `task_prompt` and output in agent execution payloads",
+        "feature: Validate platform integrations during crew setup"
+      ],
+      "teachable": 24,
+      "lines": 86
+    },
+    "market": {
+      "subject": "crewai",
+      "job_term": "crewai",
+      "jobs": 4,
+      "downloads": 2435828,
+      "months": 3
+    },
+    "feasibility": 3.7,
+    "factors": {
+      "maturity": {
+        "first_release": "2023-11-14",
+        "age_years": 2.9,
+        "latest_stable": "1.15.22",
+        "major": 1,
+        "steady": true
+      },
+      "prerequisites": {
+        "basis": "builds_on",
+        "via": [
+          "openai"
+        ]
+      },
+      "difficulty": {
+        "new_material": true,
+        "moving": false
+      }
+    }
+  },
+  {
+    "trend_id": "trend_017",
+    "chapter_id": null,
+    "confidence": 0.7,
+    "dimensions": {
+      "relevance": 2,
+      "impact": 4,
+      "educational_value": 4,
+      "market_relevance": 3,
+      "maturity": 4,
+      "prerequisites": 3,
+      "difficulty": 3
+    },
+    "provenance": {
+      "relevance": "measured",
+      "impact": "measured",
+      "educational_value": "judged",
+      "market_relevance": "measured",
+      "maturity": "measured",
+      "prerequisites": "default",
+      "difficulty": "measured"
+    },
+    "priority": 3.25,
+    "changes": {
+      "breaking": 0,
+      "deprecation": 0,
+      "feature": 3,
+      "fix": 9,
+      "noise": 11,
+      "other": 1,
+      "highlights": [
+        "feature: add native async support to StructuredLLMRerank",
+        "feature: add integration attribution header",
+        "feature: tag client with LlamaIndex integration telemetry header"
+      ],
+      "teachable": 3,
+      "lines": 24
+    },
+    "market": {
+      "subject": "llama_index",
+      "job_term": "llamaindex",
+      "jobs": 5,
+      "downloads": 3115339,
+      "months": 3
+    },
+    "feasibility": 3.3,
+    "factors": {
+      "maturity": {
+        "first_release": "2023-02-16",
+        "age_years": 3.6,
+        "latest_stable": "0.14.25",
+        "major": 0,
+        "steady": true
+      },
+      "prerequisites": {},
+      "difficulty": {
+        "new_material": true,
+        "moving": false
+      }
+    }
+  },
+  {
+    "trend_id": "trend_018",
+    "chapter_id": "C4",
+    "confidence": 0.7,
+    "dimensions": {
+      "relevance": 2,
+      "impact": 2,
+      "educational_value": 1,
+      "market_relevance": 4,
+      "maturity": 5,
+      "prerequisites": 3,
+      "difficulty": 1
+    },
+    "provenance": {
+      "relevance": "measured",
+      "impact": "default",
+      "educational_value": "judged",
+      "market_relevance": "measured",
+      "maturity": "measured",
+      "prerequisites": "default",
+      "difficulty": "measured"
+    },
+    "priority": 2.25,
+    "changes": {},
+    "market": {
+      "subject": "accelerate",
+      "job_term": null,
+      "jobs": null,
+      "downloads": 17248651,
+      "months": 3
+    },
+    "feasibility": 4.3,
+    "factors": {
+      "maturity": {
+        "first_release": "2020-10-30",
+        "age_years": 5.9,
+        "latest_stable": "1.15.0",
+        "major": 1,
+        "steady": true
+      },
+      "prerequisites": {},
+      "difficulty": {
+        "new_material": false,
+        "edit_lines": 0,
+        "chapters": 0,
+        "breaking": 0,
+        "deprecation": 0
+      }
+    }
+  },
+  {
+    "trend_id": "trend_019",
+    "chapter_id": "C9",
+    "confidence": 0.7,
+    "dimensions": {
+      "relevance": 2,
+      "impact": 2,
+      "educational_value": 1,
+      "market_relevance": 2,
+      "maturity": 4,
+      "prerequisites": 3,
+      "difficulty": 1
+    },
+    "provenance": {
+      "relevance": "measured",
+      "impact": "default",
+      "educational_value": "judged",
+      "market_relevance": "measured",
+      "maturity": "measured",
+      "prerequisites": "default",
+      "difficulty": "measured"
+    },
+    "priority": 1.75,
+    "changes": {},
+    "market": {
+      "subject": "bitsandbytes",
+      "job_term": "bitsandbytes",
+      "jobs": 0,
+      "downloads": 3405273,
+      "months": 3
+    },
+    "feasibility": 4.0,
+    "factors": {
+      "maturity": {
+        "first_release": "2022-08-09",
+        "age_years": 4.1,
+        "latest_stable": "0.50.2",
+        "major": 0,
+        "steady": true
+      },
+      "prerequisites": {},
+      "difficulty": {
+        "new_material": false,
+        "edit_lines": 0,
+        "chapters": 0,
+        "breaking": 0,
+        "deprecation": 0
+      }
+    }
+  },
+  {
+    "trend_id": "trend_020",
+    "chapter_id": "C14",
+    "confidence": 0.7,
+    "dimensions": {
+      "relevance": 2,
+      "impact": 2,
+      "educational_value": 1,
+      "market_relevance": 3,
+      "maturity": 4,
+      "prerequisites": 3,
+      "difficulty": 1
+    },
+    "provenance": {
+      "relevance": "measured",
+      "impact": "default",
+      "educational_value": "judged",
+      "market_relevance": "measured",
+      "maturity": "measured",
+      "prerequisites": "default",
+      "difficulty": "measured"
+    },
+    "priority": 2.0,
+    "changes": {},
+    "market": {
+      "subject": "ddgs",
+      "job_term": null,
+      "jobs": null,
+      "downloads": 4986839,
+      "months": 3
+    },
+    "feasibility": 4.0,
+    "factors": {
+      "maturity": {
+        "first_release": "2025-07-06",
+        "age_years": 1.2,
+        "latest_stable": "9.16.0",
+        "major": 9,
+        "steady": true
+      },
+      "prerequisites": {},
+      "difficulty": {
+        "new_material": false,
+        "edit_lines": 0,
+        "chapters": 0,
+        "breaking": 0,
+        "deprecation": 0
+      }
+    }
+  },
+  {
+    "trend_id": "trend_021",
+    "chapter_id": "C5",
+    "confidence": 0.7,
+    "dimensions": {
+      "relevance": 5,
+      "impact": 2,
+      "educational_value": 1,
+      "market_relevance": 2,
+      "maturity": 3,
+      "prerequisites": 5,
+      "difficulty": 1
+    },
+    "provenance": {
+      "relevance": "measured",
+      "impact": "default",
+      "educational_value": "judged",
+      "market_relevance": "measured",
+      "maturity": "measured",
+      "prerequisites": "measured",
+      "difficulty": "measured"
+    },
+    "priority": 2.5,
+    "changes": {},
+    "market": {
+      "subject": "dspy",
+      "job_term": "dspy",
+      "jobs": 0,
+      "downloads": 5110995,
+      "months": 3
+    },
+    "feasibility": 4.3,
+    "factors": {
+      "maturity": {
+        "first_release": "2024-04-14",
+        "age_years": 2.4,
+        "latest_stable": "3.4.0",
+        "major": 3,
+        "steady": false
+      },
+      "prerequisites": {
+        "basis": "taught"
+      },
+      "difficulty": {
+        "new_material": false,
+        "edit_lines": 0,
+        "chapters": 0,
+        "breaking": 0,
+        "deprecation": 0
+      }
+    }
+  },
+  {
+    "trend_id": "trend_022",
+    "chapter_id": "C7",
+    "confidence": 0.7,
+    "dimensions": {
+      "relevance": 5,
+      "impact": 2,
+      "educational_value": 1,
+      "market_relevance": 2,
+      "maturity": 4,
+      "prerequisites": 5,
+      "difficulty": 1
+    },
+    "provenance": {
+      "relevance": "measured",
+      "impact": "default",
+      "educational_value": "judged",
+      "market_relevance": "measured",
+      "maturity": "measured",
+      "prerequisites": "measured",
+      "difficulty": "measured"
+    },
+    "priority": 2.5,
+    "changes": {},
+    "market": {
+      "subject": "evidently",
+      "job_term": null,
+      "jobs": null,
+      "downloads": 818220,
+      "months": 3
+    },
+    "feasibility": 4.7,
+    "factors": {
+      "maturity": {
+        "first_release": "2020-11-25",
+        "age_years": 5.8,
+        "latest_stable": "0.7.23",
+        "major": 0,
+        "steady": true
+      },
+      "prerequisites": {
+        "basis": "taught"
+      },
+      "difficulty": {
+        "new_material": false,
+        "edit_lines": 0,
+        "chapters": 0,
+        "breaking": 0,
+        "deprecation": 0
+      }
+    }
+  },
+  {
+    "trend_id": "trend_023",
+    "chapter_id": "C6",
+    "confidence": 0.7,
+    "dimensions": {
+      "relevance": 2,
+      "impact": 2,
+      "educational_value": 1,
+      "market_relevance": 2,
+      "maturity": 5,
+      "prerequisites": 5,
+      "difficulty": 1
+    },
+    "provenance": {
+      "relevance": "measured",
+      "impact": "default",
+      "educational_value": "judged",
+      "market_relevance": "measured",
+      "maturity": "measured",
+      "prerequisites": "measured",
+      "difficulty": "measured"
+    },
+    "priority": 1.75,
+    "changes": {},
+    "market": {
+      "subject": "faiss-cpu",
+      "job_term": "faiss",
+      "jobs": 0,
+      "downloads": 11798551,
+      "months": 3
+    },
+    "feasibility": 5.0,
+    "factors": {
+      "maturity": {
+        "first_release": "2019-07-17",
+        "age_years": 7.2,
+        "latest_stable": "1.15.1",
+        "major": 1,
+        "steady": true
+      },
+      "prerequisites": {
+        "basis": "taught"
+      },
+      "difficulty": {
+        "new_material": false,
+        "edit_lines": 0,
+        "chapters": 0,
+        "breaking": 0,
+        "deprecation": 0
+      }
+    }
+  },
+  {
+    "trend_id": "trend_024",
+    "chapter_id": "C13",
+    "confidence": 0.7,
+    "dimensions": {
+      "relevance": 2,
+      "impact": 2,
+      "educational_value": 1,
+      "market_relevance": 3,
+      "maturity": 4,
+      "prerequisites": 3,
+      "difficulty": 1
+    },
+    "provenance": {
+      "relevance": "measured",
+      "impact": "default",
+      "educational_value": "judged",
+      "market_relevance": "measured",
+      "maturity": "measured",
+      "prerequisites": "default",
+      "difficulty": "measured"
+    },
+    "priority": 2.0,
+    "changes": {},
+    "market": {
+      "subject": "langsmith",
+      "job_term": "langsmith",
+      "jobs": 2,
+      "downloads": 78342994,
+      "months": 3
+    },
+    "feasibility": 4.0,
+    "factors": {
+      "maturity": {
+        "first_release": "2023-06-26",
+        "age_years": 3.2,
+        "latest_stable": "0.14.1",
+        "major": 0,
+        "steady": true
+      },
+      "prerequisites": {},
+      "difficulty": {
+        "new_material": false,
+        "edit_lines": 0,
+        "chapters": 0,
+        "breaking": 0,
+        "deprecation": 0
+      }
+    }
+  },
+  {
+    "trend_id": "trend_025",
+    "chapter_id": "C7",
+    "confidence": 0.7217391304347825,
+    "dimensions": {
+      "relevance": 2,
+      "impact": 2,
+      "educational_value": 1,
+      "market_relevance": 3,
+      "maturity": 5,
+      "prerequisites": 4,
+      "difficulty": 1
+    },
+    "provenance": {
+      "relevance": "measured",
+      "impact": "default",
+      "educational_value": "judged",
+      "market_relevance": "measured",
+      "maturity": "measured",
+      "prerequisites": "measured",
+      "difficulty": "measured"
+    },
+    "priority": 2.0,
+    "changes": {},
+    "market": {
+      "subject": "litellm",
+      "job_term": "litellm",
+      "jobs": 0,
+      "downloads": 88904794,
+      "months": 3
+    },
+    "feasibility": 4.7,
+    "factors": {
+      "maturity": {
+        "first_release": "2023-07-27",
+        "age_years": 3.2,
+        "latest_stable": "1.102.1",
+        "major": 1,
+        "steady": true
+      },
+      "prerequisites": {
+        "basis": "builds_on",
+        "via": [
+          "openai"
+        ]
+      },
+      "difficulty": {
+        "new_material": false,
+        "edit_lines": 0,
+        "chapters": 0,
+        "breaking": 0,
+        "deprecation": 0
+      }
+    }
+  },
+  {
+    "trend_id": "trend_026",
+    "chapter_id": "C24",
+    "confidence": 0.7,
+    "dimensions": {
+      "relevance": 2,
+      "impact": 2,
+      "educational_value": 1,
+      "market_relevance": 3,
+      "maturity": 5,
+      "prerequisites": 3,
+      "difficulty": 1
+    },
+    "provenance": {
+      "relevance": "measured",
+      "impact": "default",
+      "educational_value": "judged",
+      "market_relevance": "measured",
+      "maturity": "measured",
+      "prerequisites": "default",
+      "difficulty": "measured"
+    },
+    "priority": 2.0,
+    "changes": {},
+    "market": {
+      "subject": "matplotlib",
+      "job_term": "matplotlib",
+      "jobs": 1,
+      "downloads": 155772963,
+      "months": 3
+    },
+    "feasibility": 4.3,
+    "factors": {
+      "maturity": {
+        "first_release": "2006-01-09",
+        "age_years": 20.7,
+        "latest_stable": "3.11.2",
+        "major": 3,
+        "steady": true
+      },
+      "prerequisites": {},
+      "difficulty": {
+        "new_material": false,
+        "edit_lines": 0,
+        "chapters": 0,
+        "breaking": 0,
+        "deprecation": 0
+      }
+    }
+  },
+  {
+    "trend_id": "trend_027",
+    "chapter_id": "C5",
+    "confidence": 0.6772727272727272,
+    "dimensions": {
+      "relevance": 5,
+      "impact": 2,
+      "educational_value": 1,
+      "market_relevance": 4,
+      "maturity": 5,
+      "prerequisites": 5,
+      "difficulty": 1
+    },
+    "provenance": {
+      "relevance": "measured",
+      "impact": "default",
+      "educational_value": "judged",
+      "market_relevance": "measured",
+      "maturity": "measured",
+      "prerequisites": "measured",
+      "difficulty": "measured"
+    },
+    "priority": 3.0,
+    "changes": {},
+    "market": {
+      "subject": "openai",
+      "job_term": "openai",
+      "jobs": 19,
+      "downloads": 283218318,
+      "months": 3
+    },
+    "feasibility": 5.0,
+    "factors": {
+      "maturity": {
+        "first_release": "2020-02-18",
+        "age_years": 6.6,
+        "latest_stable": "3.19.2",
+        "major": 3,
+        "steady": true
+      },
+      "prerequisites": {
+        "basis": "taught"
+      },
+      "difficulty": {
+        "new_material": false,
+        "edit_lines": 0,
+        "chapters": 0,
+        "breaking": 0,
+        "deprecation": 0
+      }
+    }
+  },
+  {
+    "trend_id": "trend_028",
+    "chapter_id": "C5",
+    "confidence": 0.7,
+    "dimensions": {
+      "relevance": 2,
+      "impact": 2,
+      "educational_value": 1,
+      "market_relevance": 4,
+      "maturity": 5,
+      "prerequisites": 3,
+      "difficulty": 1
+    },
+    "provenance": {
+      "relevance": "measured",
+      "impact": "default",
+      "educational_value": "judged",
+      "market_relevance": "measured",
+      "maturity": "measured",
+      "prerequisites": "default",
+      "difficulty": "measured"
+    },
+    "priority": 2.25,
+    "changes": {},
+    "market": {
+      "subject": "pandas",
+      "job_term": "pandas",
+      "jobs": 10,
+      "downloads": 524669947,
+      "months": 3
+    },
+    "feasibility": 4.3,
+    "factors": {
+      "maturity": {
+        "first_release": "2009-12-25",
+        "age_years": 16.8,
+        "latest_stable": "3.0.6",
+        "major": 3,
+        "steady": true
+      },
+      "prerequisites": {},
+      "difficulty": {
+        "new_material": false,
+        "edit_lines": 0,
+        "chapters": 0,
+        "breaking": 0,
+        "deprecation": 0
+      }
+    }
+  },
+  {
+    "trend_id": "trend_029",
+    "chapter_id": "C9",
+    "confidence": 0.7,
+    "dimensions": {
+      "relevance": 5,
+      "impact": 2,
+      "educational_value": 1,
+      "market_relevance": 2,
+      "maturity": 4,
+      "prerequisites": 5,
+      "difficulty": 1
+    },
+    "provenance": {
+      "relevance": "measured",
+      "impact": "default",
+      "educational_value": "judged",
+      "market_relevance": "measured",
+      "maturity": "measured",
+      "prerequisites": "measured",
+      "difficulty": "measured"
+    },
+    "priority": 2.5,
+    "changes": {},
+    "market": {
+      "subject": "peft",
+      "job_term": "peft",
+      "jobs": 1,
+      "downloads": 8063014,
+      "months": 3
+    },
+    "feasibility": 4.7,
+    "factors": {
+      "maturity": {
+        "first_release": "2023-01-19",
+        "age_years": 3.7,
+        "latest_stable": "0.21.0",
+        "major": 0,
+        "steady": true
+      },
+      "prerequisites": {
+        "basis": "taught"
+      },
+      "difficulty": {
+        "new_material": false,
+        "edit_lines": 0,
+        "chapters": 0,
+        "breaking": 0,
+        "deprecation": 0
+      }
+    }
+  },
+  {
+    "trend_id": "trend_030",
+    "chapter_id": "C8",
+    "confidence": 0.7,
+    "dimensions": {
+      "relevance": 2,
+      "impact": 2,
+      "educational_value": 1,
+      "market_relevance": 3,
+      "maturity": 5,
+      "prerequisites": 3,
+      "difficulty": 1
+    },
+    "provenance": {
+      "relevance": "measured",
+      "impact": "default",
+      "educational_value": "judged",
+      "market_relevance": "measured",
+      "maturity": "measured",
+      "prerequisites": "default",
+      "difficulty": "measured"
+    },
+    "priority": 2.0,
+    "changes": {},
+    "market": {
+      "subject": "pypdf",
+      "job_term": "pypdf",
+      "jobs": 0,
+      "downloads": 116089379,
+      "months": 3
+    },
+    "feasibility": 4.3,
+    "factors": {
+      "maturity": {
+        "first_release": "2014-05-17",
+        "age_years": 12.4,
+        "latest_stable": "6.19.0",
+        "major": 6,
+        "steady": true
+      },
+      "prerequisites": {},
+      "difficulty": {
+        "new_material": false,
+        "edit_lines": 0,
+        "chapters": 0,
+        "breaking": 0,
+        "deprecation": 0
+      }
+    }
+  },
+  {
+    "trend_id": "trend_031",
+    "chapter_id": "C7",
+    "confidence": 0.7,
+    "dimensions": {
+      "relevance": 2,
+      "impact": 2,
+      "educational_value": 1,
+      "market_relevance": 3,
+      "maturity": 5,
+      "prerequisites": 3,
+      "difficulty": 1
+    },
+    "provenance": {
+      "relevance": "measured",
+      "impact": "default",
+      "educational_value": "judged",
+      "market_relevance": "measured",
+      "maturity": "measured",
+      "prerequisites": "default",
+      "difficulty": "measured"
+    },
+    "priority": 2.0,
+    "changes": {},
+    "market": {
+      "subject": "rapidfuzz",
+      "job_term": "rapidfuzz",
+      "jobs": 0,
+      "downloads": 117530110,
+      "months": 3
+    },
+    "feasibility": 4.3,
+    "factors": {
+      "maturity": {
+        "first_release": "2020-03-18",
+        "age_years": 6.5,
+        "latest_stable": "3.14.6",
+        "major": 3,
+        "steady": true
+      },
+      "prerequisites": {},
+      "difficulty": {
+        "new_material": false,
+        "edit_lines": 0,
+        "chapters": 0,
+        "breaking": 0,
+        "deprecation": 0
+      }
+    }
+  },
+  {
+    "trend_id": "trend_032",
+    "chapter_id": "C4",
+    "confidence": 0.7,
+    "dimensions": {
+      "relevance": 2,
+      "impact": 2,
+      "educational_value": 1,
+      "market_relevance": 3,
+      "maturity": 5,
+      "prerequisites": 3,
+      "difficulty": 1
+    },
+    "provenance": {
+      "relevance": "measured",
+      "impact": "default",
+      "educational_value": "judged",
+      "market_relevance": "measured",
+      "maturity": "measured",
+      "prerequisites": "default",
+      "difficulty": "measured"
+    },
+    "priority": 2.0,
+    "changes": {},
+    "market": {
+      "subject": "scikit-learn",
+      "job_term": "scikit-learn",
+      "jobs": 1,
+      "downloads": 183826718,
+      "months": 3
+    },
+    "feasibility": 4.3,
+    "factors": {
+      "maturity": {
+        "first_release": "2011-09-22",
+        "age_years": 15.0,
+        "latest_stable": "1.9.1",
+        "major": 1,
+        "steady": true
+      },
+      "prerequisites": {},
+      "difficulty": {
+        "new_material": false,
+        "edit_lines": 0,
+        "chapters": 0,
+        "breaking": 0,
+        "deprecation": 0
+      }
+    }
+  },
+  {
+    "trend_id": "trend_033",
+    "chapter_id": "C6",
+    "confidence": 0.7,
+    "dimensions": {
+      "relevance": 2,
+      "impact": 2,
+      "educational_value": 1,
+      "market_relevance": 3,
+      "maturity": 5,
+      "prerequisites": 4,
+      "difficulty": 1
+    },
+    "provenance": {
+      "relevance": "measured",
+      "impact": "default",
+      "educational_value": "judged",
+      "market_relevance": "measured",
+      "maturity": "measured",
+      "prerequisites": "measured",
+      "difficulty": "measured"
+    },
+    "priority": 2.0,
+    "changes": {},
+    "market": {
+      "subject": "sentence-transformers",
+      "job_term": "sentence-transformers",
+      "jobs": 3,
+      "downloads": 22718928,
+      "months": 3
+    },
+    "feasibility": 4.7,
+    "factors": {
+      "maturity": {
+        "first_release": "2019-07-25",
+        "age_years": 7.2,
+        "latest_stable": "6.1.0",
+        "major": 6,
+        "steady": true
+      },
+      "prerequisites": {
+        "basis": "builds_on",
+        "via": [
+          "transformers"
+        ]
+      },
+      "difficulty": {
+        "new_material": false,
+        "edit_lines": 0,
+        "chapters": 0,
+        "breaking": 0,
+        "deprecation": 0
+      }
+    }
+  },
+  {
+    "trend_id": "trend_034",
+    "chapter_id": "C10",
+    "confidence": 0.7,
+    "dimensions": {
+      "relevance": 5,
+      "impact": 2,
+      "educational_value": 1,
+      "market_relevance": 3,
+      "maturity": 5,
+      "prerequisites": 5,
+      "difficulty": 1
+    },
+    "provenance": {
+      "relevance": "measured",
+      "impact": "default",
+      "educational_value": "judged",
+      "market_relevance": "measured",
+      "maturity": "measured",
+      "prerequisites": "measured",
+      "difficulty": "measured"
+    },
+    "priority": 2.75,
+    "changes": {},
+    "market": {
+      "subject": "streamlit",
+      "job_term": "streamlit",
+      "jobs": 3,
+      "downloads": 19110072,
+      "months": 3
+    },
+    "feasibility": 5.0,
+    "factors": {
+      "maturity": {
+        "first_release": "2018-03-20",
+        "age_years": 8.5,
+        "latest_stable": "1.64.0",
+        "major": 1,
+        "steady": true
+      },
+      "prerequisites": {
+        "basis": "taught"
+      },
+      "difficulty": {
+        "new_material": false,
+        "edit_lines": 0,
+        "chapters": 0,
+        "breaking": 0,
+        "deprecation": 0
+      }
+    }
+  },
+  {
+    "trend_id": "trend_035",
+    "chapter_id": "C4",
+    "confidence": 0.7,
+    "dimensions": {
+      "relevance": 2,
+      "impact": 2,
+      "educational_value": 1,
+      "market_relevance": 4,
+      "maturity": 5,
+      "prerequisites": 3,
+      "difficulty": 1
+    },
+    "provenance": {
+      "relevance": "measured",
+      "impact": "default",
+      "educational_value": "judged",
+      "market_relevance": "measured",
+      "maturity": "measured",
+      "prerequisites": "default",
+      "difficulty": "measured"
+    },
+    "priority": 2.25,
+    "changes": {},
+    "market": {
+      "subject": "torch",
+      "job_term": "pytorch",
+      "jobs": 19,
+      "downloads": 59904898,
+      "months": 3
+    },
+    "feasibility": 4.3,
+    "factors": {
+      "maturity": {
+        "first_release": "2018-12-07",
+        "age_years": 7.8,
+        "latest_stable": "2.14.0",
+        "major": 2,
+        "steady": true
+      },
+      "prerequisites": {},
+      "difficulty": {
+        "new_material": false,
+        "edit_lines": 0,
+        "chapters": 0,
+        "breaking": 0,
+        "deprecation": 0
+      }
+    }
+  },
+  {
+    "trend_id": "trend_036",
+    "chapter_id": "C4",
+    "confidence": 0.7,
+    "dimensions": {
+      "relevance": 2,
+      "impact": 2,
+      "educational_value": 1,
+      "market_relevance": 4,
+      "maturity": 4,
+      "prerequisites": 3,
+      "difficulty": 1
+    },
+    "provenance": {
+      "relevance": "measured",
+      "impact": "default",
+      "educational_value": "judged",
+      "market_relevance": "measured",
+      "maturity": "measured",
+      "prerequisites": "default",
+      "difficulty": "measured"
+    },
+    "priority": 2.25,
+    "changes": {},
+    "market": {
+      "subject": "torchvision",
+      "job_term": "pytorch",
+      "jobs": 19,
+      "downloads": 15858954,
+      "months": 3
+    },
+    "feasibility": 4.0,
+    "factors": {
+      "maturity": {
+        "first_release": "2019-05-22",
+        "age_years": 7.3,
+        "latest_stable": "0.29.0",
+        "major": 0,
+        "steady": true
+      },
+      "prerequisites": {},
+      "difficulty": {
+        "new_material": false,
+        "edit_lines": 0,
+        "chapters": 0,
+        "breaking": 0,
+        "deprecation": 0
+      }
+    }
+  },
+  {
+    "trend_id": "trend_037",
+    "chapter_id": "C5",
+    "confidence": 0.7,
+    "dimensions": {
+      "relevance": 2,
+      "impact": 2,
+      "educational_value": 1,
+      "market_relevance": 3,
+      "maturity": 5,
+      "prerequisites": 3,
+      "difficulty": 1
+    },
+    "provenance": {
+      "relevance": "measured",
+      "impact": "default",
+      "educational_value": "judged",
+      "market_relevance": "measured",
+      "maturity": "measured",
+      "prerequisites": "default",
+      "difficulty": "measured"
+    },
+    "priority": 2.0,
+    "changes": {},
+    "market": {
+      "subject": "tqdm",
+      "job_term": "tqdm",
+      "jobs": 0,
+      "downloads": 400710508,
+      "months": 3
+    },
+    "feasibility": 4.3,
+    "factors": {
+      "maturity": {
+        "first_release": "2013-10-26",
+        "age_years": 12.9,
+        "latest_stable": "4.70.1",
+        "major": 4,
+        "steady": true
+      },
+      "prerequisites": {},
+      "difficulty": {
+        "new_material": false,
+        "edit_lines": 0,
+        "chapters": 0,
+        "breaking": 0,
+        "deprecation": 0
+      }
+    }
+  },
+  {
+    "trend_id": "trend_038",
+    "chapter_id": "C8",
+    "confidence": 0.6999999999999998,
+    "dimensions": {
+      "relevance": 2,
+      "impact": 2,
+      "educational_value": 1,
+      "market_relevance": 3,
+      "maturity": 4,
+      "prerequisites": 3,
+      "difficulty": 1
+    },
+    "provenance": {
+      "relevance": "measured",
+      "impact": "default",
+      "educational_value": "judged",
+      "market_relevance": "measured",
+      "maturity": "measured",
+      "prerequisites": "default",
+      "difficulty": "measured"
+    },
+    "priority": 2.0,
+    "changes": {},
+    "market": {
+      "subject": "unstructured",
+      "job_term": null,
+      "jobs": null,
+      "downloads": 2488273,
+      "months": 3
+    },
+    "feasibility": 4.0,
+    "factors": {
+      "maturity": {
+        "first_release": "2022-09-06",
+        "age_years": 4.1,
+        "latest_stable": "0.27.8",
+        "major": 0,
+        "steady": true
+      },
+      "prerequisites": {},
+      "difficulty": {
+        "new_material": false,
+        "edit_lines": 0,
+        "chapters": 0,
+        "breaking": 0,
+        "deprecation": 0
+      }
+    }
+  }
+]
