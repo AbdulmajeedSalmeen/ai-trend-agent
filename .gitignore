@@ -20,3 +20,4 @@ notebooks/
 # public: it stays on this machine until the course owners say otherwise
 fixtures/material_review.json
 web/dist/site-material.html
+fixtures/lesson_demand.json

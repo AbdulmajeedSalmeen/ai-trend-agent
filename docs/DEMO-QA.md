@@ -292,6 +292,21 @@ found were dropped. The
 review describes SDA's course in detail and this repo is public, so it stays on this machine
 until the course owners say otherwise: the served page shows it, the committed page does not.
 
+## "The reviewers proposed new lessons. How do you know anyone wants them?"
+
+We measured each one the way we measured MCP. A model picks the name a job post would use for
+what the lesson adds. The rules keep a name only if the lesson itself uses it, it is not a word
+every AI job post carries, and, if the course already teaches it, only if it is the lesson's
+subject. Hacker News counts it in the last three "Who is hiring?" threads, and the notebooks
+are searched for it.
+
+Of 26 proposals: 1 new lesson, MCP (20 posts, no notebook mentions it, the same number the
+concept check found independently); 3 optional (prompt injection in two lessons, 3 posts each,
+and Structured Outputs, 1); 22 watched, because no employer names them yet. The first attempt
+promoted a lesson on "retention", which found 9 posts, about keeping customers and users,
+none about agent memory. That is why one
+lower-case word no longer counts as a name.
+
 ## "Where do the model shutdown dates come from?"
 
 From OpenAI's deprecations page, read on 2026-09-26 and copied row by row into

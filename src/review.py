@@ -30,7 +30,7 @@ import re
 from collections import Counter, defaultdict
 from pathlib import Path
 
-from src import arabic, retirements
+from src import arabic, lessons, retirements
 from src.plan import chapter_order
 
 REVIEW_PATH = Path("fixtures/material_review.json")
@@ -42,6 +42,7 @@ HARD = {"removed", "deprecated", "unsafe", "superseded"}
 SEVERITY = {"unsafe": 0, "removed": 1, "deprecated": 2, "superseded": 3, "missing_context": 4}
 CONFIDENCE = {"high": 0, "medium": 1, "low": 2}
 VERDICTS = {"retire": 0, "replace": 1, "revise": 2, "keep": 3}
+LESSON_ORDER = {"add_new_lesson": 0, "add_optional_content": 1, "watch": 2}
 STATUS_EN = {"unsafe": "unsafe as taught", "removed": "removed", "deprecated": "deprecated",
              "superseded": "superseded"}
 SHOWN_PER_NOTEBOOK = 4
@@ -221,7 +222,8 @@ def course_wide(entries: list[tuple[str, str, dict]]) -> list[dict]:
     return sorted(found, key=lambda item: (-item["notebooks"], SEVERITY[item["status"]], item["technique_id"]))
 
 
-def build(review: dict, curriculum: dict, deadlines: list[dict], retirement_data: dict | None) -> dict:
+def build(review: dict, curriculum: dict, deadlines: list[dict], retirement_data: dict | None,
+          demand: dict | None = None) -> dict:
     chapters = {chapter["chapter_id"]: chapter for chapter in curriculum["chapters"]}
     placed = {(chapter["week"], name): chapter["chapter_id"]
               for chapter in curriculum["chapters"] for name in chapter.get("notebooks", [])}
@@ -231,12 +233,14 @@ def build(review: dict, curriculum: dict, deadlines: list[dict], retirement_data
     shutdowns = {model: row["shutdown"] for row in (retirement_data or {}).get("retirements", [])
                  for model in row["ids"]}
     read_on = review.get("read_on")
+    months = (demand or {}).get("months", lessons.MONTHS)
+    measured = {lesson["notebook"]: lesson for lesson in (demand or {}).get("lessons", [])}
 
     books, unplaced, counted = [], [], []
     tally = Counter()
     claims = {"located": 0, "dropped": 0}
     credentials = lowered = relabelled = 0
-    lessons = set()
+    lesson_titles = set()
 
     for entry in review["notebooks"]:
         notebook = entry["notebook"]
@@ -264,7 +268,7 @@ def build(review: dict, curriculum: dict, deadlines: list[dict], retirement_data
             counted.extend((chapter_id, notebook, finding) for finding in shown)
 
             if entry.get("new_lesson"):
-                lessons.add(entry["new_lesson"]["title"])
+                lesson_titles.add(entry["new_lesson"]["title"])
 
         hard = sum(1 for finding in shown if finding["status"] in HARD)
         why, why_ar = notebook_why(verdict, proposed, len(shown), hard, original)
@@ -285,6 +289,7 @@ def build(review: dict, curriculum: dict, deadlines: list[dict], retirement_data
             "found": len(shown),
             "why": why,
             "why_ar": why_ar,
+            "ld": lesson_view(measured.get(notebook), months) if not original else None,
         }
         (books if chapter_id else unplaced).append(book)
 
@@ -295,6 +300,10 @@ def build(review: dict, curriculum: dict, deadlines: list[dict], retirement_data
 
     kept = [finding for _, _, finding in counted]
     sources = retirement_data or {}
+    proposed_lessons = sorted(
+        ({"title": book["n"], "file": book["file"], "ch": book["ch"], **book["ld"]}
+         for book in books + unplaced if book["ld"]),
+        key=lambda lesson: (LESSON_ORDER[lesson["act"]], -(lesson["jobs"] or 0), lesson["title"]))
 
     return {
         "schema": "material_view/1",
@@ -315,13 +324,20 @@ def build(review: dict, curriculum: dict, deadlines: list[dict], retirement_data
             "lowered": lowered,
             "relabelled": relabelled,
             "copies": len([book for book in books + unplaced if book["copy_of"]]),
-            "lessons": len(lessons),
+            "lessons": len(lesson_titles),
             "credentials": credentials,
             "owned_by_import_check": sum(1 for chapter_id, notebook, finding in counted
                                          if (notebook, finding.get("cell")) in owned),
             "undated_sources": sum(1 for finding in kept if source_of(finding)[1] is None),
             "unplaced": len(unplaced),
+            "lessons_measured": sum(1 for lesson in proposed_lessons if lesson["jobs"] is not None),
+            "lessons_new": sum(1 for lesson in proposed_lessons if lesson["act"] == "add_new_lesson"),
+            "lessons_optional": sum(1 for lesson in proposed_lessons if lesson["act"] == "add_optional_content"),
+            "lessons_watch": sum(1 for lesson in proposed_lessons if lesson["act"] == "watch"),
         },
+        "lessons_checked": {"on": (demand or {}).get("checked_on"), "months": months,
+                            "picked_by": (demand or {}).get("picked_by")} if demand else None,
+        "lessons": proposed_lessons,
         "deadline_source": {"url": sources.get("source", ""), "read_on": sources.get("read_on", "")},
         "deadlines": deadlines,
         "course_wide": course_wide(counted),
@@ -335,8 +351,18 @@ def build(review: dict, curriculum: dict, deadlines: list[dict], retirement_data
     }
 
 
+def lesson_view(lesson: dict | None, months: int) -> dict | None:
+    if lesson is None:
+        return None
+
+    settled = lessons.settle(lesson.get("terms", []), lesson.get("title", ""))
+    english, arabic_text = lessons.why(settled, months)
+    return {**settled, "terms": lesson.get("terms", []), "why": english, "why_ar": arabic_text}
+
+
 def payload(path: Path = REVIEW_PATH, curriculum_path: Path = CURRICULUM_PATH,
-            retirements_path: Path = retirements.RETIREMENTS_PATH) -> dict | None:
+            retirements_path: Path = retirements.RETIREMENTS_PATH,
+            demand_path: Path = lessons.DEMAND_PATH) -> dict | None:
     """The material view the page shows, or None when there is no review on this machine."""
     review = load(path)
 
@@ -347,7 +373,8 @@ def payload(path: Path = REVIEW_PATH, curriculum_path: Path = CURRICULUM_PATH,
     data = retirements.load(retirements_path)
     left_out = {copy["notebook"] for copy in curriculum.get("copies", [])}
     deadlines = retirements.deadlines(curriculum.get("model_calls", []), data, left_out)
-    return build(review, curriculum, deadlines, data)
+    demand = json.loads(demand_path.read_text(encoding="utf-8")) if demand_path.exists() else None
+    return build(review, curriculum, deadlines, data, demand)
 
 
 def main() -> None:

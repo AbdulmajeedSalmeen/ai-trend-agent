@@ -1,6 +1,6 @@
 # Progress
 
-**Last updated:** 2026-09-26 · **Tests:** 414 passing · **Demo:** Sep 26–27
+**Last updated:** 2026-09-26 · **Tests:** 432 passing · **Demo:** Sep 26–27
 
 The pipeline runs end to end, live, from a web app. A model reads, judges and writes;
 rules still decide what counts as confirmed, and every recommendation now carries the reason
@@ -144,7 +144,17 @@ behind it: what the chapter teaches, which version it runs, and how far the rele
 - The review stays on this machine: the repo is public and the review describes SDA's material
   in detail. `fixtures/material_review.json` and `web/dist/site-material.html` are ignored; the
   served page carries the review, `python -m web.site --material` writes the local offline page.
-- 414 tests, none touching a model or the network.
+- The 26 new lessons the reviewers proposed are measured like a concept (`src/lessons.py`): a
+  model picks the name a job post would use, the rules keep it only if the lesson itself uses it,
+  it is not a word every AI post carries (one lower-case word is noise: "retention" found 9
+  posts, about keeping customers and users, none about agent memory), and a name the course already teaches speaks only when it is the lesson's
+  subject. Hacker News counts it. 1 new lesson (MCP, 20 posts, the same count the concept check
+  found on its own), 3 optional (prompt injection twice, Structured Outputs), 22 watched. The
+  counts are saved in `fixtures/lesson_demand.json`, ignored with the review, and the decision is
+  remade from them whenever the page is built.
+- OpenAI answered the term pick (`gpt-4o-mini`): the key works again and `MODEL_ORDER` now
+  starts with it.
+- 432 tests, none touching a model or the network.
 
 ### 2026-09-25
 - The 19 install counts pypistats had refused on Sep 22 are in, filled one request at a time.

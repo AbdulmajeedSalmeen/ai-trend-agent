@@ -48,6 +48,12 @@ the machine. Two facts from it are measured rather than judged, and those travel
   LangChain's `OpenAI()` with no model, and 22 on 23 October. The dates are OpenAI's own,
   from its deprecations page; the defaults were read in the langchain-openai source.
 
+The reviewers also proposed 26 new lessons. Each is measured the way MCP was: a model picks the
+name a job post would use, the rules keep it only if the lesson itself uses that name and it is
+not a word every AI job post carries, and Hacker News counts it (`src/lessons.py`). **1 is asked
+for often enough to be a new lesson, MCP, and 3 are optional content**; the other 22 are
+watched, since no employer names them yet.
+
 ## How it decides
 
 ```mermaid
@@ -154,7 +160,7 @@ instead. The run log says so when it happens.
 | Chapters with something to act on | 11 of 25 |
 | Model shutdowns reaching the course | 24 notebooks: 2 on 28 September, 22 on 23 October |
 | Notebooks that are copies of another | 4, identical cell for cell |
-| Tests | 414, none of which calls a model or the network |
+| Tests | 432, none of which calls a model or the network |
 
 Cross-source is zero because no discussion post this week stated anything a release page
 could check. That is a property of the data, not a gap in the checker, and the page prints

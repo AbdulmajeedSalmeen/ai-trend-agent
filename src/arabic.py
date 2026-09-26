@@ -484,3 +484,28 @@ def default_model(notebooks: int, constructor: str, model: str) -> str:
 
 def shutdown_sentence(parts: list[str], date: str) -> str:
     return "؛ و".join(parts) + f". تاريخ الإيقاف عند OpenAI: {date}."
+
+
+def lesson_unmeasured() -> str:
+    return ("لم يُقَس الطلب: لا اسم في الدرس المقترح اجتاز القواعد ليُبحث عنه في إعلانات الوظائف، "
+            "فيبقى تحت المراقبة ولا يُرقّى.")
+
+
+def lesson_demand(term: str, jobs: int, months: int, mentioned: int, act: str) -> str:
+    """lessons.why, from the same counts."""
+    period = f"في آخر {counted(months, MONTH)}"
+
+    if not jobs:
+        return f"لم تذكر أي وظيفة {term} {period}، فيبقى تحت المراقبة."
+
+    posts = f"{counted(jobs, JOB)} {'ذكرتا' if jobs == 2 else 'ذكرت'} {term} {period}"
+
+    if mentioned:
+        return (f"{posts}، لكن {counted(mentioned, NOTEBOOK)} من المقرر "
+                f"{by_count(mentioned, 'يذكره', 'يذكرانه', 'تذكره')} بالفعل: درس أعمق في شيء يلمسه المقرر، "
+                "فمادة اختيارية.")
+
+    if act == "add_new_lesson":
+        return f"{posts}، ولا يذكره أي نوتبوك: درس جديد."
+
+    return f"{posts}، ولا يذكره أي نوتبوك: مادة اختيارية حتى يطلبه عدد أكبر من أصحاب العمل."
