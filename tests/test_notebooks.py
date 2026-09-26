@@ -1,4 +1,6 @@
-from src.notebooks import read_installs, read_patterns, requirements, scan
+import json
+
+from src.notebooks import copies, fingerprint, read_installs, read_patterns, requirements, scan
 
 
 def notebook(*code, markdown=""):
@@ -114,3 +116,29 @@ def test_scanning_reports_installs_and_patterns_together():
 
     assert report["pinned"] == {"openai": "0.28"}
     assert report["patterns"][0]["uses"] == "openai.ChatCompletion"
+
+
+def write_notebook(path, *sources):
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(json.dumps({"cells": [{"cell_type": "code", "source": source} for source in sources]}),
+                    encoding="utf-8")
+    return path
+
+
+def test_two_notebooks_with_the_same_cells_share_a_fingerprint_whatever_their_names():
+    a = {"cells": [{"cell_type": "code", "source": ["x = 1\n", "y = 2"]}]}
+    b = {"cells": [{"cell_type": "code", "source": "x = 1\ny = 2"}]}
+    c = {"cells": [{"cell_type": "markdown", "source": "x = 1\ny = 2"}]}
+
+    assert fingerprint(a) == fingerprint(b) != fingerprint(c)
+
+
+def test_a_copy_names_the_notebook_a_download_did_not_number(tmp_path):
+    week = tmp_path / "week 5"
+    files = [write_notebook(week / "Demo (1).ipynb", "print(1)"), write_notebook(week / "Demo.ipynb", "print(1)"),
+             write_notebook(week / "Other.ipynb", "print(2)")]
+
+    found = copies(files)
+
+    assert found == [{"notebook": (week / "Demo (1).ipynb").as_posix(),
+                      "same_as": (week / "Demo.ipynb").as_posix(), "cells": 1}]

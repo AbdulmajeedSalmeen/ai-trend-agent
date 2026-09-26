@@ -36,6 +36,18 @@ It also reads what the tools grew. langchain 1.4.2 has a module the course's 0.3
 applications" in its own docstring. **20 job posts named MCP in the last three months, and none
 of the 89 notebooks mentions it**, so the agent recommends a new lesson on it.
 
+It reads what the notebooks teach, not only what they import. AI reviewers, Claude agents
+with web research, read all 89 notebooks for methods the field has moved past, and rules decide
+what the page may say about it (`src/review.py`): a chapter comes from the curriculum, replace or retire needs a finding
+that a method was removed, deprecated, superseded or is unsafe, and every number is counted
+from what the page carries. That review describes the course material in detail and stays on
+the machine. Two facts from it are measured rather than judged, and those travel:
+
+- **4 notebooks are identical to another, cell for cell**, under a second file name.
+- **24 notebooks call a model OpenAI is shutting down**: 2 on 28 September, through
+  LangChain's `OpenAI()` with no model, and 22 on 23 October. The dates are OpenAI's own,
+  from its deprecations page; the defaults were read in the langchain-openai source.
+
 ## How it decides
 
 ```mermaid
@@ -140,7 +152,9 @@ instead. The run log says so when it happens.
 | Teaching feasibility | 3.3 to 5.0 of 5; 2 tools watched as not stable enough to teach |
 | Written reasons | 34 of 38 by the model, checked for the facts; 4 by the rules |
 | Chapters with something to act on | 11 of 25 |
-| Tests | 372, none of which calls a model or the network |
+| Model shutdowns reaching the course | 24 notebooks: 2 on 28 September, 22 on 23 October |
+| Notebooks that are copies of another | 4, identical cell for cell |
+| Tests | 414, none of which calls a model or the network |
 
 Cross-source is zero because no discussion post this week stated anything a release page
 could check. That is a property of the data, not a gap in the checker, and the page prints
@@ -187,6 +201,11 @@ network. The stages report what they are thinking while they work.
 
 Writes `web/dist/site.html` with the run and its fonts embedded. It opens on any machine
 with no server and no network, and it is what we present from if the wifi dies.
+
+    python -m web.site --run-id run_2026... --material
+
+does the same with the material review in it, into `web/dist/site-material.html`, which git
+ignores. The review stays on the machine that holds `fixtures/material_review.json`.
 
 Every card's reason is on the page in English and Arabic. The Arabic is built from rules,
 never the model, so it carries the same versions, dates and counts as the English.

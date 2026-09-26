@@ -1,4 +1,5 @@
 import argparse
+import hashlib
 import json
 import re
 from collections import defaultdict
@@ -12,6 +13,9 @@ REQUIREMENT_RE = re.compile(r"^([A-Za-z0-9_.\-]+)(?:\[[^\]]*\])?\s*(.*)$")
 BOUND_RE = re.compile(r"(\d+(?:\.\d+)*)")
 
 SKIP_TOKENS = {"install", "pip", "pip3", "-r", "requirements.txt", "/dev/null"}
+
+# " (1)", " (2)": the number a browser adds when the same file is saved twice.
+COPY_SUFFIX_RE = re.compile(r"\s\(\d+\)$")
 
 PATTERNS = {
     # What the notebooks import from langchain is checked against the release
@@ -157,6 +161,42 @@ def scan_all(root: Path) -> list[dict]:
         raise SystemExit(f"no notebooks under {root}")
 
     return [scan_file(path) for path in files]
+
+
+def fingerprint(notebook: dict) -> str:
+    """Every cell's type and source, in order, hashed. Two notebooks with the same
+    fingerprint teach the same thing cell for cell, whatever their file names say."""
+    parts = []
+
+    for cell in notebook.get("cells", []):
+        source = cell.get("source", "")
+        parts.append(cell.get("cell_type", "") + "\x00" + ("".join(source) if isinstance(source, list) else source))
+
+    return hashlib.sha256("\x01".join(parts).encode("utf-8")).hexdigest()
+
+
+def copies(files: list[Path]) -> list[dict]:
+    """Notebooks that are another notebook under a second name. The one kept is the
+    name a download did not number: "x.ipynb" over "x (1).ipynb", then the shorter."""
+    groups = defaultdict(list)
+
+    for path in files:
+        notebook = json.loads(path.read_text(encoding="utf-8"))
+        groups[fingerprint(notebook)].append((path, len(notebook.get("cells", []))))
+
+    found = []
+
+    for members in groups.values():
+        if len(members) < 2:
+            continue
+
+        members.sort(key=lambda member: (bool(COPY_SUFFIX_RE.search(member[0].stem)), len(member[0].name), member[0].name))
+        kept = members[0][0]
+
+        for path, cells in members[1:]:
+            found.append({"notebook": path.as_posix(), "same_as": kept.as_posix(), "cells": cells})
+
+    return sorted(found, key=lambda copy: copy["notebook"])
 
 
 def summarise(reports: list[dict]) -> dict:

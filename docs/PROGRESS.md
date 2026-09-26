@@ -1,6 +1,6 @@
 # Progress
 
-**Last updated:** 2026-09-25 · **Tests:** 372 passing · **Demo:** Sep 26–27
+**Last updated:** 2026-09-26 · **Tests:** 414 passing · **Demo:** Sep 26–27
 
 The pipeline runs end to end, live, from a web app. A model reads, judges and writes;
 rules still decide what counts as confirmed, and every recommendation now carries the reason
@@ -116,12 +116,35 @@ behind it: what the chapter teaches, which version it runs, and how far the rele
 ## Not done
 
 - [ ] `dev` merged into `main`
+- [ ] Decide whether the material review may be published. Until then it stays on this machine
 - [ ] Two timed rehearsals, and the offline fallback drill
 - [ ] Raise or refill the OpenAI spend limit; until then every run is rules only
 - [ ] The evaluation suite: frozen cases, several repeats, pass^k, a release gate
 - [ ] Optional: GitHub token per member (60 requests/hour without one)
 
 ## Standup log
+
+### 2026-09-26
+- The material review, the half that asks whether a notebook still teaches the right method:
+  AI reviewers, Claude agents with web research led from the design session, read all 89
+  notebooks and wrote `material_review/1`. The page says they are AI, never "a reviewer" alone.
+  `src/review.py` holds the rules that decide what the page may say: the chapter comes from the
+  curriculum, replace or retire needs a hard finding, a credential is counted and never
+  located, and every count is computed from what travels.
+- Measured, not judged: 4 notebooks are identical to another cell for cell (`copies` in
+  `fixtures/curriculum.json`). They are retired and their findings counted once. Two reviewers
+  had given one of them a different verdict and a different new lesson from its identical twin.
+- Model shutdowns measured from the code cells against OpenAI's deprecations table, read today
+  into `fixtures/model_retirements.json`, with the defaults of LangChain's `OpenAI()` and
+  `ChatOpenAI()` read in the langchain-openai source at 1.6.6 and 0.3.35: 28 September reaches
+  2 notebooks, 23 October 22. The reviewers had 6 and 25, plus 11 December for `gpt-5-mini`,
+  but that row lists only dated snapshots and no notebook names one.
+- 10 findings said removed for a model whose shutdown is still ahead: relabelled deprecated by
+  rule. One replace verdict rested only on absences: lowered to revise.
+- The review stays on this machine: the repo is public and the review describes SDA's material
+  in detail. `fixtures/material_review.json` and `web/dist/site-material.html` are ignored; the
+  served page carries the review, `python -m web.site --material` writes the local offline page.
+- 414 tests, none touching a model or the network.
 
 ### 2026-09-25
 - The 19 install counts pypistats had refused on Sep 22 are in, filled one request at a time.

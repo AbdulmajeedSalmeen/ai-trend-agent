@@ -139,3 +139,17 @@ def test_a_page_without_an_icon_answers_the_tab_with_no_content(tmp_path, monkey
     monkeypatch.setattr(server.site, "TEMPLATE_PATH", bare)
 
     assert TestClient(server.app).get("/favicon.ico").status_code == 204
+
+
+def test_the_served_page_carries_the_material_review_only_when_this_machine_has_one(tmp_path, monkeypatch):
+    template = tmp_path / "template.html"
+    template.write_text("<main>__DATA__</main><script id=\"material\">__MATERIAL__</script>", encoding="utf-8")
+    monkeypatch.setattr(server.site, "TEMPLATE_PATH", template)
+    monkeypatch.setattr(server.site.review, "REVIEW_PATH", tmp_path / "absent.json")
+    monkeypatch.setattr(server.site, "material_json", lambda: "null")
+
+    assert '<script id="material">null</script>' in TestClient(server.app).get("/").text
+
+    monkeypatch.setattr(server.site, "material_json", lambda: '{"read_on": "2026-09-26"}')
+
+    assert '{"read_on": "2026-09-26"}' in TestClient(server.app).get("/").text

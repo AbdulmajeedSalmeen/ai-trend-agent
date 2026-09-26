@@ -2,7 +2,7 @@ import argparse
 import json
 from pathlib import Path
 
-from src import concepts, feasibility, memory, runio
+from src import concepts, feasibility, memory, retirements, review, runio
 from src.schema import Recommendation, Score, Signal, Trend
 from src.stages.stage3_score import WEIGHTS
 
@@ -204,6 +204,9 @@ def build_payload(run_dir: Path) -> dict:
                             "immature_at_or_below": feasibility.IMMATURE},
         },
         "material_checked": curriculum.get("material_checked"),
+        # Measured from the notebooks' code against OpenAI's own table, so it travels
+        # with every run, review or not.
+        "retirements": model_deadlines(curriculum),
         "concepts_checked": curriculum.get("concepts_checked"),
         "trace": read_trace(run_dir),
         "items": items,
@@ -211,6 +214,35 @@ def build_payload(run_dir: Path) -> dict:
         "concepts": [dict(zip(("why", "why_ar"), concepts.why(concept)), **concept)
                      for concept in curriculum.get("concepts", [])],
     }
+
+
+def model_deadlines(curriculum: dict) -> dict:
+    data = retirements.load()
+    copies = {copy["notebook"] for copy in curriculum.get("copies", [])}
+
+    return {"source": (data or {}).get("source"), "read_on": (data or {}).get("read_on"),
+            "deadlines": retirements.deadlines(curriculum.get("model_calls", []), data, copies)}
+
+
+def material_json(path: Path = review.REVIEW_PATH) -> str:
+    """The material view for the page's material script, or null on a machine with
+    no review. `</` is escaped so no reviewer's sentence can close the script early."""
+    try:
+        view = review.payload(path)
+    except (ValueError, KeyError) as error:
+        print(f"material review not shown: {error}")
+        view = None
+
+    return json.dumps(view, ensure_ascii=False).replace("</", "<\\/")
+
+
+def page_html(data: str, material: str = "null") -> str:
+    """The template with its fonts, styles, run data and material view filled in."""
+    page = TEMPLATE_PATH.read_text(encoding="utf-8")
+    page = page.replace("__FONTS__", FONTS_PATH.read_text(encoding="utf-8"))
+    page = page.replace("__STYLE__", STYLE_PATH.read_text(encoding="utf-8"))
+    page = page.replace("__DATA__", data)
+    return page.replace("__MATERIAL__", material)
 
 
 def latest_run() -> Path:
@@ -223,18 +255,17 @@ def latest_run() -> Path:
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--run-id", default=None)
-    parser.add_argument("--out", default="web/dist/site.html")
+    parser.add_argument("--out", default=None)
+    parser.add_argument("--material", action="store_true",
+                        help="include the material review, which stays on this machine: the page is then "
+                             "written to web/dist/site-material.html, which git ignores, unless --out says otherwise")
     args = parser.parse_args()
 
     run_dir = runio.RUNS_DIR / args.run_id if args.run_id else latest_run()
     payload = build_payload(run_dir)
+    page = page_html(json.dumps(payload, ensure_ascii=False), material_json() if args.material else "null")
 
-    template = TEMPLATE_PATH.read_text(encoding="utf-8")
-    page = template.replace("__FONTS__", FONTS_PATH.read_text(encoding="utf-8"))
-    page = page.replace("__STYLE__", STYLE_PATH.read_text(encoding="utf-8"))
-    page = page.replace("__DATA__", json.dumps(payload, ensure_ascii=False))
-
-    out = Path(args.out)
+    out = Path(args.out or ("web/dist/site-material.html" if args.material else "web/dist/site.html"))
     out.parent.mkdir(parents=True, exist_ok=True)
     out.write_text(page, encoding="utf-8")
     print(f"wrote {out} from {run_dir.name}")

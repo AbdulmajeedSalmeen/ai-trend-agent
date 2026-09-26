@@ -2,6 +2,7 @@ from datetime import datetime, timezone
 
 from src import runio
 from src.schema import Claim, Recommendation, Score, Signal, Trend
+from web import site
 from web.site import build_payload
 
 
@@ -171,3 +172,43 @@ def test_each_card_carries_its_feasibility_factors_in_both_languages(tmp_path):
     assert set(item["factors"]) == {"maturity", "prerequisites", "difficulty"}
     assert all(factor["why"] and factor["why_ar"] for factor in item["factors"].values())
     assert payload["scoring"]["priority"]["relevance"] == 0.25
+
+
+def test_the_material_view_fills_its_own_slot_and_nothing_else(monkeypatch, tmp_path):
+    template = tmp_path / "template.html"
+    template.write_text("<script>__DATA__</script><script id=\"material\">__MATERIAL__</script>", encoding="utf-8")
+    for name in ("FONTS_PATH", "STYLE_PATH"):
+        blank = tmp_path / f"{name}.css"
+        blank.write_text("", encoding="utf-8")
+        monkeypatch.setattr(site, name, blank)
+    monkeypatch.setattr(site, "TEMPLATE_PATH", template)
+
+    page = site.page_html('{"run": 1}', '{"read_on": "2026-09-26"}')
+
+    assert page == '<script>{"run": 1}</script><script id="material">{"read_on": "2026-09-26"}</script>'
+
+
+def test_no_review_on_this_machine_puts_null_in_the_material_slot(tmp_path):
+    assert site.material_json(tmp_path / "absent.json") == "null"
+
+
+def test_a_reviewer_sentence_cannot_close_the_material_script(monkeypatch, tmp_path):
+    monkeypatch.setattr(site.review, "payload", lambda path: {"w": "ends here </script><b>"})
+
+    assert "</script>" not in site.material_json(tmp_path / "any.json")
+
+
+def test_a_review_of_another_shape_is_left_out_rather_than_breaking_the_page(tmp_path):
+    path = tmp_path / "review.json"
+    path.write_text('{"schema": "other/9", "notebooks": []}', encoding="utf-8")
+
+    assert site.material_json(path) == "null"
+
+
+def test_every_run_carries_the_model_deadlines_measured_from_the_notebooks(tmp_path):
+    build_run(tmp_path)
+
+    found = build_payload(tmp_path)["retirements"]
+
+    assert found["source"].startswith("https://")
+    assert all({"date", "books", "why", "why_ar"} <= set(deadline) for deadline in found["deadlines"])

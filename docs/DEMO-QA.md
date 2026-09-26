@@ -269,6 +269,46 @@ its tag on GitHub, and the name it moved to is found the same way. The table sti
 few calls outside LangChain, such as `openai.ChatCompletion`, and those are labelled as coming
 from our table. It no longer reads comments, and a name must match whole.
 
+## "Does it check whether the material still teaches the right method?"
+
+Yes, and it is the half of the agent that is judged rather than measured, so it is labelled that
+way. AI reviewers, Claude agents given one theme each and the web to search, read all 89
+notebooks and wrote, per notebook, what it teaches, each technique
+located to its cell, which of those techniques the field has moved past, with the source and
+date they read, and a verdict. Then rules decide what the page may say:
+
+- the chapter comes from the curriculum, not from the reviewer;
+- replace or retire needs a finding that a method was removed, deprecated, superseded or is
+  unsafe; otherwise it is lowered to revise, and the card says so;
+- a notebook identical to another, cell for cell, is a copy: measured, retired, counted once;
+- a finding on a cell the import check already edits never proposes a line there;
+- a credential is counted and never located;
+- every number on the page is computed from what the page carries.
+
+None of it is a checked claim, and nobody should call it a human review: it was read and
+judged by models, and every finding shows the source they read. What the rules add is that
+every quote a reviewer gave about the notebook was looked for in its cells, and the ones not
+found were dropped. The
+review describes SDA's course in detail and this repo is public, so it stays on this machine
+until the course owners say otherwise: the served page shows it, the committed page does not.
+
+## "Where do the model shutdown dates come from?"
+
+From OpenAI's deprecations page, read on 2026-09-26 and copied row by row into
+`fixtures/model_retirements.json`. Which notebooks a date reaches is measured from their code:
+a model id written in a code cell, or LangChain's `OpenAI()` or `ChatOpenAI()` called with no
+model, whose defaults we read in the langchain-openai source at 1.6.6 and 0.3.35
+(`gpt-3.5-turbo-instruct` and `gpt-3.5-turbo`).
+
+- 28 September: 2 notebooks, through `OpenAI()` with no model.
+- 23 October: 22 notebooks. 21 name `gpt-3.5-turbo` or `gpt-4`, 1 calls `ChatOpenAI()` with no
+  model.
+
+The reviewers had said 6 and 25, and a third date, 11 December, for notebooks using
+`gpt-5-mini`. That row lists only dated snapshots such as `gpt-5-mini-2025-08-07`, and no
+notebook names one, so the rules do not count it. The same table corrected 10 findings that
+said a model was removed while its shutdown is still ahead: they now say deprecated.
+
 ## "What happens if the wifi dies during the demo?"
 
 Two fallbacks. Both were run with the network and the model switched off, on 2026-09-25:
@@ -278,7 +318,8 @@ Two fallbacks. Both were run with the network and the model switched off, on 202
    verdicts on every claim, and every action identical. Without a model the sentences come from
    the rules instead of being rewritten, and each card says who wrote its reason.
 2. `web/dist/site.html` is a single file with the run and the fonts embedded. It opens on any
-   machine with no server and no network.
+   machine with no server and no network. `python -m web.site --material` writes the same page
+   with the material review in it, to `web/dist/site-material.html`, which stays on this machine.
 
 ## "What would you do with another two weeks?"
 

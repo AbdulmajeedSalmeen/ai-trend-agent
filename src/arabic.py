@@ -407,3 +407,80 @@ def fallback(subject: str, confirmed: int, unverified: int, priority: float,
 
     return (f"{subject}: مؤكد {confirmed}، غير مؤكد {unverified}. "
             f"الأولوية {priority:.2f}، الثقة {confidence:.2f}، {where}.{weak}")
+
+
+# The material review. Status, verdict, effort and confidence are closed sets the
+# reviewers chose from, so each has one wording here. The reviewers' own sentences
+# are English prose that a rule cannot render faithfully, so they are never
+# translated, and the page marks them as English.
+REVIEW_STATUS = {
+    "current": "ما زالت هي الطريقة المتّبعة",
+    "superseded": "حلّت محلها طريقة أحدث",
+    "deprecated": "مُعلن عن إيقافها",
+    "removed": "أُزيلت ولم تبقَ موجودة",
+    "unsafe": "لم تعد آمنة كما تُدرَّس",
+    "missing_context": "ما زالت صحيحة لكن ينقصها سياق اليوم",
+}
+# Verdicts as the noun a sentence needs: "the reviewer proposed replacing it".
+REVIEW_VERDICT = {"keep": "الإبقاء عليه", "revise": "التعديل", "replace": "الاستبدال", "retire": "السحب"}
+REVIEW_EFFORT = {"small": "تعديل صغير", "medium": "تعديل متوسط", "large": "تعديل كبير"}
+REVIEW_CONFIDENCE = {"high": "ثقة عالية", "medium": "ثقة متوسطة", "low": "ثقة منخفضة"}
+REVIEW_BASIS = ("قرأه مراجعون من الذكاء الاصطناعي، وكلاء Claude يبحثون على الويب، وحكموا عليه، والمصدر "
+                "الذي قرؤوه مذكور بجانبه. ثم بحثت قاعدة عن كل اقتباس قدّموه في خلايا النوتبوك، وحُذف ما "
+                "لم يُعثر عليه. هذا ليس من الادعاءات المفحوصة.")
+FINDING = ("ملاحظة واحدة", "ملاحظتان", "ملاحظات", "ملاحظة", "ملاحظتين")
+
+HARD_CHANGE = "عن طريقة أُزيلت أو أُوقفت أو حلّت محلها أخرى أو صارت غير آمنة"
+SOFT_CHANGE = "عن سياق ينقصه اليوم"
+
+
+def by_count(n: int, one: str, two: str, many: str) -> str:
+    """The verb after a counted subject: singular, dual, or the feminine singular
+    Arabic uses after a plural of things."""
+    return one if n == 1 else two if n == 2 else many
+
+
+def review_notebook(verdict: str, found: int, hard: int, proposed: str | None = None,
+                    copy_of: str | None = None) -> str:
+    """Why a notebook got its verdict, from the counts and the rules alone."""
+    if copy_of:
+        return f"نسخة مطابقة خلية بخلية من {copy_of}، فتُسحب ويبقى الأصل، وتُحسب ملاحظاتها مرة واحدة."
+
+    if proposed and proposed != verdict:
+        return (f"اقترح المراجع {REVIEW_VERDICT[proposed]}، لكن لا ملاحظة فيه تُثبت أن طريقة أُزيلت "
+                f"أو أُوقفت أو حلّت محلها أخرى أو صارت غير آمنة، فخُفّض الحكم إلى {REVIEW_VERDICT[verdict]}.")
+
+    if found == 0:
+        return f"لا ملاحظة على هذا النوتبوك. الحكم: {REVIEW_VERDICT[verdict]}."
+
+    head = f"{counted(found, FINDING)} على هذا النوتبوك"
+    all_of = by_count(found, "وهي", "كلتاهما", "كلها")
+
+    if hard == found:
+        body = f"{head}، {all_of} {HARD_CHANGE}"
+    elif hard == 0:
+        body = f"{head}، {all_of} {SOFT_CHANGE}"
+    else:
+        body = f"{head}، منها {counted(hard, FINDING)} {HARD_CHANGE}"
+
+    return f"{body}. الحكم: {REVIEW_VERDICT[verdict]}."
+
+
+def review_course_wide(technique: str, status: str, notebooks: int, chapters: int) -> str:
+    return (f"{counted(notebooks, NOTEBOOK)} في {counted(chapters, CHAPTER, oblique=True)} "
+            f"{by_count(notebooks, 'يدرّس', 'يدرّسان', 'تدرّس')} الطريقة نفسها ({technique})، "
+            f"وحكم المراجعون أنها {REVIEW_STATUS[status]}: قرار واحد للمقرر كله، لا تعديل لكل نوتبوك على حدة.")
+
+
+def named_models(notebooks: int, models: list[str]) -> str:
+    return (f"{counted(notebooks, NOTEBOOK)} {by_count(notebooks, 'يسمّي', 'يسمّيان', 'تسمّي')} "
+            f"{' أو '.join(models)} في خلية كود")
+
+
+def default_model(notebooks: int, constructor: str, model: str) -> str:
+    return (f"{counted(notebooks, NOTEBOOK)} {by_count(notebooks, 'يستدعي', 'يستدعيان', 'تستدعي')} "
+            f"{constructor}() من LangChain دون تحديد نموذج، والنموذج الافتراضي لهذا الاستدعاء {model}")
+
+
+def shutdown_sentence(parts: list[str], date: str) -> str:
+    return "؛ و".join(parts) + f". تاريخ الإيقاف عند OpenAI: {date}."

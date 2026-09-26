@@ -19,10 +19,9 @@ class RunRequest(BaseModel):
 
 
 def page() -> str:
-    template = site.TEMPLATE_PATH.read_text(encoding="utf-8")
-    page_html = template.replace("__FONTS__", site.FONTS_PATH.read_text(encoding="utf-8"))
-    page_html = page_html.replace("__STYLE__", site.STYLE_PATH.read_text(encoding="utf-8"))
-    return page_html.replace("__DATA__", "null")
+    """The page with no run in it: the browser asks the API for one. The material
+    review goes in when this machine has one, since a served page is never committed."""
+    return site.page_html("null", site.material_json())
 
 
 @app.get("/", response_class=HTMLResponse)

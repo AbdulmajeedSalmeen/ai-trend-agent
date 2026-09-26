@@ -15,3 +15,8 @@ notebooks/
 
 # run logs written while testing
 *.log
+
+# the material review describes the course notebooks in detail, and this repo is
+# public: it stays on this machine until the course owners say otherwise
+fixtures/material_review.json
+web/dist/site-material.html

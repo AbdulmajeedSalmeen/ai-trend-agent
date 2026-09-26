@@ -3320,5 +3320,826 @@
     },
     "on": "2026-09-25"
   },
-  "concepts_note": "concepts are read by `python -m src.curriculum`: modules the newest release of a tool the course teaches added since the newest version the course's pins allow, each described by its own docstring, with job posts counted only for a name distinct enough to search."
+  "concepts_note": "concepts are read by `python -m src.curriculum`: modules the newest release of a tool the course teaches added since the newest version the course's pins allow, each described by its own docstring, with job posts counted only for a name distinct enough to search.",
+  "copies": [
+    {
+      "notebook": "notebooks/week 5/Demo_Common_Agent_Failure_Cases(Solution) (1).ipynb",
+      "same_as": "notebooks/week 5/Demo_Common_Agent_Failure_Cases(Solution).ipynb",
+      "cells": 17
+    },
+    {
+      "notebook": "notebooks/week 5/Demo_Failure_Diagnosis_Workflow(Solution) (1).ipynb",
+      "same_as": "notebooks/week 5/Demo_Failure_Diagnosis_Workflow(Solution).ipynb",
+      "cells": 18
+    },
+    {
+      "notebook": "notebooks/week 5/Exercise_Diagnose_Agent_Failures (sample solution) (1).ipynb",
+      "same_as": "notebooks/week 5/Exercise_Diagnose_Agent_Failures (sample solution).ipynb",
+      "cells": 14
+    },
+    {
+      "notebook": "notebooks/week 5/Exercise_Fix_Failure_Cases (sample solution) (1).ipynb",
+      "same_as": "notebooks/week 5/Exercise_Fix_Failure_Cases (sample solution).ipynb",
+      "cells": 14
+    }
+  ],
+  "model_calls": [
+    {
+      "notebook": "notebooks/week 2/DSPy_Facility_Support_Analyzer_Demo.ipynb",
+      "calls": [
+        {
+          "model": "gpt-5",
+          "cell": 28,
+          "how": "named"
+        }
+      ]
+    },
+    {
+      "notebook": "notebooks/week 2/LLM_as_a_Jury_with_Evidently_AI_(demo).ipynb",
+      "calls": [
+        {
+          "model": "gpt-4o-mini",
+          "cell": 14,
+          "how": "named"
+        }
+      ]
+    },
+    {
+      "notebook": "notebooks/week 2/openai_api_quickstart.ipynb",
+      "calls": [
+        {
+          "model": "gpt-4.1-mini",
+          "cell": 3,
+          "how": "named"
+        }
+      ]
+    },
+    {
+      "notebook": "notebooks/week 2/optimizing_llm_as_a_judge_prompts_explainer.ipynb",
+      "calls": [
+        {
+          "model": "gpt-4",
+          "cell": 9,
+          "how": "named"
+        },
+        {
+          "model": "gpt-4",
+          "cell": 11,
+          "how": "named"
+        },
+        {
+          "model": "gpt-4",
+          "cell": 22,
+          "how": "named"
+        }
+      ]
+    },
+    {
+      "notebook": "notebooks/week 2/RAG_Evaluation_Metrics_with_Ragas_sol.ipynb",
+      "calls": [
+        {
+          "model": "gpt-4o-mini",
+          "cell": 5,
+          "how": "named"
+        }
+      ]
+    },
+    {
+      "notebook": "notebooks/week 2/Story_Writing_with_Prompt_Chaining_OpenAI.ipynb",
+      "calls": [
+        {
+          "model": "gpt-5-mini",
+          "cell": 4,
+          "how": "named"
+        }
+      ]
+    },
+    {
+      "notebook": "notebooks/week 3/Demo_LangChain_Document_Chat_using_OpenAI(solution).ipynb",
+      "calls": [
+        {
+          "model": "gpt-4.1-mini",
+          "cell": 24,
+          "how": "named"
+        },
+        {
+          "model": "gpt-4.1-mini",
+          "cell": 30,
+          "how": "named"
+        },
+        {
+          "model": "gpt-4.1-mini",
+          "cell": 44,
+          "how": "named"
+        },
+        {
+          "model": "gpt-4.1-mini",
+          "cell": 64,
+          "how": "named"
+        },
+        {
+          "model": "gpt-4.1-mini",
+          "cell": 67,
+          "how": "named"
+        },
+        {
+          "model": "gpt-4.1-mini",
+          "cell": 72,
+          "how": "named"
+        },
+        {
+          "model": "gpt-4.1-mini",
+          "cell": 78,
+          "how": "named"
+        },
+        {
+          "model": "gpt-4.1-mini",
+          "cell": 88,
+          "how": "named"
+        },
+        {
+          "model": "gpt-4.1-mini",
+          "cell": 93,
+          "how": "named"
+        },
+        {
+          "model": "gpt-3.5-turbo",
+          "cell": 57,
+          "how": "default",
+          "constructor": "ChatOpenAI"
+        }
+      ]
+    },
+    {
+      "notebook": "notebooks/week 3/Demo_LangChain_FAISS(solution).ipynb",
+      "calls": [
+        {
+          "model": "gpt-4.1-mini",
+          "cell": 20,
+          "how": "named"
+        }
+      ]
+    },
+    {
+      "notebook": "notebooks/week 3/Demo_LangChain_Intro(Solution).ipynb",
+      "calls": [
+        {
+          "model": "gpt-4.1-mini",
+          "cell": 14,
+          "how": "named"
+        },
+        {
+          "model": "gpt-4.1-mini",
+          "cell": 20,
+          "how": "named"
+        },
+        {
+          "model": "gpt-4.1-mini",
+          "cell": 29,
+          "how": "named"
+        },
+        {
+          "model": "gpt-4.1-mini",
+          "cell": 34,
+          "how": "named"
+        },
+        {
+          "model": "gpt-3.5-turbo-instruct",
+          "cell": 9,
+          "how": "default",
+          "constructor": "OpenAI"
+        }
+      ]
+    },
+    {
+      "notebook": "notebooks/week 3/Demo_LangChain_Splitter(solution).ipynb",
+      "calls": [
+        {
+          "model": "gpt-4.1-mini",
+          "cell": 7,
+          "how": "named"
+        },
+        {
+          "model": "gpt-4.1-mini",
+          "cell": 8,
+          "how": "named"
+        }
+      ]
+    },
+    {
+      "notebook": "notebooks/week 3/Demo_Langchian_Overview(Solution).ipynb",
+      "calls": [
+        {
+          "model": "gpt-3.5-turbo",
+          "cell": 7,
+          "how": "named"
+        },
+        {
+          "model": "gpt-4.1",
+          "cell": 8,
+          "how": "named"
+        },
+        {
+          "model": "gpt-4.1-mini",
+          "cell": 14,
+          "how": "named"
+        },
+        {
+          "model": "gpt-4.1-mini",
+          "cell": 21,
+          "how": "named"
+        },
+        {
+          "model": "gpt-4.1-mini",
+          "cell": 25,
+          "how": "named"
+        },
+        {
+          "model": "gpt-4.1-mini",
+          "cell": 28,
+          "how": "named"
+        },
+        {
+          "model": "gpt-4.1-mini",
+          "cell": 39,
+          "how": "named"
+        }
+      ]
+    },
+    {
+      "notebook": "notebooks/week 3/Lab_Endgame_QA_LangChain(Solution).ipynb",
+      "calls": [
+        {
+          "model": "gpt-3.5-turbo",
+          "cell": 32,
+          "how": "named"
+        }
+      ]
+    },
+    {
+      "notebook": "notebooks/week 3/Lab_LangChain_QA(solution).ipynb",
+      "calls": [
+        {
+          "model": "gpt-4.1-mini",
+          "cell": 6,
+          "how": "named"
+        },
+        {
+          "model": "gpt-3.5-turbo-instruct",
+          "cell": 9,
+          "how": "default",
+          "constructor": "OpenAI"
+        },
+        {
+          "model": "gpt-3.5-turbo-instruct",
+          "cell": 11,
+          "how": "default",
+          "constructor": "OpenAI"
+        },
+        {
+          "model": "gpt-3.5-turbo-instruct",
+          "cell": 15,
+          "how": "default",
+          "constructor": "OpenAI"
+        },
+        {
+          "model": "gpt-3.5-turbo-instruct",
+          "cell": 18,
+          "how": "default",
+          "constructor": "OpenAI"
+        }
+      ]
+    },
+    {
+      "notebook": "notebooks/week 3/Lab_LangChain_wikipedia(solution).ipynb",
+      "calls": [
+        {
+          "model": "gpt-3.5-turbo",
+          "cell": 9,
+          "how": "named"
+        }
+      ]
+    },
+    {
+      "notebook": "notebooks/week 4/Agent_Failure_Examples_sol.ipynb",
+      "calls": [
+        {
+          "model": "gpt-3.5-turbo",
+          "cell": 8,
+          "how": "named"
+        }
+      ]
+    },
+    {
+      "notebook": "notebooks/week 4/Demo__Tool_Schema_and_Structured_Arguments.ipynb",
+      "calls": [
+        {
+          "model": "gpt-3.5-turbo",
+          "cell": 13,
+          "how": "named"
+        }
+      ]
+    },
+    {
+      "notebook": "notebooks/week 4/Demo_Autonomy_Limits_and_Guardrails_sol.ipynb",
+      "calls": [
+        {
+          "model": "gpt-4o-mini",
+          "cell": 9,
+          "how": "named"
+        }
+      ]
+    },
+    {
+      "notebook": "notebooks/week 4/Demo_Evaluating_Agent_Behavior_(sol).ipynb",
+      "calls": [
+        {
+          "model": "gpt-3.5-turbo",
+          "cell": 10,
+          "how": "named"
+        }
+      ]
+    },
+    {
+      "notebook": "notebooks/week 4/Demo_From_Single_Agent_to_Multi_Agent_Workflow_sol (1).ipynb",
+      "calls": [
+        {
+          "model": "gpt-4o-mini",
+          "cell": 5,
+          "how": "named"
+        }
+      ]
+    },
+    {
+      "notebook": "notebooks/week 4/Demo_From_Single_Agent_to_Multi_Agent_Workflow_sol.ipynb",
+      "calls": [
+        {
+          "model": "gpt-4o-mini",
+          "cell": 6,
+          "how": "named"
+        },
+        {
+          "model": "gpt-4o-mini",
+          "cell": 11,
+          "how": "named"
+        }
+      ]
+    },
+    {
+      "notebook": "notebooks/week 4/Demo_Reference_Agent_System_Walkthrough_sol.ipynb",
+      "calls": [
+        {
+          "model": "gpt-4o-mini",
+          "cell": 13,
+          "how": "named"
+        }
+      ]
+    },
+    {
+      "notebook": "notebooks/week 4/Demo_Role_Based_Agent_Design_sol.ipynb",
+      "calls": [
+        {
+          "model": "gpt-4o-mini",
+          "cell": 6,
+          "how": "named"
+        }
+      ]
+    },
+    {
+      "notebook": "notebooks/week 4/Demo_Task_Oriented_Agent_Workflow_sol.ipynb",
+      "calls": [
+        {
+          "model": "gpt-4o-mini",
+          "cell": 9,
+          "how": "named"
+        }
+      ]
+    },
+    {
+      "notebook": "notebooks/week 4/Demo_Tool_Schema_and_Structured_Arguments_sol.ipynb",
+      "calls": [
+        {
+          "model": "gpt-3.5-turbo",
+          "cell": 13,
+          "how": "named"
+        }
+      ]
+    },
+    {
+      "notebook": "notebooks/week 4/Exercise_Build_Three_Agent_Tools_solution.ipynb",
+      "calls": [
+        {
+          "model": "gpt-4o-mini",
+          "cell": 8,
+          "how": "named"
+        }
+      ]
+    },
+    {
+      "notebook": "notebooks/week 4/Exercise_Document_System_Behavior_sol.ipynb",
+      "calls": [
+        {
+          "model": "gpt-3.5-turbo",
+          "cell": 8,
+          "how": "named"
+        }
+      ]
+    },
+    {
+      "notebook": "notebooks/week 4/Exercise_Fix_a_Broken_Agent_Solution_ver.ipynb",
+      "calls": [
+        {
+          "model": "gpt-3.5-turbo",
+          "cell": 7,
+          "how": "named"
+        }
+      ]
+    },
+    {
+      "notebook": "notebooks/week 4/Exercise_Implement_Tool_Error_Handling__sol.ipynb",
+      "calls": [
+        {
+          "model": "gpt-4o-mini",
+          "cell": 8,
+          "how": "named"
+        }
+      ]
+    },
+    {
+      "notebook": "notebooks/week 4/Exercise_Sol_Add_Guardrails.ipynb",
+      "calls": [
+        {
+          "model": "gpt-4o-mini",
+          "cell": 8,
+          "how": "named"
+        }
+      ]
+    },
+    {
+      "notebook": "notebooks/week 4/Exercise_Sol_Build_a_Task_Agent.ipynb",
+      "calls": [
+        {
+          "model": "gpt-4o-mini",
+          "cell": 8,
+          "how": "named"
+        }
+      ]
+    },
+    {
+      "notebook": "notebooks/week 4/Exercise_Sol_Build_a_Two_Agent_System.ipynb",
+      "calls": [
+        {
+          "model": "gpt-4o-mini",
+          "cell": 5,
+          "how": "named"
+        }
+      ]
+    },
+    {
+      "notebook": "notebooks/week 4/Exercise_Sol_Extend_the_Workflow.ipynb",
+      "calls": [
+        {
+          "model": "gpt-4o-mini",
+          "cell": 5,
+          "how": "named"
+        }
+      ]
+    },
+    {
+      "notebook": "notebooks/week 5/Demo_Common_Agent_Failure_Cases(Solution) (1).ipynb",
+      "calls": [
+        {
+          "model": "gpt-4",
+          "cell": 9,
+          "how": "named"
+        }
+      ]
+    },
+    {
+      "notebook": "notebooks/week 5/Demo_Common_Agent_Failure_Cases(Solution).ipynb",
+      "calls": [
+        {
+          "model": "gpt-4",
+          "cell": 9,
+          "how": "named"
+        }
+      ]
+    },
+    {
+      "notebook": "notebooks/week 5/Demo_Conversation_Memory_in_AI_Agents_sol.ipynb",
+      "calls": [
+        {
+          "model": "gpt-3.5-turbo",
+          "cell": 12,
+          "how": "named"
+        },
+        {
+          "model": "gpt-4o-mini",
+          "cell": 35,
+          "how": "named"
+        }
+      ]
+    },
+    {
+      "notebook": "notebooks/week 5/Demo_Diagnosing_Coordination_Failures(Solution).ipynb",
+      "calls": [
+        {
+          "model": "gpt-4o-mini",
+          "cell": 4,
+          "how": "named"
+        }
+      ]
+    },
+    {
+      "notebook": "notebooks/week 5/Demo_Execution_Tracking(Solution).ipynb",
+      "calls": [
+        {
+          "model": "gpt-4o-mini",
+          "cell": 4,
+          "how": "named"
+        }
+      ]
+    },
+    {
+      "notebook": "notebooks/week 5/Demo_Failure_Diagnosis_Workflow(Solution) (1).ipynb",
+      "calls": [
+        {
+          "model": "gpt-3.5-turbo",
+          "cell": 8,
+          "how": "named"
+        }
+      ]
+    },
+    {
+      "notebook": "notebooks/week 5/Demo_Failure_Diagnosis_Workflow(Solution).ipynb",
+      "calls": [
+        {
+          "model": "gpt-3.5-turbo",
+          "cell": 8,
+          "how": "named"
+        }
+      ]
+    },
+    {
+      "notebook": "notebooks/week 5/Demo_Graph_Based_Agent_Workflow_sol.ipynb",
+      "calls": [
+        {
+          "model": "gpt-4",
+          "cell": 10,
+          "how": "named"
+        }
+      ]
+    },
+    {
+      "notebook": "notebooks/week 5/Demo_Long_Term_Memory_with_Vector_Store(Solution).ipynb",
+      "calls": [
+        {
+          "model": "gpt-4",
+          "cell": 16,
+          "how": "named"
+        }
+      ]
+    },
+    {
+      "notebook": "notebooks/week 5/Demo_Multi_Agent_System_Walkthrough(Solution).ipynb",
+      "calls": [
+        {
+          "model": "gpt-4o-mini",
+          "cell": 6,
+          "how": "named"
+        }
+      ]
+    },
+    {
+      "notebook": "notebooks/week 5/Demo_Task_Planning_Agent(Solution).ipynb",
+      "calls": [
+        {
+          "model": "gpt-4o-mini",
+          "cell": 4,
+          "how": "named"
+        }
+      ]
+    },
+    {
+      "notebook": "notebooks/week 5/Exercise_Add_a_Review_Agent_sol.ipynb",
+      "calls": [
+        {
+          "model": "gpt-3.5-turbo",
+          "cell": 9,
+          "how": "named"
+        }
+      ]
+    },
+    {
+      "notebook": "notebooks/week 5/Exercise_Diagnose_Agent_Failures (sample solution) (1).ipynb",
+      "calls": [
+        {
+          "model": "gpt-3.5-turbo",
+          "cell": 6,
+          "how": "named"
+        }
+      ]
+    },
+    {
+      "notebook": "notebooks/week 5/Exercise_Diagnose_Agent_Failures (sample solution).ipynb",
+      "calls": [
+        {
+          "model": "gpt-3.5-turbo",
+          "cell": 6,
+          "how": "named"
+        }
+      ]
+    },
+    {
+      "notebook": "notebooks/week 5/Exercise_Fix_Failure_Cases (sample solution) (1).ipynb",
+      "calls": [
+        {
+          "model": "gpt-3.5-turbo",
+          "cell": 8,
+          "how": "named"
+        }
+      ]
+    },
+    {
+      "notebook": "notebooks/week 5/Exercise_Fix_Failure_Cases (sample solution).ipynb",
+      "calls": [
+        {
+          "model": "gpt-3.5-turbo",
+          "cell": 8,
+          "how": "named"
+        }
+      ]
+    },
+    {
+      "notebook": "notebooks/week 5/Exercise_Implement_a_Multi_Agent_Workflow_sol_dynamic_looping.ipynb",
+      "calls": [
+        {
+          "model": "gpt-3.5-turbo",
+          "cell": 9,
+          "how": "named"
+        }
+      ]
+    },
+    {
+      "notebook": "notebooks/week 5/Exercise_Integrate_Memory_into_Your_Agent_System_sol.ipynb",
+      "calls": [
+        {
+          "model": "gpt-3.5-turbo",
+          "cell": 8,
+          "how": "named"
+        }
+      ]
+    },
+    {
+      "notebook": "notebooks/week 5/Exercise_Memory_Retrieval_Test_sol.ipynb",
+      "calls": [
+        {
+          "model": "gpt-3.5-turbo",
+          "cell": 9,
+          "how": "named"
+        }
+      ]
+    },
+    {
+      "notebook": "notebooks/week 5/Exercise_Solution_Complete_Multi_Agent_Upgrade.ipynb",
+      "calls": [
+        {
+          "model": "gpt-4o-mini",
+          "cell": 4,
+          "how": "named"
+        }
+      ]
+    },
+    {
+      "notebook": "notebooks/week 5/Exercise_Solution_Implement_a_Planning_Agent.ipynb",
+      "calls": [
+        {
+          "model": "gpt-4o-mini",
+          "cell": 4,
+          "how": "named"
+        }
+      ]
+    },
+    {
+      "notebook": "notebooks/week 5/Exercise_Solution_Loop_Prevention.ipynb",
+      "calls": [
+        {
+          "model": "gpt-4o-mini",
+          "cell": 4,
+          "how": "named"
+        }
+      ]
+    },
+    {
+      "notebook": "notebooks/week 6/Demo_Agent_Execution_Logging(Solution).ipynb",
+      "calls": [
+        {
+          "model": "gpt-4o-mini",
+          "cell": 4,
+          "how": "named"
+        }
+      ]
+    },
+    {
+      "notebook": "notebooks/week 6/Demo_Automated_Evaluation_Workflow_Solution.ipynb",
+      "calls": [
+        {
+          "model": "gpt-4o-mini",
+          "cell": 8,
+          "how": "named"
+        }
+      ]
+    },
+    {
+      "notebook": "notebooks/week 6/Demo_Designing_Evaluation_Tasks_for_Agent_Systems_Solution.ipynb",
+      "calls": [
+        {
+          "model": "gpt-4o-mini",
+          "cell": 11,
+          "how": "named"
+        }
+      ]
+    },
+    {
+      "notebook": "notebooks/week 6/Demo_End_to_End_Agent_Evaluation_Solution.ipynb",
+      "calls": [
+        {
+          "model": "gpt-5-mini",
+          "cell": 4,
+          "how": "named"
+        }
+      ]
+    },
+    {
+      "notebook": "notebooks/week 6/Demo_Guardrail_Design_Patterns(Solution).ipynb",
+      "calls": [
+        {
+          "model": "gpt-4o-mini",
+          "cell": 4,
+          "how": "named"
+        }
+      ]
+    },
+    {
+      "notebook": "notebooks/week 6/Demo_Human_in_the_Loop_Control(Solution).ipynb",
+      "calls": [
+        {
+          "model": "gpt-4o-mini",
+          "cell": 4,
+          "how": "named"
+        }
+      ]
+    },
+    {
+      "notebook": "notebooks/week 6/Demo_Monitoring_Agent_Performance(Solution).ipynb",
+      "calls": [
+        {
+          "model": "gpt-4o-mini",
+          "cell": 4,
+          "how": "named"
+        }
+      ]
+    },
+    {
+      "notebook": "notebooks/week 6/Exercise_Analyze_System_Logs.ipynb",
+      "calls": [
+        {
+          "model": "gpt-4o-mini",
+          "cell": 5,
+          "how": "named"
+        }
+      ]
+    },
+    {
+      "notebook": "notebooks/week 6/Exercise_Sol_Implement_Guardrails.ipynb",
+      "calls": [
+        {
+          "model": "gpt-4o-mini",
+          "cell": 4,
+          "how": "named"
+        }
+      ]
+    },
+    {
+      "notebook": "notebooks/week 6/Exercise_Solution_Implement_Agent_Logging.ipynb",
+      "calls": [
+        {
+          "model": "gpt-4o-mini",
+          "cell": 4,
+          "how": "named"
+        }
+      ]
+    },
+    {
+      "notebook": "notebooks/week 6/Exercise_Solution_Test_Guardrails.ipynb",
+      "calls": [
+        {
+          "model": "gpt-4o-mini",
+          "cell": 4,
+          "how": "named"
+        }
+      ]
+    }
+  ],
+  "copies_note": "copies are notebooks whose cells, type and source, are identical to another notebook's; model_calls are the models each notebook's code reaches, named in quotes or through a LangChain constructor called with no model. Both are read by `python -m src.curriculum`."
 }

@@ -6,8 +6,8 @@ from pathlib import Path
 
 import requests
 
-from src import concepts, material
-from src.notebooks import NOTEBOOK_DIR, scan_all
+from src import concepts, material, retirements
+from src.notebooks import NOTEBOOK_DIR, copies, scan_all
 
 CURRICULUM_PATH = Path("fixtures/curriculum.json")
 
@@ -143,9 +143,19 @@ def main() -> None:
         "notebook, so a student installs whatever is newest on the day they run it."
     )
 
+    root = Path(args.notebooks)
+    files = sorted(root.rglob("*.ipynb")) if root.is_dir() else [root]
+
+    # Both read only the notebooks, so they run offline too.
+    data["copies"] = copies(files)
+    data["model_calls"] = retirements.scan(files, retirements.load())
+    data["copies_note"] = (
+        "copies are notebooks whose cells, type and source, are identical to another notebook's; "
+        "model_calls are the models each notebook's code reaches, named in quotes or through a LangChain "
+        "constructor called with no model. Both are read by `python -m src.curriculum`."
+    )
+
     if not args.offline:
-        root = Path(args.notebooks)
-        files = sorted(root.rglob("*.ipynb")) if root.is_dir() else [root]
         found = material.check_all(files, lambda path: assign({"file": path.name, "week": path.parent.name},
                                                               chapters), material.releases_now())
 
