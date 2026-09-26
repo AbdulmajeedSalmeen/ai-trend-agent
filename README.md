@@ -2,14 +2,27 @@
 
 [![ci](https://github.com/AbdulmajeedSalmeen/ai-trend-agent/actions/workflows/ci.yml/badge.svg?branch=dev)](https://github.com/AbdulmajeedSalmeen/ai-trend-agent/actions/workflows/ci.yml)
 
-An agent that reads what shipped in the AI ecosystem this week, checks every claim against
-the official release that would have to confirm it, then compares the confirmed versions
-with what our own course notebooks install. It follows every package the course installs,
-because that watchlist is read out of the material rather than typed by us.
+An agent that keeps an AI bootcamp's curriculum current. It reads what shipped in the AI
+ecosystem, checks every claim against the official release, then reads the course's own
+notebooks and says what to change: which notebook, which cell, what to write instead, and
+which new lesson employers are asking for. In English and Arabic.
+
+https://github.com/user-attachments/assets/c901d9d3-d8a2-4d8f-ab85-5e9055fa0110
 
 It does not report news. It reports what our material teaches that no longer exists, and
 what employers ask for that the course does not teach yet. A version number is evidence,
 never the reason on its own.
+
+It works in three layers:
+
+- **What shipped.** Release notes and discussion from GitHub, PyPI and Hacker News, for every
+  package the course installs. That watchlist is read out of the notebooks, not typed by us,
+  and every claim is checked against the release that would have to confirm it.
+- **What the notebooks teach.** Every `langchain` import is checked against the source of the
+  release a student installs today. AI reviewers read all 89 notebooks for methods the field
+  has moved past, and rules decide what the page may say about it.
+- **What to teach next.** New concepts come from the tools' own source, and every proposed
+  lesson is measured against real job posts before it is recommended.
 
 ## What it found
 
