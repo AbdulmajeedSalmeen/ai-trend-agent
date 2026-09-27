@@ -1,0 +1,125 @@
+[
+  {
+    "id": "gh_langgraph_2.0.0",
+    "source": "github",
+    "tier": 1,
+    "subject": "langgraph",
+    "title": "LangGraph 2.0.0 released",
+    "url": "https://github.com/langchain-ai/langgraph/releases/tag/2.0.0",
+    "published_at": "2026-09-14T08:00:00+00:00",
+    "body": "LangGraph version 2.0.0 introduces durable execution and workflow improvements."
+  },
+  {
+    "id": "hn_langgraph_001",
+    "source": "hackernews",
+    "tier": 2,
+    "subject": null,
+    "title": "LangGraph 2.0 released with durable execution",
+    "url": "https://news.ycombinator.com/item?id=45123001",
+    "published_at": "2026-09-14T08:30:00+00:00",
+    "body": "Discussion about the new LangGraph release and durable agent execution."
+  },
+  {
+    "id": "hn_langgraph_002",
+    "source": "hackernews",
+    "tier": 2,
+    "subject": null,
+    "title": "LangGraph v2.0.0 improves agent workflows",
+    "url": "https://news.ycombinator.com/item?id=45123002",
+    "published_at": "2026-09-14T09:00:00+00:00",
+    "body": "LangGraph adds improvements for persistent and durable AI agent workflows."
+  },
+  {
+    "id": "hn_langgraph_003",
+    "source": "hackernews",
+    "tier": 2,
+    "subject": null,
+    "title": "New LangGraph release focuses on durable agents",
+    "url": "https://news.ycombinator.com/item?id=45123003",
+    "published_at": "2026-09-14T09:30:00+00:00",
+    "body": ""
+  },
+
+  {
+    "id": "gh_transformers_5.1.0",
+    "source": "github",
+    "tier": 1,
+    "subject": "transformers",
+    "title": "Transformers 5.1.0 released",
+    "url": "https://github.com/huggingface/transformers/releases/tag/v5.1.0",
+    "published_at": "2026-09-13T08:00:00+00:00",
+    "body": "Hugging Face Transformers version 5.1.0 is now available."
+  },
+  {
+    "id": "hn_transformers_001",
+    "source": "hackernews",
+    "tier": 2,
+    "subject": null,
+    "title": "Hugging Face Transformers 5.1.0 is out",
+    "url": "https://news.ycombinator.com/item?id=45124001",
+    "published_at": "2026-09-13T09:00:00+00:00",
+    "body": "The latest Transformers library release includes model and inference updates."
+  },
+  {
+    "id": "hn_transformers_002",
+    "source": "hackernews",
+    "tier": 2,
+    "subject": null,
+    "title": "Transformers v5.1.0 brings new model support",
+    "url": "https://news.ycombinator.com/item?id=45124002",
+    "published_at": "2026-09-13T10:00:00+00:00",
+    "body": "Developers discuss the newest Hugging Face Transformers release."
+  },
+
+  {
+    "id": "gh_openai_python_2.9.0",
+    "source": "github",
+    "tier": 1,
+    "subject": "openai-python",
+    "title": "OpenAI Python 2.9.0 released",
+    "url": "https://github.com/openai/openai-python/releases/tag/v2.9.0",
+    "published_at": "2026-09-12T08:00:00+00:00",
+    "body": "OpenAI Python SDK version 2.9.0 is now available."
+  },
+  {
+    "id": "hn_openai_python_001",
+    "source": "hackernews",
+    "tier": 2,
+    "subject": null,
+    "title": "OpenAI Python SDK 2.9.0 update",
+    "url": "https://news.ycombinator.com/item?id=45125001",
+    "published_at": "2026-09-12T09:00:00+00:00",
+    "body": "Discussion of the latest OpenAI Python SDK release."
+  },
+
+  {
+    "id": "hn_unrelated_001",
+    "source": "hackernews",
+    "tier": 2,
+    "subject": null,
+    "title": "PostgreSQL query planner improvements",
+    "url": "https://news.ycombinator.com/item?id=45126001",
+    "published_at": "2026-09-11T08:00:00+00:00",
+    "body": "A discussion about database query optimization and indexing."
+  },
+  {
+    "id": "hn_unrelated_002",
+    "source": "hackernews",
+    "tier": 2,
+    "subject": null,
+    "title": "New Linux kernel networking changes",
+    "url": "https://news.ycombinator.com/item?id=45126002",
+    "published_at": "2026-09-11T09:00:00+00:00",
+    "body": "Linux networking subsystem receives performance changes."
+  },
+  {
+    "id": "hn_unrelated_003",
+    "source": "hackernews",
+    "tier": 2,
+    "subject": null,
+    "title": "SQLite adds improvements for large databases",
+    "url": "https://news.ycombinator.com/item?id=45126003",
+    "published_at": "2026-09-11T10:00:00+00:00",
+    "body": "SQLite storage and database performance discussion."
+  }
+]

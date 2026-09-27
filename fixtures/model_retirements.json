@@ -1,0 +1,39 @@
+{
+  "source": "https://developers.openai.com/api/docs/deprecations",
+  "read_on": "2026-09-26",
+  "note": "Shutdown dates copied row by row from OpenAI's deprecations page, with the day they were read. Each row lists the snapshot and every alias the page prints beside it with its pipe notation. A notebook counts against a row only when a code cell names one of those ids exactly, or calls a constructor whose default is one of them; the defaults below were read from the release source, at the line given.",
+  "retirements": [
+    {"shutdown": "2026-09-28", "announced": "2025-09-26", "ids": ["gpt-3.5-turbo-instruct"], "replacement": "gpt-5.6-terra"},
+    {"shutdown": "2026-09-28", "announced": "2025-09-26", "ids": ["babbage-002"], "replacement": "gpt-5.6-terra"},
+    {"shutdown": "2026-09-28", "announced": "2025-09-26", "ids": ["davinci-002"], "replacement": "gpt-5.6-terra"},
+    {"shutdown": "2026-09-28", "announced": "2025-09-26", "ids": ["gpt-3.5-turbo-1106"], "replacement": "gpt-5.6-terra"},
+    {"shutdown": "2026-10-23", "announced": "2026-04-22", "ids": ["gpt-3.5-turbo-0125", "gpt-3.5-turbo", "gpt-3.5-turbo-completions"], "replacement": "gpt-5.6-terra"},
+    {"shutdown": "2026-10-23", "announced": "2026-04-22", "ids": ["gpt-4-0613", "gpt-4", "gpt-4-0613-completions", "gpt-4-completions"], "replacement": "gpt-5.6-sol"},
+    {"shutdown": "2026-10-23", "announced": "2026-04-22", "ids": ["gpt-4-1106-preview"], "replacement": "gpt-5.6-sol"},
+    {"shutdown": "2026-10-23", "announced": "2026-04-22", "ids": ["gpt-4-turbo", "gpt-4-turbo-2024-04-09", "gpt-4-turbo-completions"], "replacement": "gpt-5.6-sol"},
+    {"shutdown": "2026-10-23", "announced": "2026-04-22", "ids": ["gpt-4.1-nano", "gpt-4.1-nano-2025-04-14"], "replacement": "gpt-5.6-luna"},
+    {"shutdown": "2026-10-23", "announced": "2026-04-22", "ids": ["gpt-4o-2024-05-13"], "replacement": "gpt-5.6-sol"},
+    {"shutdown": "2026-10-23", "announced": "2026-04-22", "ids": ["o1-2024-12-17", "o1"], "replacement": "gpt-5.6-sol"},
+    {"shutdown": "2026-10-23", "announced": "2026-04-22", "ids": ["o1-pro-2025-03-19", "o1-pro"], "replacement": "gpt-5.6-sol"},
+    {"shutdown": "2026-10-23", "announced": "2026-04-22", "ids": ["o3-mini-2025-01-31", "o3-mini"], "replacement": "gpt-5.6-sol"},
+    {"shutdown": "2026-10-23", "announced": "2026-04-22", "ids": ["o4-mini-2025-04-16", "o4-mini"], "replacement": "gpt-5.6-terra"},
+    {"shutdown": "2026-12-11", "announced": "2026-06-11", "ids": ["gpt-5-2025-08-07"], "replacement": "gpt-5.6-sol"},
+    {"shutdown": "2026-12-11", "announced": "2026-06-11", "ids": ["gpt-5-mini-2025-08-07"], "replacement": "gpt-5.6-terra"},
+    {"shutdown": "2026-12-11", "announced": "2026-06-11", "ids": ["gpt-5-nano-2025-08-07"], "replacement": "gpt-5.6-luna"},
+    {"shutdown": "2026-12-11", "announced": "2026-06-11", "ids": ["gpt-5-pro-2025-10-06"], "replacement": "gpt-5.6-sol"},
+    {"shutdown": "2026-12-11", "announced": "2026-06-11", "ids": ["o3-2025-04-16"], "replacement": "gpt-5.6-sol"},
+    {"shutdown": "2026-12-11", "announced": "2026-06-11", "ids": ["o3-pro-2025-06-10"], "replacement": "gpt-5.6-sol"}
+  ],
+  "defaults": {
+    "OpenAI": {
+      "model": "gpt-3.5-turbo-instruct",
+      "read_from": "langchain-openai 1.6.6 and 0.3.35",
+      "url": "https://github.com/langchain-ai/langchain/blob/langchain-openai%3D%3D1.6.6/libs/partners/openai/langchain_openai/llms/base.py#L176"
+    },
+    "ChatOpenAI": {
+      "model": "gpt-3.5-turbo",
+      "read_from": "langchain-openai 1.6.6 and 0.3.35",
+      "url": "https://github.com/langchain-ai/langchain/blob/langchain-openai%3D%3D1.6.6/libs/partners/openai/langchain_openai/chat_models/base.py#L801"
+    }
+  }
+}

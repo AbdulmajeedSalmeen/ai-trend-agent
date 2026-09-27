@@ -1,0 +1,926 @@
+{
+  "exhaustive": {
+    "nbHits": false,
+    "typo": false
+  },
+  "exhaustiveNbHits": false,
+  "exhaustiveTypo": false,
+  "hits": [
+    {
+      "_highlightResult": {
+        "author": {
+          "matchLevel": "none",
+          "matchedWords": [],
+          "value": "jd_"
+        },
+        "story_text": {
+          "fullyHighlighted": false,
+          "matchLevel": "full",
+          "matchedWords": [
+            "langgraph"
+          ],
+          "value": "Hi HN - long-time lurker (since 2012!), first time poster.<p>Pizza Bot is a self-hosted desktop app for Mac, Windows, and Linux that runs AI agents in the background and exposes them through an email-like UI. Finished work shows up in Unread, and anything waiting on your approval shows up in Action. It's Apache 2.0-licensed, there's no signup and no telemetry, and you bring your own model provider: Anthropic, Amazon Bedrock, Google Gemini, OpenAI, OpenRouter, or a local model through Ollama. There are builds on the releases page, or you can run it from source.<p>Pizza Bot started as an internal passion project I worked on with a small team at Amazon.<p>The whole thing came out of my frustration at having to manually log CRM activities through a browser form. I built a simple REST API called &quot;JoeBot&quot; that connected to my authenticated browser session over CDP and filled out the form for me using Playwright. Then I hacked up a quick Obsidian plugin so I could trigger it from my local notes (no AI and no MCP servers involved).<p>This caught on quickly. My fellow AWS Solutions Architect Igor Fil joined up with me, and we rebranded the project as &quot;Pizza Bot,&quot; named after Amazon's two-pizza teams. We started seeing what other automations we could build. We found a GraphQL API we could query and hacked up some &quot;recipes&quot; to pull data out of the CRM to help with meeting prep. That worked great, and it was right around the time MCP servers seemed to be taking off, so we decided to expose Pizza Bot as an MCP server instead, so it would be available to AI tools through natural language.<p>This was a decent solution for technical users, but the Account Managers who live inside our CRM system wanted something too. We decided to rebuild Pizza Bot as an Electron desktop app modeled after an email inbox, so it would be familiar to non-technical users and would run on both Mac and Windows. We also bundled internal MCP servers as OCI images and hosted them in Amazon ECR as an &quot;addon marketplace&quot; so users could install them with one click without having to set up Amazon developer tooling.<p>The project took off organically and expanded outside of AWS into the wider Amazon organization globally. More than 2,000 people ended up using it for meeting prep, email drafting, Slack summaries, CRM logging, prioritizing their day, and web research.<p>Once apps like Claude Cowork and Amazon's own Quick Desktop came out, we realized the real growth opportunity was outside of Amazon. Rather than try to rip out the Amazon-specific integrations, we rebuilt Pizza Bot once more as an open source project. We leaned on coding agents heavily, which is the only reason a team our size could pull off a full rewrite. I'm pleased to say it's finally public, and we're hoping to bring in community members and see where it goes. We'd like to do for knowledge workers what Claude Code and Codex have done for programmers.<p>A couple of things to know up front. Most of what made Pizza Bot useful on day one inside Amazon came from that internal catalog of skills and MCP servers for Amazon's own systems, and none of it could come out with the app. So it ships thinner than the version those 2,000 people used, and building that catalog back up for tools other people actually use is where we need the most help. It's also a community project and not an AWS service, so there's no support or SLA behind it. The Windows and Linux builds aren't signed yet either.<p>On the technical side, Pizza Bot is a server and a client. The desktop app bundles both, or you can point a client at a remote backend; personally, I self-host the server on my home network and reach it from my phone over Tailscale. The server owns the thread lifecycle and checkpoints state with DeepAgents and <em>LangGraph</em>, and clients rehydrate from it as needed, so you can disconnect mid-run and pick the thread back up from another client. Approval pauses outlive the session that created them and collect in an Action filter, so you can answer an hour later from a different device. The agent you talk to has a sandboxed QuickJS interpreter that can reach your filesystem only if you grant it a folder, but its main job is to delegate. Each subagent is a 1:1 mapping of a Skill, and an Activity bar shows that subagent and the tool calls it's making as it works. Memory is opt-in and stored as plain markdown files on your machine. Every tool call is explicit, including looking up a memory - we err on the side of transparency to reduce surprises. Tools come from MCP servers, and skills are ordinary SKILL.md files with a per-tool approval policy, so existing skills that don't require a code interpreter should still work.<p>What I'd most like to hear about is where the app itself gets in your way, the kind of problem you can't fix by writing a skill or an MCP server. I'm around today to answer questions!"
+        },
+        "title": {
+          "matchLevel": "none",
+          "matchedWords": [],
+          "value": "Show HN: Pizza Bot \u2013 An inbox for AI agents that work in the background"
+        },
+        "url": {
+          "matchLevel": "none",
+          "matchedWords": [],
+          "value": "https://github.com/pizza-bot-app/pizza-bot"
+        }
+      },
+      "_tags": [
+        "story",
+        "author_jd_",
+        "story_49713894",
+        "show_hn"
+      ],
+      "author": "jd_",
+      "children": [
+        49721762,
+        49720486,
+        49722869,
+        49723174,
+        49723294,
+        49721898,
+        49720673,
+        49720280,
+        49722268,
+        49721286,
+        49722764,
+        49719663,
+        49721569,
+        49720073,
+        49720524,
+        49722670,
+        49715451,
+        49713896
+      ],
+      "created_at": "2026-09-15T15:20:26Z",
+      "created_at_i": 1789485626,
+      "num_comments": 31,
+      "objectID": "49713894",
+      "points": 48,
+      "story_id": 49713894,
+      "story_text": "Hi HN - long-time lurker (since 2012!), first time poster.<p>Pizza Bot is a self-hosted desktop app for Mac, Windows, and Linux that runs AI agents in the background and exposes them through an email-like UI. Finished work shows up in Unread, and anything waiting on your approval shows up in Action. It&#x27;s Apache 2.0-licensed, there&#x27;s no signup and no telemetry, and you bring your own model provider: Anthropic, Amazon Bedrock, Google Gemini, OpenAI, OpenRouter, or a local model through Ollama. There are builds on the releases page, or you can run it from source.<p>Pizza Bot started as an internal passion project I worked on with a small team at Amazon.<p>The whole thing came out of my frustration at having to manually log CRM activities through a browser form. I built a simple REST API called &quot;JoeBot&quot; that connected to my authenticated browser session over CDP and filled out the form for me using Playwright. Then I hacked up a quick Obsidian plugin so I could trigger it from my local notes (no AI and no MCP servers involved).<p>This caught on quickly. My fellow AWS Solutions Architect Igor Fil joined up with me, and we rebranded the project as &quot;Pizza Bot,&quot; named after Amazon&#x27;s two-pizza teams. We started seeing what other automations we could build. We found a GraphQL API we could query and hacked up some &quot;recipes&quot; to pull data out of the CRM to help with meeting prep. That worked great, and it was right around the time MCP servers seemed to be taking off, so we decided to expose Pizza Bot as an MCP server instead, so it would be available to AI tools through natural language.<p>This was a decent solution for technical users, but the Account Managers who live inside our CRM system wanted something too. We decided to rebuild Pizza Bot as an Electron desktop app modeled after an email inbox, so it would be familiar to non-technical users and would run on both Mac and Windows. We also bundled internal MCP servers as OCI images and hosted them in Amazon ECR as an &quot;addon marketplace&quot; so users could install them with one click without having to set up Amazon developer tooling.<p>The project took off organically and expanded outside of AWS into the wider Amazon organization globally. More than 2,000 people ended up using it for meeting prep, email drafting, Slack summaries, CRM logging, prioritizing their day, and web research.<p>Once apps like Claude Cowork and Amazon&#x27;s own Quick Desktop came out, we realized the real growth opportunity was outside of Amazon. Rather than try to rip out the Amazon-specific integrations, we rebuilt Pizza Bot once more as an open source project. We leaned on coding agents heavily, which is the only reason a team our size could pull off a full rewrite. I&#x27;m pleased to say it&#x27;s finally public, and we&#x27;re hoping to bring in community members and see where it goes. We&#x27;d like to do for knowledge workers what Claude Code and Codex have done for programmers.<p>A couple of things to know up front. Most of what made Pizza Bot useful on day one inside Amazon came from that internal catalog of skills and MCP servers for Amazon&#x27;s own systems, and none of it could come out with the app. So it ships thinner than the version those 2,000 people used, and building that catalog back up for tools other people actually use is where we need the most help. It&#x27;s also a community project and not an AWS service, so there&#x27;s no support or SLA behind it. The Windows and Linux builds aren&#x27;t signed yet either.<p>On the technical side, Pizza Bot is a server and a client. The desktop app bundles both, or you can point a client at a remote backend; personally, I self-host the server on my home network and reach it from my phone over Tailscale. The server owns the thread lifecycle and checkpoints state with DeepAgents and LangGraph, and clients rehydrate from it as needed, so you can disconnect mid-run and pick the thread back up from another client. Approval pauses outlive the session that created them and collect in an Action filter, so you can answer an hour later from a different device. The agent you talk to has a sandboxed QuickJS interpreter that can reach your filesystem only if you grant it a folder, but its main job is to delegate. Each subagent is a 1:1 mapping of a Skill, and an Activity bar shows that subagent and the tool calls it&#x27;s making as it works. Memory is opt-in and stored as plain markdown files on your machine. Every tool call is explicit, including looking up a memory - we err on the side of transparency to reduce surprises. Tools come from MCP servers, and skills are ordinary SKILL.md files with a per-tool approval policy, so existing skills that don&#x27;t require a code interpreter should still work.<p>What I&#x27;d most like to hear about is where the app itself gets in your way, the kind of problem you can&#x27;t fix by writing a skill or an MCP server. I&#x27;m around today to answer questions!",
+      "title": "Show HN: Pizza Bot \u2013 An inbox for AI agents that work in the background",
+      "updated_at": "2026-09-16T09:24:41Z",
+      "url": "https://github.com/pizza-bot-app/pizza-bot"
+    },
+    {
+      "_highlightResult": {
+        "author": {
+          "matchLevel": "none",
+          "matchedWords": [],
+          "value": "noahhafn"
+        },
+        "story_text": {
+          "fullyHighlighted": false,
+          "matchLevel": "full",
+          "matchedWords": [
+            "langgraph"
+          ],
+          "value": "Hi - I'm Noah, a student working out of the UK &amp; I've been building Vigilator for the past couple of months, Vigilator provides an agnostic solution for handling interrupts and observing agents as they work.<p>I was inspired to build Vigilator after I realised as teams roll out AI agents across organisations there's no consistent way to interrupt an agent mid-task, get a\nhuman decision, and resume - especially when multiple people can be responsible for weighing in on the decisions.<p>Vigilator provides a dashboard, where you and your teammates can join a virtual organisation - from here you can use our Py/TS SDK or simply make API calls yourself - then from here tool calls can be approved/reviewed/denied and agents can be monitored as they work. We provide a workload management system meaning that you can have multiple team members at once handling interrupts and watching agents as they work.<p>Vigilator is still early, while Vigilator is framework agnostic I've primarily focused on adding support and examples for Mastra, Langchain Deep Agents and <em>Langgraph</em> - and I would love feedback, particularly from people running agents in production at scale.<p>try it: <a href=\"https://vigilator.ai\" rel=\"nofollow\">https://vigilator.ai</a><p>Docs: <a href=\"https://docs.vigilator.ai\" rel=\"nofollow\">https://docs.vigilator.ai</a> (conceptual overview: <a href=\"https://docs.vigilator.ai/concepts\" rel=\"nofollow\">https://docs.vigilator.ai/concepts</a>)<p>If you would like to get in contact feel free to shoot me an email at noah@vigilator.ai"
+        },
+        "title": {
+          "matchLevel": "none",
+          "matchedWords": [],
+          "value": "Show HN: Vigilator \u2013 human-in-the-loop layer for AI agents"
+        },
+        "url": {
+          "matchLevel": "none",
+          "matchedWords": [],
+          "value": "https://vigilator.ai/"
+        }
+      },
+      "_tags": [
+        "story",
+        "author_noahhafn",
+        "story_49695678",
+        "show_hn"
+      ],
+      "author": "noahhafn",
+      "children": [
+        49701313
+      ],
+      "created_at": "2026-09-14T12:24:37Z",
+      "created_at_i": 1789388677,
+      "num_comments": 0,
+      "objectID": "49695678",
+      "points": 3,
+      "story_id": 49695678,
+      "story_text": "Hi - I&#x27;m Noah, a student working out of the UK &amp; I&#x27;ve been building Vigilator for the past couple of months, Vigilator provides an agnostic solution for handling interrupts and observing agents as they work.<p>I was inspired to build Vigilator after I realised as teams roll out AI agents across organisations there&#x27;s no consistent way to interrupt an agent mid-task, get a\nhuman decision, and resume - especially when multiple people can be responsible for weighing in on the decisions.<p>Vigilator provides a dashboard, where you and your teammates can join a virtual organisation - from here you can use our Py&#x2F;TS SDK or simply make API calls yourself - then from here tool calls can be approved&#x2F;reviewed&#x2F;denied and agents can be monitored as they work. We provide a workload management system meaning that you can have multiple team members at once handling interrupts and watching agents as they work.<p>Vigilator is still early, while Vigilator is framework agnostic I&#x27;ve primarily focused on adding support and examples for Mastra, Langchain Deep Agents and Langgraph - and I would love feedback, particularly from people running agents in production at scale.<p>try it: <a href=\"https:&#x2F;&#x2F;vigilator.ai\" rel=\"nofollow\">https:&#x2F;&#x2F;vigilator.ai</a><p>Docs: <a href=\"https:&#x2F;&#x2F;docs.vigilator.ai\" rel=\"nofollow\">https:&#x2F;&#x2F;docs.vigilator.ai</a> (conceptual overview: <a href=\"https:&#x2F;&#x2F;docs.vigilator.ai&#x2F;concepts\" rel=\"nofollow\">https:&#x2F;&#x2F;docs.vigilator.ai&#x2F;concepts</a>)<p>If you would like to get in contact feel free to shoot me an email at noah@vigilator.ai",
+      "title": "Show HN: Vigilator \u2013 human-in-the-loop layer for AI agents",
+      "updated_at": "2026-09-14T18:11:07Z",
+      "url": "https://vigilator.ai/"
+    },
+    {
+      "_highlightResult": {
+        "author": {
+          "matchLevel": "none",
+          "matchedWords": [],
+          "value": "ibobev"
+        },
+        "title": {
+          "fullyHighlighted": false,
+          "matchLevel": "full",
+          "matchedWords": [
+            "langgraph"
+          ],
+          "value": "A deep dive into LangChain and <em>LangGraph</em>"
+        },
+        "url": {
+          "fullyHighlighted": false,
+          "matchLevel": "full",
+          "matchedWords": [
+            "langgraph"
+          ],
+          "value": "https://flaviocopes.com/langchain-<em>langgraph</em>/"
+        }
+      },
+      "_tags": [
+        "story",
+        "author_ibobev",
+        "story_49657460"
+      ],
+      "author": "ibobev",
+      "created_at": "2026-09-11T12:42:18Z",
+      "created_at_i": 1789130538,
+      "num_comments": 0,
+      "objectID": "49657460",
+      "points": 3,
+      "story_id": 49657460,
+      "title": "A deep dive into LangChain and LangGraph",
+      "updated_at": "2026-09-11T14:02:28Z",
+      "url": "https://flaviocopes.com/langchain-langgraph/"
+    },
+    {
+      "_highlightResult": {
+        "author": {
+          "matchLevel": "none",
+          "matchedWords": [],
+          "value": "luplex"
+        },
+        "story_text": {
+          "fullyHighlighted": false,
+          "matchLevel": "full",
+          "matchedWords": [
+            "langgraph"
+          ],
+          "value": "I work in a medium-size government agency in Germany, mostly comprised of middle management. We have already built and rolled out a web-based &quot;internal GPT&quot; with <em>LangGraph</em> and a custom frontend, based on Azure OpenAI, but it of course lacks far behind the commercial offerings in functionality. We also have secure on-premise infrastructure, so I'm not looking for security debate here, and instead just product features.<p>I'm looking for success stories to orient our future internal product strategy around. On the web, I mostly see AI slop stories about this sort of stuff, no concrete cases. Who is in town?<p>To anyone in enterprise IT rolling out AI, have you found benefits in giving knowledge workers more agentic AI? What do they actually end up doing?<p>Or do you have any pointers to use cases?"
+        },
+        "title": {
+          "matchLevel": "none",
+          "matchedWords": [],
+          "value": "Ask HN: How to roll out Agents for knowledge workers?"
+        }
+      },
+      "_tags": [
+        "story",
+        "author_luplex",
+        "story_49596428",
+        "ask_hn"
+      ],
+      "author": "luplex",
+      "children": [
+        49596640,
+        49596569,
+        49606660,
+        49606485
+      ],
+      "created_at": "2026-09-07T10:14:59Z",
+      "created_at_i": 1788776099,
+      "num_comments": 3,
+      "objectID": "49596428",
+      "points": 1,
+      "story_id": 49596428,
+      "story_text": "I work in a medium-size government agency in Germany, mostly comprised of middle management. We have already built and rolled out a web-based &quot;internal GPT&quot; with LangGraph and a custom frontend, based on Azure OpenAI, but it of course lacks far behind the commercial offerings in functionality. We also have secure on-premise infrastructure, so I&#x27;m not looking for security debate here, and instead just product features.<p>I&#x27;m looking for success stories to orient our future internal product strategy around. On the web, I mostly see AI slop stories about this sort of stuff, no concrete cases. Who is in town?<p>To anyone in enterprise IT rolling out AI, have you found benefits in giving knowledge workers more agentic AI? What do they actually end up doing?<p>Or do you have any pointers to use cases?",
+      "title": "Ask HN: How to roll out Agents for knowledge workers?",
+      "updated_at": "2026-09-16T06:41:56Z"
+    },
+    {
+      "_highlightResult": {
+        "author": {
+          "matchLevel": "none",
+          "matchedWords": [],
+          "value": "aravinthan-n"
+        },
+        "title": {
+          "fullyHighlighted": false,
+          "matchLevel": "full",
+          "matchedWords": [
+            "langgraph"
+          ],
+          "value": "Prism Reviewer \u2013 Multi-agent AI code reviewer built with <em>LangGraph</em> and LiteLLM"
+        },
+        "url": {
+          "matchLevel": "none",
+          "matchedWords": [],
+          "value": "https://github.com/marketplace/actions/prism-reviewer-ai"
+        }
+      },
+      "_tags": [
+        "story",
+        "author_aravinthan-n",
+        "story_49408247"
+      ],
+      "author": "aravinthan-n",
+      "children": [
+        49408252,
+        49408248
+      ],
+      "created_at": "2026-08-23T12:22:24Z",
+      "created_at_i": 1787487744,
+      "num_comments": 0,
+      "objectID": "49408247",
+      "points": 1,
+      "story_id": 49408247,
+      "title": "Prism Reviewer \u2013 Multi-agent AI code reviewer built with LangGraph and LiteLLM",
+      "updated_at": "2026-08-23T12:24:00Z",
+      "url": "https://github.com/marketplace/actions/prism-reviewer-ai"
+    },
+    {
+      "_highlightResult": {
+        "author": {
+          "matchLevel": "none",
+          "matchedWords": [],
+          "value": "songrenchu"
+        },
+        "story_text": {
+          "fullyHighlighted": false,
+          "matchLevel": "full",
+          "matchedWords": [
+            "langgraph"
+          ],
+          "value": "Hey HN! We are building HarnessRouter, a canonical API for running Codex, Claude Code, Hermes, and other managed agent harnesses as your product backend.<p>Before building HarnessRouter, I used to build our own agent harness for our products. I tried <em>LangGraph</em>, agent SDKs from different vendors, pydantic, LLM tool use / function call, and so on. It's a very heavy lifting engineering effort, and I am disappointed about the agent deliveries compared to what Codex, CC can deliver. That changed my mindset. The frontier labs and famous open source communities are already putting so much engineering effort to build the world's best harnesses, why not leverage them directly instead of building our own, just like how we call LLM chat completion endpoints instead of training our own models?<p>We provide a docker image to run HarnessRouter locally.<p>----------<p>Quickstart:<p><pre><code>    docker pull harnessrouter/harnessrouter\n\n    docker run -d --name harnessrouter -p 127.0.0.1:3000:3000 -v harnessrouter:/data harnessrouter/harnessrouter\n\n    docker logs -f harnessrouter\n\n    Wait for the &quot;ready on :3000&quot; show up, then open the browser at http://localhost:3000.\n    Default username/password is harnessrouter/harnessrouter\n\n    Then in Integrations page, add your model provider credentials or API keys.\n    In Harnesses tab, as of today we provide routing to Codex, Claude Code, and Hermes as base harnesses.\n    You can customize any of them and configure harness instruction, MCP tools, and skills.\n\n    Then go to Tasks and let them do jobs.\n</code></pre>\n----------<p>Every harness has its own request/response format and incompatible with each other. We propose Unified Harness Procotol [1] to standardize how an application talks to an agent harness. It covers harness selection and configuration, task execution, event streaming, sessions start cancel and resume, artifact management and delivery, and failure handling. It's similar idea like LiteLLM, but for harnesses rather than models.<p>HarnessRouter implements UHP. We provide an AGENTS.md [2] and your coding agent can follow it to integrate your application with the harnesses available.<p>We also provide starter kits [3] to demonstrate some types of agentic products that can be built on HarnessRouter. It currently includes PPT agent, Spreadsheet agent, BI Dashboard agent, and Video generation agent.<p>Can't wait to hear what you think!<p>[1] <a href=\"https://unifiedharnessprotocol.org\" rel=\"nofollow\">https://unifiedharnessprotocol.org</a><p>[2] <a href=\"https://harnessrouter.ai/agents.md\" rel=\"nofollow\">https://harnessrouter.ai/agents.md</a><p>[3] <a href=\"https://github.com/harnessrouter/starter-kit\" rel=\"nofollow\">https://github.com/harnessrouter/starter-kit</a>"
+        },
+        "title": {
+          "matchLevel": "none",
+          "matchedWords": [],
+          "value": "Show HN: HarnessRouter: Unified interface for agent harnesses"
+        },
+        "url": {
+          "matchLevel": "none",
+          "matchedWords": [],
+          "value": "https://github.com/harnessrouter/harnessrouter"
+        }
+      },
+      "_tags": [
+        "story",
+        "author_songrenchu",
+        "story_49335595",
+        "show_hn"
+      ],
+      "author": "songrenchu",
+      "children": [
+        49336407,
+        49366027,
+        49344414,
+        49342449,
+        49336675,
+        49346800,
+        49336605
+      ],
+      "created_at": "2026-08-17T18:33:38Z",
+      "created_at_i": 1786991618,
+      "num_comments": 14,
+      "objectID": "49335595",
+      "points": 10,
+      "story_id": 49335595,
+      "story_text": "Hey HN! We are building HarnessRouter, a canonical API for running Codex, Claude Code, Hermes, and other managed agent harnesses as your product backend.<p>Before building HarnessRouter, I used to build our own agent harness for our products. I tried LangGraph, agent SDKs from different vendors, pydantic, LLM tool use &#x2F; function call, and so on. It&#x27;s a very heavy lifting engineering effort, and I am disappointed about the agent deliveries compared to what Codex, CC can deliver. That changed my mindset. The frontier labs and famous open source communities are already putting so much engineering effort to build the world&#x27;s best harnesses, why not leverage them directly instead of building our own, just like how we call LLM chat completion endpoints instead of training our own models?<p>We provide a docker image to run HarnessRouter locally.<p>----------<p>Quickstart:<p><pre><code>    docker pull harnessrouter&#x2F;harnessrouter\n\n    docker run -d --name harnessrouter -p 127.0.0.1:3000:3000 -v harnessrouter:&#x2F;data harnessrouter&#x2F;harnessrouter\n\n    docker logs -f harnessrouter\n\n    Wait for the &quot;ready on :3000&quot; show up, then open the browser at http:&#x2F;&#x2F;localhost:3000.\n    Default username&#x2F;password is harnessrouter&#x2F;harnessrouter\n\n    Then in Integrations page, add your model provider credentials or API keys.\n    In Harnesses tab, as of today we provide routing to Codex, Claude Code, and Hermes as base harnesses.\n    You can customize any of them and configure harness instruction, MCP tools, and skills.\n\n    Then go to Tasks and let them do jobs.\n</code></pre>\n----------<p>Every harness has its own request&#x2F;response format and incompatible with each other. We propose Unified Harness Procotol [1] to standardize how an application talks to an agent harness. It covers harness selection and configuration, task execution, event streaming, sessions start cancel and resume, artifact management and delivery, and failure handling. It&#x27;s similar idea like LiteLLM, but for harnesses rather than models.<p>HarnessRouter implements UHP. We provide an AGENTS.md [2] and your coding agent can follow it to integrate your application with the harnesses available.<p>We also provide starter kits [3] to demonstrate some types of agentic products that can be built on HarnessRouter. It currently includes PPT agent, Spreadsheet agent, BI Dashboard agent, and Video generation agent.<p>Can&#x27;t wait to hear what you think!<p>[1] <a href=\"https:&#x2F;&#x2F;unifiedharnessprotocol.org\" rel=\"nofollow\">https:&#x2F;&#x2F;unifiedharnessprotocol.org</a><p>[2] <a href=\"https:&#x2F;&#x2F;harnessrouter.ai&#x2F;agents.md\" rel=\"nofollow\">https:&#x2F;&#x2F;harnessrouter.ai&#x2F;agents.md</a><p>[3] <a href=\"https:&#x2F;&#x2F;github.com&#x2F;harnessrouter&#x2F;starter-kit\" rel=\"nofollow\">https:&#x2F;&#x2F;github.com&#x2F;harnessrouter&#x2F;starter-kit</a>",
+      "title": "Show HN: HarnessRouter: Unified interface for agent harnesses",
+      "updated_at": "2026-08-22T08:59:34Z",
+      "url": "https://github.com/harnessrouter/harnessrouter"
+    },
+    {
+      "_highlightResult": {
+        "author": {
+          "matchLevel": "none",
+          "matchedWords": [],
+          "value": "mainawycliffe"
+        },
+        "title": {
+          "fullyHighlighted": false,
+          "matchLevel": "full",
+          "matchedWords": [
+            "langgraph"
+          ],
+          "value": "Skein-JS \u2013 The open-source <em>LangGraph</em> Platform alternative, for TypeScript"
+        },
+        "url": {
+          "matchLevel": "none",
+          "matchedWords": [],
+          "value": "https://skein-js.github.io/skein-js/"
+        }
+      },
+      "_tags": [
+        "story",
+        "author_mainawycliffe",
+        "story_49275717"
+      ],
+      "author": "mainawycliffe",
+      "children": [
+        49275718
+      ],
+      "created_at": "2026-08-12T17:17:07Z",
+      "created_at_i": 1786555027,
+      "num_comments": 0,
+      "objectID": "49275717",
+      "points": 2,
+      "story_id": 49275717,
+      "title": "Skein-JS \u2013 The open-source LangGraph Platform alternative, for TypeScript",
+      "updated_at": "2026-08-12T17:29:32Z",
+      "url": "https://skein-js.github.io/skein-js/"
+    },
+    {
+      "_highlightResult": {
+        "author": {
+          "matchLevel": "none",
+          "matchedWords": [],
+          "value": "atif089"
+        },
+        "story_text": {
+          "fullyHighlighted": false,
+          "matchLevel": "full",
+          "matchedWords": [
+            "langgraph"
+          ],
+          "value": "I believe vLLM has been the gold standard for inferencing but I'd like to learn how vLLM, <em>langgraph</em>, langfuse, other observability and business logic is meld into a single setup."
+        },
+        "title": {
+          "matchLevel": "none",
+          "matchedWords": [],
+          "value": "Ask HN: Are there any production LLM pipeline setups to learn from?"
+        }
+      },
+      "_tags": [
+        "story",
+        "author_atif089",
+        "story_49273774",
+        "ask_hn"
+      ],
+      "author": "atif089",
+      "children": [
+        49406869,
+        49292347
+      ],
+      "created_at": "2026-08-12T15:18:25Z",
+      "created_at_i": 1786547905,
+      "num_comments": 0,
+      "objectID": "49273774",
+      "points": 6,
+      "story_id": 49273774,
+      "story_text": "I believe vLLM has been the gold standard for inferencing but I&#x27;d like to learn how vLLM, langgraph, langfuse, other observability and business logic is meld into a single setup.",
+      "title": "Ask HN: Are there any production LLM pipeline setups to learn from?",
+      "updated_at": "2026-08-23T07:51:50Z"
+    },
+    {
+      "_highlightResult": {
+        "author": {
+          "matchLevel": "none",
+          "matchedWords": [],
+          "value": "m2magents"
+        },
+        "title": {
+          "fullyHighlighted": false,
+          "matchLevel": "full",
+          "matchedWords": [
+            "langgraph"
+          ],
+          "value": "A <em>LangGraph</em> pipeline that generates compiling Flutter apps (with a repair loop)"
+        },
+        "url": {
+          "matchLevel": "none",
+          "matchedWords": [],
+          "value": "https://github.com/carlosge492/app-generation-microservice"
+        }
+      },
+      "_tags": [
+        "story",
+        "author_m2magents",
+        "story_49130994"
+      ],
+      "author": "m2magents",
+      "children": [
+        49130995
+      ],
+      "created_at": "2026-08-01T04:21:15Z",
+      "created_at_i": 1785558075,
+      "num_comments": 0,
+      "objectID": "49130994",
+      "points": 1,
+      "story_id": 49130994,
+      "title": "A LangGraph pipeline that generates compiling Flutter apps (with a repair loop)",
+      "updated_at": "2026-08-01T04:24:34Z",
+      "url": "https://github.com/carlosge492/app-generation-microservice"
+    },
+    {
+      "_highlightResult": {
+        "author": {
+          "matchLevel": "none",
+          "matchedWords": [],
+          "value": "eigenBasis"
+        },
+        "title": {
+          "fullyHighlighted": false,
+          "matchLevel": "full",
+          "matchedWords": [
+            "langgraph"
+          ],
+          "value": "Building Agentic Workflows in Python with <em>LangGraph</em>"
+        },
+        "url": {
+          "fullyHighlighted": false,
+          "matchLevel": "full",
+          "matchedWords": [
+            "langgraph"
+          ],
+          "value": "https://machinelearningmastery.com/building-agentic-workflows-in-python-with-<em>langgraph</em>/"
+        }
+      },
+      "_tags": [
+        "story",
+        "author_eigenBasis",
+        "story_48987671"
+      ],
+      "author": "eigenBasis",
+      "created_at": "2026-07-21T03:22:33Z",
+      "created_at_i": 1784604153,
+      "num_comments": 0,
+      "objectID": "48987671",
+      "points": 4,
+      "story_id": 48987671,
+      "title": "Building Agentic Workflows in Python with LangGraph",
+      "updated_at": "2026-07-21T04:26:11Z",
+      "url": "https://machinelearningmastery.com/building-agentic-workflows-in-python-with-langgraph/"
+    },
+    {
+      "_highlightResult": {
+        "author": {
+          "matchLevel": "none",
+          "matchedWords": [],
+          "value": "mattm"
+        },
+        "title": {
+          "fullyHighlighted": false,
+          "matchLevel": "full",
+          "matchedWords": [
+            "langgraph"
+          ],
+          "value": "Building Systems That Build Systems: Setting Up the SDLC in <em>LangGraph</em>"
+        },
+        "url": {
+          "fullyHighlighted": false,
+          "matchLevel": "full",
+          "matchedWords": [
+            "langgraph"
+          ],
+          "value": "https://mattmccormick.ca/building-systems-that-build-systems-setting-up-the-sdlc-in-<em>langgraph</em>/"
+        }
+      },
+      "_tags": [
+        "story",
+        "author_mattm",
+        "story_48953085"
+      ],
+      "author": "mattm",
+      "created_at": "2026-07-17T22:55:30Z",
+      "created_at_i": 1784328930,
+      "num_comments": 0,
+      "objectID": "48953085",
+      "points": 1,
+      "story_id": 48953085,
+      "title": "Building Systems That Build Systems: Setting Up the SDLC in LangGraph",
+      "updated_at": "2026-07-17T23:01:15Z",
+      "url": "https://mattmccormick.ca/building-systems-that-build-systems-setting-up-the-sdlc-in-langgraph/"
+    },
+    {
+      "_highlightResult": {
+        "author": {
+          "matchLevel": "none",
+          "matchedWords": [],
+          "value": "jgo94"
+        },
+        "title": {
+          "fullyHighlighted": false,
+          "matchLevel": "full",
+          "matchedWords": [
+            "langgraph"
+          ],
+          "value": "Show HN: LIA \u2013 a self-hosted multi-agent AI assistant (FastAPI and <em>LangGraph</em>)"
+        },
+        "url": {
+          "matchLevel": "none",
+          "matchedWords": [],
+          "value": "https://github.com/jgouviergmail/LIA-Assistant"
+        }
+      },
+      "_tags": [
+        "story",
+        "author_jgo94",
+        "story_48952432",
+        "show_hn"
+      ],
+      "author": "jgo94",
+      "children": [
+        48952462
+      ],
+      "created_at": "2026-07-17T21:21:58Z",
+      "created_at_i": 1784323318,
+      "num_comments": 0,
+      "objectID": "48952432",
+      "points": 2,
+      "story_id": 48952432,
+      "title": "Show HN: LIA \u2013 a self-hosted multi-agent AI assistant (FastAPI and LangGraph)",
+      "updated_at": "2026-07-17T22:05:14Z",
+      "url": "https://github.com/jgouviergmail/LIA-Assistant"
+    },
+    {
+      "_highlightResult": {
+        "author": {
+          "matchLevel": "none",
+          "matchedWords": [],
+          "value": "Brescou"
+        },
+        "title": {
+          "fullyHighlighted": false,
+          "matchLevel": "full",
+          "matchedWords": [
+            "langgraph"
+          ],
+          "value": "Show HN: Production-grade <em>LangGraph</em> template"
+        },
+        "url": {
+          "fullyHighlighted": false,
+          "matchLevel": "full",
+          "matchedWords": [
+            "langgraph"
+          ],
+          "value": "https://github.com/brescou/<em>langgraph</em>-agent-stack"
+        }
+      },
+      "_tags": [
+        "story",
+        "author_Brescou",
+        "story_48920715",
+        "show_hn"
+      ],
+      "author": "Brescou",
+      "children": [
+        48920759,
+        48920716
+      ],
+      "created_at": "2026-07-15T13:42:41Z",
+      "created_at_i": 1784122961,
+      "num_comments": 0,
+      "objectID": "48920715",
+      "points": 3,
+      "story_id": 48920715,
+      "title": "Show HN: Production-grade LangGraph template",
+      "updated_at": "2026-07-15T15:59:07Z",
+      "url": "https://github.com/brescou/langgraph-agent-stack"
+    },
+    {
+      "_highlightResult": {
+        "author": {
+          "matchLevel": "none",
+          "matchedWords": [],
+          "value": "christkarani"
+        },
+        "title": {
+          "fullyHighlighted": false,
+          "matchLevel": "full",
+          "matchedWords": [
+            "langgraph"
+          ],
+          "value": "Show HN: I Built <em>LangGraph</em> for Swift"
+        },
+        "url": {
+          "matchLevel": "none",
+          "matchedWords": [],
+          "value": "https://github.com/christopherkarani/Swarm"
+        }
+      },
+      "_tags": [
+        "story",
+        "author_christkarani",
+        "story_48805437",
+        "show_hn"
+      ],
+      "author": "christkarani",
+      "children": [
+        48807893,
+        48819748,
+        48806729,
+        48807855,
+        48808282
+      ],
+      "created_at": "2026-07-06T14:47:45Z",
+      "created_at_i": 1783349265,
+      "num_comments": 4,
+      "objectID": "48805437",
+      "points": 25,
+      "story_id": 48805437,
+      "title": "Show HN: I Built LangGraph for Swift",
+      "updated_at": "2026-07-08T14:11:27Z",
+      "url": "https://github.com/christopherkarani/Swarm"
+    },
+    {
+      "_highlightResult": {
+        "author": {
+          "matchLevel": "none",
+          "matchedWords": [],
+          "value": "insightits"
+        },
+        "title": {
+          "fullyHighlighted": false,
+          "matchLevel": "full",
+          "matchedWords": [
+            "langgraph"
+          ],
+          "value": "ChorusGraph \u2013 Agent graph runtime (not a <em>LangGraph</em> wrapper) with built-in cache"
+        },
+        "url": {
+          "matchLevel": "none",
+          "matchedWords": [],
+          "value": "https://github.com/insightitsGit/ChorusGraph"
+        }
+      },
+      "_tags": [
+        "story",
+        "author_insightits",
+        "story_48800652"
+      ],
+      "author": "insightits",
+      "children": [
+        48800653
+      ],
+      "created_at": "2026-07-06T04:30:39Z",
+      "created_at_i": 1783312239,
+      "num_comments": 0,
+      "objectID": "48800652",
+      "points": 1,
+      "story_id": 48800652,
+      "title": "ChorusGraph \u2013 Agent graph runtime (not a LangGraph wrapper) with built-in cache",
+      "updated_at": "2026-07-06T04:32:46Z",
+      "url": "https://github.com/insightitsGit/ChorusGraph"
+    },
+    {
+      "_highlightResult": {
+        "author": {
+          "matchLevel": "none",
+          "matchedWords": [],
+          "value": "hopefulbutwary"
+        },
+        "story_text": {
+          "fullyHighlighted": false,
+          "matchLevel": "full",
+          "matchedWords": [
+            "langgraph"
+          ],
+          "value": "I work on agent infra at Featherless. This is MIT and works with any OpenAI-compatible endpoint, not just ours.\nI kept rebuilding the same loop: call model, run tools, feed results back, stop. Every framework I tried either owned the UI, owned the control flow, or dragged a dependency tree. So I pulled the loop out and put every piece behind an interface: memory, model, tools, stop condition. The loop depends only on the interfaces. It never writes to a screen. It emits one typed event stream, so a trace is just data, and you render it however you want. The landing page scrubs one run and rebuilds a CLI, a DOM timeline, and raw JSONL from the same stream.\nOne dependency (zod). Same build runs in Node, Bun, Deno, and a browser tab. Every seam is tested in isolation with deterministic doubles, no network.\nWhy not the Vercel AI SDK, pi, or <em>LangGraph</em>: AI SDK owns more of the surface and has been awkward with self-hosted tool calling. pi is a great coding-agent toolkit but it's shaped around being a coding agent and ships a TUI. <em>LangGraph</em> is a heavier graph framework. This is the layer under all of those: the bare loop you'd build any of them on.\nHappy to be told where the seams are wrong.\nIf anyone finds any problems let me know this field moves at break neck speed so let me know if I am missing anything."
+        },
+        "title": {
+          "matchLevel": "none",
+          "matchedWords": [],
+          "value": "Show HN: A provider-agnostic agent loop built on ports and adapters"
+        },
+        "url": {
+          "matchLevel": "none",
+          "matchedWords": [],
+          "value": "https://openagentloops.featherless.ai/"
+        }
+      },
+      "_tags": [
+        "story",
+        "author_hopefulbutwary",
+        "story_48766154",
+        "show_hn"
+      ],
+      "author": "hopefulbutwary",
+      "children": [
+        48770321,
+        48769244,
+        48769078
+      ],
+      "created_at": "2026-07-02T19:22:51Z",
+      "created_at_i": 1783020171,
+      "num_comments": 1,
+      "objectID": "48766154",
+      "points": 4,
+      "story_id": 48766154,
+      "story_text": "I work on agent infra at Featherless. This is MIT and works with any OpenAI-compatible endpoint, not just ours.\nI kept rebuilding the same loop: call model, run tools, feed results back, stop. Every framework I tried either owned the UI, owned the control flow, or dragged a dependency tree. So I pulled the loop out and put every piece behind an interface: memory, model, tools, stop condition. The loop depends only on the interfaces. It never writes to a screen. It emits one typed event stream, so a trace is just data, and you render it however you want. The landing page scrubs one run and rebuilds a CLI, a DOM timeline, and raw JSONL from the same stream.\nOne dependency (zod). Same build runs in Node, Bun, Deno, and a browser tab. Every seam is tested in isolation with deterministic doubles, no network.\nWhy not the Vercel AI SDK, pi, or LangGraph: AI SDK owns more of the surface and has been awkward with self-hosted tool calling. pi is a great coding-agent toolkit but it&#x27;s shaped around being a coding agent and ships a TUI. LangGraph is a heavier graph framework. This is the layer under all of those: the bare loop you&#x27;d build any of them on.\nHappy to be told where the seams are wrong.\nIf anyone finds any problems let me know this field moves at break neck speed so let me know if I am missing anything.",
+      "title": "Show HN: A provider-agnostic agent loop built on ports and adapters",
+      "updated_at": "2026-07-03T03:19:36Z",
+      "url": "https://openagentloops.featherless.ai/"
+    },
+    {
+      "_highlightResult": {
+        "author": {
+          "matchLevel": "none",
+          "matchedWords": [],
+          "value": "Korridzy"
+        },
+        "title": {
+          "fullyHighlighted": false,
+          "matchLevel": "full",
+          "matchedWords": [
+            "langgraph"
+          ],
+          "value": "Comparing Fable and 10 other LLMs on refactoring a <em>LangGraph</em> god node"
+        },
+        "url": {
+          "matchLevel": "none",
+          "matchedWords": [],
+          "value": "https://wtf.korridzy.com/twilight-of-the-gods/"
+        }
+      },
+      "_tags": [
+        "story",
+        "author_Korridzy",
+        "story_48761132"
+      ],
+      "author": "Korridzy",
+      "children": [
+        48762663,
+        48763711,
+        48764333,
+        48765227,
+        48764031,
+        48765597,
+        48764423
+      ],
+      "created_at": "2026-07-02T13:19:56Z",
+      "created_at_i": 1782998396,
+      "num_comments": 20,
+      "objectID": "48761132",
+      "points": 47,
+      "story_id": 48761132,
+      "title": "Comparing Fable and 10 other LLMs on refactoring a LangGraph god node",
+      "updated_at": "2026-07-05T02:34:28Z",
+      "url": "https://wtf.korridzy.com/twilight-of-the-gods/"
+    },
+    {
+      "_highlightResult": {
+        "author": {
+          "matchLevel": "none",
+          "matchedWords": [],
+          "value": "enamakel"
+        },
+        "story_text": {
+          "fullyHighlighted": false,
+          "matchLevel": "full",
+          "matchedWords": [
+            "langgraph"
+          ],
+          "value": "Hey Guys, I would like to showcase Tiny Agents, which is an entirely Rust-based RLM. RLMs are a recent and fantastic new innovation on how LLMs can be reimagined by designing the LLM agent itself to define how it will orchestrate or create its own sub-agent.<p>I also could not find any good LLM harness workflow in Rust, so I built this one, taking massive inspiration from <em>LangGraph</em> and LangChain but also incorporating a Rust-based transpiler to build on-demand LLM graphs all in Rust following the RLM idea.<p>This is the harness that we are currently using in production in openhuman."
+        },
+        "title": {
+          "matchLevel": "none",
+          "matchedWords": [],
+          "value": "Show HN: TinyAgents \u2013 a Rust based recursive LLM harness"
+        },
+        "url": {
+          "matchLevel": "none",
+          "matchedWords": [],
+          "value": "https://github.com/tinyhumansai/tinyagents"
+        }
+      },
+      "_tags": [
+        "story",
+        "author_enamakel",
+        "story_48727680",
+        "show_hn"
+      ],
+      "author": "enamakel",
+      "children": [
+        48731263
+      ],
+      "created_at": "2026-06-30T01:53:15Z",
+      "created_at_i": 1782784395,
+      "num_comments": 1,
+      "objectID": "48727680",
+      "points": 4,
+      "story_id": 48727680,
+      "story_text": "Hey Guys, I would like to showcase Tiny Agents, which is an entirely Rust-based RLM. RLMs are a recent and fantastic new innovation on how LLMs can be reimagined by designing the LLM agent itself to define how it will orchestrate or create its own sub-agent.<p>I also could not find any good LLM harness workflow in Rust, so I built this one, taking massive inspiration from LangGraph and LangChain but also incorporating a Rust-based transpiler to build on-demand LLM graphs all in Rust following the RLM idea.<p>This is the harness that we are currently using in production in openhuman.",
+      "title": "Show HN: TinyAgents \u2013 a Rust based recursive LLM harness",
+      "updated_at": "2026-06-30T11:42:26Z",
+      "url": "https://github.com/tinyhumansai/tinyagents"
+    },
+    {
+      "_highlightResult": {
+        "author": {
+          "matchLevel": "none",
+          "matchedWords": [],
+          "value": "chelbi"
+        },
+        "story_text": {
+          "matchLevel": "none",
+          "matchedWords": [],
+          "value": "Detects when an LLM starts answering outside its intended domain (a legal assistant drifting into cooking advice, a medical chatbot wandering into finance) without ground-truth labels or a separate classifier."
+        },
+        "title": {
+          "fullyHighlighted": false,
+          "matchLevel": "full",
+          "matchedWords": [
+            "langgraph"
+          ],
+          "value": "Show HN: DriftGuard \u2013 response drift detection for <em>LangGraph</em> agents"
+        },
+        "url": {
+          "matchLevel": "none",
+          "matchedWords": [],
+          "value": "https://github.com/vinerya/driftGuard"
+        }
+      },
+      "_tags": [
+        "story",
+        "author_chelbi",
+        "story_48721038",
+        "show_hn"
+      ],
+      "author": "chelbi",
+      "children": [
+        48788551
+      ],
+      "created_at": "2026-06-29T16:04:55Z",
+      "created_at_i": 1782749095,
+      "num_comments": 2,
+      "objectID": "48721038",
+      "points": 4,
+      "story_id": 48721038,
+      "story_text": "Detects when an LLM starts answering outside its intended domain (a legal assistant drifting into cooking advice, a medical chatbot wandering into finance) without ground-truth labels or a separate classifier.",
+      "title": "Show HN: DriftGuard \u2013 response drift detection for LangGraph agents",
+      "updated_at": "2026-08-02T06:06:52Z",
+      "url": "https://github.com/vinerya/driftGuard"
+    },
+    {
+      "_highlightResult": {
+        "author": {
+          "matchLevel": "none",
+          "matchedWords": [],
+          "value": "ramkm"
+        },
+        "title": {
+          "fullyHighlighted": false,
+          "matchLevel": "full",
+          "matchedWords": [
+            "langgraph"
+          ],
+          "value": "Show HN: Dspyer \u2013 self-correcting, optimizable LLM steps for DSPy and <em>LangGraph</em>"
+        },
+        "url": {
+          "matchLevel": "none",
+          "matchedWords": [],
+          "value": "https://github.com/theramkm/dspyer"
+        }
+      },
+      "_tags": [
+        "story",
+        "author_ramkm",
+        "story_48665660",
+        "show_hn"
+      ],
+      "author": "ramkm",
+      "children": [
+        48665667
+      ],
+      "created_at": "2026-06-24T21:08:30Z",
+      "created_at_i": 1782335310,
+      "num_comments": 0,
+      "objectID": "48665660",
+      "points": 2,
+      "story_id": 48665660,
+      "title": "Show HN: Dspyer \u2013 self-correcting, optimizable LLM steps for DSPy and LangGraph",
+      "updated_at": "2026-06-24T21:42:21Z",
+      "url": "https://github.com/theramkm/dspyer"
+    }
+  ],
+  "hitsPerPage": 20,
+  "nbHits": 268,
+  "nbPages": 14,
+  "page": 0,
+  "params": "query=langgraph&tags=story&hitsPerPage=20&advancedSyntax=true&analyticsTags=backend",
+  "processingTimeMS": 6,
+  "processingTimingsMS": {
+    "_request": {
+      "roundTrip": 20
+    },
+    "afterFetch": {
+      "format": {
+        "highlighting": 1,
+        "total": 1
+      }
+    },
+    "fetch": {
+      "query": 4,
+      "total": 5
+    },
+    "total": 6
+  },
+  "query": "langgraph",
+  "serverTimeMS": 8
+}

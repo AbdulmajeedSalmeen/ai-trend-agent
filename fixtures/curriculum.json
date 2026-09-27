@@ -1,163 +1,4145 @@
 {
-  "name": "WeCloudData Applied Generative AI Bootcamp — Weeks 1-3 of 6 (PROVISIONAL, PARTIAL)",
-  "version": "2026-08-25-provisional-w1to3",
+  "name": "SDA Agentic AI Bootcamp - Aug 2026 - Online 02",
+  "version": "2026-09-19",
+  "sources": [
+    "https://sda.weclouddata.com/my-learning/course/cmsjgfjwj00d801munmq192xx/chapters",
+    "SDA Agentic AI Bootcamp - Bootcamp Syllabus, Saudi Digital Academy 2026"
+  ],
   "chapters": [
     {
       "chapter_id": "C1",
-      "title": "Week 1 - Orientation and environment setup",
+      "week": 1,
+      "title": "Week 1 - Welcome and course overview",
       "level": "foundation",
       "topics_covered": [
-        "VS Code",
-        "Google Colab",
-        "OpenAI account and API key",
-        "GitHub account and personal access token",
-        "environment setup"
+        "bootcamp syllabus",
+        "welcome session",
+        "bootcamp orientation"
       ],
+      "tools_covered": [],
+      "teaches": "Orientation only: the syllabus and how the bootcamp runs. No tools.",
+      "teaches_ar": "تعريف فقط: خطة المقرر وطريقة سير المعسكر. بلا أدوات.",
+      "pins": {},
       "prerequisites": [],
-      "last_updated": "2026-08-25",
-      "duration_hours": 8
+      "last_updated": "2026-08-20",
+      "material_edits": []
     },
     {
       "chapter_id": "C2",
-      "title": "Week 2 - LLM foundations and Hugging Face",
-      "level": "core",
+      "week": 1,
+      "title": "Week 1 - Environment setup",
+      "level": "foundation",
       "topics_covered": [
-        "introduction to LLMs",
-        "AI ethics",
-        "transformers",
-        "BERT and Hugging Face workflows",
-        "BERT text classification",
-        "word similarity",
-        "fine-tuning BERT for sentiment"
+        "tools and account setup",
+        "Visual Studio Code installation",
+        "Google Colab usage",
+        "OpenAI account and API key setup",
+        "GitHub account and personal access token setup"
       ],
+      "tools_covered": [
+        "VS Code",
+        "Google Colab",
+        "GitHub"
+      ],
+      "teaches": "Set up the local toolchain: VS Code, Colab, and API keys for OpenAI and GitHub.",
+      "teaches_ar": "تجهيز بيئة العمل المحلية: VS Code وColab ومفاتيح API لـOpenAI وGitHub.",
+      "pins": {},
       "prerequisites": [
         "C1"
       ],
-      "last_updated": "2026-08-25",
-      "duration_hours": 10
+      "last_updated": "2026-08-20",
+      "material_edits": []
     },
     {
       "chapter_id": "C3",
-      "title": "Week 2 - Prompt engineering and optimisation",
+      "week": 2,
+      "title": "Week 2 - Generative AI, AI ethics and transformer foundations",
       "level": "core",
       "topics_covered": [
-        "prompt engineering",
-        "prompt optimisation",
-        "OpenAI API",
-        "prompt chaining",
-        "DSPy",
-        "DSPy-GEPA structured extraction",
-        "LLM-as-a-judge prompt optimisation"
+        "introduction to LLM",
+        "AI ethics",
+        "introduction to transformer",
+        "transformer explainer"
       ],
+      "tools_covered": [],
+      "teaches": "Concepts only: how LLMs and transformers work, and the ethics around them.",
+      "teaches_ar": "مفاهيم فقط: كيف تعمل النماذج اللغوية الكبيرة والمحوّلات، والأخلاقيات المحيطة بها.",
+      "pins": {},
       "prerequisites": [
-        "C1"
+        "C2"
       ],
-      "last_updated": "2026-08-25",
-      "duration_hours": 10
+      "last_updated": "2026-08-27",
+      "material_edits": []
     },
     {
       "chapter_id": "C4",
-      "title": "Week 2 - Retrieval-augmented generation",
+      "week": 2,
+      "title": "Week 2 - BERT and Hugging Face workflows",
       "level": "core",
       "topics_covered": [
-        "RAG fundamentals",
-        "embeddings",
-        "vector databases",
-        "FAISS indexing",
-        "RAG evaluation with Ragas and Evidently",
-        "LLM-as-a-jury"
+        "Hugging Face quick introduction",
+        "BERT example output",
+        "BERT for text classification",
+        "BERT use cases",
+        "BERT word similarity",
+        "fine-tuning BERT for sentiment analysis"
       ],
+      "tools_covered": [
+        "Hugging Face",
+        "transformers",
+        "BERT"
+      ],
+      "teaches": "Classify and compare text with BERT through Hugging Face transformers, then fine-tune it.",
+      "teaches_ar": "تصنيف النصوص ومقارنتها بـBERT عبر مكتبة transformers من Hugging Face، ثم ضبطه بدقة.",
+      "pins": {
+        "torch": "2.5.1",
+        "torchaudio": "2.5.1",
+        "torchvision": "0.20.1"
+      },
       "prerequisites": [
-        "C1"
+        "C3"
       ],
-      "last_updated": "2026-08-25",
-      "duration_hours": 10
+      "last_updated": "2026-08-27",
+      "installs_unpinned": [
+        "accelerate",
+        "datasets",
+        "evaluate",
+        "scikit-learn",
+        "transformers"
+      ],
+      "legacy_api": [],
+      "notebooks": [
+        "BERT Use Cases lab (solution).ipynb",
+        "BERT_Word_Similarity lab (solution).ipynb",
+        "BERT_for_Sentiment_Analysis(solution).ipynb",
+        "BERT_for_Text_Classification_Lab(solution).ipynb",
+        "HuggingFace_Intro_demo.ipynb",
+        "LLM_3_BERT_Example_Output_(demo).ipynb"
+      ],
+      "material_edits": []
     },
     {
       "chapter_id": "C5",
-      "title": "Week 3 - LLM applications with LangChain",
+      "week": 2,
+      "title": "Week 2 - Prompt engineering and LLM prompt optimization",
       "level": "core",
       "topics_covered": [
-        "LangChain for document QA",
-        "FAISS with LangChain",
-        "document splitters",
-        "document chat"
+        "OpenAI API quickstart",
+        "prompt engineering",
+        "story writing with prompt chaining",
+        "DSPy facility support analyzer",
+        "DSPy-GEPA for structured information extraction",
+        "prompt engineering coding challenge",
+        "optimizing LLM as a judge prompts"
       ],
+      "tools_covered": [
+        "OpenAI API",
+        "openai-python",
+        "DSPy"
+      ],
+      "teaches": "Call the OpenAI API directly and shape answers by prompt engineering and chaining, with DSPy shown for optimization.",
+      "teaches_ar": "استدعاء OpenAI API مباشرة وتوجيه الإجابات بهندسة الأوامر وتسلسلها، مع عرض DSPy للتحسين.",
+      "pins": {},
       "prerequisites": [
-        "C4"
+        "C3"
       ],
-      "last_updated": "2026-08-25",
-      "duration_hours": 8
+      "last_updated": "2026-08-27",
+      "installs_unpinned": [
+        "datasets",
+        "dspy",
+        "nest-asyncio",
+        "openai",
+        "pandas",
+        "tqdm"
+      ],
+      "legacy_api": [],
+      "notebooks": [
+        "DSPy_Facility_Support_Analyzer_Demo.ipynb",
+        "Story_Writing_with_Prompt_Chaining_OpenAI.ipynb",
+        "openai_api_quickstart.ipynb",
+        "optimizing_llm_as_a_judge_prompts_explainer.ipynb"
+      ],
+      "material_edits": []
     },
     {
       "chapter_id": "C6",
-      "title": "Week 3 - Evaluation and fine-tuning",
-      "level": "advanced",
-      "topics_covered": [
-        "LLM evaluation and basic metrics",
-        "fine-tuning overview",
-        "PEFT and LoRA"
-      ],
-      "prerequisites": [
-        "C2",
-        "C4"
-      ],
-      "last_updated": "2026-08-25",
-      "duration_hours": 8
-    },
-    {
-      "chapter_id": "C7",
-      "title": "Week 3 - Deployment foundations",
+      "week": 2,
+      "title": "Week 2 - RAG fundamentals, embeddings and vector databases",
       "level": "core",
       "topics_covered": [
-        "FastAPI",
-        "Streamlit"
+        "RAG introduction",
+        "building a simple RAG system from scratch",
+        "indexing FAISS basics",
+        "build a research paper assistant using RAG"
       ],
-      "prerequisites": [
-        "C1"
+      "tools_covered": [
+        "FAISS"
       ],
-      "last_updated": "2026-08-25",
-      "duration_hours": 6
-    },
-    {
-      "chapter_id": "C8",
-      "title": "Week 3 - Agents and tools",
-      "level": "advanced",
-      "topics_covered": [
-        "building a first agent",
-        "converting a RAG pipeline into an agent",
-        "minimal tool agents",
-        "adding tools"
-      ],
+      "teaches": "Build RAG from scratch: chunk, embed, index with FAISS, retrieve, then answer.",
+      "teaches_ar": "بناء RAG من الصفر: التقطيع، ثم التضمين، ثم الفهرسة بـFAISS، ثم الاسترجاع، ثم الإجابة.",
+      "pins": {
+        "datasets": "2.14.5"
+      },
       "prerequisites": [
         "C5"
       ],
-      "last_updated": "2026-08-25",
-      "duration_hours": 8
+      "last_updated": "2026-08-27",
+      "installs_unpinned": [
+        "faiss-cpu",
+        "faiss-gpu-cu12",
+        "sentence-transformers",
+        "transformers"
+      ],
+      "legacy_api": [],
+      "notebooks": [
+        "Build_a_Research_Paper_Assistant_using_RAG(lab_solution).ipynb",
+        "Building_a_Simple_RAG_System_from_Scratch_sol.ipynb",
+        "Indexing_Faiss_Basics_sol.ipynb"
+      ],
+      "material_edits": []
     },
     {
-      "chapter_id" : "C9" ,
-      "title" : "Week 4 - Agentic AI Foundations & tool Use"
-
-    } ,
+      "chapter_id": "C7",
+      "week": 2,
+      "title": "Week 2 - RAG evaluation and checkpoint",
+      "level": "core",
+      "topics_covered": [
+        "RAG evaluation",
+        "RAG evaluation with Ragas",
+        "RAG evaluation with Evidently",
+        "LLM as a jury with Evidently"
+      ],
+      "tools_covered": [
+        "Ragas",
+        "Evidently"
+      ],
+      "teaches": "Measure a RAG system with Ragas and Evidently, including LLM-as-jury scoring.",
+      "teaches_ar": "قياس نظام RAG بـRagas وEvidently، بما في ذلك التقييم بلجنة من النماذج اللغوية.",
+      "pins": {
+        "langchain-community": "<0.4.2"
+      },
+      "prerequisites": [
+        "C6"
+      ],
+      "last_updated": "2026-08-27",
+      "installs_unpinned": [
+        "evidently",
+        "faiss-cpu",
+        "langchain",
+        "langchain-openai",
+        "litellm",
+        "openai",
+        "ragas",
+        "rapidfuzz",
+        "sentence-transformers"
+      ],
+      "legacy_api": [],
+      "notebooks": [
+        "LLM_as_a_Jury_with_Evidently_AI_(demo).ipynb",
+        "RAG_Evaluation_Metrics_with_Ragas_sol.ipynb",
+        "RAG_Evaluation_with_Evidently_sol.ipynb"
+      ],
+      "material_edits": []
+    },
+    {
+      "chapter_id": "C8",
+      "week": 3,
+      "title": "Week 3 - LangChain implementation for document QA workflows",
+      "level": "core",
+      "topics_covered": [
+        "LangChain introduction",
+        "LangChain overview",
+        "LangChain FAISS",
+        "LangChain splitter",
+        "LangChain document chat",
+        "endgame QA LangChain",
+        "LangChain QA",
+        "Wikipedia LangChain"
+      ],
+      "tools_covered": [
+        "LangChain",
+        "langchain",
+        "FAISS"
+      ],
+      "teaches": "Rebuild document QA on LangChain: splitters, a FAISS vector store, and chains over documents and Wikipedia.",
+      "teaches_ar": "إعادة بناء الإجابة عن أسئلة المستندات على LangChain: أدوات التقسيم، ومخزن متجهات FAISS، وسلاسل تعمل على المستندات وويكيبيديا.",
+      "pins": {
+        "faiss-cpu": "1.7.4",
+        "ipykernel": "6.20.2",
+        "langchain": "0.0.352",
+        "openai": "0.28",
+        "rank-bm25": "0.2.2",
+        "tiktoken": "0.5.2",
+        "wikipedia": "1.4.0"
+      },
+      "prerequisites": [
+        "C6"
+      ],
+      "last_updated": "2026-09-03",
+      "installs_unpinned": [
+        "accelerate",
+        "faiss-cpu",
+        "google-search-results",
+        "google-serp-api",
+        "langchain",
+        "langchain-chroma",
+        "langchain-classic",
+        "langchain-community",
+        "langchain-huggingface",
+        "langchain-openai",
+        "langchain-text-splitters",
+        "langchain-unstructured",
+        "langchainhub",
+        "langgraph",
+        "mypy-extensions",
+        "openai",
+        "pdf2image",
+        "pypdf",
+        "pytesseract",
+        "sentence-transformers",
+        "tiktoken",
+        "transformers",
+        "unstructured",
+        "wikipedia"
+      ],
+      "legacy_api": [],
+      "notebooks": [
+        "Demo_LangChain_Document_Chat_using_OpenAI(solution).ipynb",
+        "Demo_LangChain_FAISS(solution).ipynb",
+        "Demo_LangChain_Intro(Solution).ipynb",
+        "Demo_LangChain_Splitter(solution).ipynb",
+        "Demo_Langchian_Overview(Solution).ipynb",
+        "Lab_Endgame_QA_LangChain(Solution).ipynb",
+        "Lab_LangChain_QA(solution).ipynb",
+        "Lab_LangChain_wikipedia(solution).ipynb"
+      ],
+      "material_edits": [
+        {
+          "chapter_id": "C8",
+          "notebook": "notebooks/week 3/Demo_LangChain_Document_Chat_using_OpenAI(solution).ipynb",
+          "package": "langchain",
+          "installs": "unpinned",
+          "runs_as_pinned": false,
+          "cell": 88,
+          "kind": "replace",
+          "current": "from langchain.chat_models import ChatOpenAI",
+          "proposed": "from langchain_openai import ChatOpenAI",
+          "names": [
+            "ChatOpenAI"
+          ],
+          "reason": "langchain.chat_models in langchain 1.4.2 no longer has ChatOpenAI. It now comes from langchain_openai in langchain-openai 1.6.6.",
+          "reason_ar": "لم تعد langchain.chat_models في langchain 1.4.2 تضم ChatOpenAI، وهي الآن من langchain_openai في langchain-openai 1.6.6.",
+          "checked": "langchain 1.4.2",
+          "evidence_url": "https://github.com/langchain-ai/langchain/blob/langchain%3D%3D1.4.2/libs/langchain_v1/langchain/chat_models/__init__.py",
+          "moved_to": [
+            {
+              "module": "langchain_openai",
+              "release": "langchain-openai 1.6.6",
+              "url": "https://github.com/langchain-ai/langchain/blob/langchain-openai%3D%3D1.6.6/libs/partners/openai/langchain_openai/__init__.py"
+            }
+          ]
+        },
+        {
+          "chapter_id": "C8",
+          "notebook": "notebooks/week 3/Demo_LangChain_Document_Chat_using_OpenAI(solution).ipynb",
+          "package": "langchain",
+          "installs": "unpinned",
+          "runs_as_pinned": false,
+          "cell": 88,
+          "kind": "replace",
+          "current": "from langchain.chains import RetrievalQA",
+          "proposed": "from langchain_classic.chains import RetrievalQA",
+          "names": [
+            "RetrievalQA"
+          ],
+          "reason": "langchain 1.4.2 has no langchain.chains module. It now comes from langchain_classic.chains in langchain-classic 1.0.8.",
+          "reason_ar": "لا توجد وحدة langchain.chains في langchain 1.4.2، وRetrievalQA الآن من langchain_classic.chains في langchain-classic 1.0.8.",
+          "checked": "langchain 1.4.2",
+          "evidence_url": "https://github.com/langchain-ai/langchain/tree/langchain%3D%3D1.4.2/libs/langchain_v1/langchain",
+          "moved_to": [
+            {
+              "module": "langchain_classic.chains",
+              "release": "langchain-classic 1.0.8",
+              "url": "https://github.com/langchain-ai/langchain/blob/langchain-classic%3D%3D1.0.8/libs/langchain/langchain_classic/chains/__init__.py"
+            }
+          ]
+        },
+        {
+          "chapter_id": "C8",
+          "notebook": "notebooks/week 3/Demo_LangChain_Document_Chat_using_OpenAI(solution).ipynb",
+          "package": "langchain",
+          "installs": "unpinned",
+          "runs_as_pinned": false,
+          "cell": 93,
+          "kind": "replace",
+          "current": "from langchain.chat_models import ChatOpenAI",
+          "proposed": "from langchain_openai import ChatOpenAI",
+          "names": [
+            "ChatOpenAI"
+          ],
+          "reason": "langchain.chat_models in langchain 1.4.2 no longer has ChatOpenAI. It now comes from langchain_openai in langchain-openai 1.6.6.",
+          "reason_ar": "لم تعد langchain.chat_models في langchain 1.4.2 تضم ChatOpenAI، وهي الآن من langchain_openai في langchain-openai 1.6.6.",
+          "checked": "langchain 1.4.2",
+          "evidence_url": "https://github.com/langchain-ai/langchain/blob/langchain%3D%3D1.4.2/libs/langchain_v1/langchain/chat_models/__init__.py",
+          "moved_to": [
+            {
+              "module": "langchain_openai",
+              "release": "langchain-openai 1.6.6",
+              "url": "https://github.com/langchain-ai/langchain/blob/langchain-openai%3D%3D1.6.6/libs/partners/openai/langchain_openai/__init__.py"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "chapter_id": "C9",
+      "week": 3,
+      "title": "Week 3 - LLM evaluation and fine-tuning overview",
+      "level": "core",
+      "topics_covered": [
+        "LLM evals",
+        "evals basic metrics",
+        "fine-tuning introduction",
+        "fine-tuning PEFT",
+        "PEFT LoRA Qwen",
+        "BERT fine-tune practical guide"
+      ],
+      "tools_covered": [
+        "PEFT",
+        "LoRA"
+      ],
+      "teaches": "Evaluate an LLM with basic metrics, then fine-tune with PEFT and LoRA.",
+      "teaches_ar": "تقييم نموذج لغوي بمقاييس أساسية، ثم ضبطه بدقة باستخدام PEFT وLoRA.",
+      "pins": {
+        "datasets": "2.14.5",
+        "torchao": ">=0.16.0"
+      },
+      "prerequisites": [
+        "C4"
+      ],
+      "last_updated": "2026-09-03",
+      "installs_unpinned": [
+        "accelerate",
+        "bert-score",
+        "bitsandbytes",
+        "datasets",
+        "evaluate",
+        "nltk",
+        "peft",
+        "rouge-score",
+        "scikit-learn",
+        "torch",
+        "transformers"
+      ],
+      "legacy_api": [],
+      "notebooks": [
+        "Demo_BERT_Finetune_Practical_Guide.ipynb",
+        "Demo_LLM_5_Evals_Basic_Metrics_(sol).ipynb",
+        "Demo_peft_lora_qwen_sol.ipynb"
+      ],
+      "material_edits": []
+    },
     {
       "chapter_id": "C10",
-      "title": "Capstone - project and presentations",
-      "level": "capstone",
+      "week": 3,
+      "title": "Week 3 - FastAPI and Streamlit for AI applications",
+      "level": "core",
       "topics_covered": [
-        "project selection",
-        "requirements breakdown",
-        "user validation",
-        "proposal presentation",
-        "final presentation"
+        "FastAPI",
+        "FastAPI basics",
+        "Streamlit",
+        "Streamlit demo",
+        "AI application deployment"
       ],
+      "tools_covered": [
+        "FastAPI",
+        "Streamlit"
+      ],
+      "teaches": "Serve an AI application: a FastAPI backend and a Streamlit interface.",
+      "teaches_ar": "نشر تطبيق ذكاء اصطناعي: خادم بـFastAPI وواجهة بـStreamlit.",
+      "pins": {},
       "prerequisites": [
-        "C6",
-        "C7",
         "C8"
       ],
-      "last_updated": "2026-08-25",
-      "duration_hours": 20
+      "last_updated": "2026-09-03",
+      "installs_unpinned": [
+        "streamlit"
+      ],
+      "legacy_api": [],
+      "notebooks": [
+        "Streamlit_Demo.ipynb"
+      ],
+      "material_edits": []
+    },
+    {
+      "chapter_id": "C11",
+      "week": 3,
+      "title": "Week 3 - Building your first agent",
+      "level": "core",
+      "topics_covered": [
+        "introduction to agent",
+        "converting a RAG pipeline into an agent",
+        "building a minimal tool agent",
+        "build your first tool agent",
+        "add a third tool"
+      ],
+      "tools_covered": [],
+      "teaches": "Turn a RAG pipeline into an agent that chooses and calls its own tools.",
+      "teaches_ar": "تحويل مسار RAG إلى وكيل يختار أدواته ويستدعيها بنفسه.",
+      "pins": {},
+      "prerequisites": [
+        "C8"
+      ],
+      "last_updated": "2026-09-03",
+      "installs_unpinned": [],
+      "legacy_api": [],
+      "notebooks": [
+        "Building_a_Minimal_Tool_Agent_sol.ipynb",
+        "Exercise_Sol_Add_a_Third_Tool.ipynb",
+        "Exercise_Sol_Build_Your_First_Tool_Agent.ipynb",
+        "Rag_to_agent_demo_sol.ipynb"
+      ],
+      "material_edits": []
+    },
+    {
+      "chapter_id": "C12",
+      "week": 4,
+      "title": "Week 4 - Debugging and controlling agents",
+      "level": "advanced",
+      "topics_covered": [
+        "debugging and controlling agents",
+        "reason-act-observe loop",
+        "agent failure examples",
+        "implement a multi-step agent",
+        "fix a broken agent"
+      ],
+      "tools_covered": [],
+      "teaches": "Control an agent with an explicit reason-act-observe loop, and debug one that misbehaves.",
+      "teaches_ar": "التحكم في الوكيل بحلقة صريحة من التفكير ثم الفعل ثم الملاحظة، وتصحيح وكيل يسيء التصرف.",
+      "pins": {
+        "langchain": "0.3.*",
+        "langchain-community": "0.3.*",
+        "langchain-openai": "0.2.*"
+      },
+      "prerequisites": [
+        "C11"
+      ],
+      "last_updated": "2026-09-10",
+      "installs_unpinned": [
+        "beautifulsoup4",
+        "langchainhub",
+        "requests"
+      ],
+      "legacy_api": [],
+      "notebooks": [
+        "Agent_Failure_Examples_sol.ipynb",
+        "Exercise_Fix_a_Broken_Agent_Solution_ver.ipynb",
+        "Reason–Act–Observe_Loop_sol.ipynb"
+      ],
+      "material_edits": [
+        {
+          "chapter_id": "C12",
+          "notebook": "notebooks/week 4/Agent_Failure_Examples_sol.ipynb",
+          "package": "langchain",
+          "installs": "0.3.*",
+          "runs_as_pinned": true,
+          "cell": 8,
+          "kind": "replace",
+          "current": "from langchain.agents import create_react_agent, AgentExecutor",
+          "proposed": "from langchain_classic.agents import create_react_agent, AgentExecutor",
+          "names": [
+            "create_react_agent",
+            "AgentExecutor"
+          ],
+          "reason": "langchain.agents in langchain 1.4.2 no longer has create_react_agent and AgentExecutor. They now come from langchain_classic.agents in langchain-classic 1.0.8.",
+          "reason_ar": "لم تعد langchain.agents في langchain 1.4.2 تضم create_react_agent، AgentExecutor، وهي الآن من langchain_classic.agents في langchain-classic 1.0.8.",
+          "checked": "langchain 1.4.2",
+          "evidence_url": "https://github.com/langchain-ai/langchain/blob/langchain%3D%3D1.4.2/libs/langchain_v1/langchain/agents/__init__.py",
+          "moved_to": [
+            {
+              "module": "langchain_classic.agents",
+              "release": "langchain-classic 1.0.8",
+              "url": "https://github.com/langchain-ai/langchain/blob/langchain-classic%3D%3D1.0.8/libs/langchain/langchain_classic/agents/__init__.py"
+            }
+          ]
+        },
+        {
+          "chapter_id": "C12",
+          "notebook": "notebooks/week 4/Agent_Failure_Examples_sol.ipynb",
+          "package": "langchain",
+          "installs": "0.3.*",
+          "runs_as_pinned": true,
+          "cell": 8,
+          "kind": "replace",
+          "current": "from langchain import hub",
+          "proposed": "from langchain_classic import hub",
+          "names": [
+            "hub"
+          ],
+          "reason": "langchain 1.4.2 no longer has hub. It now comes from langchain_classic in langchain-classic 1.0.8.",
+          "reason_ar": "لم يعد langchain 1.4.2 يضم hub، وهي الآن من langchain_classic في langchain-classic 1.0.8.",
+          "checked": "langchain 1.4.2",
+          "evidence_url": "https://github.com/langchain-ai/langchain/blob/langchain%3D%3D1.4.2/libs/langchain_v1/langchain/__init__.py",
+          "moved_to": [
+            {
+              "module": "langchain_classic",
+              "release": "langchain-classic 1.0.8",
+              "url": "https://github.com/langchain-ai/langchain/blob/langchain-classic%3D%3D1.0.8/libs/langchain/langchain_classic/hub.py"
+            }
+          ]
+        },
+        {
+          "chapter_id": "C12",
+          "notebook": "notebooks/week 4/Agent_Failure_Examples_sol.ipynb",
+          "package": "langchain",
+          "installs": "0.3.*",
+          "runs_as_pinned": true,
+          "cell": 8,
+          "kind": "replace",
+          "current": "from langchain.prompts import PromptTemplate",
+          "proposed": "from langchain_core.prompts import PromptTemplate",
+          "names": [
+            "PromptTemplate"
+          ],
+          "reason": "langchain 1.4.2 has no langchain.prompts module. It now comes from langchain_core.prompts in langchain-core 1.6.5.",
+          "reason_ar": "لا توجد وحدة langchain.prompts في langchain 1.4.2، وPromptTemplate الآن من langchain_core.prompts في langchain-core 1.6.5.",
+          "checked": "langchain 1.4.2",
+          "evidence_url": "https://github.com/langchain-ai/langchain/tree/langchain%3D%3D1.4.2/libs/langchain_v1/langchain",
+          "moved_to": [
+            {
+              "module": "langchain_core.prompts",
+              "release": "langchain-core 1.6.5",
+              "url": "https://github.com/langchain-ai/langchain/blob/langchain-core%3D%3D1.6.5/libs/core/langchain_core/prompts/__init__.py"
+            }
+          ]
+        },
+        {
+          "chapter_id": "C12",
+          "notebook": "notebooks/week 4/Agent_Failure_Examples_sol.ipynb",
+          "package": "langchain",
+          "installs": "0.3.*",
+          "runs_as_pinned": true,
+          "cell": 10,
+          "kind": "replace",
+          "current": "from langchain.prompts import PromptTemplate",
+          "proposed": "from langchain_core.prompts import PromptTemplate",
+          "names": [
+            "PromptTemplate"
+          ],
+          "reason": "langchain 1.4.2 has no langchain.prompts module. It now comes from langchain_core.prompts in langchain-core 1.6.5.",
+          "reason_ar": "لا توجد وحدة langchain.prompts في langchain 1.4.2، وPromptTemplate الآن من langchain_core.prompts في langchain-core 1.6.5.",
+          "checked": "langchain 1.4.2",
+          "evidence_url": "https://github.com/langchain-ai/langchain/tree/langchain%3D%3D1.4.2/libs/langchain_v1/langchain",
+          "moved_to": [
+            {
+              "module": "langchain_core.prompts",
+              "release": "langchain-core 1.6.5",
+              "url": "https://github.com/langchain-ai/langchain/blob/langchain-core%3D%3D1.6.5/libs/core/langchain_core/prompts/__init__.py"
+            }
+          ]
+        },
+        {
+          "chapter_id": "C12",
+          "notebook": "notebooks/week 4/Agent_Failure_Examples_sol.ipynb",
+          "package": "langchain",
+          "installs": "0.3.*",
+          "runs_as_pinned": true,
+          "cell": 12,
+          "kind": "replace",
+          "current": "from langchain.prompts import PromptTemplate",
+          "proposed": "from langchain_core.prompts import PromptTemplate",
+          "names": [
+            "PromptTemplate"
+          ],
+          "reason": "langchain 1.4.2 has no langchain.prompts module. It now comes from langchain_core.prompts in langchain-core 1.6.5.",
+          "reason_ar": "لا توجد وحدة langchain.prompts في langchain 1.4.2، وPromptTemplate الآن من langchain_core.prompts في langchain-core 1.6.5.",
+          "checked": "langchain 1.4.2",
+          "evidence_url": "https://github.com/langchain-ai/langchain/tree/langchain%3D%3D1.4.2/libs/langchain_v1/langchain",
+          "moved_to": [
+            {
+              "module": "langchain_core.prompts",
+              "release": "langchain-core 1.6.5",
+              "url": "https://github.com/langchain-ai/langchain/blob/langchain-core%3D%3D1.6.5/libs/core/langchain_core/prompts/__init__.py"
+            }
+          ]
+        },
+        {
+          "chapter_id": "C12",
+          "notebook": "notebooks/week 4/Agent_Failure_Examples_sol.ipynb",
+          "package": "langchain",
+          "installs": "0.3.*",
+          "runs_as_pinned": true,
+          "cell": 14,
+          "kind": "replace",
+          "current": "from langchain.prompts import PromptTemplate",
+          "proposed": "from langchain_core.prompts import PromptTemplate",
+          "names": [
+            "PromptTemplate"
+          ],
+          "reason": "langchain 1.4.2 has no langchain.prompts module. It now comes from langchain_core.prompts in langchain-core 1.6.5.",
+          "reason_ar": "لا توجد وحدة langchain.prompts في langchain 1.4.2، وPromptTemplate الآن من langchain_core.prompts في langchain-core 1.6.5.",
+          "checked": "langchain 1.4.2",
+          "evidence_url": "https://github.com/langchain-ai/langchain/tree/langchain%3D%3D1.4.2/libs/langchain_v1/langchain",
+          "moved_to": [
+            {
+              "module": "langchain_core.prompts",
+              "release": "langchain-core 1.6.5",
+              "url": "https://github.com/langchain-ai/langchain/blob/langchain-core%3D%3D1.6.5/libs/core/langchain_core/prompts/__init__.py"
+            }
+          ]
+        },
+        {
+          "chapter_id": "C12",
+          "notebook": "notebooks/week 4/Agent_Failure_Examples_sol.ipynb",
+          "package": "langchain",
+          "installs": "0.3.*",
+          "runs_as_pinned": true,
+          "cell": 16,
+          "kind": "replace",
+          "current": "from langchain.prompts import PromptTemplate",
+          "proposed": "from langchain_core.prompts import PromptTemplate",
+          "names": [
+            "PromptTemplate"
+          ],
+          "reason": "langchain 1.4.2 has no langchain.prompts module. It now comes from langchain_core.prompts in langchain-core 1.6.5.",
+          "reason_ar": "لا توجد وحدة langchain.prompts في langchain 1.4.2، وPromptTemplate الآن من langchain_core.prompts في langchain-core 1.6.5.",
+          "checked": "langchain 1.4.2",
+          "evidence_url": "https://github.com/langchain-ai/langchain/tree/langchain%3D%3D1.4.2/libs/langchain_v1/langchain",
+          "moved_to": [
+            {
+              "module": "langchain_core.prompts",
+              "release": "langchain-core 1.6.5",
+              "url": "https://github.com/langchain-ai/langchain/blob/langchain-core%3D%3D1.6.5/libs/core/langchain_core/prompts/__init__.py"
+            }
+          ]
+        },
+        {
+          "chapter_id": "C12",
+          "notebook": "notebooks/week 4/Exercise_Fix_a_Broken_Agent_Solution_ver.ipynb",
+          "package": "langchain",
+          "installs": "0.3.*",
+          "runs_as_pinned": true,
+          "cell": 7,
+          "kind": "replace",
+          "current": "from langchain.agents import create_react_agent, AgentExecutor",
+          "proposed": "from langchain_classic.agents import create_react_agent, AgentExecutor",
+          "names": [
+            "create_react_agent",
+            "AgentExecutor"
+          ],
+          "reason": "langchain.agents in langchain 1.4.2 no longer has create_react_agent and AgentExecutor. They now come from langchain_classic.agents in langchain-classic 1.0.8.",
+          "reason_ar": "لم تعد langchain.agents في langchain 1.4.2 تضم create_react_agent، AgentExecutor، وهي الآن من langchain_classic.agents في langchain-classic 1.0.8.",
+          "checked": "langchain 1.4.2",
+          "evidence_url": "https://github.com/langchain-ai/langchain/blob/langchain%3D%3D1.4.2/libs/langchain_v1/langchain/agents/__init__.py",
+          "moved_to": [
+            {
+              "module": "langchain_classic.agents",
+              "release": "langchain-classic 1.0.8",
+              "url": "https://github.com/langchain-ai/langchain/blob/langchain-classic%3D%3D1.0.8/libs/langchain/langchain_classic/agents/__init__.py"
+            }
+          ]
+        },
+        {
+          "chapter_id": "C12",
+          "notebook": "notebooks/week 4/Exercise_Fix_a_Broken_Agent_Solution_ver.ipynb",
+          "package": "langchain",
+          "installs": "0.3.*",
+          "runs_as_pinned": true,
+          "cell": 7,
+          "kind": "replace",
+          "current": "from langchain.prompts import PromptTemplate",
+          "proposed": "from langchain_core.prompts import PromptTemplate",
+          "names": [
+            "PromptTemplate"
+          ],
+          "reason": "langchain 1.4.2 has no langchain.prompts module. It now comes from langchain_core.prompts in langchain-core 1.6.5.",
+          "reason_ar": "لا توجد وحدة langchain.prompts في langchain 1.4.2، وPromptTemplate الآن من langchain_core.prompts في langchain-core 1.6.5.",
+          "checked": "langchain 1.4.2",
+          "evidence_url": "https://github.com/langchain-ai/langchain/tree/langchain%3D%3D1.4.2/libs/langchain_v1/langchain",
+          "moved_to": [
+            {
+              "module": "langchain_core.prompts",
+              "release": "langchain-core 1.6.5",
+              "url": "https://github.com/langchain-ai/langchain/blob/langchain-core%3D%3D1.6.5/libs/core/langchain_core/prompts/__init__.py"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "chapter_id": "C13",
+      "week": 4,
+      "title": "Week 4 - Designing tool systems for agents",
+      "level": "advanced",
+      "topics_covered": [
+        "designing tool systems",
+        "tool schema and structured arguments",
+        "tool dispatcher architecture",
+        "build three agent tools",
+        "implement tool error handling"
+      ],
+      "tools_covered": [],
+      "teaches": "Design tool systems: schemas for arguments, a dispatcher, and error handling.",
+      "teaches_ar": "تصميم أنظمة الأدوات: مخططات للمعاملات، وموزّع للاستدعاءات، ومعالجة للأخطاء.",
+      "pins": {
+        "langchain": "0.3.*",
+        "langchain-community": "0.3.*",
+        "langchain-openai": "0.2.*"
+      },
+      "prerequisites": [
+        "C12"
+      ],
+      "last_updated": "2026-09-10",
+      "installs_unpinned": [
+        "beautifulsoup4",
+        "faiss-cpu",
+        "langchainhub",
+        "langsmith",
+        "requests",
+        "sentence-transformers",
+        "tenacity"
+      ],
+      "legacy_api": [],
+      "notebooks": [
+        "Demo_Tool_Dispatcher_Pattern_sol.ipynb",
+        "Demo_Tool_Schema_and_Structured_Arguments_sol.ipynb",
+        "Demo__Tool_Schema_and_Structured_Arguments.ipynb",
+        "Exercise_Build_Three_Agent_Tools_solution.ipynb",
+        "Exercise_Implement_Tool_Error_Handling__sol.ipynb"
+      ],
+      "material_edits": [
+        {
+          "chapter_id": "C13",
+          "notebook": "notebooks/week 4/Demo__Tool_Schema_and_Structured_Arguments.ipynb",
+          "package": "langchain",
+          "installs": "0.3.*",
+          "runs_as_pinned": true,
+          "cell": 13,
+          "kind": "replace",
+          "current": "from langchain.agents import create_react_agent, AgentExecutor",
+          "proposed": "from langchain_classic.agents import create_react_agent, AgentExecutor",
+          "names": [
+            "create_react_agent",
+            "AgentExecutor"
+          ],
+          "reason": "langchain.agents in langchain 1.4.2 no longer has create_react_agent and AgentExecutor. They now come from langchain_classic.agents in langchain-classic 1.0.8.",
+          "reason_ar": "لم تعد langchain.agents في langchain 1.4.2 تضم create_react_agent، AgentExecutor، وهي الآن من langchain_classic.agents في langchain-classic 1.0.8.",
+          "checked": "langchain 1.4.2",
+          "evidence_url": "https://github.com/langchain-ai/langchain/blob/langchain%3D%3D1.4.2/libs/langchain_v1/langchain/agents/__init__.py",
+          "moved_to": [
+            {
+              "module": "langchain_classic.agents",
+              "release": "langchain-classic 1.0.8",
+              "url": "https://github.com/langchain-ai/langchain/blob/langchain-classic%3D%3D1.0.8/libs/langchain/langchain_classic/agents/__init__.py"
+            }
+          ]
+        },
+        {
+          "chapter_id": "C13",
+          "notebook": "notebooks/week 4/Demo__Tool_Schema_and_Structured_Arguments.ipynb",
+          "package": "langchain",
+          "installs": "0.3.*",
+          "runs_as_pinned": true,
+          "cell": 13,
+          "kind": "replace",
+          "current": "from langchain import hub",
+          "proposed": "from langchain_classic import hub",
+          "names": [
+            "hub"
+          ],
+          "reason": "langchain 1.4.2 no longer has hub. It now comes from langchain_classic in langchain-classic 1.0.8.",
+          "reason_ar": "لم يعد langchain 1.4.2 يضم hub، وهي الآن من langchain_classic في langchain-classic 1.0.8.",
+          "checked": "langchain 1.4.2",
+          "evidence_url": "https://github.com/langchain-ai/langchain/blob/langchain%3D%3D1.4.2/libs/langchain_v1/langchain/__init__.py",
+          "moved_to": [
+            {
+              "module": "langchain_classic",
+              "release": "langchain-classic 1.0.8",
+              "url": "https://github.com/langchain-ai/langchain/blob/langchain-classic%3D%3D1.0.8/libs/langchain/langchain_classic/hub.py"
+            }
+          ]
+        },
+        {
+          "chapter_id": "C13",
+          "notebook": "notebooks/week 4/Demo__Tool_Schema_and_Structured_Arguments.ipynb",
+          "package": "langchain",
+          "installs": "0.3.*",
+          "runs_as_pinned": true,
+          "cell": 13,
+          "kind": "replace",
+          "current": "from langchain.prompts import PromptTemplate",
+          "proposed": "from langchain_core.prompts import PromptTemplate",
+          "names": [
+            "PromptTemplate"
+          ],
+          "reason": "langchain 1.4.2 has no langchain.prompts module. It now comes from langchain_core.prompts in langchain-core 1.6.5.",
+          "reason_ar": "لا توجد وحدة langchain.prompts في langchain 1.4.2، وPromptTemplate الآن من langchain_core.prompts في langchain-core 1.6.5.",
+          "checked": "langchain 1.4.2",
+          "evidence_url": "https://github.com/langchain-ai/langchain/tree/langchain%3D%3D1.4.2/libs/langchain_v1/langchain",
+          "moved_to": [
+            {
+              "module": "langchain_core.prompts",
+              "release": "langchain-core 1.6.5",
+              "url": "https://github.com/langchain-ai/langchain/blob/langchain-core%3D%3D1.6.5/libs/core/langchain_core/prompts/__init__.py"
+            }
+          ]
+        },
+        {
+          "chapter_id": "C13",
+          "notebook": "notebooks/week 4/Demo_Tool_Schema_and_Structured_Arguments_sol.ipynb",
+          "package": "langchain",
+          "installs": "0.3.*",
+          "runs_as_pinned": true,
+          "cell": 13,
+          "kind": "replace",
+          "current": "from langchain.agents import create_react_agent, AgentExecutor",
+          "proposed": "from langchain_classic.agents import create_react_agent, AgentExecutor",
+          "names": [
+            "create_react_agent",
+            "AgentExecutor"
+          ],
+          "reason": "langchain.agents in langchain 1.4.2 no longer has create_react_agent and AgentExecutor. They now come from langchain_classic.agents in langchain-classic 1.0.8.",
+          "reason_ar": "لم تعد langchain.agents في langchain 1.4.2 تضم create_react_agent، AgentExecutor، وهي الآن من langchain_classic.agents في langchain-classic 1.0.8.",
+          "checked": "langchain 1.4.2",
+          "evidence_url": "https://github.com/langchain-ai/langchain/blob/langchain%3D%3D1.4.2/libs/langchain_v1/langchain/agents/__init__.py",
+          "moved_to": [
+            {
+              "module": "langchain_classic.agents",
+              "release": "langchain-classic 1.0.8",
+              "url": "https://github.com/langchain-ai/langchain/blob/langchain-classic%3D%3D1.0.8/libs/langchain/langchain_classic/agents/__init__.py"
+            }
+          ]
+        },
+        {
+          "chapter_id": "C13",
+          "notebook": "notebooks/week 4/Demo_Tool_Schema_and_Structured_Arguments_sol.ipynb",
+          "package": "langchain",
+          "installs": "0.3.*",
+          "runs_as_pinned": true,
+          "cell": 13,
+          "kind": "replace",
+          "current": "from langchain import hub",
+          "proposed": "from langchain_classic import hub",
+          "names": [
+            "hub"
+          ],
+          "reason": "langchain 1.4.2 no longer has hub. It now comes from langchain_classic in langchain-classic 1.0.8.",
+          "reason_ar": "لم يعد langchain 1.4.2 يضم hub، وهي الآن من langchain_classic في langchain-classic 1.0.8.",
+          "checked": "langchain 1.4.2",
+          "evidence_url": "https://github.com/langchain-ai/langchain/blob/langchain%3D%3D1.4.2/libs/langchain_v1/langchain/__init__.py",
+          "moved_to": [
+            {
+              "module": "langchain_classic",
+              "release": "langchain-classic 1.0.8",
+              "url": "https://github.com/langchain-ai/langchain/blob/langchain-classic%3D%3D1.0.8/libs/langchain/langchain_classic/hub.py"
+            }
+          ]
+        },
+        {
+          "chapter_id": "C13",
+          "notebook": "notebooks/week 4/Demo_Tool_Schema_and_Structured_Arguments_sol.ipynb",
+          "package": "langchain",
+          "installs": "0.3.*",
+          "runs_as_pinned": true,
+          "cell": 13,
+          "kind": "replace",
+          "current": "from langchain.prompts import PromptTemplate",
+          "proposed": "from langchain_core.prompts import PromptTemplate",
+          "names": [
+            "PromptTemplate"
+          ],
+          "reason": "langchain 1.4.2 has no langchain.prompts module. It now comes from langchain_core.prompts in langchain-core 1.6.5.",
+          "reason_ar": "لا توجد وحدة langchain.prompts في langchain 1.4.2، وPromptTemplate الآن من langchain_core.prompts في langchain-core 1.6.5.",
+          "checked": "langchain 1.4.2",
+          "evidence_url": "https://github.com/langchain-ai/langchain/tree/langchain%3D%3D1.4.2/libs/langchain_v1/langchain",
+          "moved_to": [
+            {
+              "module": "langchain_core.prompts",
+              "release": "langchain-core 1.6.5",
+              "url": "https://github.com/langchain-ai/langchain/blob/langchain-core%3D%3D1.6.5/libs/core/langchain_core/prompts/__init__.py"
+            }
+          ]
+        },
+        {
+          "chapter_id": "C13",
+          "notebook": "notebooks/week 4/Exercise_Build_Three_Agent_Tools_solution.ipynb",
+          "package": "langchain",
+          "installs": "0.3.*",
+          "runs_as_pinned": true,
+          "cell": 8,
+          "kind": "replace",
+          "current": "from langchain.agents import create_react_agent, AgentExecutor",
+          "proposed": "from langchain_classic.agents import create_react_agent, AgentExecutor",
+          "names": [
+            "create_react_agent",
+            "AgentExecutor"
+          ],
+          "reason": "langchain.agents in langchain 1.4.2 no longer has create_react_agent and AgentExecutor. They now come from langchain_classic.agents in langchain-classic 1.0.8.",
+          "reason_ar": "لم تعد langchain.agents في langchain 1.4.2 تضم create_react_agent، AgentExecutor، وهي الآن من langchain_classic.agents في langchain-classic 1.0.8.",
+          "checked": "langchain 1.4.2",
+          "evidence_url": "https://github.com/langchain-ai/langchain/blob/langchain%3D%3D1.4.2/libs/langchain_v1/langchain/agents/__init__.py",
+          "moved_to": [
+            {
+              "module": "langchain_classic.agents",
+              "release": "langchain-classic 1.0.8",
+              "url": "https://github.com/langchain-ai/langchain/blob/langchain-classic%3D%3D1.0.8/libs/langchain/langchain_classic/agents/__init__.py"
+            }
+          ]
+        },
+        {
+          "chapter_id": "C13",
+          "notebook": "notebooks/week 4/Exercise_Build_Three_Agent_Tools_solution.ipynb",
+          "package": "langchain",
+          "installs": "0.3.*",
+          "runs_as_pinned": true,
+          "cell": 8,
+          "kind": "replace",
+          "current": "from langchain import hub",
+          "proposed": "from langchain_classic import hub",
+          "names": [
+            "hub"
+          ],
+          "reason": "langchain 1.4.2 no longer has hub. It now comes from langchain_classic in langchain-classic 1.0.8.",
+          "reason_ar": "لم يعد langchain 1.4.2 يضم hub، وهي الآن من langchain_classic في langchain-classic 1.0.8.",
+          "checked": "langchain 1.4.2",
+          "evidence_url": "https://github.com/langchain-ai/langchain/blob/langchain%3D%3D1.4.2/libs/langchain_v1/langchain/__init__.py",
+          "moved_to": [
+            {
+              "module": "langchain_classic",
+              "release": "langchain-classic 1.0.8",
+              "url": "https://github.com/langchain-ai/langchain/blob/langchain-classic%3D%3D1.0.8/libs/langchain/langchain_classic/hub.py"
+            }
+          ]
+        },
+        {
+          "chapter_id": "C13",
+          "notebook": "notebooks/week 4/Exercise_Implement_Tool_Error_Handling__sol.ipynb",
+          "package": "langchain",
+          "installs": "0.3.*",
+          "runs_as_pinned": true,
+          "cell": 8,
+          "kind": "replace",
+          "current": "from langchain.agents import create_react_agent, AgentExecutor",
+          "proposed": "from langchain_classic.agents import create_react_agent, AgentExecutor",
+          "names": [
+            "create_react_agent",
+            "AgentExecutor"
+          ],
+          "reason": "langchain.agents in langchain 1.4.2 no longer has create_react_agent and AgentExecutor. They now come from langchain_classic.agents in langchain-classic 1.0.8.",
+          "reason_ar": "لم تعد langchain.agents في langchain 1.4.2 تضم create_react_agent، AgentExecutor، وهي الآن من langchain_classic.agents في langchain-classic 1.0.8.",
+          "checked": "langchain 1.4.2",
+          "evidence_url": "https://github.com/langchain-ai/langchain/blob/langchain%3D%3D1.4.2/libs/langchain_v1/langchain/agents/__init__.py",
+          "moved_to": [
+            {
+              "module": "langchain_classic.agents",
+              "release": "langchain-classic 1.0.8",
+              "url": "https://github.com/langchain-ai/langchain/blob/langchain-classic%3D%3D1.0.8/libs/langchain/langchain_classic/agents/__init__.py"
+            }
+          ]
+        },
+        {
+          "chapter_id": "C13",
+          "notebook": "notebooks/week 4/Exercise_Implement_Tool_Error_Handling__sol.ipynb",
+          "package": "langchain",
+          "installs": "0.3.*",
+          "runs_as_pinned": true,
+          "cell": 8,
+          "kind": "replace",
+          "current": "from langchain import hub",
+          "proposed": "from langchain_classic import hub",
+          "names": [
+            "hub"
+          ],
+          "reason": "langchain 1.4.2 no longer has hub. It now comes from langchain_classic in langchain-classic 1.0.8.",
+          "reason_ar": "لم يعد langchain 1.4.2 يضم hub، وهي الآن من langchain_classic في langchain-classic 1.0.8.",
+          "checked": "langchain 1.4.2",
+          "evidence_url": "https://github.com/langchain-ai/langchain/blob/langchain%3D%3D1.4.2/libs/langchain_v1/langchain/__init__.py",
+          "moved_to": [
+            {
+              "module": "langchain_classic",
+              "release": "langchain-classic 1.0.8",
+              "url": "https://github.com/langchain-ai/langchain/blob/langchain-classic%3D%3D1.0.8/libs/langchain/langchain_classic/hub.py"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "chapter_id": "C14",
+      "week": 4,
+      "title": "Week 4 - Agents for real-world tasks",
+      "level": "advanced",
+      "topics_covered": [
+        "agents for real tasks",
+        "task-oriented agent workflow",
+        "autonomy limits and guardrails",
+        "build a task agent",
+        "add guardrails"
+      ],
+      "tools_covered": [],
+      "teaches": "Build a task-oriented agent and bound its autonomy with guardrails.",
+      "teaches_ar": "بناء وكيل موجّه للمهام وتقييد استقلاليته بحواجز أمان.",
+      "pins": {
+        "langchain": "0.3.*",
+        "langchain-community": "0.3.*",
+        "langchain-openai": "0.2.*"
+      },
+      "prerequisites": [
+        "C13"
+      ],
+      "last_updated": "2026-09-10",
+      "installs_unpinned": [
+        "beautifulsoup4",
+        "ddgs",
+        "duckduckgo-search",
+        "requests"
+      ],
+      "legacy_api": [],
+      "notebooks": [
+        "Demo_Autonomy_Limits_and_Guardrails_sol.ipynb",
+        "Demo_Task_Oriented_Agent_Workflow_sol.ipynb",
+        "Exercise_Sol_Add_Guardrails.ipynb",
+        "Exercise_Sol_Build_a_Task_Agent.ipynb"
+      ],
+      "material_edits": [
+        {
+          "chapter_id": "C14",
+          "notebook": "notebooks/week 4/Demo_Autonomy_Limits_and_Guardrails_sol.ipynb",
+          "package": "langchain",
+          "installs": "0.3.*",
+          "runs_as_pinned": true,
+          "cell": 9,
+          "kind": "replace",
+          "current": "from langchain.agents import create_react_agent, AgentExecutor",
+          "proposed": "from langchain_classic.agents import create_react_agent, AgentExecutor",
+          "names": [
+            "create_react_agent",
+            "AgentExecutor"
+          ],
+          "reason": "langchain.agents in langchain 1.4.2 no longer has create_react_agent and AgentExecutor. They now come from langchain_classic.agents in langchain-classic 1.0.8.",
+          "reason_ar": "لم تعد langchain.agents في langchain 1.4.2 تضم create_react_agent، AgentExecutor، وهي الآن من langchain_classic.agents في langchain-classic 1.0.8.",
+          "checked": "langchain 1.4.2",
+          "evidence_url": "https://github.com/langchain-ai/langchain/blob/langchain%3D%3D1.4.2/libs/langchain_v1/langchain/agents/__init__.py",
+          "moved_to": [
+            {
+              "module": "langchain_classic.agents",
+              "release": "langchain-classic 1.0.8",
+              "url": "https://github.com/langchain-ai/langchain/blob/langchain-classic%3D%3D1.0.8/libs/langchain/langchain_classic/agents/__init__.py"
+            }
+          ]
+        },
+        {
+          "chapter_id": "C14",
+          "notebook": "notebooks/week 4/Demo_Autonomy_Limits_and_Guardrails_sol.ipynb",
+          "package": "langchain",
+          "installs": "0.3.*",
+          "runs_as_pinned": true,
+          "cell": 9,
+          "kind": "replace",
+          "current": "from langchain import hub",
+          "proposed": "from langchain_classic import hub",
+          "names": [
+            "hub"
+          ],
+          "reason": "langchain 1.4.2 no longer has hub. It now comes from langchain_classic in langchain-classic 1.0.8.",
+          "reason_ar": "لم يعد langchain 1.4.2 يضم hub، وهي الآن من langchain_classic في langchain-classic 1.0.8.",
+          "checked": "langchain 1.4.2",
+          "evidence_url": "https://github.com/langchain-ai/langchain/blob/langchain%3D%3D1.4.2/libs/langchain_v1/langchain/__init__.py",
+          "moved_to": [
+            {
+              "module": "langchain_classic",
+              "release": "langchain-classic 1.0.8",
+              "url": "https://github.com/langchain-ai/langchain/blob/langchain-classic%3D%3D1.0.8/libs/langchain/langchain_classic/hub.py"
+            }
+          ]
+        },
+        {
+          "chapter_id": "C14",
+          "notebook": "notebooks/week 4/Demo_Autonomy_Limits_and_Guardrails_sol.ipynb",
+          "package": "langchain",
+          "installs": "0.3.*",
+          "runs_as_pinned": true,
+          "cell": 15,
+          "kind": "replace",
+          "current": "from langchain.agents import create_tool_calling_agent, AgentExecutor",
+          "proposed": "from langchain_classic.agents import create_tool_calling_agent, AgentExecutor",
+          "names": [
+            "create_tool_calling_agent",
+            "AgentExecutor"
+          ],
+          "reason": "langchain.agents in langchain 1.4.2 no longer has create_tool_calling_agent and AgentExecutor. They now come from langchain_classic.agents in langchain-classic 1.0.8.",
+          "reason_ar": "لم تعد langchain.agents في langchain 1.4.2 تضم create_tool_calling_agent، AgentExecutor، وهي الآن من langchain_classic.agents في langchain-classic 1.0.8.",
+          "checked": "langchain 1.4.2",
+          "evidence_url": "https://github.com/langchain-ai/langchain/blob/langchain%3D%3D1.4.2/libs/langchain_v1/langchain/agents/__init__.py",
+          "moved_to": [
+            {
+              "module": "langchain_classic.agents",
+              "release": "langchain-classic 1.0.8",
+              "url": "https://github.com/langchain-ai/langchain/blob/langchain-classic%3D%3D1.0.8/libs/langchain/langchain_classic/agents/__init__.py"
+            }
+          ]
+        },
+        {
+          "chapter_id": "C14",
+          "notebook": "notebooks/week 4/Demo_Task_Oriented_Agent_Workflow_sol.ipynb",
+          "package": "langchain",
+          "installs": "0.3.*",
+          "runs_as_pinned": true,
+          "cell": 9,
+          "kind": "replace",
+          "current": "from langchain.agents import create_react_agent, AgentExecutor",
+          "proposed": "from langchain_classic.agents import create_react_agent, AgentExecutor",
+          "names": [
+            "create_react_agent",
+            "AgentExecutor"
+          ],
+          "reason": "langchain.agents in langchain 1.4.2 no longer has create_react_agent and AgentExecutor. They now come from langchain_classic.agents in langchain-classic 1.0.8.",
+          "reason_ar": "لم تعد langchain.agents في langchain 1.4.2 تضم create_react_agent، AgentExecutor، وهي الآن من langchain_classic.agents في langchain-classic 1.0.8.",
+          "checked": "langchain 1.4.2",
+          "evidence_url": "https://github.com/langchain-ai/langchain/blob/langchain%3D%3D1.4.2/libs/langchain_v1/langchain/agents/__init__.py",
+          "moved_to": [
+            {
+              "module": "langchain_classic.agents",
+              "release": "langchain-classic 1.0.8",
+              "url": "https://github.com/langchain-ai/langchain/blob/langchain-classic%3D%3D1.0.8/libs/langchain/langchain_classic/agents/__init__.py"
+            }
+          ]
+        },
+        {
+          "chapter_id": "C14",
+          "notebook": "notebooks/week 4/Demo_Task_Oriented_Agent_Workflow_sol.ipynb",
+          "package": "langchain",
+          "installs": "0.3.*",
+          "runs_as_pinned": true,
+          "cell": 9,
+          "kind": "replace",
+          "current": "from langchain import hub",
+          "proposed": "from langchain_classic import hub",
+          "names": [
+            "hub"
+          ],
+          "reason": "langchain 1.4.2 no longer has hub. It now comes from langchain_classic in langchain-classic 1.0.8.",
+          "reason_ar": "لم يعد langchain 1.4.2 يضم hub، وهي الآن من langchain_classic في langchain-classic 1.0.8.",
+          "checked": "langchain 1.4.2",
+          "evidence_url": "https://github.com/langchain-ai/langchain/blob/langchain%3D%3D1.4.2/libs/langchain_v1/langchain/__init__.py",
+          "moved_to": [
+            {
+              "module": "langchain_classic",
+              "release": "langchain-classic 1.0.8",
+              "url": "https://github.com/langchain-ai/langchain/blob/langchain-classic%3D%3D1.0.8/libs/langchain/langchain_classic/hub.py"
+            }
+          ]
+        },
+        {
+          "chapter_id": "C14",
+          "notebook": "notebooks/week 4/Exercise_Sol_Add_Guardrails.ipynb",
+          "package": "langchain",
+          "installs": "0.3.*",
+          "runs_as_pinned": true,
+          "cell": 8,
+          "kind": "replace",
+          "current": "from langchain.agents import create_react_agent, AgentExecutor",
+          "proposed": "from langchain_classic.agents import create_react_agent, AgentExecutor",
+          "names": [
+            "create_react_agent",
+            "AgentExecutor"
+          ],
+          "reason": "langchain.agents in langchain 1.4.2 no longer has create_react_agent and AgentExecutor. They now come from langchain_classic.agents in langchain-classic 1.0.8.",
+          "reason_ar": "لم تعد langchain.agents في langchain 1.4.2 تضم create_react_agent، AgentExecutor، وهي الآن من langchain_classic.agents في langchain-classic 1.0.8.",
+          "checked": "langchain 1.4.2",
+          "evidence_url": "https://github.com/langchain-ai/langchain/blob/langchain%3D%3D1.4.2/libs/langchain_v1/langchain/agents/__init__.py",
+          "moved_to": [
+            {
+              "module": "langchain_classic.agents",
+              "release": "langchain-classic 1.0.8",
+              "url": "https://github.com/langchain-ai/langchain/blob/langchain-classic%3D%3D1.0.8/libs/langchain/langchain_classic/agents/__init__.py"
+            }
+          ]
+        },
+        {
+          "chapter_id": "C14",
+          "notebook": "notebooks/week 4/Exercise_Sol_Add_Guardrails.ipynb",
+          "package": "langchain",
+          "installs": "0.3.*",
+          "runs_as_pinned": true,
+          "cell": 8,
+          "kind": "replace",
+          "current": "from langchain import hub",
+          "proposed": "from langchain_classic import hub",
+          "names": [
+            "hub"
+          ],
+          "reason": "langchain 1.4.2 no longer has hub. It now comes from langchain_classic in langchain-classic 1.0.8.",
+          "reason_ar": "لم يعد langchain 1.4.2 يضم hub، وهي الآن من langchain_classic في langchain-classic 1.0.8.",
+          "checked": "langchain 1.4.2",
+          "evidence_url": "https://github.com/langchain-ai/langchain/blob/langchain%3D%3D1.4.2/libs/langchain_v1/langchain/__init__.py",
+          "moved_to": [
+            {
+              "module": "langchain_classic",
+              "release": "langchain-classic 1.0.8",
+              "url": "https://github.com/langchain-ai/langchain/blob/langchain-classic%3D%3D1.0.8/libs/langchain/langchain_classic/hub.py"
+            }
+          ]
+        },
+        {
+          "chapter_id": "C14",
+          "notebook": "notebooks/week 4/Exercise_Sol_Build_a_Task_Agent.ipynb",
+          "package": "langchain",
+          "installs": "0.3.*",
+          "runs_as_pinned": true,
+          "cell": 8,
+          "kind": "replace",
+          "current": "from langchain.agents import create_react_agent, AgentExecutor",
+          "proposed": "from langchain_classic.agents import create_react_agent, AgentExecutor",
+          "names": [
+            "create_react_agent",
+            "AgentExecutor"
+          ],
+          "reason": "langchain.agents in langchain 1.4.2 no longer has create_react_agent and AgentExecutor. They now come from langchain_classic.agents in langchain-classic 1.0.8.",
+          "reason_ar": "لم تعد langchain.agents في langchain 1.4.2 تضم create_react_agent، AgentExecutor، وهي الآن من langchain_classic.agents في langchain-classic 1.0.8.",
+          "checked": "langchain 1.4.2",
+          "evidence_url": "https://github.com/langchain-ai/langchain/blob/langchain%3D%3D1.4.2/libs/langchain_v1/langchain/agents/__init__.py",
+          "moved_to": [
+            {
+              "module": "langchain_classic.agents",
+              "release": "langchain-classic 1.0.8",
+              "url": "https://github.com/langchain-ai/langchain/blob/langchain-classic%3D%3D1.0.8/libs/langchain/langchain_classic/agents/__init__.py"
+            }
+          ]
+        },
+        {
+          "chapter_id": "C14",
+          "notebook": "notebooks/week 4/Exercise_Sol_Build_a_Task_Agent.ipynb",
+          "package": "langchain",
+          "installs": "0.3.*",
+          "runs_as_pinned": true,
+          "cell": 8,
+          "kind": "replace",
+          "current": "from langchain import hub",
+          "proposed": "from langchain_classic import hub",
+          "names": [
+            "hub"
+          ],
+          "reason": "langchain 1.4.2 no longer has hub. It now comes from langchain_classic in langchain-classic 1.0.8.",
+          "reason_ar": "لم يعد langchain 1.4.2 يضم hub، وهي الآن من langchain_classic في langchain-classic 1.0.8.",
+          "checked": "langchain 1.4.2",
+          "evidence_url": "https://github.com/langchain-ai/langchain/blob/langchain%3D%3D1.4.2/libs/langchain_v1/langchain/__init__.py",
+          "moved_to": [
+            {
+              "module": "langchain_classic",
+              "release": "langchain-classic 1.0.8",
+              "url": "https://github.com/langchain-ai/langchain/blob/langchain-classic%3D%3D1.0.8/libs/langchain/langchain_classic/hub.py"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "chapter_id": "C15",
+      "week": 4,
+      "title": "Week 4 - Introduction to multi-agent systems",
+      "level": "advanced",
+      "topics_covered": [
+        "introduction to multi-agent systems",
+        "from single agent to multi-agent workflow",
+        "role-based agent design",
+        "build a two-agent system",
+        "extend the workflow"
+      ],
+      "tools_covered": [],
+      "teaches": "Move from one agent to several with role-based design and a shared workflow.",
+      "teaches_ar": "الانتقال من وكيل واحد إلى عدة وكلاء بتصميم قائم على الأدوار وسير عمل مشترك.",
+      "pins": {
+        "langchain": ">=0.1.0,<1.0",
+        "langchain-community": "0.3.*",
+        "langchain-core": "0.3.*",
+        "langchain-openai": "0.2.*"
+      },
+      "prerequisites": [
+        "C14"
+      ],
+      "last_updated": "2026-09-10",
+      "installs_unpinned": [
+        "beautifulsoup4",
+        "ddgs",
+        "duckduckgo-search",
+        "faiss-cpu",
+        "langsmith",
+        "requests"
+      ],
+      "legacy_api": [],
+      "notebooks": [
+        "Demo_From_Single_Agent_to_Multi_Agent_Workflow_sol (1).ipynb",
+        "Demo_From_Single_Agent_to_Multi_Agent_Workflow_sol.ipynb",
+        "Demo_Role_Based_Agent_Design_sol.ipynb",
+        "Exercise_Sol_Build_a_Two_Agent_System.ipynb",
+        "Exercise_Sol_Extend_the_Workflow.ipynb"
+      ],
+      "material_edits": [
+        {
+          "chapter_id": "C15",
+          "notebook": "notebooks/week 4/Demo_From_Single_Agent_to_Multi_Agent_Workflow_sol (1).ipynb",
+          "package": "langchain",
+          "installs": "0.3.*",
+          "runs_as_pinned": true,
+          "cell": 5,
+          "kind": "replace",
+          "current": "from langchain.agents import create_react_agent, AgentExecutor",
+          "proposed": "from langchain_classic.agents import create_react_agent, AgentExecutor",
+          "names": [
+            "create_react_agent",
+            "AgentExecutor"
+          ],
+          "reason": "langchain.agents in langchain 1.4.2 no longer has create_react_agent and AgentExecutor. They now come from langchain_classic.agents in langchain-classic 1.0.8.",
+          "reason_ar": "لم تعد langchain.agents في langchain 1.4.2 تضم create_react_agent، AgentExecutor، وهي الآن من langchain_classic.agents في langchain-classic 1.0.8.",
+          "checked": "langchain 1.4.2",
+          "evidence_url": "https://github.com/langchain-ai/langchain/blob/langchain%3D%3D1.4.2/libs/langchain_v1/langchain/agents/__init__.py",
+          "moved_to": [
+            {
+              "module": "langchain_classic.agents",
+              "release": "langchain-classic 1.0.8",
+              "url": "https://github.com/langchain-ai/langchain/blob/langchain-classic%3D%3D1.0.8/libs/langchain/langchain_classic/agents/__init__.py"
+            }
+          ]
+        },
+        {
+          "chapter_id": "C15",
+          "notebook": "notebooks/week 4/Demo_From_Single_Agent_to_Multi_Agent_Workflow_sol.ipynb",
+          "package": "langchain",
+          "installs": ">=0.1.0,<1.0",
+          "runs_as_pinned": true,
+          "cell": 6,
+          "kind": "replace",
+          "current": "from langchain.agents import create_react_agent, AgentExecutor",
+          "proposed": "from langchain_classic.agents import create_react_agent, AgentExecutor",
+          "names": [
+            "create_react_agent",
+            "AgentExecutor"
+          ],
+          "reason": "langchain.agents in langchain 1.4.2 no longer has create_react_agent and AgentExecutor. They now come from langchain_classic.agents in langchain-classic 1.0.8.",
+          "reason_ar": "لم تعد langchain.agents في langchain 1.4.2 تضم create_react_agent، AgentExecutor، وهي الآن من langchain_classic.agents في langchain-classic 1.0.8.",
+          "checked": "langchain 1.4.2",
+          "evidence_url": "https://github.com/langchain-ai/langchain/blob/langchain%3D%3D1.4.2/libs/langchain_v1/langchain/agents/__init__.py",
+          "moved_to": [
+            {
+              "module": "langchain_classic.agents",
+              "release": "langchain-classic 1.0.8",
+              "url": "https://github.com/langchain-ai/langchain/blob/langchain-classic%3D%3D1.0.8/libs/langchain/langchain_classic/agents/__init__.py"
+            }
+          ]
+        },
+        {
+          "chapter_id": "C15",
+          "notebook": "notebooks/week 4/Demo_From_Single_Agent_to_Multi_Agent_Workflow_sol.ipynb",
+          "package": "langchain",
+          "installs": ">=0.1.0,<1.0",
+          "runs_as_pinned": true,
+          "cell": 11,
+          "kind": "replace",
+          "current": "from langchain.agents import create_react_agent, AgentExecutor",
+          "proposed": "from langchain_classic.agents import create_react_agent, AgentExecutor",
+          "names": [
+            "create_react_agent",
+            "AgentExecutor"
+          ],
+          "reason": "langchain.agents in langchain 1.4.2 no longer has create_react_agent and AgentExecutor. They now come from langchain_classic.agents in langchain-classic 1.0.8.",
+          "reason_ar": "لم تعد langchain.agents في langchain 1.4.2 تضم create_react_agent، AgentExecutor، وهي الآن من langchain_classic.agents في langchain-classic 1.0.8.",
+          "checked": "langchain 1.4.2",
+          "evidence_url": "https://github.com/langchain-ai/langchain/blob/langchain%3D%3D1.4.2/libs/langchain_v1/langchain/agents/__init__.py",
+          "moved_to": [
+            {
+              "module": "langchain_classic.agents",
+              "release": "langchain-classic 1.0.8",
+              "url": "https://github.com/langchain-ai/langchain/blob/langchain-classic%3D%3D1.0.8/libs/langchain/langchain_classic/agents/__init__.py"
+            }
+          ]
+        },
+        {
+          "chapter_id": "C15",
+          "notebook": "notebooks/week 4/Demo_Role_Based_Agent_Design_sol.ipynb",
+          "package": "langchain",
+          "installs": ">=0.1.0,<1.0",
+          "runs_as_pinned": true,
+          "cell": 6,
+          "kind": "replace",
+          "current": "from langchain.agents import create_react_agent, AgentExecutor",
+          "proposed": "from langchain_classic.agents import create_react_agent, AgentExecutor",
+          "names": [
+            "create_react_agent",
+            "AgentExecutor"
+          ],
+          "reason": "langchain.agents in langchain 1.4.2 no longer has create_react_agent and AgentExecutor. They now come from langchain_classic.agents in langchain-classic 1.0.8.",
+          "reason_ar": "لم تعد langchain.agents في langchain 1.4.2 تضم create_react_agent، AgentExecutor، وهي الآن من langchain_classic.agents في langchain-classic 1.0.8.",
+          "checked": "langchain 1.4.2",
+          "evidence_url": "https://github.com/langchain-ai/langchain/blob/langchain%3D%3D1.4.2/libs/langchain_v1/langchain/agents/__init__.py",
+          "moved_to": [
+            {
+              "module": "langchain_classic.agents",
+              "release": "langchain-classic 1.0.8",
+              "url": "https://github.com/langchain-ai/langchain/blob/langchain-classic%3D%3D1.0.8/libs/langchain/langchain_classic/agents/__init__.py"
+            }
+          ]
+        },
+        {
+          "chapter_id": "C15",
+          "notebook": "notebooks/week 4/Demo_Role_Based_Agent_Design_sol.ipynb",
+          "package": "langchain",
+          "installs": ">=0.1.0,<1.0",
+          "runs_as_pinned": true,
+          "cell": 6,
+          "kind": "replace",
+          "current": "from langchain import hub",
+          "proposed": "from langchain_classic import hub",
+          "names": [
+            "hub"
+          ],
+          "reason": "langchain 1.4.2 no longer has hub. It now comes from langchain_classic in langchain-classic 1.0.8.",
+          "reason_ar": "لم يعد langchain 1.4.2 يضم hub، وهي الآن من langchain_classic في langchain-classic 1.0.8.",
+          "checked": "langchain 1.4.2",
+          "evidence_url": "https://github.com/langchain-ai/langchain/blob/langchain%3D%3D1.4.2/libs/langchain_v1/langchain/__init__.py",
+          "moved_to": [
+            {
+              "module": "langchain_classic",
+              "release": "langchain-classic 1.0.8",
+              "url": "https://github.com/langchain-ai/langchain/blob/langchain-classic%3D%3D1.0.8/libs/langchain/langchain_classic/hub.py"
+            }
+          ]
+        },
+        {
+          "chapter_id": "C15",
+          "notebook": "notebooks/week 4/Exercise_Sol_Build_a_Two_Agent_System.ipynb",
+          "package": "langchain",
+          "installs": ">=0.1.0,<1.0",
+          "runs_as_pinned": true,
+          "cell": 5,
+          "kind": "replace",
+          "current": "from langchain.agents import create_react_agent, AgentExecutor",
+          "proposed": "from langchain_classic.agents import create_react_agent, AgentExecutor",
+          "names": [
+            "create_react_agent",
+            "AgentExecutor"
+          ],
+          "reason": "langchain.agents in langchain 1.4.2 no longer has create_react_agent and AgentExecutor. They now come from langchain_classic.agents in langchain-classic 1.0.8.",
+          "reason_ar": "لم تعد langchain.agents في langchain 1.4.2 تضم create_react_agent، AgentExecutor، وهي الآن من langchain_classic.agents في langchain-classic 1.0.8.",
+          "checked": "langchain 1.4.2",
+          "evidence_url": "https://github.com/langchain-ai/langchain/blob/langchain%3D%3D1.4.2/libs/langchain_v1/langchain/agents/__init__.py",
+          "moved_to": [
+            {
+              "module": "langchain_classic.agents",
+              "release": "langchain-classic 1.0.8",
+              "url": "https://github.com/langchain-ai/langchain/blob/langchain-classic%3D%3D1.0.8/libs/langchain/langchain_classic/agents/__init__.py"
+            }
+          ]
+        },
+        {
+          "chapter_id": "C15",
+          "notebook": "notebooks/week 4/Exercise_Sol_Extend_the_Workflow.ipynb",
+          "package": "langchain",
+          "installs": ">=0.1.0,<1.0",
+          "runs_as_pinned": true,
+          "cell": 5,
+          "kind": "replace",
+          "current": "from langchain.agents import create_react_agent, AgentExecutor",
+          "proposed": "from langchain_classic.agents import create_react_agent, AgentExecutor",
+          "names": [
+            "create_react_agent",
+            "AgentExecutor"
+          ],
+          "reason": "langchain.agents in langchain 1.4.2 no longer has create_react_agent and AgentExecutor. They now come from langchain_classic.agents in langchain-classic 1.0.8.",
+          "reason_ar": "لم تعد langchain.agents في langchain 1.4.2 تضم create_react_agent، AgentExecutor، وهي الآن من langchain_classic.agents في langchain-classic 1.0.8.",
+          "checked": "langchain 1.4.2",
+          "evidence_url": "https://github.com/langchain-ai/langchain/blob/langchain%3D%3D1.4.2/libs/langchain_v1/langchain/agents/__init__.py",
+          "moved_to": [
+            {
+              "module": "langchain_classic.agents",
+              "release": "langchain-classic 1.0.8",
+              "url": "https://github.com/langchain-ai/langchain/blob/langchain-classic%3D%3D1.0.8/libs/langchain/langchain_classic/agents/__init__.py"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "chapter_id": "C16",
+      "week": 4,
+      "title": "Week 4 - Mini project",
+      "level": "advanced",
+      "topics_covered": [
+        "reference agent system walkthrough",
+        "evaluating agent behavior",
+        "document system behavior"
+      ],
+      "tools_covered": [],
+      "teaches": "Walk through a reference agent system, evaluate its behavior, and document it.",
+      "teaches_ar": "استعراض نظام وكيل مرجعي، وتقييم سلوكه، وتوثيقه.",
+      "pins": {
+        "langchain": ">=0.1.0,<1.0",
+        "langchain-community": "0.3.*",
+        "langchain-core": "0.3.*",
+        "langchain-openai": "0.2.*"
+      },
+      "prerequisites": [
+        "C15"
+      ],
+      "last_updated": "2026-09-10",
+      "installs_unpinned": [
+        "beautifulsoup4",
+        "ddgs",
+        "duckduckgo-search",
+        "faiss-cpu",
+        "langchainhub",
+        "langsmith",
+        "requests"
+      ],
+      "legacy_api": [],
+      "notebooks": [
+        "Demo_Evaluating_Agent_Behavior_(sol).ipynb",
+        "Demo_Reference_Agent_System_Walkthrough_sol.ipynb",
+        "Exercise_Document_System_Behavior_sol.ipynb"
+      ],
+      "material_edits": [
+        {
+          "chapter_id": "C16",
+          "notebook": "notebooks/week 4/Demo_Evaluating_Agent_Behavior_(sol).ipynb",
+          "package": "langchain",
+          "installs": ">=0.1.0,<1.0",
+          "runs_as_pinned": true,
+          "cell": 10,
+          "kind": "replace",
+          "current": "from langchain.agents import create_react_agent, AgentExecutor",
+          "proposed": "from langchain_classic.agents import create_react_agent, AgentExecutor",
+          "names": [
+            "create_react_agent",
+            "AgentExecutor"
+          ],
+          "reason": "langchain.agents in langchain 1.4.2 no longer has create_react_agent and AgentExecutor. They now come from langchain_classic.agents in langchain-classic 1.0.8.",
+          "reason_ar": "لم تعد langchain.agents في langchain 1.4.2 تضم create_react_agent، AgentExecutor، وهي الآن من langchain_classic.agents في langchain-classic 1.0.8.",
+          "checked": "langchain 1.4.2",
+          "evidence_url": "https://github.com/langchain-ai/langchain/blob/langchain%3D%3D1.4.2/libs/langchain_v1/langchain/agents/__init__.py",
+          "moved_to": [
+            {
+              "module": "langchain_classic.agents",
+              "release": "langchain-classic 1.0.8",
+              "url": "https://github.com/langchain-ai/langchain/blob/langchain-classic%3D%3D1.0.8/libs/langchain/langchain_classic/agents/__init__.py"
+            }
+          ]
+        },
+        {
+          "chapter_id": "C16",
+          "notebook": "notebooks/week 4/Demo_Evaluating_Agent_Behavior_(sol).ipynb",
+          "package": "langchain",
+          "installs": ">=0.1.0,<1.0",
+          "runs_as_pinned": true,
+          "cell": 10,
+          "kind": "replace",
+          "current": "from langchain import hub",
+          "proposed": "from langchain_classic import hub",
+          "names": [
+            "hub"
+          ],
+          "reason": "langchain 1.4.2 no longer has hub. It now comes from langchain_classic in langchain-classic 1.0.8.",
+          "reason_ar": "لم يعد langchain 1.4.2 يضم hub، وهي الآن من langchain_classic في langchain-classic 1.0.8.",
+          "checked": "langchain 1.4.2",
+          "evidence_url": "https://github.com/langchain-ai/langchain/blob/langchain%3D%3D1.4.2/libs/langchain_v1/langchain/__init__.py",
+          "moved_to": [
+            {
+              "module": "langchain_classic",
+              "release": "langchain-classic 1.0.8",
+              "url": "https://github.com/langchain-ai/langchain/blob/langchain-classic%3D%3D1.0.8/libs/langchain/langchain_classic/hub.py"
+            }
+          ]
+        },
+        {
+          "chapter_id": "C16",
+          "notebook": "notebooks/week 4/Demo_Evaluating_Agent_Behavior_(sol).ipynb",
+          "package": "langchain",
+          "installs": ">=0.1.0,<1.0",
+          "runs_as_pinned": true,
+          "cell": 10,
+          "kind": "replace",
+          "current": "from langchain.prompts import PromptTemplate",
+          "proposed": "from langchain_core.prompts import PromptTemplate",
+          "names": [
+            "PromptTemplate"
+          ],
+          "reason": "langchain 1.4.2 has no langchain.prompts module. It now comes from langchain_core.prompts in langchain-core 1.6.5.",
+          "reason_ar": "لا توجد وحدة langchain.prompts في langchain 1.4.2، وPromptTemplate الآن من langchain_core.prompts في langchain-core 1.6.5.",
+          "checked": "langchain 1.4.2",
+          "evidence_url": "https://github.com/langchain-ai/langchain/tree/langchain%3D%3D1.4.2/libs/langchain_v1/langchain",
+          "moved_to": [
+            {
+              "module": "langchain_core.prompts",
+              "release": "langchain-core 1.6.5",
+              "url": "https://github.com/langchain-ai/langchain/blob/langchain-core%3D%3D1.6.5/libs/core/langchain_core/prompts/__init__.py"
+            }
+          ]
+        },
+        {
+          "chapter_id": "C16",
+          "notebook": "notebooks/week 4/Demo_Reference_Agent_System_Walkthrough_sol.ipynb",
+          "package": "langchain",
+          "installs": ">=0.1.0,<1.0",
+          "runs_as_pinned": true,
+          "cell": 13,
+          "kind": "replace",
+          "current": "from langchain.agents import create_react_agent, AgentExecutor",
+          "proposed": "from langchain_classic.agents import create_react_agent, AgentExecutor",
+          "names": [
+            "create_react_agent",
+            "AgentExecutor"
+          ],
+          "reason": "langchain.agents in langchain 1.4.2 no longer has create_react_agent and AgentExecutor. They now come from langchain_classic.agents in langchain-classic 1.0.8.",
+          "reason_ar": "لم تعد langchain.agents في langchain 1.4.2 تضم create_react_agent، AgentExecutor، وهي الآن من langchain_classic.agents في langchain-classic 1.0.8.",
+          "checked": "langchain 1.4.2",
+          "evidence_url": "https://github.com/langchain-ai/langchain/blob/langchain%3D%3D1.4.2/libs/langchain_v1/langchain/agents/__init__.py",
+          "moved_to": [
+            {
+              "module": "langchain_classic.agents",
+              "release": "langchain-classic 1.0.8",
+              "url": "https://github.com/langchain-ai/langchain/blob/langchain-classic%3D%3D1.0.8/libs/langchain/langchain_classic/agents/__init__.py"
+            }
+          ]
+        },
+        {
+          "chapter_id": "C16",
+          "notebook": "notebooks/week 4/Exercise_Document_System_Behavior_sol.ipynb",
+          "package": "langchain",
+          "installs": "0.3.*",
+          "runs_as_pinned": true,
+          "cell": 8,
+          "kind": "replace",
+          "current": "from langchain import hub",
+          "proposed": "from langchain_classic import hub",
+          "names": [
+            "hub"
+          ],
+          "reason": "langchain 1.4.2 no longer has hub. It now comes from langchain_classic in langchain-classic 1.0.8.",
+          "reason_ar": "لم يعد langchain 1.4.2 يضم hub، وهي الآن من langchain_classic في langchain-classic 1.0.8.",
+          "checked": "langchain 1.4.2",
+          "evidence_url": "https://github.com/langchain-ai/langchain/blob/langchain%3D%3D1.4.2/libs/langchain_v1/langchain/__init__.py",
+          "moved_to": [
+            {
+              "module": "langchain_classic",
+              "release": "langchain-classic 1.0.8",
+              "url": "https://github.com/langchain-ai/langchain/blob/langchain-classic%3D%3D1.0.8/libs/langchain/langchain_classic/hub.py"
+            }
+          ]
+        },
+        {
+          "chapter_id": "C16",
+          "notebook": "notebooks/week 4/Exercise_Document_System_Behavior_sol.ipynb",
+          "package": "langchain",
+          "installs": "0.3.*",
+          "runs_as_pinned": true,
+          "cell": 8,
+          "kind": "replace",
+          "current": "from langchain.prompts import PromptTemplate",
+          "proposed": "from langchain_core.prompts import PromptTemplate",
+          "names": [
+            "PromptTemplate"
+          ],
+          "reason": "langchain 1.4.2 has no langchain.prompts module. It now comes from langchain_core.prompts in langchain-core 1.6.5.",
+          "reason_ar": "لا توجد وحدة langchain.prompts في langchain 1.4.2، وPromptTemplate الآن من langchain_core.prompts في langchain-core 1.6.5.",
+          "checked": "langchain 1.4.2",
+          "evidence_url": "https://github.com/langchain-ai/langchain/tree/langchain%3D%3D1.4.2/libs/langchain_v1/langchain",
+          "moved_to": [
+            {
+              "module": "langchain_core.prompts",
+              "release": "langchain-core 1.6.5",
+              "url": "https://github.com/langchain-ai/langchain/blob/langchain-core%3D%3D1.6.5/libs/core/langchain_core/prompts/__init__.py"
+            }
+          ]
+        },
+        {
+          "chapter_id": "C16",
+          "notebook": "notebooks/week 4/Exercise_Document_System_Behavior_sol.ipynb",
+          "package": "langchain",
+          "installs": "0.3.*",
+          "runs_as_pinned": true,
+          "cell": 8,
+          "kind": "replace",
+          "current": "from langchain.agents import create_react_agent, AgentExecutor",
+          "proposed": "from langchain_classic.agents import create_react_agent, AgentExecutor",
+          "names": [
+            "create_react_agent",
+            "AgentExecutor"
+          ],
+          "reason": "langchain.agents in langchain 1.4.2 no longer has create_react_agent and AgentExecutor. They now come from langchain_classic.agents in langchain-classic 1.0.8.",
+          "reason_ar": "لم تعد langchain.agents في langchain 1.4.2 تضم create_react_agent، AgentExecutor، وهي الآن من langchain_classic.agents في langchain-classic 1.0.8.",
+          "checked": "langchain 1.4.2",
+          "evidence_url": "https://github.com/langchain-ai/langchain/blob/langchain%3D%3D1.4.2/libs/langchain_v1/langchain/agents/__init__.py",
+          "moved_to": [
+            {
+              "module": "langchain_classic.agents",
+              "release": "langchain-classic 1.0.8",
+              "url": "https://github.com/langchain-ai/langchain/blob/langchain-classic%3D%3D1.0.8/libs/langchain/langchain_classic/agents/__init__.py"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "chapter_id": "C17",
+      "week": 5,
+      "title": "Week 5 - Agent memory systems",
+      "level": "advanced",
+      "topics_covered": [
+        "agent memory systems",
+        "conversation memory",
+        "long-term memory with vector store",
+        "add memory to an agent",
+        "memory retrieval test"
+      ],
+      "tools_covered": [],
+      "teaches": "Give an agent memory: conversation history plus long-term recall from a vector store.",
+      "teaches_ar": "منح الوكيل ذاكرة: سجل المحادثة، واستدعاء طويل المدى من مخزن متجهات.",
+      "pins": {
+        "langchain": "0.3.*",
+        "langchain-community": "0.3.*",
+        "langchain-openai": "0.2.*"
+      },
+      "prerequisites": [
+        "C15"
+      ],
+      "last_updated": "2026-09-17",
+      "installs_unpinned": [
+        "beautifulsoup4",
+        "faiss-cpu",
+        "langchainhub",
+        "requests"
+      ],
+      "legacy_api": [],
+      "notebooks": [
+        "Demo_Conversation_Memory_in_AI_Agents_sol.ipynb",
+        "Demo_Long_Term_Memory_with_Vector_Store(Solution).ipynb",
+        "Exercise_Integrate_Memory_into_Your_Agent_System_sol.ipynb",
+        "Exercise_Memory_Retrieval_Test_sol.ipynb"
+      ],
+      "material_edits": [
+        {
+          "chapter_id": "C17",
+          "notebook": "notebooks/week 5/Demo_Conversation_Memory_in_AI_Agents_sol.ipynb",
+          "package": "langchain",
+          "installs": "0.3.*",
+          "runs_as_pinned": true,
+          "cell": 9,
+          "kind": "replace",
+          "current": "from langchain.prompts import PromptTemplate",
+          "proposed": "from langchain_core.prompts import PromptTemplate",
+          "names": [
+            "PromptTemplate"
+          ],
+          "reason": "langchain 1.4.2 has no langchain.prompts module. It now comes from langchain_core.prompts in langchain-core 1.6.5.",
+          "reason_ar": "لا توجد وحدة langchain.prompts في langchain 1.4.2، وPromptTemplate الآن من langchain_core.prompts في langchain-core 1.6.5.",
+          "checked": "langchain 1.4.2",
+          "evidence_url": "https://github.com/langchain-ai/langchain/tree/langchain%3D%3D1.4.2/libs/langchain_v1/langchain",
+          "moved_to": [
+            {
+              "module": "langchain_core.prompts",
+              "release": "langchain-core 1.6.5",
+              "url": "https://github.com/langchain-ai/langchain/blob/langchain-core%3D%3D1.6.5/libs/core/langchain_core/prompts/__init__.py"
+            }
+          ]
+        },
+        {
+          "chapter_id": "C17",
+          "notebook": "notebooks/week 5/Demo_Conversation_Memory_in_AI_Agents_sol.ipynb",
+          "package": "langchain",
+          "installs": "0.3.*",
+          "runs_as_pinned": true,
+          "cell": 12,
+          "kind": "replace",
+          "current": "from langchain.memory import ConversationBufferMemory",
+          "proposed": "from langchain_classic.memory import ConversationBufferMemory",
+          "names": [
+            "ConversationBufferMemory"
+          ],
+          "reason": "langchain 1.4.2 has no langchain.memory module. It now comes from langchain_classic.memory in langchain-classic 1.0.8.",
+          "reason_ar": "لا توجد وحدة langchain.memory في langchain 1.4.2، وConversationBufferMemory الآن من langchain_classic.memory في langchain-classic 1.0.8.",
+          "checked": "langchain 1.4.2",
+          "evidence_url": "https://github.com/langchain-ai/langchain/tree/langchain%3D%3D1.4.2/libs/langchain_v1/langchain",
+          "moved_to": [
+            {
+              "module": "langchain_classic.memory",
+              "release": "langchain-classic 1.0.8",
+              "url": "https://github.com/langchain-ai/langchain/blob/langchain-classic%3D%3D1.0.8/libs/langchain/langchain_classic/memory/__init__.py"
+            }
+          ]
+        },
+        {
+          "chapter_id": "C17",
+          "notebook": "notebooks/week 5/Demo_Conversation_Memory_in_AI_Agents_sol.ipynb",
+          "package": "langchain",
+          "installs": "0.3.*",
+          "runs_as_pinned": true,
+          "cell": 12,
+          "kind": "replace",
+          "current": "from langchain.chains import ConversationChain",
+          "proposed": "from langchain_classic.chains import ConversationChain",
+          "names": [
+            "ConversationChain"
+          ],
+          "reason": "langchain 1.4.2 has no langchain.chains module. It now comes from langchain_classic.chains in langchain-classic 1.0.8.",
+          "reason_ar": "لا توجد وحدة langchain.chains في langchain 1.4.2، وConversationChain الآن من langchain_classic.chains في langchain-classic 1.0.8.",
+          "checked": "langchain 1.4.2",
+          "evidence_url": "https://github.com/langchain-ai/langchain/tree/langchain%3D%3D1.4.2/libs/langchain_v1/langchain",
+          "moved_to": [
+            {
+              "module": "langchain_classic.chains",
+              "release": "langchain-classic 1.0.8",
+              "url": "https://github.com/langchain-ai/langchain/blob/langchain-classic%3D%3D1.0.8/libs/langchain/langchain_classic/chains/__init__.py"
+            }
+          ]
+        },
+        {
+          "chapter_id": "C17",
+          "notebook": "notebooks/week 5/Demo_Conversation_Memory_in_AI_Agents_sol.ipynb",
+          "package": "langchain",
+          "installs": "0.3.*",
+          "runs_as_pinned": true,
+          "cell": 17,
+          "kind": "replace",
+          "current": "from langchain.memory import ConversationSummaryMemory",
+          "proposed": "from langchain_classic.memory import ConversationSummaryMemory",
+          "names": [
+            "ConversationSummaryMemory"
+          ],
+          "reason": "langchain 1.4.2 has no langchain.memory module. It now comes from langchain_classic.memory in langchain-classic 1.0.8.",
+          "reason_ar": "لا توجد وحدة langchain.memory في langchain 1.4.2، وConversationSummaryMemory الآن من langchain_classic.memory في langchain-classic 1.0.8.",
+          "checked": "langchain 1.4.2",
+          "evidence_url": "https://github.com/langchain-ai/langchain/tree/langchain%3D%3D1.4.2/libs/langchain_v1/langchain",
+          "moved_to": [
+            {
+              "module": "langchain_classic.memory",
+              "release": "langchain-classic 1.0.8",
+              "url": "https://github.com/langchain-ai/langchain/blob/langchain-classic%3D%3D1.0.8/libs/langchain/langchain_classic/memory/__init__.py"
+            }
+          ]
+        },
+        {
+          "chapter_id": "C17",
+          "notebook": "notebooks/week 5/Demo_Conversation_Memory_in_AI_Agents_sol.ipynb",
+          "package": "langchain",
+          "installs": "0.3.*",
+          "runs_as_pinned": true,
+          "cell": 22,
+          "kind": "replace",
+          "current": "from langchain.memory import ConversationBufferWindowMemory",
+          "proposed": "from langchain_classic.memory import ConversationBufferWindowMemory",
+          "names": [
+            "ConversationBufferWindowMemory"
+          ],
+          "reason": "langchain 1.4.2 has no langchain.memory module. It now comes from langchain_classic.memory in langchain-classic 1.0.8.",
+          "reason_ar": "لا توجد وحدة langchain.memory في langchain 1.4.2، وConversationBufferWindowMemory الآن من langchain_classic.memory في langchain-classic 1.0.8.",
+          "checked": "langchain 1.4.2",
+          "evidence_url": "https://github.com/langchain-ai/langchain/tree/langchain%3D%3D1.4.2/libs/langchain_v1/langchain",
+          "moved_to": [
+            {
+              "module": "langchain_classic.memory",
+              "release": "langchain-classic 1.0.8",
+              "url": "https://github.com/langchain-ai/langchain/blob/langchain-classic%3D%3D1.0.8/libs/langchain/langchain_classic/memory/__init__.py"
+            }
+          ]
+        },
+        {
+          "chapter_id": "C17",
+          "notebook": "notebooks/week 5/Demo_Conversation_Memory_in_AI_Agents_sol.ipynb",
+          "package": "langchain",
+          "installs": "0.3.*",
+          "runs_as_pinned": true,
+          "cell": 26,
+          "kind": "replace",
+          "current": "from langchain.memory import ConversationSummaryMemory",
+          "proposed": "from langchain_classic.memory import ConversationSummaryMemory",
+          "names": [
+            "ConversationSummaryMemory"
+          ],
+          "reason": "langchain 1.4.2 has no langchain.memory module. It now comes from langchain_classic.memory in langchain-classic 1.0.8.",
+          "reason_ar": "لا توجد وحدة langchain.memory في langchain 1.4.2، وConversationSummaryMemory الآن من langchain_classic.memory في langchain-classic 1.0.8.",
+          "checked": "langchain 1.4.2",
+          "evidence_url": "https://github.com/langchain-ai/langchain/tree/langchain%3D%3D1.4.2/libs/langchain_v1/langchain",
+          "moved_to": [
+            {
+              "module": "langchain_classic.memory",
+              "release": "langchain-classic 1.0.8",
+              "url": "https://github.com/langchain-ai/langchain/blob/langchain-classic%3D%3D1.0.8/libs/langchain/langchain_classic/memory/__init__.py"
+            }
+          ]
+        },
+        {
+          "chapter_id": "C17",
+          "notebook": "notebooks/week 5/Demo_Conversation_Memory_in_AI_Agents_sol.ipynb",
+          "package": "langchain",
+          "installs": "0.3.*",
+          "runs_as_pinned": true,
+          "cell": 35,
+          "kind": "replace",
+          "current": "from langchain.memory import ConversationBufferMemory",
+          "proposed": "from langchain_classic.memory import ConversationBufferMemory",
+          "names": [
+            "ConversationBufferMemory"
+          ],
+          "reason": "langchain 1.4.2 has no langchain.memory module. It now comes from langchain_classic.memory in langchain-classic 1.0.8.",
+          "reason_ar": "لا توجد وحدة langchain.memory في langchain 1.4.2، وConversationBufferMemory الآن من langchain_classic.memory في langchain-classic 1.0.8.",
+          "checked": "langchain 1.4.2",
+          "evidence_url": "https://github.com/langchain-ai/langchain/tree/langchain%3D%3D1.4.2/libs/langchain_v1/langchain",
+          "moved_to": [
+            {
+              "module": "langchain_classic.memory",
+              "release": "langchain-classic 1.0.8",
+              "url": "https://github.com/langchain-ai/langchain/blob/langchain-classic%3D%3D1.0.8/libs/langchain/langchain_classic/memory/__init__.py"
+            }
+          ]
+        },
+        {
+          "chapter_id": "C17",
+          "notebook": "notebooks/week 5/Demo_Conversation_Memory_in_AI_Agents_sol.ipynb",
+          "package": "langchain",
+          "installs": "0.3.*",
+          "runs_as_pinned": true,
+          "cell": 35,
+          "kind": "replace",
+          "current": "from langchain.agents import AgentExecutor, create_openai_functions_agent",
+          "proposed": "from langchain_classic.agents import AgentExecutor, create_openai_functions_agent",
+          "names": [
+            "AgentExecutor",
+            "create_openai_functions_agent"
+          ],
+          "reason": "langchain.agents in langchain 1.4.2 no longer has AgentExecutor and create_openai_functions_agent. They now come from langchain_classic.agents in langchain-classic 1.0.8.",
+          "reason_ar": "لم تعد langchain.agents في langchain 1.4.2 تضم AgentExecutor، create_openai_functions_agent، وهي الآن من langchain_classic.agents في langchain-classic 1.0.8.",
+          "checked": "langchain 1.4.2",
+          "evidence_url": "https://github.com/langchain-ai/langchain/blob/langchain%3D%3D1.4.2/libs/langchain_v1/langchain/agents/__init__.py",
+          "moved_to": [
+            {
+              "module": "langchain_classic.agents",
+              "release": "langchain-classic 1.0.8",
+              "url": "https://github.com/langchain-ai/langchain/blob/langchain-classic%3D%3D1.0.8/libs/langchain/langchain_classic/agents/__init__.py"
+            }
+          ]
+        },
+        {
+          "chapter_id": "C17",
+          "notebook": "notebooks/week 5/Demo_Long_Term_Memory_with_Vector_Store(Solution).ipynb",
+          "package": "langchain",
+          "installs": "0.3.*",
+          "runs_as_pinned": true,
+          "cell": 8,
+          "kind": "replace",
+          "current": "from langchain.memory import ConversationBufferMemory",
+          "proposed": "from langchain_classic.memory import ConversationBufferMemory",
+          "names": [
+            "ConversationBufferMemory"
+          ],
+          "reason": "langchain 1.4.2 has no langchain.memory module. It now comes from langchain_classic.memory in langchain-classic 1.0.8.",
+          "reason_ar": "لا توجد وحدة langchain.memory في langchain 1.4.2، وConversationBufferMemory الآن من langchain_classic.memory في langchain-classic 1.0.8.",
+          "checked": "langchain 1.4.2",
+          "evidence_url": "https://github.com/langchain-ai/langchain/tree/langchain%3D%3D1.4.2/libs/langchain_v1/langchain",
+          "moved_to": [
+            {
+              "module": "langchain_classic.memory",
+              "release": "langchain-classic 1.0.8",
+              "url": "https://github.com/langchain-ai/langchain/blob/langchain-classic%3D%3D1.0.8/libs/langchain/langchain_classic/memory/__init__.py"
+            }
+          ]
+        },
+        {
+          "chapter_id": "C17",
+          "notebook": "notebooks/week 5/Demo_Long_Term_Memory_with_Vector_Store(Solution).ipynb",
+          "package": "langchain",
+          "installs": "0.3.*",
+          "runs_as_pinned": true,
+          "cell": 15,
+          "kind": "replace",
+          "current": "from langchain.prompts import PromptTemplate",
+          "proposed": "from langchain_core.prompts import PromptTemplate",
+          "names": [
+            "PromptTemplate"
+          ],
+          "reason": "langchain 1.4.2 has no langchain.prompts module. It now comes from langchain_core.prompts in langchain-core 1.6.5.",
+          "reason_ar": "لا توجد وحدة langchain.prompts في langchain 1.4.2، وPromptTemplate الآن من langchain_core.prompts في langchain-core 1.6.5.",
+          "checked": "langchain 1.4.2",
+          "evidence_url": "https://github.com/langchain-ai/langchain/tree/langchain%3D%3D1.4.2/libs/langchain_v1/langchain",
+          "moved_to": [
+            {
+              "module": "langchain_core.prompts",
+              "release": "langchain-core 1.6.5",
+              "url": "https://github.com/langchain-ai/langchain/blob/langchain-core%3D%3D1.6.5/libs/core/langchain_core/prompts/__init__.py"
+            }
+          ]
+        },
+        {
+          "chapter_id": "C17",
+          "notebook": "notebooks/week 5/Demo_Long_Term_Memory_with_Vector_Store(Solution).ipynb",
+          "package": "langchain",
+          "installs": "0.3.*",
+          "runs_as_pinned": true,
+          "cell": 16,
+          "kind": "replace",
+          "current": "from langchain.agents import create_react_agent, AgentExecutor",
+          "proposed": "from langchain_classic.agents import create_react_agent, AgentExecutor",
+          "names": [
+            "create_react_agent",
+            "AgentExecutor"
+          ],
+          "reason": "langchain.agents in langchain 1.4.2 no longer has create_react_agent and AgentExecutor. They now come from langchain_classic.agents in langchain-classic 1.0.8.",
+          "reason_ar": "لم تعد langchain.agents في langchain 1.4.2 تضم create_react_agent، AgentExecutor، وهي الآن من langchain_classic.agents في langchain-classic 1.0.8.",
+          "checked": "langchain 1.4.2",
+          "evidence_url": "https://github.com/langchain-ai/langchain/blob/langchain%3D%3D1.4.2/libs/langchain_v1/langchain/agents/__init__.py",
+          "moved_to": [
+            {
+              "module": "langchain_classic.agents",
+              "release": "langchain-classic 1.0.8",
+              "url": "https://github.com/langchain-ai/langchain/blob/langchain-classic%3D%3D1.0.8/libs/langchain/langchain_classic/agents/__init__.py"
+            }
+          ]
+        },
+        {
+          "chapter_id": "C17",
+          "notebook": "notebooks/week 5/Demo_Long_Term_Memory_with_Vector_Store(Solution).ipynb",
+          "package": "langchain",
+          "installs": "0.3.*",
+          "runs_as_pinned": true,
+          "cell": 16,
+          "kind": "replace",
+          "current": "from langchain.prompts import PromptTemplate",
+          "proposed": "from langchain_core.prompts import PromptTemplate",
+          "names": [
+            "PromptTemplate"
+          ],
+          "reason": "langchain 1.4.2 has no langchain.prompts module. It now comes from langchain_core.prompts in langchain-core 1.6.5.",
+          "reason_ar": "لا توجد وحدة langchain.prompts في langchain 1.4.2، وPromptTemplate الآن من langchain_core.prompts في langchain-core 1.6.5.",
+          "checked": "langchain 1.4.2",
+          "evidence_url": "https://github.com/langchain-ai/langchain/tree/langchain%3D%3D1.4.2/libs/langchain_v1/langchain",
+          "moved_to": [
+            {
+              "module": "langchain_core.prompts",
+              "release": "langchain-core 1.6.5",
+              "url": "https://github.com/langchain-ai/langchain/blob/langchain-core%3D%3D1.6.5/libs/core/langchain_core/prompts/__init__.py"
+            }
+          ]
+        },
+        {
+          "chapter_id": "C17",
+          "notebook": "notebooks/week 5/Exercise_Integrate_Memory_into_Your_Agent_System_sol.ipynb",
+          "package": "langchain",
+          "installs": "0.3.*",
+          "runs_as_pinned": true,
+          "cell": 8,
+          "kind": "replace",
+          "current": "from langchain.agents import create_react_agent, AgentExecutor",
+          "proposed": "from langchain_classic.agents import create_react_agent, AgentExecutor",
+          "names": [
+            "create_react_agent",
+            "AgentExecutor"
+          ],
+          "reason": "langchain.agents in langchain 1.4.2 no longer has create_react_agent and AgentExecutor. They now come from langchain_classic.agents in langchain-classic 1.0.8.",
+          "reason_ar": "لم تعد langchain.agents في langchain 1.4.2 تضم create_react_agent، AgentExecutor، وهي الآن من langchain_classic.agents في langchain-classic 1.0.8.",
+          "checked": "langchain 1.4.2",
+          "evidence_url": "https://github.com/langchain-ai/langchain/blob/langchain%3D%3D1.4.2/libs/langchain_v1/langchain/agents/__init__.py",
+          "moved_to": [
+            {
+              "module": "langchain_classic.agents",
+              "release": "langchain-classic 1.0.8",
+              "url": "https://github.com/langchain-ai/langchain/blob/langchain-classic%3D%3D1.0.8/libs/langchain/langchain_classic/agents/__init__.py"
+            }
+          ]
+        },
+        {
+          "chapter_id": "C17",
+          "notebook": "notebooks/week 5/Exercise_Memory_Retrieval_Test_sol.ipynb",
+          "package": "langchain",
+          "installs": "0.3.*",
+          "runs_as_pinned": true,
+          "cell": 9,
+          "kind": "replace",
+          "current": "from langchain.agents import create_react_agent, AgentExecutor",
+          "proposed": "from langchain_classic.agents import create_react_agent, AgentExecutor",
+          "names": [
+            "create_react_agent",
+            "AgentExecutor"
+          ],
+          "reason": "langchain.agents in langchain 1.4.2 no longer has create_react_agent and AgentExecutor. They now come from langchain_classic.agents in langchain-classic 1.0.8.",
+          "reason_ar": "لم تعد langchain.agents في langchain 1.4.2 تضم create_react_agent، AgentExecutor، وهي الآن من langchain_classic.agents في langchain-classic 1.0.8.",
+          "checked": "langchain 1.4.2",
+          "evidence_url": "https://github.com/langchain-ai/langchain/blob/langchain%3D%3D1.4.2/libs/langchain_v1/langchain/agents/__init__.py",
+          "moved_to": [
+            {
+              "module": "langchain_classic.agents",
+              "release": "langchain-classic 1.0.8",
+              "url": "https://github.com/langchain-ai/langchain/blob/langchain-classic%3D%3D1.0.8/libs/langchain/langchain_classic/agents/__init__.py"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "chapter_id": "C18",
+      "week": 5,
+      "title": "Week 5 - Planning and task decomposition",
+      "level": "advanced",
+      "topics_covered": [
+        "planning and task decomposition",
+        "task planning agent",
+        "execution tracking",
+        "implement a planning agent",
+        "loop prevention"
+      ],
+      "tools_covered": [],
+      "teaches": "Make an agent plan: decompose a task, track execution, and prevent loops.",
+      "teaches_ar": "جعل الوكيل يخطط: تفكيك المهمة، وتتبّع التنفيذ، ومنع الحلقات المفرغة.",
+      "pins": {
+        "langchain": "0.3.*",
+        "langchain-community": "0.3.*",
+        "langchain-openai": "0.2.*"
+      },
+      "prerequisites": [
+        "C17"
+      ],
+      "last_updated": "2026-09-17",
+      "installs_unpinned": [
+        "ddgs",
+        "duckduckgo-search"
+      ],
+      "legacy_api": [],
+      "notebooks": [
+        "Demo_Execution_Tracking(Solution).ipynb",
+        "Demo_Task_Planning_Agent(Solution).ipynb",
+        "Exercise_Solution_Implement_a_Planning_Agent.ipynb",
+        "Exercise_Solution_Loop_Prevention.ipynb"
+      ],
+      "material_edits": [
+        {
+          "chapter_id": "C18",
+          "notebook": "notebooks/week 5/Demo_Execution_Tracking(Solution).ipynb",
+          "package": "langchain",
+          "installs": "0.3.*",
+          "runs_as_pinned": true,
+          "cell": 4,
+          "kind": "replace",
+          "current": "from langchain.agents import create_react_agent, AgentExecutor",
+          "proposed": "from langchain_classic.agents import create_react_agent, AgentExecutor",
+          "names": [
+            "create_react_agent",
+            "AgentExecutor"
+          ],
+          "reason": "langchain.agents in langchain 1.4.2 no longer has create_react_agent and AgentExecutor. They now come from langchain_classic.agents in langchain-classic 1.0.8.",
+          "reason_ar": "لم تعد langchain.agents في langchain 1.4.2 تضم create_react_agent، AgentExecutor، وهي الآن من langchain_classic.agents في langchain-classic 1.0.8.",
+          "checked": "langchain 1.4.2",
+          "evidence_url": "https://github.com/langchain-ai/langchain/blob/langchain%3D%3D1.4.2/libs/langchain_v1/langchain/agents/__init__.py",
+          "moved_to": [
+            {
+              "module": "langchain_classic.agents",
+              "release": "langchain-classic 1.0.8",
+              "url": "https://github.com/langchain-ai/langchain/blob/langchain-classic%3D%3D1.0.8/libs/langchain/langchain_classic/agents/__init__.py"
+            }
+          ]
+        },
+        {
+          "chapter_id": "C18",
+          "notebook": "notebooks/week 5/Demo_Task_Planning_Agent(Solution).ipynb",
+          "package": "langchain",
+          "installs": "0.3.*",
+          "runs_as_pinned": true,
+          "cell": 4,
+          "kind": "replace",
+          "current": "from langchain.agents import create_react_agent, AgentExecutor",
+          "proposed": "from langchain_classic.agents import create_react_agent, AgentExecutor",
+          "names": [
+            "create_react_agent",
+            "AgentExecutor"
+          ],
+          "reason": "langchain.agents in langchain 1.4.2 no longer has create_react_agent and AgentExecutor. They now come from langchain_classic.agents in langchain-classic 1.0.8.",
+          "reason_ar": "لم تعد langchain.agents في langchain 1.4.2 تضم create_react_agent، AgentExecutor، وهي الآن من langchain_classic.agents في langchain-classic 1.0.8.",
+          "checked": "langchain 1.4.2",
+          "evidence_url": "https://github.com/langchain-ai/langchain/blob/langchain%3D%3D1.4.2/libs/langchain_v1/langchain/agents/__init__.py",
+          "moved_to": [
+            {
+              "module": "langchain_classic.agents",
+              "release": "langchain-classic 1.0.8",
+              "url": "https://github.com/langchain-ai/langchain/blob/langchain-classic%3D%3D1.0.8/libs/langchain/langchain_classic/agents/__init__.py"
+            }
+          ]
+        },
+        {
+          "chapter_id": "C18",
+          "notebook": "notebooks/week 5/Exercise_Solution_Implement_a_Planning_Agent.ipynb",
+          "package": "langchain",
+          "installs": "0.3.*",
+          "runs_as_pinned": true,
+          "cell": 4,
+          "kind": "replace",
+          "current": "from langchain.agents import create_react_agent, AgentExecutor",
+          "proposed": "from langchain_classic.agents import create_react_agent, AgentExecutor",
+          "names": [
+            "create_react_agent",
+            "AgentExecutor"
+          ],
+          "reason": "langchain.agents in langchain 1.4.2 no longer has create_react_agent and AgentExecutor. They now come from langchain_classic.agents in langchain-classic 1.0.8.",
+          "reason_ar": "لم تعد langchain.agents في langchain 1.4.2 تضم create_react_agent، AgentExecutor، وهي الآن من langchain_classic.agents في langchain-classic 1.0.8.",
+          "checked": "langchain 1.4.2",
+          "evidence_url": "https://github.com/langchain-ai/langchain/blob/langchain%3D%3D1.4.2/libs/langchain_v1/langchain/agents/__init__.py",
+          "moved_to": [
+            {
+              "module": "langchain_classic.agents",
+              "release": "langchain-classic 1.0.8",
+              "url": "https://github.com/langchain-ai/langchain/blob/langchain-classic%3D%3D1.0.8/libs/langchain/langchain_classic/agents/__init__.py"
+            }
+          ]
+        },
+        {
+          "chapter_id": "C18",
+          "notebook": "notebooks/week 5/Exercise_Solution_Loop_Prevention.ipynb",
+          "package": "langchain",
+          "installs": "0.3.*",
+          "runs_as_pinned": true,
+          "cell": 4,
+          "kind": "replace",
+          "current": "from langchain.agents import create_react_agent, AgentExecutor",
+          "proposed": "from langchain_classic.agents import create_react_agent, AgentExecutor",
+          "names": [
+            "create_react_agent",
+            "AgentExecutor"
+          ],
+          "reason": "langchain.agents in langchain 1.4.2 no longer has create_react_agent and AgentExecutor. They now come from langchain_classic.agents in langchain-classic 1.0.8.",
+          "reason_ar": "لم تعد langchain.agents في langchain 1.4.2 تضم create_react_agent، AgentExecutor، وهي الآن من langchain_classic.agents في langchain-classic 1.0.8.",
+          "checked": "langchain 1.4.2",
+          "evidence_url": "https://github.com/langchain-ai/langchain/blob/langchain%3D%3D1.4.2/libs/langchain_v1/langchain/agents/__init__.py",
+          "moved_to": [
+            {
+              "module": "langchain_classic.agents",
+              "release": "langchain-classic 1.0.8",
+              "url": "https://github.com/langchain-ai/langchain/blob/langchain-classic%3D%3D1.0.8/libs/langchain/langchain_classic/agents/__init__.py"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "chapter_id": "C19",
+      "week": 5,
+      "title": "Week 5 - Agentic frameworks and orchestration",
+      "level": "advanced",
+      "topics_covered": [
+        "agentic frameworks and orchestration",
+        "graph-based agent workflow",
+        "multi-agent conversation patterns",
+        "implement a multi-agent workflow",
+        "add a review agent"
+      ],
+      "tools_covered": [
+        "LangGraph",
+        "langgraph",
+        "n8n"
+      ],
+      "teaches": "Orchestrate agents as a graph with LangGraph, including multi-agent conversation and a review agent, with n8n shown as a no-code alternative.",
+      "teaches_ar": "تنسيق الوكلاء كرسم بياني بـLangGraph، بما في ذلك محادثة بين عدة وكلاء ووكيل مراجعة، مع عرض n8n بديلاً بلا كود.",
+      "pins": {
+        "langchain": "0.3.*",
+        "langchain-community": "0.3.*",
+        "langchain-openai": "0.2.*"
+      },
+      "prerequisites": [
+        "C18"
+      ],
+      "last_updated": "2026-09-17",
+      "installs_unpinned": [
+        "langchainhub",
+        "langgraph"
+      ],
+      "legacy_api": [],
+      "notebooks": [
+        "Demo_Graph_Based_Agent_Workflow_sol.ipynb",
+        "Demo_Multi_Agent_Conversation_Patterns_sol.ipynb",
+        "Exercise_Add_a_Review_Agent_sol.ipynb",
+        "Exercise_Implement_a_Multi_Agent_Workflow_sol_dynamic_looping.ipynb"
+      ],
+      "material_edits": []
+    },
+    {
+      "chapter_id": "C20",
+      "week": 5,
+      "title": "Week 5 - Agent failure modes",
+      "level": "advanced",
+      "topics_covered": [
+        "agent failure modes",
+        "common agent failure cases",
+        "failure diagnosis workflow",
+        "diagnose agent failures",
+        "fix failure cases"
+      ],
+      "tools_covered": [],
+      "teaches": "Name the ways agents fail, diagnose a failure, and fix it.",
+      "teaches_ar": "تسمية أنماط فشل الوكلاء، وتشخيص الفشل، وإصلاحه.",
+      "pins": {
+        "langchain": "0.3.*",
+        "langchain-community": "0.3.*",
+        "langchain-openai": "0.2.*"
+      },
+      "prerequisites": [
+        "C19"
+      ],
+      "last_updated": "2026-09-17",
+      "installs_unpinned": [
+        "beautifulsoup4",
+        "langchainhub",
+        "requests"
+      ],
+      "legacy_api": [],
+      "notebooks": [
+        "Demo_Common_Agent_Failure_Cases(Solution) (1).ipynb",
+        "Demo_Common_Agent_Failure_Cases(Solution).ipynb",
+        "Demo_Failure_Diagnosis_Workflow(Solution) (1).ipynb",
+        "Demo_Failure_Diagnosis_Workflow(Solution).ipynb",
+        "Exercise_Diagnose_Agent_Failures (sample solution) (1).ipynb",
+        "Exercise_Diagnose_Agent_Failures (sample solution).ipynb",
+        "Exercise_Fix_Failure_Cases (sample solution) (1).ipynb",
+        "Exercise_Fix_Failure_Cases (sample solution).ipynb"
+      ],
+      "material_edits": [
+        {
+          "chapter_id": "C20",
+          "notebook": "notebooks/week 5/Demo_Common_Agent_Failure_Cases(Solution) (1).ipynb",
+          "package": "langchain",
+          "installs": "0.3.*",
+          "runs_as_pinned": true,
+          "cell": 8,
+          "kind": "replace",
+          "current": "from langchain.agents import create_react_agent, AgentExecutor",
+          "proposed": "from langchain_classic.agents import create_react_agent, AgentExecutor",
+          "names": [
+            "create_react_agent",
+            "AgentExecutor"
+          ],
+          "reason": "langchain.agents in langchain 1.4.2 no longer has create_react_agent and AgentExecutor. They now come from langchain_classic.agents in langchain-classic 1.0.8.",
+          "reason_ar": "لم تعد langchain.agents في langchain 1.4.2 تضم create_react_agent، AgentExecutor، وهي الآن من langchain_classic.agents في langchain-classic 1.0.8.",
+          "checked": "langchain 1.4.2",
+          "evidence_url": "https://github.com/langchain-ai/langchain/blob/langchain%3D%3D1.4.2/libs/langchain_v1/langchain/agents/__init__.py",
+          "moved_to": [
+            {
+              "module": "langchain_classic.agents",
+              "release": "langchain-classic 1.0.8",
+              "url": "https://github.com/langchain-ai/langchain/blob/langchain-classic%3D%3D1.0.8/libs/langchain/langchain_classic/agents/__init__.py"
+            }
+          ]
+        },
+        {
+          "chapter_id": "C20",
+          "notebook": "notebooks/week 5/Demo_Common_Agent_Failure_Cases(Solution) (1).ipynb",
+          "package": "langchain",
+          "installs": "0.3.*",
+          "runs_as_pinned": true,
+          "cell": 9,
+          "kind": "replace",
+          "current": "from langchain import hub",
+          "proposed": "from langchain_classic import hub",
+          "names": [
+            "hub"
+          ],
+          "reason": "langchain 1.4.2 no longer has hub. It now comes from langchain_classic in langchain-classic 1.0.8.",
+          "reason_ar": "لم يعد langchain 1.4.2 يضم hub، وهي الآن من langchain_classic في langchain-classic 1.0.8.",
+          "checked": "langchain 1.4.2",
+          "evidence_url": "https://github.com/langchain-ai/langchain/blob/langchain%3D%3D1.4.2/libs/langchain_v1/langchain/__init__.py",
+          "moved_to": [
+            {
+              "module": "langchain_classic",
+              "release": "langchain-classic 1.0.8",
+              "url": "https://github.com/langchain-ai/langchain/blob/langchain-classic%3D%3D1.0.8/libs/langchain/langchain_classic/hub.py"
+            }
+          ]
+        },
+        {
+          "chapter_id": "C20",
+          "notebook": "notebooks/week 5/Demo_Common_Agent_Failure_Cases(Solution) (1).ipynb",
+          "package": "langchain",
+          "installs": "0.3.*",
+          "runs_as_pinned": true,
+          "cell": 11,
+          "kind": "replace",
+          "current": "from langchain.prompts import PromptTemplate",
+          "proposed": "from langchain_core.prompts import PromptTemplate",
+          "names": [
+            "PromptTemplate"
+          ],
+          "reason": "langchain 1.4.2 has no langchain.prompts module. It now comes from langchain_core.prompts in langchain-core 1.6.5.",
+          "reason_ar": "لا توجد وحدة langchain.prompts في langchain 1.4.2، وPromptTemplate الآن من langchain_core.prompts في langchain-core 1.6.5.",
+          "checked": "langchain 1.4.2",
+          "evidence_url": "https://github.com/langchain-ai/langchain/tree/langchain%3D%3D1.4.2/libs/langchain_v1/langchain",
+          "moved_to": [
+            {
+              "module": "langchain_core.prompts",
+              "release": "langchain-core 1.6.5",
+              "url": "https://github.com/langchain-ai/langchain/blob/langchain-core%3D%3D1.6.5/libs/core/langchain_core/prompts/__init__.py"
+            }
+          ]
+        },
+        {
+          "chapter_id": "C20",
+          "notebook": "notebooks/week 5/Demo_Common_Agent_Failure_Cases(Solution).ipynb",
+          "package": "langchain",
+          "installs": "0.3.*",
+          "runs_as_pinned": true,
+          "cell": 8,
+          "kind": "replace",
+          "current": "from langchain.agents import create_react_agent, AgentExecutor",
+          "proposed": "from langchain_classic.agents import create_react_agent, AgentExecutor",
+          "names": [
+            "create_react_agent",
+            "AgentExecutor"
+          ],
+          "reason": "langchain.agents in langchain 1.4.2 no longer has create_react_agent and AgentExecutor. They now come from langchain_classic.agents in langchain-classic 1.0.8.",
+          "reason_ar": "لم تعد langchain.agents في langchain 1.4.2 تضم create_react_agent، AgentExecutor، وهي الآن من langchain_classic.agents في langchain-classic 1.0.8.",
+          "checked": "langchain 1.4.2",
+          "evidence_url": "https://github.com/langchain-ai/langchain/blob/langchain%3D%3D1.4.2/libs/langchain_v1/langchain/agents/__init__.py",
+          "moved_to": [
+            {
+              "module": "langchain_classic.agents",
+              "release": "langchain-classic 1.0.8",
+              "url": "https://github.com/langchain-ai/langchain/blob/langchain-classic%3D%3D1.0.8/libs/langchain/langchain_classic/agents/__init__.py"
+            }
+          ]
+        },
+        {
+          "chapter_id": "C20",
+          "notebook": "notebooks/week 5/Demo_Common_Agent_Failure_Cases(Solution).ipynb",
+          "package": "langchain",
+          "installs": "0.3.*",
+          "runs_as_pinned": true,
+          "cell": 9,
+          "kind": "replace",
+          "current": "from langchain import hub",
+          "proposed": "from langchain_classic import hub",
+          "names": [
+            "hub"
+          ],
+          "reason": "langchain 1.4.2 no longer has hub. It now comes from langchain_classic in langchain-classic 1.0.8.",
+          "reason_ar": "لم يعد langchain 1.4.2 يضم hub، وهي الآن من langchain_classic في langchain-classic 1.0.8.",
+          "checked": "langchain 1.4.2",
+          "evidence_url": "https://github.com/langchain-ai/langchain/blob/langchain%3D%3D1.4.2/libs/langchain_v1/langchain/__init__.py",
+          "moved_to": [
+            {
+              "module": "langchain_classic",
+              "release": "langchain-classic 1.0.8",
+              "url": "https://github.com/langchain-ai/langchain/blob/langchain-classic%3D%3D1.0.8/libs/langchain/langchain_classic/hub.py"
+            }
+          ]
+        },
+        {
+          "chapter_id": "C20",
+          "notebook": "notebooks/week 5/Demo_Common_Agent_Failure_Cases(Solution).ipynb",
+          "package": "langchain",
+          "installs": "0.3.*",
+          "runs_as_pinned": true,
+          "cell": 11,
+          "kind": "replace",
+          "current": "from langchain.prompts import PromptTemplate",
+          "proposed": "from langchain_core.prompts import PromptTemplate",
+          "names": [
+            "PromptTemplate"
+          ],
+          "reason": "langchain 1.4.2 has no langchain.prompts module. It now comes from langchain_core.prompts in langchain-core 1.6.5.",
+          "reason_ar": "لا توجد وحدة langchain.prompts في langchain 1.4.2، وPromptTemplate الآن من langchain_core.prompts في langchain-core 1.6.5.",
+          "checked": "langchain 1.4.2",
+          "evidence_url": "https://github.com/langchain-ai/langchain/tree/langchain%3D%3D1.4.2/libs/langchain_v1/langchain",
+          "moved_to": [
+            {
+              "module": "langchain_core.prompts",
+              "release": "langchain-core 1.6.5",
+              "url": "https://github.com/langchain-ai/langchain/blob/langchain-core%3D%3D1.6.5/libs/core/langchain_core/prompts/__init__.py"
+            }
+          ]
+        },
+        {
+          "chapter_id": "C20",
+          "notebook": "notebooks/week 5/Demo_Failure_Diagnosis_Workflow(Solution) (1).ipynb",
+          "package": "langchain",
+          "installs": "0.3.*",
+          "runs_as_pinned": true,
+          "cell": 8,
+          "kind": "replace",
+          "current": "from langchain.agents import create_react_agent, AgentExecutor",
+          "proposed": "from langchain_classic.agents import create_react_agent, AgentExecutor",
+          "names": [
+            "create_react_agent",
+            "AgentExecutor"
+          ],
+          "reason": "langchain.agents in langchain 1.4.2 no longer has create_react_agent and AgentExecutor. They now come from langchain_classic.agents in langchain-classic 1.0.8.",
+          "reason_ar": "لم تعد langchain.agents في langchain 1.4.2 تضم create_react_agent، AgentExecutor، وهي الآن من langchain_classic.agents في langchain-classic 1.0.8.",
+          "checked": "langchain 1.4.2",
+          "evidence_url": "https://github.com/langchain-ai/langchain/blob/langchain%3D%3D1.4.2/libs/langchain_v1/langchain/agents/__init__.py",
+          "moved_to": [
+            {
+              "module": "langchain_classic.agents",
+              "release": "langchain-classic 1.0.8",
+              "url": "https://github.com/langchain-ai/langchain/blob/langchain-classic%3D%3D1.0.8/libs/langchain/langchain_classic/agents/__init__.py"
+            }
+          ]
+        },
+        {
+          "chapter_id": "C20",
+          "notebook": "notebooks/week 5/Demo_Failure_Diagnosis_Workflow(Solution) (1).ipynb",
+          "package": "langchain",
+          "installs": "0.3.*",
+          "runs_as_pinned": true,
+          "cell": 8,
+          "kind": "replace",
+          "current": "from langchain.prompts import PromptTemplate",
+          "proposed": "from langchain_core.prompts import PromptTemplate",
+          "names": [
+            "PromptTemplate"
+          ],
+          "reason": "langchain 1.4.2 has no langchain.prompts module. It now comes from langchain_core.prompts in langchain-core 1.6.5.",
+          "reason_ar": "لا توجد وحدة langchain.prompts في langchain 1.4.2، وPromptTemplate الآن من langchain_core.prompts في langchain-core 1.6.5.",
+          "checked": "langchain 1.4.2",
+          "evidence_url": "https://github.com/langchain-ai/langchain/tree/langchain%3D%3D1.4.2/libs/langchain_v1/langchain",
+          "moved_to": [
+            {
+              "module": "langchain_core.prompts",
+              "release": "langchain-core 1.6.5",
+              "url": "https://github.com/langchain-ai/langchain/blob/langchain-core%3D%3D1.6.5/libs/core/langchain_core/prompts/__init__.py"
+            }
+          ]
+        },
+        {
+          "chapter_id": "C20",
+          "notebook": "notebooks/week 5/Demo_Failure_Diagnosis_Workflow(Solution).ipynb",
+          "package": "langchain",
+          "installs": "0.3.*",
+          "runs_as_pinned": true,
+          "cell": 8,
+          "kind": "replace",
+          "current": "from langchain.agents import create_react_agent, AgentExecutor",
+          "proposed": "from langchain_classic.agents import create_react_agent, AgentExecutor",
+          "names": [
+            "create_react_agent",
+            "AgentExecutor"
+          ],
+          "reason": "langchain.agents in langchain 1.4.2 no longer has create_react_agent and AgentExecutor. They now come from langchain_classic.agents in langchain-classic 1.0.8.",
+          "reason_ar": "لم تعد langchain.agents في langchain 1.4.2 تضم create_react_agent، AgentExecutor، وهي الآن من langchain_classic.agents في langchain-classic 1.0.8.",
+          "checked": "langchain 1.4.2",
+          "evidence_url": "https://github.com/langchain-ai/langchain/blob/langchain%3D%3D1.4.2/libs/langchain_v1/langchain/agents/__init__.py",
+          "moved_to": [
+            {
+              "module": "langchain_classic.agents",
+              "release": "langchain-classic 1.0.8",
+              "url": "https://github.com/langchain-ai/langchain/blob/langchain-classic%3D%3D1.0.8/libs/langchain/langchain_classic/agents/__init__.py"
+            }
+          ]
+        },
+        {
+          "chapter_id": "C20",
+          "notebook": "notebooks/week 5/Demo_Failure_Diagnosis_Workflow(Solution).ipynb",
+          "package": "langchain",
+          "installs": "0.3.*",
+          "runs_as_pinned": true,
+          "cell": 8,
+          "kind": "replace",
+          "current": "from langchain.prompts import PromptTemplate",
+          "proposed": "from langchain_core.prompts import PromptTemplate",
+          "names": [
+            "PromptTemplate"
+          ],
+          "reason": "langchain 1.4.2 has no langchain.prompts module. It now comes from langchain_core.prompts in langchain-core 1.6.5.",
+          "reason_ar": "لا توجد وحدة langchain.prompts في langchain 1.4.2، وPromptTemplate الآن من langchain_core.prompts في langchain-core 1.6.5.",
+          "checked": "langchain 1.4.2",
+          "evidence_url": "https://github.com/langchain-ai/langchain/tree/langchain%3D%3D1.4.2/libs/langchain_v1/langchain",
+          "moved_to": [
+            {
+              "module": "langchain_core.prompts",
+              "release": "langchain-core 1.6.5",
+              "url": "https://github.com/langchain-ai/langchain/blob/langchain-core%3D%3D1.6.5/libs/core/langchain_core/prompts/__init__.py"
+            }
+          ]
+        },
+        {
+          "chapter_id": "C20",
+          "notebook": "notebooks/week 5/Exercise_Diagnose_Agent_Failures (sample solution) (1).ipynb",
+          "package": "langchain",
+          "installs": "0.3.*",
+          "runs_as_pinned": true,
+          "cell": 6,
+          "kind": "replace",
+          "current": "from langchain.agents import create_react_agent, AgentExecutor",
+          "proposed": "from langchain_classic.agents import create_react_agent, AgentExecutor",
+          "names": [
+            "create_react_agent",
+            "AgentExecutor"
+          ],
+          "reason": "langchain.agents in langchain 1.4.2 no longer has create_react_agent and AgentExecutor. They now come from langchain_classic.agents in langchain-classic 1.0.8.",
+          "reason_ar": "لم تعد langchain.agents في langchain 1.4.2 تضم create_react_agent، AgentExecutor، وهي الآن من langchain_classic.agents في langchain-classic 1.0.8.",
+          "checked": "langchain 1.4.2",
+          "evidence_url": "https://github.com/langchain-ai/langchain/blob/langchain%3D%3D1.4.2/libs/langchain_v1/langchain/agents/__init__.py",
+          "moved_to": [
+            {
+              "module": "langchain_classic.agents",
+              "release": "langchain-classic 1.0.8",
+              "url": "https://github.com/langchain-ai/langchain/blob/langchain-classic%3D%3D1.0.8/libs/langchain/langchain_classic/agents/__init__.py"
+            }
+          ]
+        },
+        {
+          "chapter_id": "C20",
+          "notebook": "notebooks/week 5/Exercise_Diagnose_Agent_Failures (sample solution) (1).ipynb",
+          "package": "langchain",
+          "installs": "0.3.*",
+          "runs_as_pinned": true,
+          "cell": 6,
+          "kind": "replace",
+          "current": "from langchain.prompts import PromptTemplate",
+          "proposed": "from langchain_core.prompts import PromptTemplate",
+          "names": [
+            "PromptTemplate"
+          ],
+          "reason": "langchain 1.4.2 has no langchain.prompts module. It now comes from langchain_core.prompts in langchain-core 1.6.5.",
+          "reason_ar": "لا توجد وحدة langchain.prompts في langchain 1.4.2، وPromptTemplate الآن من langchain_core.prompts في langchain-core 1.6.5.",
+          "checked": "langchain 1.4.2",
+          "evidence_url": "https://github.com/langchain-ai/langchain/tree/langchain%3D%3D1.4.2/libs/langchain_v1/langchain",
+          "moved_to": [
+            {
+              "module": "langchain_core.prompts",
+              "release": "langchain-core 1.6.5",
+              "url": "https://github.com/langchain-ai/langchain/blob/langchain-core%3D%3D1.6.5/libs/core/langchain_core/prompts/__init__.py"
+            }
+          ]
+        },
+        {
+          "chapter_id": "C20",
+          "notebook": "notebooks/week 5/Exercise_Diagnose_Agent_Failures (sample solution).ipynb",
+          "package": "langchain",
+          "installs": "0.3.*",
+          "runs_as_pinned": true,
+          "cell": 6,
+          "kind": "replace",
+          "current": "from langchain.agents import create_react_agent, AgentExecutor",
+          "proposed": "from langchain_classic.agents import create_react_agent, AgentExecutor",
+          "names": [
+            "create_react_agent",
+            "AgentExecutor"
+          ],
+          "reason": "langchain.agents in langchain 1.4.2 no longer has create_react_agent and AgentExecutor. They now come from langchain_classic.agents in langchain-classic 1.0.8.",
+          "reason_ar": "لم تعد langchain.agents في langchain 1.4.2 تضم create_react_agent، AgentExecutor، وهي الآن من langchain_classic.agents في langchain-classic 1.0.8.",
+          "checked": "langchain 1.4.2",
+          "evidence_url": "https://github.com/langchain-ai/langchain/blob/langchain%3D%3D1.4.2/libs/langchain_v1/langchain/agents/__init__.py",
+          "moved_to": [
+            {
+              "module": "langchain_classic.agents",
+              "release": "langchain-classic 1.0.8",
+              "url": "https://github.com/langchain-ai/langchain/blob/langchain-classic%3D%3D1.0.8/libs/langchain/langchain_classic/agents/__init__.py"
+            }
+          ]
+        },
+        {
+          "chapter_id": "C20",
+          "notebook": "notebooks/week 5/Exercise_Diagnose_Agent_Failures (sample solution).ipynb",
+          "package": "langchain",
+          "installs": "0.3.*",
+          "runs_as_pinned": true,
+          "cell": 6,
+          "kind": "replace",
+          "current": "from langchain.prompts import PromptTemplate",
+          "proposed": "from langchain_core.prompts import PromptTemplate",
+          "names": [
+            "PromptTemplate"
+          ],
+          "reason": "langchain 1.4.2 has no langchain.prompts module. It now comes from langchain_core.prompts in langchain-core 1.6.5.",
+          "reason_ar": "لا توجد وحدة langchain.prompts في langchain 1.4.2، وPromptTemplate الآن من langchain_core.prompts في langchain-core 1.6.5.",
+          "checked": "langchain 1.4.2",
+          "evidence_url": "https://github.com/langchain-ai/langchain/tree/langchain%3D%3D1.4.2/libs/langchain_v1/langchain",
+          "moved_to": [
+            {
+              "module": "langchain_core.prompts",
+              "release": "langchain-core 1.6.5",
+              "url": "https://github.com/langchain-ai/langchain/blob/langchain-core%3D%3D1.6.5/libs/core/langchain_core/prompts/__init__.py"
+            }
+          ]
+        },
+        {
+          "chapter_id": "C20",
+          "notebook": "notebooks/week 5/Exercise_Fix_Failure_Cases (sample solution) (1).ipynb",
+          "package": "langchain",
+          "installs": "0.3.*",
+          "runs_as_pinned": true,
+          "cell": 8,
+          "kind": "replace",
+          "current": "from langchain.agents import create_react_agent, AgentExecutor",
+          "proposed": "from langchain_classic.agents import create_react_agent, AgentExecutor",
+          "names": [
+            "create_react_agent",
+            "AgentExecutor"
+          ],
+          "reason": "langchain.agents in langchain 1.4.2 no longer has create_react_agent and AgentExecutor. They now come from langchain_classic.agents in langchain-classic 1.0.8.",
+          "reason_ar": "لم تعد langchain.agents في langchain 1.4.2 تضم create_react_agent، AgentExecutor، وهي الآن من langchain_classic.agents في langchain-classic 1.0.8.",
+          "checked": "langchain 1.4.2",
+          "evidence_url": "https://github.com/langchain-ai/langchain/blob/langchain%3D%3D1.4.2/libs/langchain_v1/langchain/agents/__init__.py",
+          "moved_to": [
+            {
+              "module": "langchain_classic.agents",
+              "release": "langchain-classic 1.0.8",
+              "url": "https://github.com/langchain-ai/langchain/blob/langchain-classic%3D%3D1.0.8/libs/langchain/langchain_classic/agents/__init__.py"
+            }
+          ]
+        },
+        {
+          "chapter_id": "C20",
+          "notebook": "notebooks/week 5/Exercise_Fix_Failure_Cases (sample solution) (1).ipynb",
+          "package": "langchain",
+          "installs": "0.3.*",
+          "runs_as_pinned": true,
+          "cell": 8,
+          "kind": "replace",
+          "current": "from langchain.prompts import PromptTemplate",
+          "proposed": "from langchain_core.prompts import PromptTemplate",
+          "names": [
+            "PromptTemplate"
+          ],
+          "reason": "langchain 1.4.2 has no langchain.prompts module. It now comes from langchain_core.prompts in langchain-core 1.6.5.",
+          "reason_ar": "لا توجد وحدة langchain.prompts في langchain 1.4.2، وPromptTemplate الآن من langchain_core.prompts في langchain-core 1.6.5.",
+          "checked": "langchain 1.4.2",
+          "evidence_url": "https://github.com/langchain-ai/langchain/tree/langchain%3D%3D1.4.2/libs/langchain_v1/langchain",
+          "moved_to": [
+            {
+              "module": "langchain_core.prompts",
+              "release": "langchain-core 1.6.5",
+              "url": "https://github.com/langchain-ai/langchain/blob/langchain-core%3D%3D1.6.5/libs/core/langchain_core/prompts/__init__.py"
+            }
+          ]
+        },
+        {
+          "chapter_id": "C20",
+          "notebook": "notebooks/week 5/Exercise_Fix_Failure_Cases (sample solution).ipynb",
+          "package": "langchain",
+          "installs": "0.3.*",
+          "runs_as_pinned": true,
+          "cell": 8,
+          "kind": "replace",
+          "current": "from langchain.agents import create_react_agent, AgentExecutor",
+          "proposed": "from langchain_classic.agents import create_react_agent, AgentExecutor",
+          "names": [
+            "create_react_agent",
+            "AgentExecutor"
+          ],
+          "reason": "langchain.agents in langchain 1.4.2 no longer has create_react_agent and AgentExecutor. They now come from langchain_classic.agents in langchain-classic 1.0.8.",
+          "reason_ar": "لم تعد langchain.agents في langchain 1.4.2 تضم create_react_agent، AgentExecutor، وهي الآن من langchain_classic.agents في langchain-classic 1.0.8.",
+          "checked": "langchain 1.4.2",
+          "evidence_url": "https://github.com/langchain-ai/langchain/blob/langchain%3D%3D1.4.2/libs/langchain_v1/langchain/agents/__init__.py",
+          "moved_to": [
+            {
+              "module": "langchain_classic.agents",
+              "release": "langchain-classic 1.0.8",
+              "url": "https://github.com/langchain-ai/langchain/blob/langchain-classic%3D%3D1.0.8/libs/langchain/langchain_classic/agents/__init__.py"
+            }
+          ]
+        },
+        {
+          "chapter_id": "C20",
+          "notebook": "notebooks/week 5/Exercise_Fix_Failure_Cases (sample solution).ipynb",
+          "package": "langchain",
+          "installs": "0.3.*",
+          "runs_as_pinned": true,
+          "cell": 8,
+          "kind": "replace",
+          "current": "from langchain.prompts import PromptTemplate",
+          "proposed": "from langchain_core.prompts import PromptTemplate",
+          "names": [
+            "PromptTemplate"
+          ],
+          "reason": "langchain 1.4.2 has no langchain.prompts module. It now comes from langchain_core.prompts in langchain-core 1.6.5.",
+          "reason_ar": "لا توجد وحدة langchain.prompts في langchain 1.4.2، وPromptTemplate الآن من langchain_core.prompts في langchain-core 1.6.5.",
+          "checked": "langchain 1.4.2",
+          "evidence_url": "https://github.com/langchain-ai/langchain/tree/langchain%3D%3D1.4.2/libs/langchain_v1/langchain",
+          "moved_to": [
+            {
+              "module": "langchain_core.prompts",
+              "release": "langchain-core 1.6.5",
+              "url": "https://github.com/langchain-ai/langchain/blob/langchain-core%3D%3D1.6.5/libs/core/langchain_core/prompts/__init__.py"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "chapter_id": "C21",
+      "week": 5,
+      "title": "Week 5 - Multi-agent checkpoint",
+      "level": "advanced",
+      "topics_covered": [
+        "multi-agent system walkthrough",
+        "diagnosing coordination failures",
+        "complete multi-agent upgrade",
+        "document system architecture"
+      ],
+      "tools_covered": [],
+      "teaches": "Diagnose coordination failures in a multi-agent system and document its architecture.",
+      "teaches_ar": "تشخيص أعطال التنسيق في نظام متعدد الوكلاء وتوثيق بنيته.",
+      "pins": {
+        "langchain": "0.3.*",
+        "langchain-community": "0.3.*",
+        "langchain-openai": "0.2.*",
+        "langgraph": "0.2.*"
+      },
+      "prerequisites": [
+        "C20"
+      ],
+      "last_updated": "2026-09-17",
+      "installs_unpinned": [
+        "ddgs",
+        "duckduckgo-search",
+        "faiss-cpu"
+      ],
+      "legacy_api": [],
+      "notebooks": [
+        "Demo_Diagnosing_Coordination_Failures(Solution).ipynb",
+        "Demo_Multi_Agent_System_Walkthrough(Solution).ipynb",
+        "Exercise_Document_System_Architecture.ipynb",
+        "Exercise_Solution_Complete_Multi_Agent_Upgrade.ipynb"
+      ],
+      "material_edits": []
+    },
+    {
+      "chapter_id": "C22",
+      "week": 6,
+      "title": "Week 6 - Agent evaluation",
+      "level": "advanced",
+      "topics_covered": [
+        "agent evaluation",
+        "designing evaluation tasks",
+        "automated evaluation workflow",
+        "end-to-end agent evaluation",
+        "build an evaluation set",
+        "build a simple automated evaluator"
+      ],
+      "tools_covered": [],
+      "teaches": "Build an evaluation set and an automated evaluator for agent behavior.",
+      "teaches_ar": "بناء مجموعة تقييم ومقيّم آلي لسلوك الوكيل.",
+      "pins": {
+        "langchain": "0.3.*",
+        "langchain-openai": "0.2.*"
+      },
+      "prerequisites": [
+        "C21"
+      ],
+      "last_updated": null,
+      "installs_unpinned": [],
+      "legacy_api": [],
+      "notebooks": [
+        "Demo_Automated_Evaluation_Workflow_Solution.ipynb",
+        "Demo_Designing_Evaluation_Tasks_for_Agent_Systems_Solution.ipynb",
+        "Demo_End_to_End_Agent_Evaluation_Solution.ipynb",
+        "Exercise_Build_a_Simple_Automated_Evaluator_Solution.ipynb",
+        "Exercise_Build_an_Evaluation_Set_Solution.ipynb"
+      ],
+      "material_edits": [
+        {
+          "chapter_id": "C22",
+          "notebook": "notebooks/week 6/Demo_Automated_Evaluation_Workflow_Solution.ipynb",
+          "package": "langchain",
+          "installs": "0.3.*",
+          "runs_as_pinned": true,
+          "cell": 8,
+          "kind": "replace",
+          "current": "from langchain.agents import create_react_agent, AgentExecutor",
+          "proposed": "from langchain_classic.agents import create_react_agent, AgentExecutor",
+          "names": [
+            "create_react_agent",
+            "AgentExecutor"
+          ],
+          "reason": "langchain.agents in langchain 1.4.2 no longer has create_react_agent and AgentExecutor. They now come from langchain_classic.agents in langchain-classic 1.0.8.",
+          "reason_ar": "لم تعد langchain.agents في langchain 1.4.2 تضم create_react_agent، AgentExecutor، وهي الآن من langchain_classic.agents في langchain-classic 1.0.8.",
+          "checked": "langchain 1.4.2",
+          "evidence_url": "https://github.com/langchain-ai/langchain/blob/langchain%3D%3D1.4.2/libs/langchain_v1/langchain/agents/__init__.py",
+          "moved_to": [
+            {
+              "module": "langchain_classic.agents",
+              "release": "langchain-classic 1.0.8",
+              "url": "https://github.com/langchain-ai/langchain/blob/langchain-classic%3D%3D1.0.8/libs/langchain/langchain_classic/agents/__init__.py"
+            }
+          ]
+        },
+        {
+          "chapter_id": "C22",
+          "notebook": "notebooks/week 6/Demo_Designing_Evaluation_Tasks_for_Agent_Systems_Solution.ipynb",
+          "package": "langchain",
+          "installs": "0.3.*",
+          "runs_as_pinned": true,
+          "cell": 11,
+          "kind": "replace",
+          "current": "from langchain.agents import create_react_agent, AgentExecutor",
+          "proposed": "from langchain_classic.agents import create_react_agent, AgentExecutor",
+          "names": [
+            "create_react_agent",
+            "AgentExecutor"
+          ],
+          "reason": "langchain.agents in langchain 1.4.2 no longer has create_react_agent and AgentExecutor. They now come from langchain_classic.agents in langchain-classic 1.0.8.",
+          "reason_ar": "لم تعد langchain.agents في langchain 1.4.2 تضم create_react_agent، AgentExecutor، وهي الآن من langchain_classic.agents في langchain-classic 1.0.8.",
+          "checked": "langchain 1.4.2",
+          "evidence_url": "https://github.com/langchain-ai/langchain/blob/langchain%3D%3D1.4.2/libs/langchain_v1/langchain/agents/__init__.py",
+          "moved_to": [
+            {
+              "module": "langchain_classic.agents",
+              "release": "langchain-classic 1.0.8",
+              "url": "https://github.com/langchain-ai/langchain/blob/langchain-classic%3D%3D1.0.8/libs/langchain/langchain_classic/agents/__init__.py"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "chapter_id": "C23",
+      "week": 6,
+      "title": "Week 6 - Guardrails and safety",
+      "level": "advanced",
+      "topics_covered": [
+        "guardrails and safety",
+        "guardrail design patterns",
+        "human-in-the-loop control",
+        "implement guardrails",
+        "test guardrails"
+      ],
+      "tools_covered": [],
+      "teaches": "Apply guardrail patterns and human-in-the-loop control, then test them.",
+      "teaches_ar": "تطبيق أنماط حواجز الأمان وتحكّم الإنسان في الحلقة، ثم اختبارها.",
+      "pins": {
+        "langchain": "0.3.*",
+        "langchain-community": "0.3.*",
+        "langchain-openai": "0.2.*",
+        "langgraph": "0.2.*"
+      },
+      "prerequisites": [
+        "C22"
+      ],
+      "last_updated": null,
+      "installs_unpinned": [
+        "faiss-cpu",
+        "langchain",
+        "langchain-community",
+        "langchain-openai",
+        "langgraph"
+      ],
+      "legacy_api": [],
+      "notebooks": [
+        "Demo_Guardrail_Design_Patterns(Solution).ipynb",
+        "Demo_Human_in_the_Loop_Control(Solution).ipynb",
+        "Exercise_Sol_Implement_Guardrails.ipynb",
+        "Exercise_Solution_Test_Guardrails.ipynb"
+      ],
+      "material_edits": [
+        {
+          "chapter_id": "C23",
+          "notebook": "notebooks/week 6/Demo_Guardrail_Design_Patterns(Solution).ipynb",
+          "package": "langchain",
+          "installs": "0.3.*",
+          "runs_as_pinned": true,
+          "cell": 4,
+          "kind": "replace",
+          "current": "from langchain.agents import create_react_agent, AgentExecutor",
+          "proposed": "from langchain_classic.agents import create_react_agent, AgentExecutor",
+          "names": [
+            "create_react_agent",
+            "AgentExecutor"
+          ],
+          "reason": "langchain.agents in langchain 1.4.2 no longer has create_react_agent and AgentExecutor. They now come from langchain_classic.agents in langchain-classic 1.0.8.",
+          "reason_ar": "لم تعد langchain.agents في langchain 1.4.2 تضم create_react_agent، AgentExecutor، وهي الآن من langchain_classic.agents في langchain-classic 1.0.8.",
+          "checked": "langchain 1.4.2",
+          "evidence_url": "https://github.com/langchain-ai/langchain/blob/langchain%3D%3D1.4.2/libs/langchain_v1/langchain/agents/__init__.py",
+          "moved_to": [
+            {
+              "module": "langchain_classic.agents",
+              "release": "langchain-classic 1.0.8",
+              "url": "https://github.com/langchain-ai/langchain/blob/langchain-classic%3D%3D1.0.8/libs/langchain/langchain_classic/agents/__init__.py"
+            }
+          ]
+        },
+        {
+          "chapter_id": "C23",
+          "notebook": "notebooks/week 6/Demo_Human_in_the_Loop_Control(Solution).ipynb",
+          "package": "langchain",
+          "installs": "0.3.*",
+          "runs_as_pinned": true,
+          "cell": 4,
+          "kind": "replace",
+          "current": "from langchain.agents import create_react_agent, AgentExecutor",
+          "proposed": "from langchain_classic.agents import create_react_agent, AgentExecutor",
+          "names": [
+            "create_react_agent",
+            "AgentExecutor"
+          ],
+          "reason": "langchain.agents in langchain 1.4.2 no longer has create_react_agent and AgentExecutor. They now come from langchain_classic.agents in langchain-classic 1.0.8.",
+          "reason_ar": "لم تعد langchain.agents في langchain 1.4.2 تضم create_react_agent، AgentExecutor، وهي الآن من langchain_classic.agents في langchain-classic 1.0.8.",
+          "checked": "langchain 1.4.2",
+          "evidence_url": "https://github.com/langchain-ai/langchain/blob/langchain%3D%3D1.4.2/libs/langchain_v1/langchain/agents/__init__.py",
+          "moved_to": [
+            {
+              "module": "langchain_classic.agents",
+              "release": "langchain-classic 1.0.8",
+              "url": "https://github.com/langchain-ai/langchain/blob/langchain-classic%3D%3D1.0.8/libs/langchain/langchain_classic/agents/__init__.py"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "chapter_id": "C24",
+      "week": 6,
+      "title": "Week 6 - Agent observability and monitoring",
+      "level": "advanced",
+      "topics_covered": [
+        "agent observability and monitoring",
+        "agent execution logging",
+        "monitoring agent performance",
+        "implement agent logging",
+        "analyze system logs"
+      ],
+      "tools_covered": [],
+      "teaches": "Log agent execution, monitor performance, and analyze the logs.",
+      "teaches_ar": "تسجيل تنفيذ الوكيل، ومراقبة الأداء، وتحليل السجلات.",
+      "pins": {},
+      "prerequisites": [
+        "C23"
+      ],
+      "last_updated": null,
+      "installs_unpinned": [
+        "langchain",
+        "langchain-community",
+        "langchain-openai",
+        "langgraph",
+        "matplotlib",
+        "pandas"
+      ],
+      "legacy_api": [],
+      "notebooks": [
+        "Demo_Agent_Execution_Logging(Solution).ipynb",
+        "Demo_Monitoring_Agent_Performance(Solution).ipynb",
+        "Exercise_Analyze_System_Logs.ipynb",
+        "Exercise_Solution_Implement_Agent_Logging.ipynb"
+      ],
+      "material_edits": []
+    },
+    {
+      "chapter_id": "C25",
+      "week": 7,
+      "title": "Capstone - Project and presentations",
+      "level": "advanced",
+      "topics_covered": [
+        "agentic AI project selection",
+        "how to break down project requirements",
+        "how to do user validation",
+        "how to do presentation",
+        "capstone project proposal presentation"
+      ],
+      "tools_covered": [],
+      "teaches": "Capstone: scope a project, validate it with users, and present it.",
+      "teaches_ar": "المشروع الختامي: تحديد نطاق المشروع، والتحقق منه مع المستخدمين، وعرضه.",
+      "pins": {},
+      "prerequisites": [
+        "C24"
+      ],
+      "last_updated": null,
+      "material_edits": []
     }
-  ]
+  ],
+  "pins_note": "pins, installs_unpinned and legacy_api are read from the course notebooks by `python -m src.curriculum`. A package under installs_unpinned has no version bound in the notebook, so a student installs whatever is newest on the day they run it.",
+  "material_checked": {
+    "langchain": "1.4.2",
+    "langchain-core": "1.6.5",
+    "langchain-openai": "1.6.6",
+    "langchain-classic": "1.0.8",
+    "on": "2026-09-25"
+  },
+  "material_note": "material_edits are read by `python -m src.curriculum`: every langchain import in the notebooks, checked against the source of the newest release at its tag on GitHub, with the replacement found the same way. runs_as_pinned is true when the notebook's own pin keeps it on the old line, so the edit is for the day the course moves, not a break today.",
+  "concepts": [
+    {
+      "concept": "MCP",
+      "module": "langchain.mcp",
+      "tool": "langchain",
+      "summary": "LangChain MCP adapters for connecting MCP servers with LangChain applications.",
+      "latest": "1.4.2",
+      "course_version": "0.3.30",
+      "term": "MCP",
+      "jobs": 20,
+      "months": 3,
+      "notebooks": 0,
+      "notebooks_read": 89,
+      "evidence": [
+        {
+          "what": "added",
+          "release": "langchain 1.4.2",
+          "url": "https://github.com/langchain-ai/langchain/tree/langchain%3D%3D1.4.2/libs/langchain_v1/langchain/mcp"
+        },
+        {
+          "what": "absent",
+          "release": "langchain 0.3.30",
+          "url": "https://github.com/langchain-ai/langchain/tree/langchain%3D%3D0.3.30/libs/langchain/langchain"
+        }
+      ],
+      "suggested_chapter": null,
+      "action": "add_new_lesson"
+    },
+    {
+      "concept": "langchain.messages",
+      "module": "langchain.messages",
+      "tool": "langchain",
+      "summary": "Message and message content types.",
+      "latest": "1.4.2",
+      "course_version": "0.3.30",
+      "term": null,
+      "jobs": null,
+      "months": 3,
+      "notebooks": 0,
+      "notebooks_read": 89,
+      "evidence": [
+        {
+          "what": "added",
+          "release": "langchain 1.4.2",
+          "url": "https://github.com/langchain-ai/langchain/tree/langchain%3D%3D1.4.2/libs/langchain_v1/langchain/messages"
+        },
+        {
+          "what": "absent",
+          "release": "langchain 0.3.30",
+          "url": "https://github.com/langchain-ai/langchain/tree/langchain%3D%3D0.3.30/libs/langchain/langchain"
+        }
+      ],
+      "suggested_chapter": null,
+      "action": "watch"
+    },
+    {
+      "concept": "langchain.rate_limiters",
+      "module": "langchain.rate_limiters",
+      "tool": "langchain",
+      "summary": "Base abstraction and in-memory implementation of rate limiters.",
+      "latest": "1.4.2",
+      "course_version": "0.3.30",
+      "term": null,
+      "jobs": null,
+      "months": 3,
+      "notebooks": 0,
+      "notebooks_read": 89,
+      "evidence": [
+        {
+          "what": "added",
+          "release": "langchain 1.4.2",
+          "url": "https://github.com/langchain-ai/langchain/tree/langchain%3D%3D1.4.2/libs/langchain_v1/langchain/rate_limiters"
+        },
+        {
+          "what": "absent",
+          "release": "langchain 0.3.30",
+          "url": "https://github.com/langchain-ai/langchain/tree/langchain%3D%3D0.3.30/libs/langchain/langchain"
+        }
+      ],
+      "suggested_chapter": null,
+      "action": "watch"
+    },
+    {
+      "concept": "langgraph.callbacks",
+      "module": "langgraph.callbacks",
+      "tool": "langgraph",
+      "summary": "Graph lifecycle callback interfaces and event payloads.",
+      "latest": "1.2.12",
+      "course_version": "0.2.76",
+      "term": null,
+      "jobs": null,
+      "months": 3,
+      "notebooks": 0,
+      "notebooks_read": 89,
+      "evidence": [
+        {
+          "what": "added",
+          "release": "langgraph 1.2.12",
+          "url": "https://github.com/langchain-ai/langgraph/tree/1.2.12/libs/langgraph/langgraph/callbacks"
+        },
+        {
+          "what": "absent",
+          "release": "langgraph 0.2.76",
+          "url": "https://github.com/langchain-ai/langgraph/tree/0.2.76/libs/langgraph/langgraph"
+        }
+      ],
+      "suggested_chapter": null,
+      "action": "watch"
+    },
+    {
+      "concept": "langgraph.stream",
+      "module": "langgraph.stream",
+      "tool": "langgraph",
+      "summary": "Streaming infrastructure for LangGraph.",
+      "latest": "1.2.12",
+      "course_version": "0.2.76",
+      "term": null,
+      "jobs": null,
+      "months": 3,
+      "notebooks": 0,
+      "notebooks_read": 89,
+      "evidence": [
+        {
+          "what": "added",
+          "release": "langgraph 1.2.12",
+          "url": "https://github.com/langchain-ai/langgraph/tree/1.2.12/libs/langgraph/langgraph/stream"
+        },
+        {
+          "what": "absent",
+          "release": "langgraph 0.2.76",
+          "url": "https://github.com/langchain-ai/langgraph/tree/0.2.76/libs/langgraph/langgraph"
+        }
+      ],
+      "suggested_chapter": null,
+      "action": "watch"
+    },
+    {
+      "concept": "langgraph.warnings",
+      "module": "langgraph.warnings",
+      "tool": "langgraph",
+      "summary": "LangGraph specific warnings.",
+      "latest": "1.2.12",
+      "course_version": "0.2.76",
+      "term": null,
+      "jobs": null,
+      "months": 3,
+      "notebooks": 0,
+      "notebooks_read": 89,
+      "evidence": [
+        {
+          "what": "added",
+          "release": "langgraph 1.2.12",
+          "url": "https://github.com/langchain-ai/langgraph/tree/1.2.12/libs/langgraph/langgraph/warnings"
+        },
+        {
+          "what": "absent",
+          "release": "langgraph 0.2.76",
+          "url": "https://github.com/langchain-ai/langgraph/tree/0.2.76/libs/langgraph/langgraph"
+        }
+      ],
+      "suggested_chapter": null,
+      "action": "watch"
+    }
+  ],
+  "concepts_checked": {
+    "langchain": {
+      "course": "0.3.30",
+      "latest": "1.4.2"
+    },
+    "langgraph": {
+      "course": "0.2.76",
+      "latest": "1.2.12"
+    },
+    "on": "2026-09-25"
+  },
+  "concepts_note": "concepts are read by `python -m src.curriculum`: modules the newest release of a tool the course teaches added since the newest version the course's pins allow, each described by its own docstring, with job posts counted only for a name distinct enough to search.",
+  "copies": [
+    {
+      "notebook": "notebooks/week 5/Demo_Common_Agent_Failure_Cases(Solution) (1).ipynb",
+      "same_as": "notebooks/week 5/Demo_Common_Agent_Failure_Cases(Solution).ipynb",
+      "cells": 17
+    },
+    {
+      "notebook": "notebooks/week 5/Demo_Failure_Diagnosis_Workflow(Solution) (1).ipynb",
+      "same_as": "notebooks/week 5/Demo_Failure_Diagnosis_Workflow(Solution).ipynb",
+      "cells": 18
+    },
+    {
+      "notebook": "notebooks/week 5/Exercise_Diagnose_Agent_Failures (sample solution) (1).ipynb",
+      "same_as": "notebooks/week 5/Exercise_Diagnose_Agent_Failures (sample solution).ipynb",
+      "cells": 14
+    },
+    {
+      "notebook": "notebooks/week 5/Exercise_Fix_Failure_Cases (sample solution) (1).ipynb",
+      "same_as": "notebooks/week 5/Exercise_Fix_Failure_Cases (sample solution).ipynb",
+      "cells": 14
+    }
+  ],
+  "model_calls": [
+    {
+      "notebook": "notebooks/week 2/DSPy_Facility_Support_Analyzer_Demo.ipynb",
+      "calls": [
+        {
+          "model": "gpt-5",
+          "cell": 28,
+          "how": "named"
+        }
+      ]
+    },
+    {
+      "notebook": "notebooks/week 2/LLM_as_a_Jury_with_Evidently_AI_(demo).ipynb",
+      "calls": [
+        {
+          "model": "gpt-4o-mini",
+          "cell": 14,
+          "how": "named"
+        }
+      ]
+    },
+    {
+      "notebook": "notebooks/week 2/openai_api_quickstart.ipynb",
+      "calls": [
+        {
+          "model": "gpt-4.1-mini",
+          "cell": 3,
+          "how": "named"
+        }
+      ]
+    },
+    {
+      "notebook": "notebooks/week 2/optimizing_llm_as_a_judge_prompts_explainer.ipynb",
+      "calls": [
+        {
+          "model": "gpt-4",
+          "cell": 9,
+          "how": "named"
+        },
+        {
+          "model": "gpt-4",
+          "cell": 11,
+          "how": "named"
+        },
+        {
+          "model": "gpt-4",
+          "cell": 22,
+          "how": "named"
+        }
+      ]
+    },
+    {
+      "notebook": "notebooks/week 2/RAG_Evaluation_Metrics_with_Ragas_sol.ipynb",
+      "calls": [
+        {
+          "model": "gpt-4o-mini",
+          "cell": 5,
+          "how": "named"
+        }
+      ]
+    },
+    {
+      "notebook": "notebooks/week 2/Story_Writing_with_Prompt_Chaining_OpenAI.ipynb",
+      "calls": [
+        {
+          "model": "gpt-5-mini",
+          "cell": 4,
+          "how": "named"
+        }
+      ]
+    },
+    {
+      "notebook": "notebooks/week 3/Demo_LangChain_Document_Chat_using_OpenAI(solution).ipynb",
+      "calls": [
+        {
+          "model": "gpt-4.1-mini",
+          "cell": 24,
+          "how": "named"
+        },
+        {
+          "model": "gpt-4.1-mini",
+          "cell": 30,
+          "how": "named"
+        },
+        {
+          "model": "gpt-4.1-mini",
+          "cell": 44,
+          "how": "named"
+        },
+        {
+          "model": "gpt-4.1-mini",
+          "cell": 64,
+          "how": "named"
+        },
+        {
+          "model": "gpt-4.1-mini",
+          "cell": 67,
+          "how": "named"
+        },
+        {
+          "model": "gpt-4.1-mini",
+          "cell": 72,
+          "how": "named"
+        },
+        {
+          "model": "gpt-4.1-mini",
+          "cell": 78,
+          "how": "named"
+        },
+        {
+          "model": "gpt-4.1-mini",
+          "cell": 88,
+          "how": "named"
+        },
+        {
+          "model": "gpt-4.1-mini",
+          "cell": 93,
+          "how": "named"
+        },
+        {
+          "model": "gpt-3.5-turbo",
+          "cell": 57,
+          "how": "default",
+          "constructor": "ChatOpenAI"
+        }
+      ]
+    },
+    {
+      "notebook": "notebooks/week 3/Demo_LangChain_FAISS(solution).ipynb",
+      "calls": [
+        {
+          "model": "gpt-4.1-mini",
+          "cell": 20,
+          "how": "named"
+        }
+      ]
+    },
+    {
+      "notebook": "notebooks/week 3/Demo_LangChain_Intro(Solution).ipynb",
+      "calls": [
+        {
+          "model": "gpt-4.1-mini",
+          "cell": 14,
+          "how": "named"
+        },
+        {
+          "model": "gpt-4.1-mini",
+          "cell": 20,
+          "how": "named"
+        },
+        {
+          "model": "gpt-4.1-mini",
+          "cell": 29,
+          "how": "named"
+        },
+        {
+          "model": "gpt-4.1-mini",
+          "cell": 34,
+          "how": "named"
+        },
+        {
+          "model": "gpt-3.5-turbo-instruct",
+          "cell": 9,
+          "how": "default",
+          "constructor": "OpenAI"
+        }
+      ]
+    },
+    {
+      "notebook": "notebooks/week 3/Demo_LangChain_Splitter(solution).ipynb",
+      "calls": [
+        {
+          "model": "gpt-4.1-mini",
+          "cell": 7,
+          "how": "named"
+        },
+        {
+          "model": "gpt-4.1-mini",
+          "cell": 8,
+          "how": "named"
+        }
+      ]
+    },
+    {
+      "notebook": "notebooks/week 3/Demo_Langchian_Overview(Solution).ipynb",
+      "calls": [
+        {
+          "model": "gpt-3.5-turbo",
+          "cell": 7,
+          "how": "named"
+        },
+        {
+          "model": "gpt-4.1",
+          "cell": 8,
+          "how": "named"
+        },
+        {
+          "model": "gpt-4.1-mini",
+          "cell": 14,
+          "how": "named"
+        },
+        {
+          "model": "gpt-4.1-mini",
+          "cell": 21,
+          "how": "named"
+        },
+        {
+          "model": "gpt-4.1-mini",
+          "cell": 25,
+          "how": "named"
+        },
+        {
+          "model": "gpt-4.1-mini",
+          "cell": 28,
+          "how": "named"
+        },
+        {
+          "model": "gpt-4.1-mini",
+          "cell": 39,
+          "how": "named"
+        }
+      ]
+    },
+    {
+      "notebook": "notebooks/week 3/Lab_Endgame_QA_LangChain(Solution).ipynb",
+      "calls": [
+        {
+          "model": "gpt-3.5-turbo",
+          "cell": 32,
+          "how": "named"
+        }
+      ]
+    },
+    {
+      "notebook": "notebooks/week 3/Lab_LangChain_QA(solution).ipynb",
+      "calls": [
+        {
+          "model": "gpt-4.1-mini",
+          "cell": 6,
+          "how": "named"
+        },
+        {
+          "model": "gpt-3.5-turbo-instruct",
+          "cell": 9,
+          "how": "default",
+          "constructor": "OpenAI"
+        },
+        {
+          "model": "gpt-3.5-turbo-instruct",
+          "cell": 11,
+          "how": "default",
+          "constructor": "OpenAI"
+        },
+        {
+          "model": "gpt-3.5-turbo-instruct",
+          "cell": 15,
+          "how": "default",
+          "constructor": "OpenAI"
+        },
+        {
+          "model": "gpt-3.5-turbo-instruct",
+          "cell": 18,
+          "how": "default",
+          "constructor": "OpenAI"
+        }
+      ]
+    },
+    {
+      "notebook": "notebooks/week 3/Lab_LangChain_wikipedia(solution).ipynb",
+      "calls": [
+        {
+          "model": "gpt-3.5-turbo",
+          "cell": 9,
+          "how": "named"
+        }
+      ]
+    },
+    {
+      "notebook": "notebooks/week 4/Agent_Failure_Examples_sol.ipynb",
+      "calls": [
+        {
+          "model": "gpt-3.5-turbo",
+          "cell": 8,
+          "how": "named"
+        }
+      ]
+    },
+    {
+      "notebook": "notebooks/week 4/Demo__Tool_Schema_and_Structured_Arguments.ipynb",
+      "calls": [
+        {
+          "model": "gpt-3.5-turbo",
+          "cell": 13,
+          "how": "named"
+        }
+      ]
+    },
+    {
+      "notebook": "notebooks/week 4/Demo_Autonomy_Limits_and_Guardrails_sol.ipynb",
+      "calls": [
+        {
+          "model": "gpt-4o-mini",
+          "cell": 9,
+          "how": "named"
+        }
+      ]
+    },
+    {
+      "notebook": "notebooks/week 4/Demo_Evaluating_Agent_Behavior_(sol).ipynb",
+      "calls": [
+        {
+          "model": "gpt-3.5-turbo",
+          "cell": 10,
+          "how": "named"
+        }
+      ]
+    },
+    {
+      "notebook": "notebooks/week 4/Demo_From_Single_Agent_to_Multi_Agent_Workflow_sol (1).ipynb",
+      "calls": [
+        {
+          "model": "gpt-4o-mini",
+          "cell": 5,
+          "how": "named"
+        }
+      ]
+    },
+    {
+      "notebook": "notebooks/week 4/Demo_From_Single_Agent_to_Multi_Agent_Workflow_sol.ipynb",
+      "calls": [
+        {
+          "model": "gpt-4o-mini",
+          "cell": 6,
+          "how": "named"
+        },
+        {
+          "model": "gpt-4o-mini",
+          "cell": 11,
+          "how": "named"
+        }
+      ]
+    },
+    {
+      "notebook": "notebooks/week 4/Demo_Reference_Agent_System_Walkthrough_sol.ipynb",
+      "calls": [
+        {
+          "model": "gpt-4o-mini",
+          "cell": 13,
+          "how": "named"
+        }
+      ]
+    },
+    {
+      "notebook": "notebooks/week 4/Demo_Role_Based_Agent_Design_sol.ipynb",
+      "calls": [
+        {
+          "model": "gpt-4o-mini",
+          "cell": 6,
+          "how": "named"
+        }
+      ]
+    },
+    {
+      "notebook": "notebooks/week 4/Demo_Task_Oriented_Agent_Workflow_sol.ipynb",
+      "calls": [
+        {
+          "model": "gpt-4o-mini",
+          "cell": 9,
+          "how": "named"
+        }
+      ]
+    },
+    {
+      "notebook": "notebooks/week 4/Demo_Tool_Schema_and_Structured_Arguments_sol.ipynb",
+      "calls": [
+        {
+          "model": "gpt-3.5-turbo",
+          "cell": 13,
+          "how": "named"
+        }
+      ]
+    },
+    {
+      "notebook": "notebooks/week 4/Exercise_Build_Three_Agent_Tools_solution.ipynb",
+      "calls": [
+        {
+          "model": "gpt-4o-mini",
+          "cell": 8,
+          "how": "named"
+        }
+      ]
+    },
+    {
+      "notebook": "notebooks/week 4/Exercise_Document_System_Behavior_sol.ipynb",
+      "calls": [
+        {
+          "model": "gpt-3.5-turbo",
+          "cell": 8,
+          "how": "named"
+        }
+      ]
+    },
+    {
+      "notebook": "notebooks/week 4/Exercise_Fix_a_Broken_Agent_Solution_ver.ipynb",
+      "calls": [
+        {
+          "model": "gpt-3.5-turbo",
+          "cell": 7,
+          "how": "named"
+        }
+      ]
+    },
+    {
+      "notebook": "notebooks/week 4/Exercise_Implement_Tool_Error_Handling__sol.ipynb",
+      "calls": [
+        {
+          "model": "gpt-4o-mini",
+          "cell": 8,
+          "how": "named"
+        }
+      ]
+    },
+    {
+      "notebook": "notebooks/week 4/Exercise_Sol_Add_Guardrails.ipynb",
+      "calls": [
+        {
+          "model": "gpt-4o-mini",
+          "cell": 8,
+          "how": "named"
+        }
+      ]
+    },
+    {
+      "notebook": "notebooks/week 4/Exercise_Sol_Build_a_Task_Agent.ipynb",
+      "calls": [
+        {
+          "model": "gpt-4o-mini",
+          "cell": 8,
+          "how": "named"
+        }
+      ]
+    },
+    {
+      "notebook": "notebooks/week 4/Exercise_Sol_Build_a_Two_Agent_System.ipynb",
+      "calls": [
+        {
+          "model": "gpt-4o-mini",
+          "cell": 5,
+          "how": "named"
+        }
+      ]
+    },
+    {
+      "notebook": "notebooks/week 4/Exercise_Sol_Extend_the_Workflow.ipynb",
+      "calls": [
+        {
+          "model": "gpt-4o-mini",
+          "cell": 5,
+          "how": "named"
+        }
+      ]
+    },
+    {
+      "notebook": "notebooks/week 5/Demo_Common_Agent_Failure_Cases(Solution) (1).ipynb",
+      "calls": [
+        {
+          "model": "gpt-4",
+          "cell": 9,
+          "how": "named"
+        }
+      ]
+    },
+    {
+      "notebook": "notebooks/week 5/Demo_Common_Agent_Failure_Cases(Solution).ipynb",
+      "calls": [
+        {
+          "model": "gpt-4",
+          "cell": 9,
+          "how": "named"
+        }
+      ]
+    },
+    {
+      "notebook": "notebooks/week 5/Demo_Conversation_Memory_in_AI_Agents_sol.ipynb",
+      "calls": [
+        {
+          "model": "gpt-3.5-turbo",
+          "cell": 12,
+          "how": "named"
+        },
+        {
+          "model": "gpt-4o-mini",
+          "cell": 35,
+          "how": "named"
+        }
+      ]
+    },
+    {
+      "notebook": "notebooks/week 5/Demo_Diagnosing_Coordination_Failures(Solution).ipynb",
+      "calls": [
+        {
+          "model": "gpt-4o-mini",
+          "cell": 4,
+          "how": "named"
+        }
+      ]
+    },
+    {
+      "notebook": "notebooks/week 5/Demo_Execution_Tracking(Solution).ipynb",
+      "calls": [
+        {
+          "model": "gpt-4o-mini",
+          "cell": 4,
+          "how": "named"
+        }
+      ]
+    },
+    {
+      "notebook": "notebooks/week 5/Demo_Failure_Diagnosis_Workflow(Solution) (1).ipynb",
+      "calls": [
+        {
+          "model": "gpt-3.5-turbo",
+          "cell": 8,
+          "how": "named"
+        }
+      ]
+    },
+    {
+      "notebook": "notebooks/week 5/Demo_Failure_Diagnosis_Workflow(Solution).ipynb",
+      "calls": [
+        {
+          "model": "gpt-3.5-turbo",
+          "cell": 8,
+          "how": "named"
+        }
+      ]
+    },
+    {
+      "notebook": "notebooks/week 5/Demo_Graph_Based_Agent_Workflow_sol.ipynb",
+      "calls": [
+        {
+          "model": "gpt-4",
+          "cell": 10,
+          "how": "named"
+        }
+      ]
+    },
+    {
+      "notebook": "notebooks/week 5/Demo_Long_Term_Memory_with_Vector_Store(Solution).ipynb",
+      "calls": [
+        {
+          "model": "gpt-4",
+          "cell": 16,
+          "how": "named"
+        }
+      ]
+    },
+    {
+      "notebook": "notebooks/week 5/Demo_Multi_Agent_System_Walkthrough(Solution).ipynb",
+      "calls": [
+        {
+          "model": "gpt-4o-mini",
+          "cell": 6,
+          "how": "named"
+        }
+      ]
+    },
+    {
+      "notebook": "notebooks/week 5/Demo_Task_Planning_Agent(Solution).ipynb",
+      "calls": [
+        {
+          "model": "gpt-4o-mini",
+          "cell": 4,
+          "how": "named"
+        }
+      ]
+    },
+    {
+      "notebook": "notebooks/week 5/Exercise_Add_a_Review_Agent_sol.ipynb",
+      "calls": [
+        {
+          "model": "gpt-3.5-turbo",
+          "cell": 9,
+          "how": "named"
+        }
+      ]
+    },
+    {
+      "notebook": "notebooks/week 5/Exercise_Diagnose_Agent_Failures (sample solution) (1).ipynb",
+      "calls": [
+        {
+          "model": "gpt-3.5-turbo",
+          "cell": 6,
+          "how": "named"
+        }
+      ]
+    },
+    {
+      "notebook": "notebooks/week 5/Exercise_Diagnose_Agent_Failures (sample solution).ipynb",
+      "calls": [
+        {
+          "model": "gpt-3.5-turbo",
+          "cell": 6,
+          "how": "named"
+        }
+      ]
+    },
+    {
+      "notebook": "notebooks/week 5/Exercise_Fix_Failure_Cases (sample solution) (1).ipynb",
+      "calls": [
+        {
+          "model": "gpt-3.5-turbo",
+          "cell": 8,
+          "how": "named"
+        }
+      ]
+    },
+    {
+      "notebook": "notebooks/week 5/Exercise_Fix_Failure_Cases (sample solution).ipynb",
+      "calls": [
+        {
+          "model": "gpt-3.5-turbo",
+          "cell": 8,
+          "how": "named"
+        }
+      ]
+    },
+    {
+      "notebook": "notebooks/week 5/Exercise_Implement_a_Multi_Agent_Workflow_sol_dynamic_looping.ipynb",
+      "calls": [
+        {
+          "model": "gpt-3.5-turbo",
+          "cell": 9,
+          "how": "named"
+        }
+      ]
+    },
+    {
+      "notebook": "notebooks/week 5/Exercise_Integrate_Memory_into_Your_Agent_System_sol.ipynb",
+      "calls": [
+        {
+          "model": "gpt-3.5-turbo",
+          "cell": 8,
+          "how": "named"
+        }
+      ]
+    },
+    {
+      "notebook": "notebooks/week 5/Exercise_Memory_Retrieval_Test_sol.ipynb",
+      "calls": [
+        {
+          "model": "gpt-3.5-turbo",
+          "cell": 9,
+          "how": "named"
+        }
+      ]
+    },
+    {
+      "notebook": "notebooks/week 5/Exercise_Solution_Complete_Multi_Agent_Upgrade.ipynb",
+      "calls": [
+        {
+          "model": "gpt-4o-mini",
+          "cell": 4,
+          "how": "named"
+        }
+      ]
+    },
+    {
+      "notebook": "notebooks/week 5/Exercise_Solution_Implement_a_Planning_Agent.ipynb",
+      "calls": [
+        {
+          "model": "gpt-4o-mini",
+          "cell": 4,
+          "how": "named"
+        }
+      ]
+    },
+    {
+      "notebook": "notebooks/week 5/Exercise_Solution_Loop_Prevention.ipynb",
+      "calls": [
+        {
+          "model": "gpt-4o-mini",
+          "cell": 4,
+          "how": "named"
+        }
+      ]
+    },
+    {
+      "notebook": "notebooks/week 6/Demo_Agent_Execution_Logging(Solution).ipynb",
+      "calls": [
+        {
+          "model": "gpt-4o-mini",
+          "cell": 4,
+          "how": "named"
+        }
+      ]
+    },
+    {
+      "notebook": "notebooks/week 6/Demo_Automated_Evaluation_Workflow_Solution.ipynb",
+      "calls": [
+        {
+          "model": "gpt-4o-mini",
+          "cell": 8,
+          "how": "named"
+        }
+      ]
+    },
+    {
+      "notebook": "notebooks/week 6/Demo_Designing_Evaluation_Tasks_for_Agent_Systems_Solution.ipynb",
+      "calls": [
+        {
+          "model": "gpt-4o-mini",
+          "cell": 11,
+          "how": "named"
+        }
+      ]
+    },
+    {
+      "notebook": "notebooks/week 6/Demo_End_to_End_Agent_Evaluation_Solution.ipynb",
+      "calls": [
+        {
+          "model": "gpt-5-mini",
+          "cell": 4,
+          "how": "named"
+        }
+      ]
+    },
+    {
+      "notebook": "notebooks/week 6/Demo_Guardrail_Design_Patterns(Solution).ipynb",
+      "calls": [
+        {
+          "model": "gpt-4o-mini",
+          "cell": 4,
+          "how": "named"
+        }
+      ]
+    },
+    {
+      "notebook": "notebooks/week 6/Demo_Human_in_the_Loop_Control(Solution).ipynb",
+      "calls": [
+        {
+          "model": "gpt-4o-mini",
+          "cell": 4,
+          "how": "named"
+        }
+      ]
+    },
+    {
+      "notebook": "notebooks/week 6/Demo_Monitoring_Agent_Performance(Solution).ipynb",
+      "calls": [
+        {
+          "model": "gpt-4o-mini",
+          "cell": 4,
+          "how": "named"
+        }
+      ]
+    },
+    {
+      "notebook": "notebooks/week 6/Exercise_Analyze_System_Logs.ipynb",
+      "calls": [
+        {
+          "model": "gpt-4o-mini",
+          "cell": 5,
+          "how": "named"
+        }
+      ]
+    },
+    {
+      "notebook": "notebooks/week 6/Exercise_Sol_Implement_Guardrails.ipynb",
+      "calls": [
+        {
+          "model": "gpt-4o-mini",
+          "cell": 4,
+          "how": "named"
+        }
+      ]
+    },
+    {
+      "notebook": "notebooks/week 6/Exercise_Solution_Implement_Agent_Logging.ipynb",
+      "calls": [
+        {
+          "model": "gpt-4o-mini",
+          "cell": 4,
+          "how": "named"
+        }
+      ]
+    },
+    {
+      "notebook": "notebooks/week 6/Exercise_Solution_Test_Guardrails.ipynb",
+      "calls": [
+        {
+          "model": "gpt-4o-mini",
+          "cell": 4,
+          "how": "named"
+        }
+      ]
+    }
+  ],
+  "copies_note": "copies are notebooks whose cells, type and source, are identical to another notebook's; model_calls are the models each notebook's code reaches, named in quotes or through a LangChain constructor called with no model. Both are read by `python -m src.curriculum`."
 }

@@ -1,0 +1,1787 @@
+/* The late edition.
+
+   This page publishes a finding once a week, and the finding is already written
+   like a standfirst: so many subjects, so many chapters to update, so many
+   things the course does not cover at all. So it is set like a bulletin rather
+   than like a dashboard. A serif display voice, hairline rules, wide margins,
+   and a dark backlit ground with the week's signals drifting behind it.
+
+   Colour carries one job. Gold means a claim was checked against an official
+   release and survived. Nothing else on the page may use it. Anything
+   unverified is drawn with no colour at all, because nothing backed it, and
+   that absence is the honest picture rather than a warning. The single alert
+   hue is kept for a real gap: a package the course does not teach, or an API a
+   chapter still calls that no longer exists.
+
+   Every text value below was measured against every ground it sits on before it
+   was written down. */
+
+:root {
+  --void:    #0A0A0C;
+  --paper:   #101014;
+  --surface: #16161C;
+  --raised:  #1D1D25;
+  --sunk:    #0D0D11;
+
+  --ink:       #F2F0EC;
+  --ink-soft:  #B3B0AA;
+  --ink-faint: #918E88;
+
+  --line:      rgba(242, 240, 236, .085);
+  --line-soft: rgba(242, 240, 236, .045);
+  --edge:      #6E6B66;
+
+  --gold:      #E8B54B;
+  --gold-ink:  #E8B54B;
+  --gold-soft: rgba(232, 181, 75, .10);
+  --gold-edge: rgba(232, 181, 75, .32);
+
+  --crit:      #E0666B;
+  --crit-soft: rgba(224, 102, 107, .10);
+  --crit-ink:  #E0666B;
+  --crit-edge: rgba(224, 102, 107, .30);
+
+  --neutral-mark: #2A2A33;
+  --gray-soft:    #1E1E26;
+
+  /* Chart series. These are categories in one bar rather than verdicts, so they
+     are separated by lightness first and hue second, and the trio was checked
+     against protanopia, deuteranopia and tritanopia before being written down.
+     Evidence is gold and the rarest, strongest check is the page's own ink.
+     What is not evidence takes a slate rather than a grey: a grey segment sits
+     too close to the track behind it and reads as the bar being unfinished
+     instead of as the largest part of what was collected. */
+  --viz-cross:      #F2F0EC;
+  --viz-primary:    #D9A43C;
+  --viz-unverified: #4F7290;
+  --viz-official:   #D9A43C;
+  --viz-discussion: #4F7290;
+  /* The radar's three action hues, validated as drawn (every pair, every
+     deficiency) on this plate's card surface: update, lesson, watch. */
+  --viz-act-update: #c48800;
+  --viz-act-lesson: #d02b31;
+  --viz-act-watch:  #706e6b;
+
+  --shadow-hue: 260 30% 2%;
+  --shadow-1: 0 1px 2px hsl(var(--shadow-hue) / .34), 0 2px 8px hsl(var(--shadow-hue) / .26);
+  --shadow-2: 0 2px 6px hsl(var(--shadow-hue) / .38), 0 16px 40px hsl(var(--shadow-hue) / .34);
+
+  --grain: .040;
+  --wash-a: rgba(74, 66, 122, .22);
+  --wash-b: rgba(130, 96, 48, .16);
+  --wash-c: rgba(52, 76, 110, .18);
+  --spark: 240, 236, 228;
+  --spark-warm: 232, 181, 75;
+  --hatch: rgba(10, 10, 12, .24);
+  --hatch-dim: rgba(10, 10, 12, .12);
+
+  /* The project's radius scale, unchanged: marks, chips, cards, pills. */
+  --r-mark: 4px;
+  --r-chip: 8px;
+  --r-card: 14px;
+  --r-pill: 999px;
+  --radius: var(--r-card);
+
+  --ease-out: cubic-bezier(.23, 1, .32, 1);
+  --ease-in-out: cubic-bezier(.77, 0, .175, 1);
+
+  --display: "Cormorant Garamond", Georgia, "Times New Roman", serif;
+  --sans: "IBM Plex Sans", system-ui, sans-serif;
+  --ar: "IBM Plex Sans Arabic", "Segoe UI", Tahoma, sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, Consolas, monospace;
+  color-scheme: dark;
+}
+
+/* The light plate, for a projector or a lit room. Same roles, same meanings,
+   rotated onto paper. Gold darkens because a bright gold on white cannot carry
+   text at any size. */
+:root[data-theme="light"] {
+  --void:    #E7E5E0;
+  --paper:   #F4F3EF;
+  --surface: #FBFAF7;
+  --raised:  #FFFFFE;
+  --sunk:    #EEEDE8;
+
+  --ink:       #17171C;
+  --ink-soft:  #4B4A52;
+  --ink-faint: #67656C;
+
+  --line:      rgba(23, 23, 28, .11);
+  --line-soft: rgba(23, 23, 28, .06);
+  --edge:      #85838A;
+
+  --gold:      #7A5A12;
+  --gold-ink:  #6B4E0C;
+  --gold-soft: rgba(122, 90, 18, .09);
+  --gold-edge: rgba(122, 90, 18, .30);
+
+  --crit:      #A8201A;
+  --crit-soft: rgba(168, 32, 26, .08);
+  --crit-ink:  #8E1B16;
+  --crit-edge: rgba(168, 32, 26, .26);
+
+  --neutral-mark: #D9D7D1;
+  --gray-soft:    #ECEAE4;
+
+  --viz-cross:      #17171C;
+  --viz-primary:    #7A5A12;
+  --viz-unverified: #7C9AB8;
+  --viz-official:   #7A5A12;
+  --viz-discussion: #7C9AB8;
+  --viz-act-update: #9c771f;
+  --viz-act-lesson: #b32228;
+  --viz-act-watch:  #8f8c85;
+
+  --shadow-hue: 40 18% 55%;
+  --grain: .022;
+  --wash-a: rgba(126, 118, 180, .18);
+  --wash-b: rgba(190, 158, 92, .18);
+  --wash-c: rgba(108, 132, 168, .16);
+  --spark: 40, 38, 48;
+  --spark-warm: 122, 90, 18;
+  --hatch: rgba(251, 250, 247, .40);
+  --hatch-dim: rgba(251, 250, 247, .22);
+  color-scheme: light;
+}
+
+/* ------------------------------------------------------------------ base -- */
+
+* { box-sizing: border-box; }
+
+html {
+  -webkit-text-size-adjust: 100%;
+  /* No overflow clamp here. One was added when a mirrored layout left a sliver
+     of horizontal drag, but the cause was a header row that could not shrink;
+     fixing that removed the drag at source. A clip on the root outlives its
+     reason and quietly cuts off anything positioned that needs to escape, the
+     run picker's list first among them. Measured at zero drag in both
+     directions without it. */
+}
+
+body {
+  margin: 0; background: var(--paper); color: var(--ink);
+  font: 400 15px/1.62 var(--sans); font-variant-numeric: tabular-nums;
+  -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  min-height: 100dvh;
+}
+body[dir="rtl"] { font-family: var(--ar); font-weight: 400; }
+
+.wrap { max-width: 1060px; margin: 0 auto; padding: 0 22px 96px; position: relative; z-index: 3; }
+
+a { color: var(--gold-ink); text-underline-offset: .22em; text-decoration-thickness: 1px; }
+
+/* The parts of the page nobody draws still belong to the design. */
+::selection { background: var(--gold-edge); color: var(--ink); }
+:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; border-radius: var(--r-mark); }
+:focus:not(:focus-visible) { outline: none; }
+:where(a, button, select, summary, [role="tab"]) { -webkit-tap-highlight-color: transparent; }
+
+* { scrollbar-width: thin; scrollbar-color: var(--neutral-mark) transparent; }
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb {
+  background: var(--neutral-mark); border-radius: var(--r-pill);
+  border: 3px solid transparent; background-clip: content-box;
+}
+@media (hover: hover) and (pointer: fine) {
+  ::-webkit-scrollbar-thumb:hover { background: var(--edge); background-clip: content-box; }
+}
+
+[hidden] { display: none !important; }
+
+/* ----------------------------------------------------------------- field -- */
+
+/* The week's traffic, drifting behind the bulletin. It is the corpus this run
+   read rather than a decoration: when a claim is confirmed, the field marks a
+   point and lets it fade. */
+
+#field {
+  position: fixed; inset: 0; z-index: 0; width: 100%; height: 100%;
+  display: block; pointer-events: none;
+}
+/* The two deep layers, each drawn once into a canvas a little larger than the
+   window and moved here, so the compositor moves them and no script runs for
+   them per frame. --pad is set on each layer by the script, never on a parent.
+
+   Each layer circles at a constant speed rather than sliding back and forth.
+   An eased back-and-forth crawled below half a pixel a second for a third of
+   every pass, which read as the background freezing; a circle never slows and
+   never turns back. Rotate, translate, counter-rotate moves the layer round the
+   circle without turning it. Both layers share one period, so they always drift
+   the same way, the deeper one at under half the speed: about 2.2 and 4.7
+   pixels a second. */
+.field-deep {
+  position: fixed; z-index: 0; pointer-events: none; display: block;
+  left: calc(var(--pad, 0px) * -1); top: calc(var(--pad, 0px) * -1);
+  will-change: transform;
+  animation: fieldOrbit 180s linear infinite;
+}
+@keyframes fieldOrbit {
+  from { transform: rotate(0deg) translateX(calc(var(--pad) * .9)) rotate(0deg); }
+  to   { transform: rotate(360deg) translateX(calc(var(--pad) * .9)) rotate(-360deg); }
+}
+.wash { position: fixed; inset: 0; z-index: 1; pointer-events: none; overflow: clip; }
+.wash::before {
+  content: ""; position: absolute; inset: -22%;
+  background:
+    radial-gradient(40vw 40vw at 16% 18%, var(--wash-a), transparent 66%),
+    radial-gradient(46vw 46vw at 84% 30%, var(--wash-b), transparent 68%),
+    radial-gradient(36vw 36vw at 58% 86%, var(--wash-c), transparent 64%);
+  filter: blur(20px);
+  animation: drift 52s var(--ease-in-out) infinite alternate;
+  will-change: transform;
+}
+@keyframes drift {
+  from { transform: translate3d(-1.6%, -1%, 0) scale(1.02); }
+  to   { transform: translate3d(2%, 1.6%, 0) scale(1.09); }
+}
+.grain {
+  position: fixed; inset: 0; z-index: 2; pointer-events: none;
+  opacity: var(--grain); mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='170' height='170'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.86' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='170' height='170' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* --------------------------------------------------------------- masthead -- */
+
+/* Above the tab bar and the page body, because the run picker opens out of
+   this header and its list has to sit over whatever it covers. A lower value
+   let the stats row paint straight through the open list. */
+header { position: relative; z-index: 25; background: transparent; }
+.head-inner { max-width: 1060px; margin: 0 auto; padding: 26px 22px 0; position: relative; z-index: 1; }
+
+.brandline { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
+
+/* The mark is the week's sky joined into a trend: the points the agent read,
+   drawn as stars like the field behind the page, rising with one dip to the
+   one it found, in gold. The line stops short of each star, as on a star
+   chart, so they read as stars rather than as markers on a graph. Stars and
+   line take the ink rather than a fixed hex, so they sit the same distance
+   below the page on either plate, and gold stays the one thing confirmed.
+   It is a logo, so it does not mirror in Arabic. */
+.mark { width: 22px; height: 22px; display: block; flex: none; overflow: visible; }
+.mk-line { fill: none; stroke: color-mix(in srgb, var(--ink-faint) 78%, transparent); stroke-width: 1.1; stroke-linecap: round; }
+.mk-star { fill: var(--ink-soft); }
+.mk-found { fill: var(--gold); transform-box: fill-box; transform-origin: center; }
+.mk-run {
+  fill: none; stroke: var(--gold); stroke-width: 1.6; stroke-linecap: round;
+  stroke-dasharray: 18 200; stroke-dashoffset: 18; opacity: 0;
+}
+
+/* The spark crosses the mark on the page's in-and-out curve, because it
+   travels across it rather than arriving, and fades as it goes under the
+   last star. The gold star flares as the spark reaches it, 470ms in, and
+   every part ends where it rests, so clearing the class moves nothing. */
+.brandbtn.tracing .mk-run { animation: markTrace 720ms var(--ease-in-out); }
+.brandbtn.tracing .mk-found { animation: markFlare 460ms 470ms var(--ease-out) both; }
+@keyframes markTrace {
+  0%   { stroke-dashoffset: 18; opacity: 1; }
+  88%  { opacity: 1; }
+  100% { stroke-dashoffset: -100; opacity: 0; }
+}
+@keyframes markFlare {
+  0%   { transform: scale(1); }
+  35%  { transform: scale(1.45); }
+  100% { transform: scale(1); }
+}
+
+h1 {
+  margin: 0; font-family: var(--display); font-weight: 600;
+  font-size: 25px; line-height: 1; letter-spacing: -.015em;
+  font-variant-numeric: lining-nums;
+}
+/* The brand doubles as the way back to the opening, so it is a real button
+   underneath and inherits the wordmark's type rather than a control's. */
+.brandbtn {
+  font: inherit; color: inherit; letter-spacing: inherit;
+  background: none; border: 0; padding: 0; cursor: pointer;
+  display: inline-flex; align-items: center; gap: 11px;
+  transition: color 160ms ease, transform 120ms var(--ease-out);
+}
+.brandname { line-height: 1; }
+@media (hover: hover) and (pointer: fine) {
+  .brandbtn:hover { color: var(--gold-ink); }
+}
+.brandbtn:active { color: var(--gold-ink); transform: scale(.97); }
+body[dir="rtl"] h1 { font-family: var(--ar); font-weight: 600; font-size: 20px; letter-spacing: 0; }
+
+.runid {
+  font: 500 11.5px/1 var(--mono); color: var(--ink-faint);
+  background: var(--gray-soft); border: 1px solid var(--line);
+  padding: 7px 10px; border-radius: var(--r-chip);
+}
+.spacer { flex: 1; }
+
+.lang {
+  border: 1px solid var(--line); border-radius: var(--r-pill); padding: 4px;
+  display: inline-flex; gap: 2px; background: var(--surface);
+}
+.lang button {
+  border: 0; background: transparent; color: var(--ink-faint); cursor: pointer;
+  font: 600 11.5px/1 var(--sans); padding: 8px 13px; border-radius: var(--r-pill);
+  min-height: 34px;
+  transition: background-color 160ms ease, color 160ms ease, transform 120ms var(--ease-out);
+}
+.lang button:active { transform: scale(.96); }
+.lang button[aria-pressed="true"] { background: var(--gold); color: var(--void); }
+@media (hover: hover) and (pointer: fine) {
+  .lang button:hover:not([aria-pressed="true"]) { color: var(--ink); }
+}
+
+/* The standfirst. This sentence is written by the run itself, so it is the one
+   piece of type on the page that earns a display size. */
+.headline {
+  font-family: var(--display); font-weight: 600;
+  font-size: clamp(30px, 1.4rem + 2.6vw, 54px);
+  line-height: 1.08; letter-spacing: -.02em;
+  margin: 26px 0 12px; max-width: 1000px; text-wrap: balance;
+  font-variant-numeric: lining-nums; padding-block-end: .06em;
+}
+body[dir="rtl"] .headline {
+  font-family: var(--ar); font-weight: 600; letter-spacing: 0;
+  line-height: 1.34; font-size: clamp(24px, 1.2rem + 1.9vw, 40px); max-width: 820px;
+}
+.headline b { font-weight: inherit; color: var(--gold-ink); }
+/* A compound that must not break at its hyphen. */
+.nw { white-space: nowrap; }
+.headline .warn { color: var(--crit-ink); font-weight: inherit; }
+
+.sub { color: var(--ink-soft); margin: 0 0 28px; max-width: 62ch; font-size: 14px; }
+
+/* ------------------------------------------------------------------ tabs -- */
+
+.tabbar {
+  position: sticky; top: 0; z-index: 20;
+  background: color-mix(in srgb, var(--paper) 78%, transparent);
+  backdrop-filter: blur(14px) saturate(140%);
+  -webkit-backdrop-filter: blur(14px) saturate(140%);
+  border-block-end: 1px solid var(--line);
+  box-shadow: inset 0 1px 0 var(--line-soft);
+}
+.tabbar-inner { max-width: 1060px; margin: 0 auto; padding: 0 22px; }
+.tabs { display: flex; gap: 4px; overflow-x: auto; scrollbar-width: none; position: relative; }
+.tabs::-webkit-scrollbar { display: none; }
+.tabs button {
+  border: 0; background: transparent; color: var(--ink-faint); cursor: pointer;
+  font: 600 13px/1 var(--sans); padding: 15px 12px; min-height: 48px;
+  display: inline-flex; align-items: center; gap: 7px; white-space: nowrap;
+  position: relative; transition: color 160ms ease, transform 120ms var(--ease-out);
+}
+.tabs button:active { transform: scale(.97); }
+body[dir="rtl"] .tabs button { font-family: var(--ar); }
+/* One underline that travels to the chosen tab. Two lines, one collapsing and
+   one growing, was two motions for a single change. It is a 1px line sized and
+   placed by transform from the tab's own box, so it moves on the compositor. */
+.tab-ink {
+  position: absolute; left: 0; bottom: 0; width: 1px; height: 2px;
+  background: var(--gold); transform-origin: left center; pointer-events: none;
+  opacity: 0;
+}
+.tab-ink[data-ready] { opacity: 1; transition: transform 260ms var(--ease-in-out); }
+.tabs button[aria-selected="true"] { color: var(--ink); }
+@media (hover: hover) and (pointer: fine) { .tabs button:hover { color: var(--ink); } }
+
+.count {
+  font: 500 11px/1 var(--mono); color: var(--ink-faint);
+  background: var(--gray-soft); padding: 4px 6px; border-radius: var(--r-mark);
+}
+.tabs button[aria-selected="true"] .count { color: var(--gold-ink); background: var(--gold-soft); }
+
+/* ---------------------------------------------------------------- panels -- */
+
+.panel { display: none; }
+.panel[data-open] { display: block; animation: enter 220ms var(--ease-out) both; }
+@keyframes enter { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+
+h2 {
+  font-family: var(--display); font-weight: 600;
+  font-size: 27px; line-height: 1.16; letter-spacing: -.015em;
+  margin: 34px 0 10px; font-variant-numeric: lining-nums;
+}
+body[dir="rtl"] h2 { font-family: var(--ar); font-weight: 600; font-size: 21px; letter-spacing: 0; line-height: 1.5; }
+
+/* ----------------------------------------------------------------- stats -- */
+
+.stats {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(128px, 1fr));
+  margin: 30px 0 4px; border-block: 1px solid var(--line);
+}
+.stat { padding: 18px; border-inline-start: 1px solid var(--line-soft); }
+.stat:first-child { border-inline-start: 0; padding-inline-start: 0; }
+.stat .n {
+  font-family: var(--display); font-weight: 600; font-size: 34px; line-height: 1.02;
+  letter-spacing: -.02em; color: var(--ink);
+  /* Both, always. Naming only lining-nums drops the tabular figures inherited
+     from body, and the counter then shifts width on every frame. */
+  font-variant-numeric: lining-nums tabular-nums;
+}
+.stat .l { font-size: 12.5px; color: var(--ink-faint); margin-top: 5px; }
+body[dir="rtl"] .stat .l { font-family: var(--ar); }
+.stat.good .n { color: var(--gold-ink); }
+.stat.gap .n { color: var(--crit-ink); }
+
+/* ------------------------------------------------------------------- viz -- */
+
+.viz {
+  margin: 0 0 12px; padding: 19px 21px;
+  background: var(--surface); border: 1px solid var(--line);
+  border-radius: var(--radius); box-shadow: var(--shadow-1);
+}
+.viz figcaption { font: 600 13.5px/1.4 var(--sans); color: var(--ink); margin-bottom: 3px; }
+body[dir="rtl"] .viz figcaption { font-family: var(--ar); }
+.viz .cap { color: var(--ink-faint); font-size: 12.5px; margin-bottom: 15px; }
+
+.stack {
+  display: flex; gap: 2px; height: 14px; border-radius: var(--r-chip);
+  overflow: hidden; background: var(--gray-soft);
+}
+.stack span { display: block; transition: filter 160ms ease; position: relative; }
+
+/* Two registries carrying the same version is the same publisher speaking
+   twice, so the segment keeps the hue of a primary report and takes a shadow
+   across it. It has to read as the same family and a weaker claim, which means
+   quieter than its solid sibling, never louder. */
+.stack span.hatched::after, .legend .sw.hatched::after {
+  content: ""; position: absolute; inset: 0; border-radius: inherit;
+  /* Stripes alone only add texture, and texture reads as emphasis. A flat dim
+     under them takes the weight back off, so the segment ends up quieter than
+     the solid one it belongs beside rather than louder. */
+  background:
+    repeating-linear-gradient(135deg, transparent 0 5px, var(--hatch) 5px 10px),
+    linear-gradient(var(--hatch-dim), var(--hatch-dim));
+}
+.legend .sw.hatched { position: relative; overflow: hidden; }
+/* A 9px swatch cannot hold an 8px repeat, so the legend uses a finer pitch. */
+.legend .sw.hatched::after {
+  background: repeating-linear-gradient(135deg,
+    transparent 0 2px, var(--hatch) 2px 4px);
+}
+@media (hover: hover) and (pointer: fine) { .stack span:hover { filter: brightness(1.14); } }
+
+.legend {
+  list-style: none; display: flex; flex-wrap: wrap; gap: 8px 20px;
+  margin: 14px 0 0; padding: 0; font-size: 12.5px; color: var(--ink-soft);
+}
+.legend li { display: flex; align-items: center; gap: 7px; }
+.legend .sw {
+  width: 9px; height: 9px; border-radius: var(--r-mark); flex: none;
+  /* The quiet swatch sits close to the card it is printed on, so every swatch
+     carries a hairline and stays findable rather than only the pale ones. */
+  box-shadow: inset 0 0 0 1px var(--line);
+}
+.legend b { color: var(--ink); font-weight: 600; font-variant-numeric: tabular-nums; }
+.legend .zero { color: var(--ink-faint); }
+
+.strip { display: grid; grid-template-columns: repeat(auto-fit, minmax(22px, 1fr)); gap: 3px; }
+.cell {
+  height: 26px; border-radius: var(--r-mark); background: var(--neutral-mark);
+  position: relative; cursor: default;
+  transition: transform 160ms var(--ease-out), box-shadow 160ms var(--ease-out);
+}
+.cell.touched { background: var(--gold); }
+.cell.gap { background: var(--crit); }
+@media (hover: hover) and (pointer: fine) {
+  .cell:hover { transform: translateY(-3px); box-shadow: var(--shadow-1); }
+}
+.outside { display: flex; align-items: center; gap: 10px; margin-top: 10px; }
+.outside-l { font-size: 11.5px; color: var(--ink-faint); white-space: nowrap; }
+body[dir="rtl"] .outside-l { font-family: var(--ar); }
+.gapstrip { grid-template-columns: repeat(auto-fit, minmax(22px, 26px)); flex: none; }
+
+/* Distance rows. The fill is scaled rather than widened, so a redraw never
+   costs a layout pass. */
+.dlist { list-style: none; margin: 0; padding: 0; display: grid; gap: 4px; }
+.drow { padding: 7px 0; border-block-end: 1px solid var(--line-soft); }
+.dlist > .drow:last-child { border-block-end: 0; }
+/* A chapter already on the current major has nothing to report, so the whole
+   row steps back rather than sitting at the same weight as one that is behind. */
+.drow[data-behind="none"] .dname { color: var(--ink-soft); }
+.drow[data-behind="none"] .dlabel { color: var(--ink-faint); }
+.drow {
+  display: grid; grid-template-columns: minmax(96px, 1.1fr) auto minmax(60px, 1.6fr) auto;
+  gap: 12px; align-items: center; font-size: 12.5px;
+}
+.dname { font: 500 12.5px/1.2 var(--mono); color: var(--ink); }
+.dspec { font: 500 11px/1.2 var(--mono); color: var(--ink-faint); white-space: nowrap; }
+.dtrack { height: 10px; background: var(--gray-soft); border-radius: var(--r-mark); overflow: hidden; }
+.drow[data-behind="none"] .dtrack { background: transparent; box-shadow: inset 0 0 0 1px var(--line); }
+.dtrack i {
+  display: block; height: 100%; background: var(--crit); border-radius: var(--r-mark);
+  transform-origin: left center; animation: grow 280ms var(--ease-out) both;
+}
+body[dir="rtl"] .dtrack i { transform-origin: right center; }
+@keyframes grow { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+/* Per stage, against one scale. Shares the distance figure's track so the two
+   places on the page that divide a whole read the same way. */
+.slist { list-style: none; margin: 12px 0 0; padding: 0; display: grid; gap: 4px; }
+.srow {
+  display: grid; grid-template-columns: minmax(64px, 84px) minmax(60px, 1fr) auto auto;
+  gap: 12px; align-items: center; padding: 7px 0;
+  border-block-end: 1px solid var(--line-soft); font-size: 12.5px;
+}
+.slist > .srow:last-child { border-block-end: 0; }
+.sname { font: 500 12.5px/1.2 var(--mono); color: var(--ink); }
+.sfig { font: 500 12px/1.2 var(--mono); color: var(--ink-soft); white-space: nowrap; font-variant-numeric: tabular-nums; }
+.smeta { font: 500 11px/1.2 var(--mono); color: var(--ink-faint); white-space: nowrap; }
+.srow .dtrack i { background: var(--ink-faint); }
+@media (max-width: 560px) {
+  .srow { grid-template-columns: 1fr auto; gap: 5px 10px; }
+  .srow .dtrack { grid-column: 1 / -1; }
+  .smeta { grid-column: 1 / -1; }
+}
+
+.dloose { margin-top: 20px; padding-top: 16px; border-top: 1px solid var(--rule, var(--line)); }
+/* This group is the larger half of the answer, so its label is a heading with a
+   count rather than a caption trailing the rows above it. */
+.dloose-t {
+  display: flex; align-items: baseline; gap: 8px;
+  font-size: 13px; color: var(--ink-soft); margin-bottom: 11px;
+}
+.dloose-t b {
+  font-family: var(--display); font-weight: 600; font-size: 22px;
+  line-height: 1; color: var(--ink); font-variant-numeric: lining-nums tabular-nums;
+}
+body[dir="rtl"] .dloose-t { font-family: var(--ar); }
+.dloose-l { display: flex; flex-wrap: wrap; gap: 6px; }
+.dlabel { color: var(--ink-soft); white-space: nowrap; font-size: 11.5px; }
+body[dir="rtl"] .dlabel { font-family: var(--ar); }
+
+/* --------------------------------------------------------------- filters -- */
+
+.filters { display: flex; gap: 7px; flex-wrap: wrap; margin-bottom: 15px; }
+.filters button {
+  border: 1px solid var(--line); background: var(--surface); color: var(--ink-soft);
+  border-radius: var(--r-pill); padding: 9px 15px; min-height: 38px;
+  font: 600 12.5px/1 var(--sans); cursor: pointer; white-space: nowrap;
+  transition: background-color 160ms ease, color 160ms ease,
+              border-color 160ms ease, transform 120ms var(--ease-out);
+}
+body[dir="rtl"] .filters button { font-family: var(--ar); font-weight: 600; }
+.filters button:active { transform: scale(.97); }
+.filters button[aria-pressed="true"] { background: var(--gold); color: var(--void); border-color: var(--gold); }
+@media (hover: hover) and (pointer: fine) {
+  .filters button:hover:not([aria-pressed="true"]) { color: var(--ink); border-color: var(--edge); }
+}
+
+/* ----------------------------------------------------------------- cards -- */
+
+.card {
+  background: var(--surface); border: 1px solid var(--line);
+  border-radius: var(--radius); margin-bottom: 9px; overflow: hidden;
+  box-shadow: var(--shadow-1);
+  transition: border-color 200ms var(--ease-out), box-shadow 200ms var(--ease-out);
+}
+/* Hover is shown by the edge and the shadow, not by movement. This list is
+   swept many times a visit, and a lift there also made a card hop up just after
+   it closed under the pointer. The press lives on the header. The curriculum
+   map's chapters take no hover motion either: they are not clickable. */
+@media (hover: hover) and (pointer: fine) {
+  .card:hover { border-color: var(--edge); box-shadow: var(--shadow-2); }
+  .note:hover { border-color: var(--edge); }
+}
+.card > summary {
+  list-style: none; cursor: pointer; padding-block: 18px; padding-inline: 20px 46px;
+  display: grid; gap: 6px; position: relative;
+  transition: transform 140ms var(--ease-out);
+}
+.card > summary::-webkit-details-marker { display: none; }
+.card > summary:active { transform: scale(.995); }
+.card > summary::after {
+  content: ""; position: absolute; inset-inline-end: 20px; top: 26px;
+  width: 7px; height: 7px;
+  /* Physical sides on purpose. The mark means open and closed, not left and
+     right, so it must keep pointing down when the page mirrors. Logical sides
+     here turned it into a sideways arrow in Arabic. */
+  border-right: 1.5px solid var(--ink-faint);
+  border-bottom: 1.5px solid var(--ink-faint);
+  transform: rotate(45deg); transform-origin: center;
+  transition: transform 220ms var(--ease-out), border-color 200ms ease;
+}
+.card[open] > summary::after { transform: rotate(-135deg); border-color: var(--gold); }
+/* While a card is closing it is still marked open so its content stays in flow
+   and can be measured. The chevron follows the reader's intent, not that
+   bookkeeping, so it turns back the moment they click. */
+.card[open][data-closing] > summary::after { transform: rotate(45deg); border-color: var(--ink-faint); }
+.card[open] > summary { border-bottom: 1px solid var(--line-soft); }
+
+.row1 { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.subject { font: 500 15px/1.3 var(--mono); letter-spacing: -.02em; color: var(--ink); }
+
+.chip {
+  font: 600 10.5px/1 var(--sans); padding: 6px 10px; border-radius: var(--r-pill);
+  white-space: nowrap; border: 1px solid transparent;
+}
+body[dir="rtl"] .chip { font-family: var(--ar); }
+.chip.update { background: var(--gold-soft); color: var(--gold-ink); border-color: var(--gold-edge); }
+.chip.add { background: var(--crit-soft); color: var(--crit-ink); border-color: var(--crit-edge); }
+.chip.watch { background: var(--gray-soft); color: var(--ink-soft); border-color: var(--line); }
+/* A change across the course names APIs the notebooks still call, some of which
+   break on today's install, so it takes the alert hue; outlined rather than
+   filled, so it does not read as a new lesson. Optional content asks nothing,
+   so it is the quietest action chip. */
+.chip.coursewide { background: transparent; color: var(--crit-ink); border-color: var(--crit-edge); }
+.chip.optional { background: transparent; color: var(--ink-soft); border-color: var(--edge); }
+.chip.chapter {
+  background: var(--gray-soft); color: var(--ink-soft); font-family: var(--mono); font-weight: 500; border-color: var(--line);
+  /* The curriculum map's chapter cards share this class name. A chip must not
+     inherit a card's padding, radius, shadow or hover lift. */
+  display: inline-block; padding: 6px 10px; margin: 0; border-radius: var(--r-pill);
+  box-shadow: none; transform: none;
+}
+.chip.gap { background: var(--crit-soft); color: var(--crit-ink); border-color: var(--crit-edge); }
+.chip.pkgs { background: var(--gray-soft); color: var(--ink-faint); font-family: var(--mono); font-weight: 500; border-color: var(--line); }
+
+/* A recommendation the run keeps making and nobody has acted on. It is neither
+   a confirmation nor a gap, so it takes no hue at all; it gets its weight from
+   contrast instead, which is the loudest thing left once colour is spoken for.
+   A repeat is a note and stays outlined. Three weeks, a fourth weekly run, is
+   a standing debt and inverts, so it carries further than anything else in
+   the row. */
+.chip.streak { font-variant-numeric: lining-nums tabular-nums; }
+.chip.streak[data-weight="soft"] {
+  background: transparent; color: var(--ink-soft);
+  border-color: var(--edge); border-style: dashed;
+}
+.chip.streak[data-weight="hard"] {
+  background: var(--ink); color: var(--paper);
+  border-color: var(--ink); font-weight: 700;
+}
+/* The card is already a hover target; the debt chip lifts a shade further so
+   it stays the first thing read on the row it belongs to. */
+@media (hover: hover) and (pointer: fine) {
+  .card:hover .chip.streak[data-weight="hard"] { background: var(--gold); color: var(--void); border-color: var(--gold); }
+}
+
+.meta { display: flex; gap: 16px; flex-wrap: wrap; color: var(--ink-faint); font-size: 12.5px; align-items: center; }
+.meta b { color: var(--ink-soft); font-weight: 600; }
+
+.bar { height: 3px; background: var(--line); border-radius: var(--r-pill); overflow: hidden; width: 84px; }
+.bar i {
+  display: block; height: 100%; background: var(--gold); border-radius: var(--r-pill);
+  transform-origin: left center; animation: grow 240ms var(--ease-out) both;
+}
+body[dir="rtl"] .bar i { transform-origin: right center; }
+
+.body { padding: 8px 20px 19px; }
+.reason {
+  color: var(--ink-soft); font-size: 13px; margin: 2px 0 15px;
+  padding-inline-start: 12px; border-inline-start: 1px solid var(--line);
+}
+.member {
+  display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+  margin: 17px 0 2px; padding-top: 15px; border-top: 1px solid var(--line-soft);
+}
+.body > .member:first-child { margin-top: 4px; padding-top: 0; border-top: 0; }
+.mprio { font-size: 12px; color: var(--ink-faint); }
+
+/* ---------------------------------------------------------------- claims -- */
+
+table.claims { width: 100%; border-collapse: collapse; font-size: 13px; }
+table.claims th {
+  text-align: start; font: 600 11px/1 var(--sans); letter-spacing: .07em;
+  text-transform: uppercase; color: var(--ink-faint);
+  padding: 0 12px 10px 0; border-block-end: 1px solid var(--line); white-space: nowrap;
+}
+body[dir="rtl"] table.claims th { font-family: var(--ar); letter-spacing: 0; }
+table.claims td { padding: 13px 12px 13px 0; border-block-end: 1px solid var(--line-soft); vertical-align: top; }
+table.claims tr:last-child td { border-block-end: 0; }
+
+/* A verdict is a mark plus a word. The mark is filled only when something
+   actually backed the claim. An unverified one stays an open ring, because
+   nothing filled it in. */
+.verdict { display: inline-flex; align-items: center; gap: 8px; font-weight: 700; white-space: nowrap; }
+body[dir="rtl"] .verdict { font-family: var(--ar); font-weight: 600; }
+.dot { width: 7px; height: 7px; border-radius: var(--r-pill); flex: none; }
+.dot.confirmed { background: var(--gold); box-shadow: 0 0 0 3px var(--gold-soft); }
+.dot.unverified { background: transparent; box-shadow: inset 0 0 0 1.5px var(--ink-faint); }
+.verdict:has(.confirmed) { color: var(--gold-ink); }
+.verdict:has(.unverified) { color: var(--ink-soft); }
+.kind { font: 500 10.5px/1.4 var(--mono); color: var(--ink-faint); margin-top: 5px; }
+.claimtext { color: var(--ink); }
+.origin { color: var(--ink-faint); font-size: 12px; margin-top: 4px; }
+.ver { font: 500 12.5px/1.5 var(--mono); color: var(--ink-soft); }
+/* A value that is absent says so. A dash in its place reads as a typographic
+   flourish and does not translate. */
+.muted-none { color: var(--ink-faint); font-style: italic; }
+body[dir="rtl"] .muted-none { font-style: normal; font-family: var(--ar); }
+
+/* -------------------------------------------------------------- gaplines -- */
+
+/* The version line. It used to open the card; the card now opens on what the
+   releases changed and whether employers want it, so this is the footnote that
+   says which version shipped, set as one quiet line. Graded by what the reader
+   must do: only a major jump, the one semver says breaks things, keeps the
+   alert hue, and only on its meter and its word. A minor jump runs for a
+   student exactly as it was written, so it asks for nothing and stays neutral. */
+.gapline {
+  display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+  margin: 0 0 12px; padding: 6px 10px; border-radius: var(--r-chip);
+  background: transparent; border: 1px solid var(--line-soft);
+  font: 500 11px/1.4 var(--mono); color: var(--ink-faint);
+}
+.gapline[data-level="3"] { border-color: var(--crit-edge); color: var(--ink-soft); }
+.gapline[data-level="3"] .vmeter { color: var(--crit-ink); }
+.gapline[data-level="2"] { border-color: var(--line); color: var(--ink-soft); }
+/* No version bound is not a severity, it is an absence, so it borrows the
+   dashed language the loose pins already use for the same idea. */
+.gapline[data-level="-1"] { border-color: var(--edge); border-style: dashed; }
+/* Installed but never taught. Nothing to act on, so it recedes furthest: no
+   frame at all, just the words. */
+.gapline[data-kind="dependency"] { border-color: transparent; padding-inline: 0; }
+
+.vmeter { display: inline-flex; gap: 2px; align-items: center; flex: none; }
+.vmeter i {
+  display: block; width: 3px; height: 10px; border-radius: 1px;
+  background: currentColor; opacity: .18;
+}
+.vmeter[data-level="1"] i:nth-child(1),
+.vmeter[data-level="2"] i:nth-child(-n+2),
+.vmeter[data-level="3"] i { opacity: 1; }
+.vmeter[data-level="-1"] i { opacity: .3; height: 6px; }
+.vpair { color: var(--ink-soft); font-weight: 600; }
+.gapline[data-level="3"] .vpair { color: var(--ink); }
+.vpair.unknown { color: var(--ink-faint); font-weight: 500; }
+.vkind { padding: 2px 7px; border-radius: var(--r-chip); background: var(--gray-soft); }
+.gapline[data-level="3"] .vkind { background: var(--crit-soft); color: var(--crit-ink); }
+.vsince { color: var(--ink-faint); }
+
+.legacyline {
+  margin: -4px 0 11px; padding: 7px 11px; border-radius: var(--r-chip);
+  background: var(--crit-soft); color: var(--crit-ink); border: 1px solid var(--crit-edge);
+  font: 500 11.5px/1.5 var(--mono);
+}
+.legacyline code { font: inherit; background: var(--crit-soft); padding: 2px 5px; border-radius: var(--r-mark); }
+
+/* -------------------------------------------------------------- chapters -- */
+
+.weekhead {
+  font-family: var(--display); font-weight: 600; font-size: 19px; line-height: 1;
+  color: var(--ink-faint); margin: 30px 0 11px; letter-spacing: -.01em;
+  font-variant-numeric: lining-nums;
+}
+body[dir="rtl"] .weekhead { font-family: var(--ar); font-size: 15px; letter-spacing: 0; }
+
+.chapter {
+  background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius);
+  padding: 15px 18px; margin-bottom: 8px; display: grid; gap: 8px; box-shadow: var(--shadow-1);
+  transition: border-color 200ms var(--ease-out), box-shadow 200ms var(--ease-out);
+}
+@media (hover: hover) and (pointer: fine) { .chapter:hover { border-color: var(--edge); } }
+.chapter.touched { border-color: var(--gold-edge); background: linear-gradient(180deg, var(--gold-soft), var(--surface) 48%); }
+.chapter.touched .cid { color: var(--gold-ink); }
+.chapter.gapcard { border-color: var(--crit-edge); background: linear-gradient(180deg, var(--crit-soft), var(--surface) 48%); }
+.chapter.gapcard .cid { color: var(--crit-ink); }
+.chapter .ctitle { display: flex; gap: 10px; align-items: baseline; flex-wrap: wrap; }
+.chapter .cid { font: 500 11.5px/1 var(--mono); color: var(--ink-faint); }
+.chapter h3 { margin: 0; font: 600 14.5px/1.45 var(--sans); color: var(--ink); }
+body[dir="rtl"] .chapter h3 { font-family: var(--ar); }
+
+.tools { display: flex; gap: 6px; flex-wrap: wrap; }
+.tool { font: 500 10.5px/1 var(--mono); background: var(--gray-soft); color: var(--ink-soft); padding: 6px 9px; border-radius: var(--r-chip); border: 1px solid var(--line); }
+.touchlist { font-size: 13px; color: var(--ink-soft); display: flex; gap: 7px; flex-wrap: wrap; align-items: center; }
+.stale { font-size: 12px; color: var(--ink-faint); }
+body[dir="rtl"] .stale { font-family: var(--ar); }
+.teaches { margin: 0 0 11px; font-size: 12.5px; line-height: 1.55; color: var(--ink-soft); }
+/* Only on the Arabic page, above a paragraph the run has no Arabic for. It
+   sits inside the English block it describes, on that block's own edge. */
+.en-note {
+  display: block; width: fit-content; margin-block-end: 7px;
+  font: 600 11px/1.3 var(--ar); letter-spacing: 0; color: var(--ink-faint);
+  padding: 3px 9px 4px; border: 1px solid var(--line); border-radius: var(--r-pill);
+}
+
+.pins { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 8px; }
+.pin {
+  font: 500 10.5px/1 var(--mono); background: var(--gold-soft); color: var(--gold-ink);
+  padding: 6px 9px; border-radius: var(--r-chip); border: 1px solid var(--gold-edge);
+}
+.pin b { font-weight: 600; }
+.pin.empty { background: var(--gray-soft); color: var(--ink-faint); border-color: var(--line); padding: 6px 9px; text-align: start; }
+.pin.loose { background: var(--gray-soft); color: var(--ink-soft); border-color: var(--edge); border-style: dashed; }
+.pin.legacy { background: var(--crit-soft); color: var(--crit-ink); border-color: var(--crit-edge); }
+.pinlabel { font-size: 11px; color: var(--ink-faint); align-self: center; }
+body[dir="rtl"] .pinlabel { font-family: var(--ar); }
+
+/* ----------------------------------------------------------------- notes -- */
+
+.note {
+  background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius);
+  padding: 20px 22px; margin-bottom: 10px; box-shadow: var(--shadow-1);
+}
+.note h3 { margin: 0 0 8px; font: 600 14.5px/1.45 var(--sans); color: var(--ink); }
+body[dir="rtl"] .note h3 { font-family: var(--ar); }
+.note p { margin: 0; color: var(--ink-soft); font-size: 13.5px; max-width: 74ch; }
+.note.warn { border-color: var(--gold-edge); background: linear-gradient(180deg, var(--gold-soft), var(--surface) 48%); }
+.note.warn h3 { color: var(--gold-ink); }
+
+.kv { display: grid; grid-template-columns: auto 1fr; gap: 8px 22px; font-size: 13.5px; margin-top: 12px; }
+.kv dt { color: var(--ink-faint); }
+body[dir="rtl"] .kv dt { font-family: var(--ar); }
+.kv dd { margin: 0; font: 500 12.5px/1.5 var(--mono); word-break: break-word; color: var(--ink-soft); }
+
+footer {
+  margin-top: 44px; padding-top: 22px; border-top: 1px solid var(--line);
+  color: var(--ink-faint); font-size: 12.5px;
+}
+body[dir="rtl"] footer { font-family: var(--ar); }
+
+.empty {
+  padding: 38px 24px; background: var(--surface); border: 1px solid var(--line);
+  border-radius: var(--radius); text-align: center; box-shadow: var(--shadow-1);
+}
+.empty strong { display: block; font: 600 14.5px/1.5 var(--sans); color: var(--ink); margin-bottom: 5px; }
+body[dir="rtl"] .empty strong { font-family: var(--ar); }
+.empty span { color: var(--ink-faint); font-size: 13px; }
+
+/* ------------------------------------------------------------- run panel -- */
+
+.controls { display: flex; align-items: center; gap: 7px; }
+/* The run picker. A listbox rather than a select, because a select cannot be
+   styled past its arrow and opens a system popup that belongs to no design. */
+.pk { position: relative; }
+
+.pk-trigger {
+  display: inline-flex; align-items: center; gap: 8px;
+  font: 500 11.5px/1 var(--mono); color: var(--ink-soft);
+  background: var(--surface); border: 1px solid var(--line);
+  border-radius: var(--r-chip); padding: 0 10px; min-height: 38px;
+  max-width: 230px; cursor: pointer;
+  transition: border-color 160ms ease, color 160ms ease, transform 120ms var(--ease-out);
+}
+.pk-trigger:active { transform: scale(.98); }
+@media (hover: hover) and (pointer: fine) {
+  .pk-trigger:hover { color: var(--ink); border-color: var(--edge); }
+}
+.pk[data-open] .pk-trigger { border-color: var(--gold); color: var(--ink); }
+
+.pk-value { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+.pk-caret {
+  width: 13px; height: 13px; flex: none;
+  fill: none; stroke: currentColor; stroke-width: 1.5;
+  stroke-linecap: round; stroke-linejoin: round;
+  transition: transform 220ms var(--ease-out);
+}
+.pk[data-open] .pk-caret { transform: rotate(180deg); }
+
+/* The list grows out of the control that opened it rather than from its own
+   middle, so it reads as coming from the button that was pressed. */
+.pk-list {
+  position: absolute; z-index: 30; inset-inline-start: 0; top: calc(100% + 6px);
+  min-width: 100%; width: max-content; max-width: min(340px, 78vw);
+  max-height: 320px; overflow-y: auto;
+  background: var(--raised); border: 1px solid var(--line);
+  border-radius: var(--r-card); box-shadow: var(--shadow-2);
+  padding: 5px; display: grid; gap: 2px;
+  transform-origin: top left;
+  opacity: 0; transform: translateY(-4px) scale(.97);
+  transition: opacity 170ms var(--ease-out), transform 170ms var(--ease-out);
+}
+.pk[data-open] .pk-list { opacity: 1; transform: none; }
+body[dir="rtl"] .pk-list { transform-origin: top right; }
+
+.pk-opt {
+  display: grid; gap: 3px; justify-items: start; text-align: start;
+  width: 100%; border: 0; background: transparent; cursor: pointer;
+  padding: 8px 10px; border-radius: var(--r-chip); color: var(--ink-soft);
+  transition: background-color 140ms ease, color 140ms ease;
+}
+.pk-opt:disabled { opacity: .45; cursor: default; }
+@media (hover: hover) and (pointer: fine) {
+  .pk-opt:not(:disabled):hover { background: var(--gray-soft); color: var(--ink); }
+}
+.pk-opt[aria-selected="true"] { background: var(--gold-soft); color: var(--gold-ink); }
+.pk-opt[aria-selected="true"] .pk-id { color: var(--gold-ink); }
+
+.pk-id { font: 500 11.5px/1.2 var(--mono); color: var(--ink); direction: ltr; }
+.pk-meta {
+  display: flex; align-items: center; gap: 8px;
+  font-size: 11px; color: var(--ink-faint);
+}
+.pk-partial {
+  font: 500 10px/1 var(--mono); padding: 3px 6px; border-radius: var(--r-mark);
+  background: var(--gray-soft); border: 1px solid var(--line); color: var(--ink-faint);
+}
+@media (pointer: coarse) {
+  .pk-trigger { min-height: 44px; }
+  .pk-opt { padding: 11px 10px; }
+}
+
+.runbtn {
+  border: 1px solid var(--edge); background: transparent; color: var(--ink-soft); cursor: pointer;
+  font: 600 12px/1 var(--sans); padding: 0 14px; min-height: 38px; border-radius: var(--r-chip);
+  display: inline-flex; align-items: center; justify-content: center; gap: 7px;
+  white-space: nowrap; flex: none;
+  transition: background-color 160ms ease, color 160ms ease,
+              border-color 160ms ease, transform 120ms var(--ease-out);
+}
+body[dir="rtl"] .runbtn { font-family: var(--ar); }
+.runbtn:active:not(:disabled) { transform: scale(.97); }
+.runbtn.primary { background: var(--gold); color: var(--void); border-color: var(--gold); font-weight: 700; }
+.runbtn:disabled { opacity: .5; cursor: default; }
+@media (hover: hover) and (pointer: fine) {
+  .runbtn:hover:not(:disabled) { color: var(--gold-ink); border-color: var(--gold); }
+  .runbtn.primary:hover:not(:disabled) { color: var(--void); filter: brightness(1.07); }
+}
+/* A control carrying only a mark needs to stay square, and it needs a real
+   name in the accessibility tree because there is no text left on its face. */
+.runbtn.icon-only { width: 38px; padding: 0; }
+@media (pointer: coarse) { .runbtn.icon-only { width: 44px; } }
+
+.thm { width: 17px; height: 17px; display: block; overflow: visible; }
+.thm * {
+  fill: none; stroke: currentColor; stroke-width: 1.5;
+  stroke-linecap: round; stroke-linejoin: round;
+}
+/* The button shows the plate it would switch to, not the one already on. */
+.thm .sun, .thm .moon {
+  transform-origin: 12px 12px;
+  transition: opacity 180ms var(--ease-out), transform 260ms var(--ease-out);
+}
+.thm .moon { opacity: 0; transform: rotate(-65deg) scale(.55); }
+:root[data-theme="light"] .thm .sun  { opacity: 0; transform: rotate(65deg) scale(.55); }
+:root[data-theme="light"] .thm .moon { opacity: 1; transform: none; }
+/* The theme crossfade (see the theme button in the script): the browser's own
+   fade from the old page to the new one, on the page's ease-out curve. */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 260ms;
+  animation-timing-function: var(--ease-out, cubic-bezier(.23, 1, .32, 1));
+}
+
+.runbtn.busy { position: relative; color: transparent; }
+.runbtn.busy::after {
+  content: ""; position: absolute; inset: 0; margin: auto; width: 13px; height: 13px;
+  border-radius: var(--r-pill); border: 2px solid color-mix(in srgb, var(--void) 38%, transparent);
+  border-top-color: var(--void); animation: spin 560ms linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* In and out on transitions rather than keyframes, so a run that starts while
+   the last panel is leaving turns the exit around instead of restarting it.
+   Leaving is quicker than arriving: the panel is getting out of the way. */
+.runpanel {
+  margin: 22px 0 6px; padding: 19px 21px 17px; background: var(--surface);
+  border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow-1);
+  opacity: 1; transform: none;
+  transition: opacity 300ms var(--ease-out), transform 300ms var(--ease-out);
+}
+@starting-style { .runpanel { opacity: 0; transform: translateY(-6px) scale(.985); } }
+.runpanel.leaving {
+  opacity: 0; transform: translateY(-6px) scale(.985);
+  transition-duration: 200ms;
+}
+/* A sweeping line used to run across the top of this panel while a run was in
+   flight. It was added before the stages had figures of their own, and once
+   they did it was a second, vaguer answer to a question the working machine,
+   the filling connector and the counting clock already answer precisely. Two
+   indicators of the same fact is one too many, so the looping one went. */
+.runpanel { position: relative; }
+
+.runpanel[data-state="done"] { border-color: var(--gold-edge); background: linear-gradient(180deg, var(--gold-soft), var(--surface) 55%); }
+.runpanel[data-state="failed"] { border-color: var(--crit-edge); background: linear-gradient(180deg, var(--crit-soft), var(--surface) 55%); }
+
+/* The run landing. Rare enough to earn a little overshoot, and it plays once
+   because the panel is dismissed straight afterwards. */
+.runpanel[data-state="done"] { animation: settle 420ms var(--ease-out); }
+@keyframes settle {
+  0%   { transform: scale(.994); }
+  55%  { transform: scale(1.004); }
+  100% { transform: scale(1); }
+}
+.runpanel[data-state="done"] .runtitle { animation: liftIn 380ms var(--ease-out) both; }
+@keyframes liftIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: none; } }
+
+.runhead { display: flex; align-items: baseline; gap: 12px; margin-bottom: 17px; flex-wrap: wrap; }
+.runtitle { font: 600 14.5px/1.4 var(--sans); color: var(--ink); }
+body[dir="rtl"] .runtitle { font-family: var(--ar); }
+.runmodel {
+  font: 500 11px/1 var(--mono); color: var(--gold-ink); background: var(--gold-soft);
+  border: 1px solid var(--gold-edge); padding: 5px 8px; border-radius: var(--r-chip);
+}
+.runmodel[data-off="true"] { color: var(--ink-faint); background: var(--gray-soft); border-color: var(--line); }
+.runtime { margin-inline-start: auto; font: 500 12px/1 var(--mono); color: var(--ink-faint); }
+
+.track { display: grid; grid-auto-flow: column; grid-auto-columns: 1fr; list-style: none; margin: 0; padding: 0; gap: 0; }
+.node { position: relative; padding-inline-end: 10px; display: grid; gap: 6px; justify-items: start; }
+.node::before {
+  content: ""; position: absolute; top: 19px; inset-inline-start: 0; inset-inline-end: 0; height: 2px;
+  background: var(--line); border-radius: var(--r-mark);
+}
+.node::after {
+  content: ""; position: absolute; top: 19px; inset-inline-start: 0; inset-inline-end: 0; height: 2px;
+  background: var(--gold); border-radius: var(--r-mark);
+  transform: scaleX(0); transform-origin: left center;
+  transition: transform 520ms var(--ease-out);
+}
+body[dir="rtl"] .node::after { transform-origin: right center; }
+.node[data-state="done"]::after { transform: scaleX(1); }
+.node:last-child::before, .node:last-child::after { inset-inline-end: 10px; }
+
+/* The stage figure sits in a disc that masks the connector line running behind
+   it, so the line reads as joining the stages rather than passing through the
+   machine. */
+.pip {
+  width: 40px; height: 40px; border-radius: var(--r-pill);
+  background: var(--surface); position: relative; z-index: 1;
+  display: grid; place-items: center;
+  color: var(--neutral-mark);
+  transition: color 300ms var(--ease-out);
+}
+.node[data-state="active"] .pip { color: var(--gold); }
+.node[data-state="done"]   .pip { color: var(--gold); }
+.node[data-state="failed"] .pip { color: var(--crit); }
+
+.fig { width: 40px; height: 40px; display: block; overflow: visible; }
+.fig * {
+  fill: none; stroke: currentColor; stroke-width: 1.4;
+  stroke-linecap: round; stroke-linejoin: round;
+  vector-effect: non-scaling-stroke;
+}
+.fig .eye, .fig .tip, .fig .pupil, .fig .fall, .fig .mv { fill: currentColor; stroke: none; }
+.fig .slit { opacity: .45; }
+.fig .mark { opacity: 0; stroke-width: 2; }
+
+/* Idle stages hold still. A stage the run has not reached yet should not be
+   competing for attention with the one that is working. */
+.node[data-state="pending"] .pip { opacity: .5; }
+
+/* --- gathering: items drop into the hopper ------------------------------- */
+.fig-ingest .fall { opacity: 0; }
+.node[data-state="active"] .fig-ingest .fall { animation: drop 1.5s var(--ease-out) infinite; }
+.node[data-state="active"] .fig-ingest .f2 { animation-delay: .32s; }
+.node[data-state="active"] .fig-ingest .f3 { animation-delay: .64s; }
+@keyframes drop {
+  0%   { opacity: 0; transform: translateY(-2px); }
+  20%  { opacity: 1; }
+  70%  { opacity: 1; transform: translateY(6px); }
+  100% { opacity: 0; transform: translateY(8px); }
+}
+
+/* --- sorting: loose marks migrate inward --------------------------------- */
+.node[data-state="active"] .fig-cluster .mv { animation: gather 1.9s var(--ease-in-out) infinite; }
+.node[data-state="active"] .fig-cluster .m2 { animation-delay: .16s; }
+.node[data-state="active"] .fig-cluster .m3 { animation-delay: .32s; }
+.node[data-state="active"] .fig-cluster .m4 { animation-delay: .48s; }
+@keyframes gather {
+  0%, 100% { transform: none; opacity: .5; }
+  50%      { transform: translate(var(--gx, 0), var(--gy, 0)); opacity: 1; }
+}
+.fig-cluster .m1 { --gx: 7px;  --gy: 5px; }
+.fig-cluster .m2 { --gx: -7px; --gy: 5px; }
+.fig-cluster .m3 { --gx: 7px;  --gy: -5px; }
+.fig-cluster .m4 { --gx: -7px; --gy: -5px; }
+
+/* --- looking: the lens sweeps and the eye follows ------------------------ */
+.node[data-state="active"] .fig-verify .lens  { animation: sweepLens 2.2s var(--ease-in-out) infinite; }
+.node[data-state="active"] .fig-verify .pupil { animation: track 2.2s var(--ease-in-out) infinite; }
+@keyframes sweepLens {
+  0%, 100% { transform: translate(0, 0); }
+  50%      { transform: translate(-17px, 13px); }
+}
+@keyframes track {
+  0%, 100% { transform: translateX(3.4px); }
+  50%      { transform: translateX(0); }
+}
+
+/* --- weighing: the readings move while it takes a measure ---------------- */
+.fig .base { opacity: .4; }
+.fig-score .bar { transform-origin: 50% 32px; }
+.node[data-state="active"] .fig-score .bar { animation: meter 1.6s var(--ease-in-out) infinite; }
+.node[data-state="active"] .fig-score .b2 { animation-delay: .18s; }
+.node[data-state="active"] .fig-score .b3 { animation-delay: .36s; }
+.node[data-state="active"] .fig-score .b4 { animation-delay: .54s; }
+@keyframes meter {
+  0%, 100% { transform: scaleY(.45); }
+  50%      { transform: scaleY(1.1); }
+}
+
+/* --- deciding: the mark comes down, lands, lifts -------------------------- */
+.node[data-state="active"] .fig-act .stamp { animation: press 1.8s var(--ease-in-out) infinite; }
+.node[data-state="active"] .fig-act .mark  { animation: struck 1.8s var(--ease-out) infinite; }
+@keyframes press {
+  0%, 62%, 100% { transform: translateY(0); }
+  30%, 44%      { transform: translateY(4px); }
+}
+@keyframes struck {
+  0%, 26%  { opacity: 0; }
+  40%      { opacity: 1; }
+  82%      { opacity: 1; }
+  100%     { opacity: 0; }
+}
+
+/* A finished stage keeps its mark rather than replaying the action. */
+.node[data-state="done"] .fig-act .mark { opacity: 1; }
+.node[data-state="done"] .fig-ingest .fall,
+.node[data-state="done"] .fig-cluster .mv { opacity: 1; }
+
+.nlabel { font: 600 12px/1 var(--sans); color: var(--ink-faint); transition: color 220ms var(--ease-out); }
+body[dir="rtl"] .nlabel { font-family: var(--ar); }
+.node[data-state="active"] .nlabel, .node[data-state="done"] .nlabel { color: var(--ink); }
+.nres { font: 500 11px/1.4 var(--mono); color: var(--ink-faint); min-height: 15px; }
+/* A stage result arrives once, so it announces itself once. Re-triggered by
+   removing and re-adding the class rather than by rebuilding the node. */
+.nres.fresh { animation: resIn 260ms var(--ease-out) both; }
+@keyframes resIn { from { opacity: 0; transform: translateY(-3px); filter: blur(2px); } to { opacity: 1; transform: none; filter: blur(0); } }
+
+/* The moment a stage lands. One ring, once, then gone. */
+.node.landed .pip::before {
+  content: ""; position: absolute; inset: -3px; border-radius: var(--r-pill);
+  border: 1px solid var(--gold); pointer-events: none;
+  animation: land 620ms var(--ease-out) forwards;
+}
+@keyframes land {
+  from { opacity: .85; transform: scale(.5); }
+  to   { opacity: 0; transform: scale(1.9); }
+}
+
+.runlog {
+  display: block; margin-top: 15px; padding-top: 13px; border-top: 1px solid var(--line-soft);
+  font: 500 11px/1.5 var(--mono); color: var(--ink-faint);
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap; direction: ltr; text-align: start;
+}
+
+.thoughts {
+  display: grid; gap: 8px; margin-top: 17px;
+  border-inline-start: 1px solid var(--line); padding-inline-start: 14px;
+}
+.thought {
+  margin: 0; font: 500 12px/1.55 var(--mono); color: var(--ink-soft);
+  opacity: 1; transform: none;
+  transition: opacity 220ms var(--ease-out), transform 220ms var(--ease-out), filter 220ms ease;
+}
+@starting-style { .thought { opacity: 0; transform: translateY(-4px); filter: blur(2px); } }
+
+main.wrap { transition: opacity 240ms var(--ease-out); }
+main.wrap.swapping { opacity: .45; transition-delay: 120ms; }
+
+.skeleton {
+  height: 96px; margin-bottom: 10px; border-radius: var(--radius);
+  background: var(--gray-soft);
+  animation: skeletonPulse 1100ms var(--ease-in-out) infinite alternate;
+}
+/* Waiting is shown as a slow pulse on opacity, which the compositor runs. It
+   replaced a sheen swept across a repainted background, and a sliding sheen
+   reads as a ticker rather than as a page that is still arriving. */
+@keyframes skeletonPulse { from { opacity: .5; } to { opacity: 1; } }
+
+/* ------------------------------------------------------------------- tip -- */
+
+.tip {
+  position: fixed; z-index: 40; pointer-events: none; opacity: 0; transform: translateY(3px);
+  background: var(--raised); color: var(--ink); border: 1px solid var(--line);
+  font: 500 12px/1.45 var(--sans); padding: 9px 12px;
+  border-radius: var(--r-chip); max-width: 260px; box-shadow: var(--shadow-2);
+  transition: opacity 140ms var(--ease-out), transform 140ms var(--ease-out);
+}
+body[dir="rtl"] .tip { font-family: var(--ar); }
+.tip[data-show] { opacity: 1; transform: none; }
+.tip b { display: block; font-weight: 600; }
+
+/* ---------------------------------------------------------------- reveal -- */
+
+/* Scroll entry. Scoped to html.js, which the script adds to itself on boot:
+   without that guard the page ships its content at opacity 0 and stays blank
+   if the script never runs, and this file has to open from disk on a machine
+   nobody has checked. Visible is the default; hidden is the enhancement.
+
+   It moves on the individual translate property, not transform. It used to set
+   transform and transition, and at its specificity it overrode every
+   component's own for good: the card lift and press never ran and hover
+   colours snapped. Now its transition applies only while a block is arriving.
+   Once .settled lands a beat later, the end values stand on their own, any
+   transition a backgrounded tab left parked is dropped, and the component's
+   own transitions are back. */
+html.js .reveal { opacity: 0; translate: 0 12px; filter: blur(4px); }
+html.js .reveal.in { opacity: 1; translate: none; filter: none; }
+html.js .reveal.in:not(.settled) {
+  transition: opacity 480ms var(--ease-out),
+              translate 480ms var(--ease-out),
+              filter 360ms var(--ease-out);
+  transition-delay: var(--d, 0ms);
+}
+
+/* The opening screen is the one authored moment, read once, so it keeps the
+   long form. Everything after it is content the reader came for. */
+html.js .overture .reveal { translate: 0 18px; filter: blur(8px); }
+html.js .overture .reveal.in { translate: none; filter: none; }
+html.js .overture .reveal.in:not(.settled) {
+  transition: opacity 720ms var(--ease-out),
+              translate 720ms var(--ease-out),
+              filter 560ms var(--ease-out);
+  transition-delay: var(--d, 0ms);
+}
+
+/* Re-rendered content: a short fade, well inside the budget for something the
+   reader just asked for by clicking. */
+html.js .reveal.quick { translate: none; filter: none; }
+html.js .reveal.quick.in:not(.settled) {
+  transition: opacity 200ms var(--ease-out);
+  transition-delay: 0ms;
+}
+
+/* A stat is a number that was counted, so it arrives a little tighter than the
+   block around it and does not blur, which would make the digits mush. */
+html.js .stat.reveal { translate: 0 10px; filter: none; }
+html.js .stat.reveal.in:not(.settled) {
+  transition: opacity 480ms var(--ease-out), translate 480ms var(--ease-out);
+  transition-delay: var(--d, 0ms);
+}
+
+/* Bars and stacks draw themselves on the first read. A re-render shows them
+   already finished: a filter or a language switch that redrew every chart read
+   as the page starting over. */
+html.js .stack span { transform: scaleX(0); transform-origin: left center; }
+html.js .reveal.in .stack span, html.js .stack.in span { transform: scaleX(1); }
+html.js .reveal.in:not(.settled):not(.quick) .stack span {
+  transition: transform 760ms var(--ease-out);
+  transition-delay: calc(var(--d, 0ms) + var(--sd, 0ms));
+}
+html.js .reveal.quick .stack span { transform: scaleX(1); }
+body[dir="rtl"] .stack span { transform-origin: right center; }
+
+/* Cells land in course order from just under full size, on the scale property,
+   so a cell's own hover lift keeps working on transform. */
+html.js .cell { scale: .9; opacity: 0; }
+html.js .reveal.in .cell, html.js .reveal.quick .cell { scale: none; opacity: 1; }
+html.js .reveal.in:not(.settled):not(.quick) .cell {
+  transition: scale 420ms var(--ease-out), opacity 300ms var(--ease-out);
+  transition-delay: calc(var(--d, 0ms) + var(--cd, 0ms));
+}
+html.js .reveal.quick .bar i, html.js .reveal.quick .dtrack i { animation: none; }
+/* Priority and distance bars grow as their block arrives, the way the stacked
+   bars do, instead of when the page renders: below the fold they used to finish
+   before anyone could see them. Paused, they hold at zero; the extra 120ms lets
+   the block's fade get under way first. Re-rendered blocks are covered by the
+   quick rule above and show their bars finished. */
+html.js .reveal:not(.in) .bar i,
+html.js .reveal:not(.in) .dtrack i { animation-play-state: paused; }
+html.js .reveal.in .bar i,
+html.js .reveal.in .dtrack i { animation-delay: calc(var(--d, 0ms) + 120ms); }
+
+/* -------------------------------------------------------------- overture -- */
+
+/* The one authored moment on the page. It says what the agent does before it is
+   asked to do anything, then hands over. It plays once per reader, is skippable
+   at every point, and renders already finished under reduced motion. */
+
+.overture {
+  position: fixed; inset: 0; z-index: 60;
+  display: grid; place-items: center;
+  padding: 32px clamp(22px, 5vw, 64px);
+  background: color-mix(in srgb, var(--paper) 72%, transparent);
+  backdrop-filter: blur(22px) saturate(130%);
+  -webkit-backdrop-filter: blur(22px) saturate(130%);
+  transition: opacity 260ms var(--ease-out), transform 260ms var(--ease-out);
+}
+.overture.closing { opacity: 0; transform: scale(1.03); pointer-events: none; }
+.ov-inner { width: min(980px, 100%); }
+
+.ov-title {
+  font-family: var(--display); font-weight: 600;
+  font-size: clamp(34px, 1.4rem + 4.4vw, 68px);
+  line-height: 1.04; letter-spacing: -.03em; margin: 0 0 22px;
+  text-wrap: balance; font-variant-numeric: lining-nums;
+  padding-block-end: .08em; color: var(--ink);
+}
+.ov-title em { font-style: italic; font-weight: 600; }
+body[dir="rtl"] .ov-title {
+  font-family: var(--ar); font-weight: 600; letter-spacing: 0;
+  line-height: 1.36; font-size: clamp(26px, 1.2rem + 3vw, 46px);
+}
+/* Arabic does not italicise. The emphasis moves to colour rather than being
+   faked with a slant. */
+body[dir="rtl"] .ov-title em { font-style: normal; color: var(--gold-ink); }
+
+.ov-rule {
+  height: 1px; background: var(--gold); opacity: .6; margin-bottom: 26px;
+  transform: scaleX(0); transform-origin: left center;
+}
+body[dir="rtl"] .ov-rule { transform-origin: right center; }
+.ov-rule.in { transform: scaleX(1); transition: transform 900ms var(--ease-in-out); }
+
+/* The sentence that says what this is and who it serves, before the three
+   steps explain how it works. */
+.ov-lede {
+  margin: 0 0 26px; max-width: 62ch;
+  font-size: 17px; line-height: 1.55; color: var(--ink-soft);
+}
+body[dir="rtl"] .ov-lede { font-family: var(--ar); font-size: 16px; line-height: 1.8; }
+
+.ov-lines { list-style: none; margin: 0 0 30px; padding: 0; display: grid; gap: 14px; max-width: 62ch; }
+.ov-lines li {
+  display: grid; grid-template-columns: 10px 1fr; gap: 14px; align-items: start;
+  color: var(--ink-soft); font-size: 16px; line-height: 1.55;
+}
+body[dir="rtl"] .ov-lines li { font-family: var(--ar); }
+.ov-lines i {
+  display: block; width: 7px; height: 7px; border-radius: var(--r-pill);
+  background: var(--gold); margin-top: .52em;
+}
+.ov-lines b { color: var(--ink); font-weight: 600; }
+
+.ov-act { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+.ov-act .runbtn { min-height: 44px; padding: 0 20px; font-size: 13px; }
+
+/* ------------------------------------------------------------------- rtl -- */
+
+/* Mirror what is about reading order. Do not mirror what is about the world: a
+   version string, a run id, a package name and a URL are facts, and flipping
+   them makes them wrong rather than translated. */
+.runid, .runlog, .subject, .dname, .dspec, .ver, .tool, .pin, .kv dd,
+.gapline, .vkind, .vpair, .nres, .thought, .kind, .cid {
+  direction: ltr; unicode-bidi: isolate; text-align: start;
+}
+body[dir="rtl"] .runid, body[dir="rtl"] .subject,
+body[dir="rtl"] .dname, body[dir="rtl"] .runlog { text-align: left; }
+bdi { unicode-bidi: isolate; }
+
+/* -------------------------------------------------------- reader choices -- */
+
+@media (prefers-reduced-transparency: reduce) {
+  .tabbar, .overture { background: var(--surface); backdrop-filter: none; -webkit-backdrop-filter: none; }
+  .wash, .grain { display: none; }
+}
+
+/* Reduced motion means fewer and gentler, not none. Animations end at once.
+   Transitions keep their authored length but are narrowed to the properties
+   that do not move anything, so fades and colour changes stay and every
+   travel stops. The old rule cut every transition to nothing, which also erased
+   the fades this block meant to keep. */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: .01ms !important; animation-iteration-count: 1 !important;
+    transition-property: opacity, color, background-color, border-color, box-shadow !important;
+  }
+  html.js .reveal, html.js .overture .reveal, html.js .stat.reveal { translate: none; filter: none; }
+  html.js .reveal.in:not(.settled),
+  html.js .overture .reveal.in:not(.settled),
+  html.js .stat.reveal.in:not(.settled) { transition-duration: 200ms; transition-delay: 0ms; }
+  html.js .stack span, html.js .reveal.in .stack span { transform: scaleX(1); }
+  html.js .cell, html.js .reveal.in .cell { scale: none; opacity: 1; }
+  .cell:hover { transform: none; }
+  .node.landed .pip::before { animation: none; opacity: 0; }
+  .ov-rule { transform: scaleX(1); }
+  .wash::before, .field-deep { animation: none; }
+  .skeleton { animation: none; }
+  .runbtn.busy::after { animation: none; }
+  .runpanel.leaving { transform: none; }
+  .fig *, .node[data-state="active"] .fig * { animation: none !important; transform: none !important; }
+  .fig .fall, .fig .mv { opacity: 1; }
+  .fig-act .mark { opacity: 1; }
+  .thought { transition: none; }
+  .thm .sun, .thm .moon { transition: opacity 180ms ease; transform: none !important; }
+  .pk-list { transition: opacity 140ms ease; transform: none !important; }
+  .pk-caret { transition: none; }
+  .dtrack i, .bar i { animation: none; transform: scaleX(1); }
+  ::view-transition-old(root),
+  ::view-transition-new(root) { animation-duration: 160ms; }
+}
+
+/* ------------------------------------------------------------ responsive -- */
+
+@media (pointer: coarse) {
+  .tabs button { min-height: 52px; }
+  .filters button, .runbtn, .lang button { min-height: 44px; }
+}
+@media (max-width: 720px) {
+  .controls { order: 3; width: 100%; }
+  .pk { flex: 1; }
+  .pk-trigger { width: 100%; max-width: none; }
+}
+@media (max-width: 620px) {
+  .track { grid-auto-flow: row; gap: 12px; }
+  .node::before, .node::after { display: none; }
+  .node { grid-template-columns: 40px 1fr auto; align-items: center; gap: 12px; justify-items: start; }
+  .nres { text-align: end; }
+}
+@media (max-width: 560px) {
+  table.claims th:nth-child(3), table.claims td:nth-child(3) { display: none; }
+  .head-inner, .wrap, .tabbar-inner { padding-inline: 18px; }
+  .drow { grid-template-columns: 1fr auto; gap: 5px 10px; }
+  .dtrack { grid-column: 1 / -1; }
+  .dlabel { grid-column: 1 / -1; }
+  .ov-act { width: 100%; }
+  .ov-act .runbtn { flex: 1 1 auto; }
+}
+.gapline[data-kind="dependency"] .vpair { font-weight: 500; }
+/* Neither of these is evidence or a gap, so neither takes the page's two
+   meaningful colours. The streak earns an edge because an ask that keeps
+   coming back is the one a reader should stop skipping. */
+.chip.streak { background: var(--gray-soft); color: var(--ink-soft); border-color: var(--edge); }
+.chip.moved { background: var(--gray-soft); color: var(--ink-faint); }
+
+/* ------------------------------------------------------------------ why -- */
+
+/* What changed, and whether employers want it: the two things a teacher
+   decides by, so they open the card and are set as figures rather than as a
+   line of small print. Two columns under hairlines, like a ledger, rather than
+   two boxes, because a box inside a card is a card inside a card. Neutral on
+   purpose: neither is evidence nor a gap, so neither borrows gold or the alert
+   hue, and a breaking change leads by position and weight instead. */
+.why {
+  display: grid; grid-auto-flow: column; grid-auto-columns: minmax(0, 1fr);
+  margin: 4px 0 14px; padding: 15px 0 17px;
+  border-block: 1px solid var(--line-soft);
+}
+.why:has(> .why-changed + .why-market) {
+  grid-auto-flow: row; grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr);
+}
+.why-panel { display: grid; align-content: start; gap: 13px; min-width: 0; }
+.why-panel:not(:last-child) { padding-inline-end: 24px; }
+.why-panel + .why-panel { padding-inline-start: 24px; border-inline-start: 1px solid var(--line-soft); }
+/* On its own a panel keeps the width it has beside its partner; stretched
+   across the card the job bar turns into a rule and its number drifts away. */
+.why > .why-panel:only-child { max-inline-size: 440px; }
+
+.why-t {
+  font: 600 10.5px/1.2 var(--sans); letter-spacing: .08em; text-transform: uppercase;
+  color: var(--ink-faint);
+}
+body[dir="rtl"] .why-t { font: 600 12px/1.3 var(--ar); letter-spacing: 0; text-transform: none; }
+
+.why-figs { display: flex; flex-wrap: wrap; align-items: end; gap: 12px 26px; }
+.why-fig { display: grid; gap: 5px; }
+.why-fig b {
+  font: 600 38px/.86 var(--display); letter-spacing: -.02em; color: var(--ink);
+  font-variant-numeric: lining-nums tabular-nums;
+}
+.why-fig > span { font-size: 11.5px; line-height: 1.2; color: var(--ink-soft); white-space: nowrap; }
+body[dir="rtl"] .why-fig > span { font-family: var(--ar); font-size: 12px; }
+.why-fig[data-kind="breaking"] > span { color: var(--ink); font-weight: 600; }
+/* Fixes are counted and set back, so the eye lands on what a lesson needs. */
+.why-fig[data-kind="fix"] b { font-size: 26px; color: var(--ink-faint); }
+.why-fig[data-kind="fix"] > span { color: var(--ink-faint); }
+
+.why .quiet { margin: 0; font: italic 400 16.5px/1.35 var(--display); color: var(--ink-soft); }
+body[dir="rtl"] .why .quiet { font: 500 13px/1.6 var(--ar); }
+
+/* Each highlight keeps the kind it was filed under, as a small tag in a
+   column of its own so the release notes start on one edge. */
+.why-list {
+  list-style: none; margin: 0; padding: 0;
+  display: grid; grid-template-columns: max-content minmax(0, 1fr); gap: 8px 12px;
+}
+.why-list li {
+  grid-column: 1 / -1; display: grid; grid-template-columns: subgrid; align-items: baseline;
+  font: 500 12px/1.5 var(--mono); color: var(--ink-soft);
+}
+@supports not (grid-template-columns: subgrid) {
+  .why-list li { grid-template-columns: 7em minmax(0, 1fr); }
+}
+.why-h { justify-self: start; min-width: 0; overflow-wrap: anywhere; }
+.why-k {
+  justify-self: start; white-space: nowrap;
+  font: 600 9.5px/1 var(--sans); letter-spacing: .08em; text-transform: uppercase;
+  color: var(--ink-faint); padding: 4px 6px 3px;
+  border: 1px solid var(--line); border-radius: var(--r-mark);
+}
+.why-k[data-kind="breaking"] { color: var(--ink); border-color: var(--edge); }
+body[dir="rtl"] .why-k { font: 600 11px/1 var(--ar); letter-spacing: 0; text-transform: none; padding: 4px 6px; }
+
+/* Who pays for it and who uses it. A length for job posts, which sit in a
+   narrow range; a stepped size class for installs, which span five orders of
+   magnitude, one cell per power of ten from a thousand. Different marks so
+   the two are never read on one scale. */
+.mk-row {
+  display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center;
+  gap: 7px 14px;
+}
+.mk-label { grid-column: 1 / -1; font-size: 11.5px; line-height: 1.3; color: var(--ink-soft); }
+body[dir="rtl"] .mk-label { font-family: var(--ar); font-size: 12px; }
+.mk-num {
+  font: 600 25px/.9 var(--display); letter-spacing: -.01em; color: var(--ink);
+  font-variant-numeric: lining-nums tabular-nums; text-align: end; min-inline-size: 2ch;
+}
+.mk-track { display: block; height: 5px; border-radius: var(--r-pill); background: var(--neutral-mark); overflow: hidden; }
+.mk-track i {
+  display: block; height: 100%; border-radius: inherit; background: var(--ink-soft);
+  transform-origin: left center; animation: grow 300ms var(--ease-out) 80ms both;
+}
+body[dir="rtl"] .mk-track i { transform-origin: right center; }
+.mk-mag { display: flex; align-items: flex-end; gap: 3px; height: 16px; }
+.mk-mag i { display: block; flex: none; width: 7px; border-radius: 1px; background: var(--neutral-mark); }
+.mk-mag i:nth-child(1) { height: 5px; }
+.mk-mag i:nth-child(2) { height: 7px; }
+.mk-mag i:nth-child(3) { height: 9px; }
+.mk-mag i:nth-child(4) { height: 11px; }
+.mk-mag i:nth-child(5) { height: 13.5px; }
+.mk-mag i:nth-child(6) { height: 16px; }
+.mk-mag i.on {
+  background: var(--ink-soft); transform-origin: center bottom;
+  animation: magRise 240ms var(--ease-out) both;
+}
+.mk-mag i.on:nth-child(2) { animation-delay: 40ms; }
+.mk-mag i.on:nth-child(3) { animation-delay: 80ms; }
+.mk-mag i.on:nth-child(4) { animation-delay: 120ms; }
+.mk-mag i.on:nth-child(5) { animation-delay: 160ms; }
+.mk-mag i.on:nth-child(6) { animation-delay: 200ms; }
+@keyframes magRise { from { opacity: 0; transform: scaleY(.25); } to { opacity: 1; transform: none; } }
+
+/* ------------------------------------------------------------- watching -- */
+
+/* The watch list, gathered under the actions. Closed it is one line: how
+   many, and why they are quiet. Open, its cards sit on the page's ground
+   instead of lifted off it, so an action card is always the brighter one. */
+.watchgroup { margin-top: 26px; border-top: 1px solid var(--line); }
+.watchgroup > summary {
+  list-style: none; cursor: pointer; position: relative;
+  display: grid; grid-template-columns: auto minmax(0, 1fr); align-items: center; column-gap: 18px;
+  padding-block: 20px; padding-inline: 0 46px;
+  transition: transform 140ms var(--ease-out);
+}
+.watchgroup > summary::-webkit-details-marker { display: none; }
+.watchgroup > summary:active { transform: scale(.995); }
+.watchgroup > summary::after {
+  content: ""; position: absolute; inset-inline-end: 20px; top: 50%; margin-top: -6px;
+  width: 7px; height: 7px;
+  border-right: 1.5px solid var(--ink-faint); border-bottom: 1.5px solid var(--ink-faint);
+  transform: rotate(45deg); transform-origin: center;
+  transition: transform 220ms var(--ease-out), border-color 200ms ease;
+}
+.watchgroup[open] > summary::after { transform: rotate(-135deg); border-color: var(--ink); }
+.watchgroup[open][data-closing] > summary::after { transform: rotate(45deg); border-color: var(--ink-faint); }
+.wg-n {
+  font: 600 46px/.86 var(--display); letter-spacing: -.02em; color: var(--ink-soft);
+  font-variant-numeric: lining-nums tabular-nums;
+  padding-inline-end: 18px; border-inline-end: 1px solid var(--line);
+  transition: color 160ms ease;
+}
+.wg-text { display: grid; gap: 5px; min-width: 0; }
+.wg-t { font: 600 21px/1.15 var(--display); letter-spacing: -.01em; color: var(--ink); }
+body[dir="rtl"] .wg-t { font: 600 17px/1.45 var(--ar); letter-spacing: 0; }
+.wg-note { font-size: 13px; line-height: 1.5; color: var(--ink-faint); max-width: 68ch; }
+body[dir="rtl"] .wg-note { font-family: var(--ar); }
+@media (hover: hover) and (pointer: fine) {
+  .watchgroup > summary:hover .wg-n { color: var(--ink); }
+  .watchgroup > summary:hover::after { border-color: var(--ink); }
+}
+.watchgroup > summary:focus-visible { outline: 2px solid var(--ink-soft); outline-offset: 4px; border-radius: var(--r-chip); }
+.wg-body { padding-bottom: 6px; }
+.wg-body > .card { background: var(--paper); border-color: var(--line-soft); box-shadow: none; }
+
+@media (max-width: 640px) {
+  .why, .why:has(> .why-changed + .why-market) { grid-auto-flow: row; grid-template-columns: minmax(0, 1fr); }
+  .why-panel:not(:last-child) { padding-inline-end: 0; }
+  .why-panel + .why-panel {
+    padding-inline-start: 0; border-inline-start: 0;
+    margin-top: 15px; padding-top: 15px; border-top: 1px solid var(--line-soft);
+  }
+  .wg-n { font-size: 36px; padding-inline-end: 14px; }
+  .watchgroup > summary { column-gap: 14px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .mk-track i, .mk-mag i.on { animation: none; transform: none; opacity: 1; }
+}
+
+/* ------------------------------------------------------------ next steps -- */
+
+/* What to do, in two or three short steps, first in the card body. Numbered in
+   the display face so the order reads at a glance. */
+.plan { margin: 4px 0 16px; display: grid; gap: 11px; }
+.plan-steps { list-style: none; margin: 0; padding: 0; display: grid; gap: 9px; }
+.plan-steps li { display: grid; grid-template-columns: 20px minmax(0, 1fr); gap: 10px; align-items: baseline; }
+.plan-n {
+  font: 600 21px/1 var(--display); color: var(--ink-faint);
+  font-variant-numeric: lining-nums tabular-nums;
+}
+.plan-s { font-size: 13.5px; line-height: 1.55; color: var(--ink); min-width: 0; overflow-wrap: anywhere; }
+body[dir="rtl"] .plan-s { font-family: var(--ar); font-size: 14px; line-height: 1.75; }
+
+/* Who wrote the explanation above it. */
+.byline { margin: -9px 0 15px; padding-inline-start: 13px; font-size: 11.5px; color: var(--ink-faint); }
+body[dir="rtl"] .byline { font-family: var(--ar); }
+
+/* ------------------------------------------------------------ cell edits -- */
+
+/* The named edits, folded by chapter and then by notebook, on hairlines rather
+   than boxes: a box inside a card is a card inside a card. */
+.edits { margin: 0 0 16px; border-block: 1px solid var(--line-soft); }
+.edits > summary, .ed-ch > summary {
+  list-style: none; cursor: pointer; position: relative;
+  display: flex; flex-wrap: wrap; align-items: baseline; gap: 5px 14px;
+  padding-inline: 0 30px;
+  transition: transform 140ms var(--ease-out);
+}
+.edits > summary { padding-block: 13px; }
+.ed-ch > summary { padding-block: 10px; }
+.edits > summary::-webkit-details-marker, .ed-ch > summary::-webkit-details-marker { display: none; }
+.edits > summary:active, .ed-ch > summary:active { transform: scale(.995); }
+.edits > summary::after, .ed-ch > summary::after {
+  content: ""; position: absolute; inset-inline-end: 8px; top: 50%; margin-top: -5px;
+  width: 6px; height: 6px;
+  border-right: 1.5px solid var(--ink-faint); border-bottom: 1.5px solid var(--ink-faint);
+  transform: rotate(45deg); transform-origin: center;
+  transition: transform 220ms var(--ease-out), border-color 200ms ease;
+}
+.edits[open] > summary::after, .ed-ch[open] > summary::after { transform: rotate(-135deg); border-color: var(--ink); }
+.edits[open][data-closing] > summary::after,
+.ed-ch[open][data-closing] > summary::after { transform: rotate(45deg); border-color: var(--ink-faint); }
+@media (hover: hover) and (pointer: fine) {
+  .edits > summary:hover::after, .ed-ch > summary:hover::after { border-color: var(--ink); }
+}
+.ed-n { font-size: 13px; color: var(--ink-soft); }
+body[dir="rtl"] .ed-n, body[dir="rtl"] .ed-brk, body[dir="rtl"] .ed-checked { font-family: var(--ar); }
+.ed-brk { font-size: 12.5px; font-weight: 600; color: var(--crit-ink); }
+.ed-checked { margin: 2px 0 10px; font-size: 12px; line-height: 1.5; color: var(--ink-faint); }
+
+.ed-ch { border-top: 1px solid var(--line-soft); }
+.ed-ch-title { flex: 1 1 220px; min-width: 0; font-size: 13px; color: var(--ink-soft); }
+body[dir="rtl"] .ed-ch-title { font-family: var(--ar); }
+.ed-ch-n { font: 500 11.5px/1 var(--mono); color: var(--ink-faint); }
+body[dir="rtl"] .ed-ch-n { font-family: var(--ar); }
+
+.ed-nb { margin: 2px 0 16px; padding-inline-start: 13px; border-inline-start: 1px solid var(--line); }
+.ed-nb-head { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 12px; margin-bottom: 10px; }
+.ed-nb-name { font: 500 12px/1.45 var(--mono); color: var(--ink); overflow-wrap: anywhere; min-width: 0; }
+.ed-pin { font: 500 11px/1.3 var(--mono); color: var(--ink-faint); }
+.ed-state { font-size: 11.5px; color: var(--ink-faint); }
+.ed-state[data-breaks="true"] { color: var(--crit-ink); font-weight: 600; }
+body[dir="rtl"] .ed-state, body[dir="rtl"] .ed-pin { font-family: var(--ar); }
+
+.ed-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 14px; }
+.ed { display: grid; gap: 6px; }
+.ed-cell {
+  font: 600 10.5px/1.2 var(--sans); letter-spacing: .07em; text-transform: uppercase;
+  color: var(--ink-faint);
+}
+body[dir="rtl"] .ed-cell { font: 600 11.5px/1.3 var(--ar); letter-spacing: 0; text-transform: none; }
+.ed-diff { display: grid; grid-template-columns: max-content minmax(0, 1fr); gap: 5px 10px; align-items: baseline; }
+.ed-k { font-size: 11px; color: var(--ink-faint); }
+body[dir="rtl"] .ed-k { font-family: var(--ar); font-size: 11.5px; }
+.ed-diff code {
+  justify-self: start; max-width: 100%;
+  font: 500 12px/1.5 var(--mono); padding: 2px 7px; border-radius: var(--r-mark);
+  overflow-wrap: anywhere; text-align: left;
+}
+.ed-old { background: var(--gray-soft); color: var(--ink-soft); }
+/* The replacement was found at a release tag, so it takes the page's colour for
+   a checked fact. A current line that breaks on today's install takes the
+   alert hue. */
+.ed-new { background: var(--gold-soft); color: var(--gold-ink); }
+.ed[data-breaks="true"] .ed-old { background: var(--crit-soft); color: var(--crit-ink); }
+.ed-reason { margin: 0; font-size: 12.5px; line-height: 1.55; color: var(--ink-soft); }
+body[dir="rtl"] .ed-reason[lang="ar"] { font-family: var(--ar); line-height: 1.8; }
+.ed-links { display: flex; flex-wrap: wrap; gap: 3px 14px; font-size: 11.5px; }
+
+/* The curriculum map says how much of each chapter the edits touch. */
+.ch-edits { display: flex; flex-wrap: wrap; gap: 4px 12px; margin: 0 0 10px; font-size: 12px; color: var(--ink-soft); }
+body[dir="rtl"] .ch-edits { font-family: var(--ar); }
+
+/* -------------------------------------------------------------- concepts -- */
+
+/* Concepts the course does not teach yet. Cards like the others; a concept on
+   watch sits on the page's ground, the way watched packages do, so the one that
+   asks for a lesson is the brighter card. */
+.concepts { margin-top: 34px; }
+.concepts .sub { margin-bottom: 16px; }
+body[dir="rtl"] .concepts .sub { font-family: var(--ar); }
+.concept[data-action="watch"] { background: var(--paper); border-color: var(--line-soft); box-shadow: none; }
+
+/* The module's own description, quoted as released: English, left to right,
+   on both pages. */
+.cq { margin: 0 0 12px; }
+.cq blockquote {
+  margin: 0; padding-inline-start: 13px; border-inline-start: 2px solid var(--line);
+  font: italic 400 17px/1.4 var(--display); color: var(--ink);
+}
+.cq figcaption { margin-top: 6px; font-size: 11.5px; color: var(--ink-faint); }
+body[dir="rtl"] .cq figcaption { font-family: var(--ar); }
+
+/* ----------------------------------------------------------------- radar -- */
+
+.radar { margin: 4px 0 6px; }
+.radar-svg { display: block; width: 100%; height: auto; overflow: visible; }
+.rd-grid { stroke: var(--line-soft); stroke-width: 1; }
+.rd-split { stroke: var(--edge); stroke-width: 1; opacity: .7; }
+.rd-tick { font: 500 10.5px var(--mono); fill: var(--ink-faint); }
+.rd-axis { font: 600 11px var(--sans); fill: var(--ink-soft); }
+.rd-q { font: 600 10px var(--sans); letter-spacing: .08em; text-transform: uppercase; fill: var(--ink-faint); }
+body[dir="rtl"] .rd-axis, body[dir="rtl"] .rd-q { font-family: var(--ar); letter-spacing: 0; text-transform: none; font-size: 11.5px; }
+.rd-label { font: 500 11px var(--mono); fill: var(--ink-soft); pointer-events: none; }
+.rd-leader { stroke: var(--edge); stroke-width: 1; pointer-events: none; }
+
+/* Marks: a surface halo, then the dot or ring. The halo keeps dots that
+   touch apart; the hit circle is larger than the mark and invisible. */
+.rd-hit { fill: transparent; }
+.rd-halo { fill: var(--surface); }
+.blip[data-tone="update"] { --tone: var(--viz-act-update); }
+.blip[data-tone="lesson"] { --tone: var(--viz-act-lesson); }
+.blip[data-tone="watch"] { --tone: var(--viz-act-watch); }
+.blip .rd-mark { fill: var(--tone); }
+.blip[data-ring] .rd-mark { fill: var(--surface); stroke: var(--tone); stroke-width: 2.2; }
+.radar .blip { cursor: pointer; }
+@media (hover: hover) and (pointer: fine) {
+  .radar .blip:hover .rd-halo { fill: var(--ink-faint); }
+}
+
+/* The dots land in priority order on the first read, from just under full
+   size; a redraw or a re-render shows them at once. */
+html.js .radar .blip { opacity: 0; scale: .6; transform-box: fill-box; transform-origin: center; }
+html.js .reveal.in .radar .blip, html.js .reveal.quick .radar .blip { opacity: 1; scale: none; }
+html.js .reveal.in:not(.settled):not(.quick) .radar .blip {
+  transition: opacity 260ms var(--ease-out), scale 320ms var(--ease-out);
+  transition-delay: calc(var(--d, 0ms) + 200ms + var(--bd, 0ms));
+}
+
+.rd-legend { margin-top: 12px; }
+.rd-key { width: 14px; height: 14px; flex: none; overflow: visible; }
+.rd-key.wide { width: 28px; }
+.rd-legend .rd-size { color: var(--ink-faint); }
+.rd-table { margin-top: 12px; }
+.rd-table > summary { cursor: pointer; font-size: 12px; color: var(--ink-faint); width: fit-content; }
+.rd-table > summary:hover { color: var(--ink-soft); }
+.rd-table table { margin-top: 10px; }
+.rd-table td.num { font-variant-numeric: tabular-nums; }
+body[dir="rtl"] .rd-table > summary { font-family: var(--ar); }
+
+/* --------------------------------------------------------------- scoring -- */
+
+/* How a card's two numbers were reached. Neutral like the why block: a score
+   is neither a confirmation nor a gap. Where a value came from is said in
+   words; a default, which measured nothing, borrows the dashed outline the
+   page uses for an absence. */
+.score { margin: 0 0 14px; padding-bottom: 14px; border-bottom: 1px solid var(--line-soft); }
+.sc-title { display: block; margin-bottom: 10px; }
+.sc-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+.sc-col { min-width: 0; display: grid; align-content: start; gap: 9px; }
+.sc-col:not(:last-child) { padding-inline-end: 24px; }
+.sc-col + .sc-col { padding-inline-start: 24px; border-inline-start: 1px solid var(--line-soft); }
+.sc-head { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 10px; }
+.sc-total { font: 600 26px/1 var(--display); color: var(--ink); font-variant-numeric: lining-nums tabular-nums; }
+.sc-math { font: 500 11.5px/1.3 var(--mono); color: var(--ink-faint); }
+.sc-rows { list-style: none; margin: 0; padding: 0; display: grid; gap: 7px; }
+/* A fixed column for where each score came from, so the meters line up down
+   the column whatever the word beside them. */
+.sc-rows li { display: grid; grid-template-columns: minmax(0, 1fr) auto 14px 76px; align-items: center; gap: 4px 10px; }
+.sc-name { font-size: 12.5px; color: var(--ink-soft); min-width: 0; }
+body[dir="rtl"] .sc-name { font-family: var(--ar); }
+.sc-meter { display: inline-flex; gap: 2px; }
+.sc-meter i { display: block; width: 8px; height: 8px; border-radius: 2px; background: var(--neutral-mark); }
+.sc-meter i.on { background: var(--ink-soft); }
+.sc-v { font: 600 13px/1 var(--sans); color: var(--ink); text-align: end; font-variant-numeric: tabular-nums; }
+.sc-prov {
+  justify-self: start; font: 500 10.5px/1 var(--sans); color: var(--ink-soft);
+  padding: 3px 7px; border: 1px solid var(--line); border-radius: var(--r-pill);
+}
+body[dir="rtl"] .sc-prov { font-family: var(--ar); }
+.sc-prov[data-p="judged"] { background: var(--gray-soft); }
+.sc-prov[data-p="default"] { color: var(--ink-faint); border-style: dashed; border-color: var(--edge); }
+.sc-why { grid-column: 1 / -1; margin: 0; font-size: 11.5px; line-height: 1.5; color: var(--ink-faint); }
+body[dir="rtl"] .sc-why[lang="ar"] { font-family: var(--ar); line-height: 1.7; }
+.sc-note { margin: 0; font-size: 11.5px; color: var(--ink-faint); }
+body[dir="rtl"] .sc-note { font-family: var(--ar); }
+.sc-warn { color: var(--ink-soft); }
+.chip.immature { background: transparent; color: var(--ink-soft); border-color: var(--edge); }
+
+@media (max-width: 640px) {
+  .sc-grid { grid-template-columns: minmax(0, 1fr); }
+  .sc-col:not(:last-child) { padding-inline-end: 0; }
+  .sc-col + .sc-col {
+    padding-inline-start: 0; border-inline-start: 0;
+    margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--line-soft);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  html.js .radar .blip { opacity: 1; scale: none; }
+}
