@@ -352,11 +352,21 @@ body[dir="rtl"] .headline {
 
 .tabbar {
   position: sticky; top: 0; z-index: 20;
-  background: color-mix(in srgb, var(--paper) 78%, transparent);
-  backdrop-filter: blur(14px) saturate(140%);
-  -webkit-backdrop-filter: blur(14px) saturate(140%);
+  /* Nearly opaque on purpose. At 78% the page read straight through it: a line of
+     monospace passing under the bar stayed legible, so the bar looked like a bug.
+     The blur still samples the backdrop, so the band keeps the page's own tint
+     instead of sitting on it as a flat slab. */
+  background: color-mix(in srgb, var(--paper) 94%, transparent);
+  backdrop-filter: blur(24px) saturate(140%);
+  -webkit-backdrop-filter: blur(24px) saturate(140%);
   border-block-end: 1px solid var(--line);
   box-shadow: inset 0 1px 0 var(--line-soft);
+}
+/* Without the blur the band is only a tint, and the page reads straight through
+   it. Where the browser cannot blur a backdrop, the bar stops being translucent
+   at all rather than showing the text it is meant to cover. */
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .tabbar { background: var(--paper); }
 }
 .tabbar-inner { max-width: 1060px; margin: 0 auto; padding: 0 22px; }
 .tabs { display: flex; gap: 4px; overflow-x: auto; scrollbar-width: none; position: relative; }
@@ -1784,4 +1794,162 @@ body[dir="rtl"] .sc-note { font-family: var(--ar); }
 }
 @media (prefers-reduced-motion: reduce) {
   html.js .radar .blip { opacity: 1; scale: none; }
+}
+
+/* ------------------------------------------------------------- material -- */
+
+/* The review reads as a second opinion on the chapter, so it sits in the same
+   card as the curriculum map, with the finding as the new unit inside it. A
+   finding is not a claim the run checked, so it never takes the gold: state
+   travels in the chip, and the source line carries the weight instead. */
+.basis {
+  margin: -2px 0 14px; font-size: 12.5px; line-height: 1.5; color: var(--ink-faint);
+  border-inline-start: 2px solid var(--line); padding-inline-start: 10px;
+}
+body[dir="rtl"] .basis { font-family: var(--ar); font-size: 13px; }
+
+.deadlines { border: 1px solid var(--line); border-radius: var(--radius); padding: 12px 14px; margin-bottom: 18px; }
+.deadlines h3 { margin: 0 0 8px; font: 600 13px/1.3 var(--sans); letter-spacing: .04em; text-transform: uppercase; color: var(--ink-soft); }
+body[dir="rtl"] .deadlines h3 { font-family: var(--ar); letter-spacing: 0; text-transform: none; }
+.dl {
+  display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 10px;
+  padding: 7px 0; border-top: 1px solid var(--line-soft);
+}
+.dl:first-of-type { border-top: 0; }
+.dl b { font: 600 13px/1 var(--mono); color: var(--ink); }
+.dl code { font: 500 12px/1.4 var(--mono); color: var(--ink-soft); }
+.dl-n { font-size: 12px; color: var(--ink-faint); }
+.dl-why { flex: 1 1 100%; font-size: 12.5px; line-height: 1.5; color: var(--ink-faint); }
+/* The nearest date is a real gap, so it takes the one alert hue the page owns. */
+.dl.near b { color: var(--crit-ink); }
+.dl.near { background: var(--crit-soft); margin: 0 -14px; padding: 7px 14px; }
+
+.match { border: 1px solid var(--line); border-radius: var(--radius); background: var(--surface); margin-bottom: 10px; }
+.match > summary { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; padding: 12px 14px; cursor: pointer; list-style: none; }
+.match > summary::-webkit-details-marker { display: none; }
+.match > summary h3 { margin: 0; font: 600 16px/1.3 var(--display); flex: 1 1 auto; }
+body[dir="rtl"] .match > summary h3 { font-family: var(--ar); font-size: 15px; }
+.mc-tally { display: flex; gap: 6px; flex-wrap: wrap; }
+.mc-body { padding: 0 14px 12px; display: grid; gap: 12px; }
+
+.matbook { border-top: 1px solid var(--line-soft); padding-top: 12px; }
+.mb-head { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 6px; }
+.mb-file { font: 500 12px/1.4 var(--mono); color: var(--ink-soft); word-break: break-all; }
+.mb-action { margin: 0 0 8px; font-size: 13.5px; line-height: 1.55; color: var(--ink); }
+.mb-lesson { margin-top: 8px; font-size: 12.5px; color: var(--ink-soft); }
+.mb-lesson span { color: var(--gold-ink); font-weight: 600; }
+.mb-more { margin-top: 6px; font-size: 12px; color: var(--ink-faint); }
+
+.mf { border-inline-start: 2px solid var(--line); padding-inline-start: 10px; margin-top: 10px; }
+.mf-top { display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap; }
+.mf-top b { font-size: 13.5px; }
+.mf-cell { font: 500 11.5px/1 var(--mono); color: var(--ink-faint); }
+.mf-own { font-size: 11.5px; color: var(--ink-faint); }
+.mf-why { margin: 4px 0 0; font-size: 13px; line-height: 1.55; color: var(--ink-soft); }
+.mf-rep { margin: 4px 0 0; font-size: 13px; line-height: 1.55; color: var(--ink); }
+.mf-rep code { font: 500 12.5px/1.4 var(--mono); background: var(--gray-soft); padding: 1px 5px; border-radius: var(--r-mark); }
+.mf-arrow { display: inline-block; width: 12px; height: 1px; background: var(--ink-faint); vertical-align: middle; margin-inline-end: 6px; }
+.mf-foot { display: flex; align-items: center; gap: 10px; margin-top: 5px; }
+.mf-src { font-size: 12px; color: var(--ink-soft); text-decoration: none; border-bottom: 1px solid var(--line); }
+.mf-src:hover { color: var(--gold-ink); }
+.mf-date { font: 500 11.5px/1 var(--mono); color: var(--ink-faint); }
+.matfoot { margin-top: 18px; }
+.dl-src { margin: 8px 0 0; font-size: 11.5px; color: var(--ink-faint); word-break: break-all; }
+.dl-src a { color: inherit; }
+.dl-src a:hover { color: var(--gold-ink); }
+.mb-found { font: 500 11px/1 var(--mono); color: var(--ink-faint); }
+.dl-split, .dl-rep { font-size: 12px; color: var(--ink-faint); }
+.dl-rep code { font: 500 12px/1.4 var(--mono); color: var(--ink-soft); }
+#matWide { margin-bottom: 18px; }
+#matWide h3 { margin: 0 0 8px; font: 600 13px/1.3 var(--sans); letter-spacing: .04em; text-transform: uppercase; color: var(--ink-soft); }
+body[dir="rtl"] #matWide h3 { font-family: var(--ar); letter-spacing: 0; text-transform: none; }
+.cw { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 10px; padding: 7px 0; border-top: 1px solid var(--line-soft); }
+.cw:first-of-type { border-top: 0; }
+.cw-n { font: 500 11.5px/1 var(--mono); color: var(--ink-faint); }
+.cw-why { flex: 1 1 100%; font-size: 12.5px; line-height: 1.5; color: var(--ink-faint); }
+
+/* A proposal with its measure beside it. The count is not a confirmed claim, so it
+   takes no gold: the action chip carries the decision, the term carries the proof. */
+#matLessons { margin-bottom: 18px; }
+#matLessons h3 { margin: 0 0 6px; font: 600 13px/1.3 var(--sans); letter-spacing: .04em; text-transform: uppercase; color: var(--ink-soft); }
+body[dir="rtl"] #matLessons h3 { font-family: var(--ar); letter-spacing: 0; text-transform: none; }
+.ls-sub { margin: 0 0 10px; font-size: 12.5px; line-height: 1.55; color: var(--ink-faint); }
+body[dir="rtl"] .ls-sub { font-family: var(--ar); font-size: 13px; }
+.ls { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 10px; padding: 8px 0; border-top: 1px solid var(--line-soft); }
+.ls:first-of-type { border-top: 0; }
+.ls > b { font-size: 13.5px; flex: 1 1 260px; }
+.ls-term { display: inline-flex; align-items: baseline; gap: 8px; flex-wrap: wrap; }
+.ls-term code { font: 500 12px/1.4 var(--mono); background: var(--gray-soft); padding: 1px 6px; border-radius: var(--r-mark); }
+.ls-n { font: 500 11.5px/1 var(--mono); color: var(--ink-faint); }
+/* A term that did not repeat is not a term: the row says so where the name would be. */
+.ls-unstable { font-size: 12px; color: var(--crit-ink); }
+
+/* A change, at the cell it lives in. The cell number is the spine: it is what a
+   teacher opens the notebook to, so it holds the left edge and the evidence hangs
+   off it. Verified and judged differ by their tag and nothing else, because the
+   difference is what the tag says, not how loud the row is. */
+.cellrow { display: grid; grid-template-columns: 78px minmax(0, 1fr); gap: 10px; padding: 9px 0; border-top: 1px solid var(--line-soft); }
+.cellrow:first-of-type { border-top: 0; }
+.cell-no { font: 500 11.5px/1.6 var(--mono); color: var(--ink-faint); }
+body[dir="rtl"] .cellrow.whole .cell-no, body[dir="rtl"] .cell-no { font-family: var(--ar); font-size: 12px; }
+.cellrow.whole .cell-no { font-family: var(--sans); font-size: 11.5px; }
+.cell-items { display: grid; gap: 10px; min-width: 0; }
+.ci { min-width: 0; }
+.ci-top { display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap; }
+.ci-tag {
+  font: 600 10px/1 var(--sans); letter-spacing: .04em; text-transform: uppercase;
+  padding: 4px 7px; border-radius: var(--r-mark); white-space: nowrap;
+}
+body[dir="rtl"] .ci-tag { font-family: var(--ar); letter-spacing: 0; text-transform: none; }
+.ci-tag.ver { background: var(--gold-soft); color: var(--gold-ink); }
+.ci-tag.jud { border: 1px solid var(--line); color: var(--ink-faint); }
+.ci-breaks { font-size: 11.5px; color: var(--crit-ink); }
+.ci-how { font-size: 11.5px; color: var(--ink-faint); }
+.ci-line { display: flex; gap: 8px; align-items: baseline; margin-top: 4px; flex-wrap: wrap; }
+.ci-label { font: 500 10.5px/1.6 var(--sans); text-transform: uppercase; letter-spacing: .04em; color: var(--ink-faint); flex: none; }
+body[dir="rtl"] .ci-label { font-family: var(--ar); text-transform: none; letter-spacing: 0; font-size: 11.5px; }
+.ci-line code { font: 500 12px/1.5 var(--mono); background: var(--gray-soft); padding: 2px 6px; border-radius: var(--r-mark); overflow-wrap: anywhere; }
+.ci-line code.ci-new { color: var(--ink); }
+.ci-rep { font-size: 13px; line-height: 1.55; color: var(--ink); }
+.ci-why { margin: 4px 0 0; font-size: 12.5px; line-height: 1.55; color: var(--ink-soft); }
+.mb-cells { font: 500 11.5px/1 var(--mono); color: var(--ink-faint); }
+
+@media (max-width: 640px) {
+  .cellrow { grid-template-columns: minmax(0, 1fr); gap: 4px; }
+}
+body[dir="rtl"] .ls-unstable { font-family: var(--ar); font-size: 12.5px; }
+body[dir="rtl"] .ls-n { font-family: var(--ar); font-size: 12px; }
+.ls-why { flex: 1 1 100%; font-size: 12.5px; line-height: 1.5; color: var(--ink-faint); }
+.ls-watch { margin-top: 6px; border-top: 1px solid var(--line-soft); }
+.ls-watch > summary {
+  padding: 9px 0; cursor: pointer; list-style: none; font-size: 12.5px; color: var(--ink-soft);
+  display: flex; align-items: center; gap: 8px;
+}
+/* The same chevron the cards use, so a group that opens looks like one. */
+.ls-watch > summary::before {
+  content: ""; width: 6px; height: 6px; flex: none;
+  border-right: 1.5px solid currentColor; border-bottom: 1.5px solid currentColor;
+  transform: rotate(-45deg); transition: transform 180ms var(--ease-out);
+}
+body[dir="rtl"] .ls-watch > summary::before { transform: rotate(135deg); }
+.ls-watch[open] > summary::before { transform: rotate(45deg); }
+.ls-watch > summary::-webkit-details-marker { display: none; }
+.ls-watch[open] > summary { color: var(--ink); }
+/* The English note is carried by the notebook's own line, so the findings under it
+   are marked only by their direction. */
+.mf-why.bare .en-note { display: none; }
+body[dir="rtl"] .mf-why.bare { border-inline-start: 0; padding-inline-start: 0; }
+
+/* State reads as state, so the verdict and the status chips take ink weight
+   rather than colour, with the one exception the page reserves for a real gap. */
+.chip.m-replace, .chip.m-retire, .chip.m-unsafe { background: var(--crit-soft); color: var(--crit-ink); border-color: transparent; }
+.chip.m-revise, .chip.m-keep { background: var(--gray-soft); color: var(--ink-soft); }
+.chip.m-superseded, .chip.m-deprecated, .chip.m-removed { background: var(--gray-soft); color: var(--ink-soft); }
+.chip.m-missing_context { background: transparent; color: var(--ink-faint); border: 1px solid var(--line); }
+.chip.m-small, .chip.m-medium, .chip.m-large { background: transparent; color: var(--ink-faint); border: 1px solid var(--line); }
+.chip.m-high, .chip.m-low { background: transparent; color: var(--ink-faint); border: 1px solid var(--line); }
+
+@media (max-width: 640px) {
+  .mc-body { padding-inline: 10px; }
+  .dl.near { margin: 0 -10px; padding-inline: 10px; }
 }
