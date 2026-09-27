@@ -29,6 +29,7 @@ from src.sources import market
 DEMAND_PATH = Path("fixtures/lesson_demand.json")
 MONTHS = 3
 TERMS_PER_LESSON = 3
+RUNS = 5
 
 # Words nearly every AI job post carries. Counting them would measure the field,
 # not the lesson.
@@ -91,27 +92,41 @@ def valid(term: str, lesson: dict) -> bool:
     return named_in(term, lesson_text(lesson))
 
 
-def pick_terms(lessons: list[dict], ask=None) -> dict[str, list[str]]:
-    """The names to count for each lesson, by notebook. Empty when no model answers."""
+def offered_terms(answer, number: int, lesson: dict) -> list[str]:
+    """What one answer offered for one lesson, keeping only names that pass the rules."""
+    terms = answer.get("terms") if isinstance(answer, dict) else None
+    offered = (terms or {}).get(str(number)) or []
+    kept = []
+
+    for term in offered if isinstance(offered, list) else []:
+        if isinstance(term, str) and valid(term, lesson) and term.strip().lower() not in {k.lower() for k in kept}:
+            kept.append(term.strip())
+
+    return kept[:TERMS_PER_LESSON]
+
+
+def pick_terms(lessons: list[dict], ask=None,
+               runs: int = RUNS) -> tuple[dict[str, list[str]], dict[str, list[list[str]]]]:
+    """The names to count for each lesson, asked `runs` times. A name counts only when
+    the model gives it every time: pass^k, not pass@k. Asked once each, one run named
+    Streamlit and the next "Streamlit chat app", and the lesson's decision flipped
+    between them. A name the model does not repeat is its choice of the moment, not
+    the lesson's subject. A run that fails to answer holds nothing, so nothing holds.
+    Returns the names that held, and what each run offered."""
     ask = ask or (lambda system, user: model.ask_json(system, user, max_tokens=900, timeout=60,
                                                       action="pick_lesson_terms"))
     listed = "\n\n".join(f"Lesson {number}: {lesson['title']}\nTopics: " + "; ".join(lesson["covers"])
                          for number, lesson in enumerate(lessons, start=1))
-    answer = ask(PICK_SYSTEM, listed) or {}
-    terms = answer.get("terms") if isinstance(answer, dict) else None
-    picked = {}
+    answers = [ask(PICK_SYSTEM, listed) for _ in range(runs)]
+    picked, offered = {}, {}
 
     for number, lesson in enumerate(lessons, start=1):
-        offered = (terms or {}).get(str(number)) or []
-        kept = []
+        each = [offered_terms(answer, number, lesson) for answer in answers]
+        offered[lesson["notebook"]] = each
+        picked[lesson["notebook"]] = [term for term in (each[0] if each else [])
+                                      if all(term.lower() in {other.lower() for other in run} for run in each[1:])]
 
-        for term in offered if isinstance(offered, list) else []:
-            if isinstance(term, str) and valid(term, lesson) and term.strip().lower() not in {k.lower() for k in kept}:
-                kept.append(term.strip())
-
-        picked[lesson["notebook"]] = kept[:TERMS_PER_LESSON]
-
-    return picked
+    return picked, offered
 
 
 def taught(term: str, texts: list[str]) -> int:
@@ -155,19 +170,26 @@ def settle(terms: list[dict], title: str = "") -> dict:
             "act": decide(jobs, mentioned)}
 
 
-def measure(lessons: list[dict], picked: dict[str, list[str]], count_jobs, texts: list[str]) -> list[dict]:
+def measure(lessons: list[dict], picked: dict[str, list[str]], count_jobs, texts: list[str],
+            offered: dict[str, list[list[str]]] | None = None) -> list[dict]:
     found = []
 
     for lesson in lessons:
+        tries = (offered or {}).get(lesson["notebook"], [])
         terms = [{"term": term, "jobs": count_jobs(term), "notebooks": taught(term, texts)}
                  for term in picked.get(lesson["notebook"], [])]
-        found.append({**lesson, "terms": terms, **settle(terms, lesson["title"])})
+        found.append({**lesson, "terms": terms, "offered": tries, "unstable": not terms and any(tries),
+                      **settle(terms, lesson["title"])})
 
     return found
 
 
-def why(lesson: dict, months: int = MONTHS) -> tuple[str, str]:
+def why(lesson: dict, months: int = MONTHS, runs: int = RUNS) -> tuple[str, str]:
     term, jobs, mentioned, act = lesson["term"], lesson["jobs"], lesson["mentioned"], lesson["act"]
+
+    if term is None and lesson.get("unstable"):
+        return (f"The model was asked {runs} times and no name came back every time, so demand is "
+                "not measured and the lesson is watched.", arabic.lesson_unstable(runs))
 
     if term is None:
         return ("Demand not measured: no name in the proposal passed the rules, so it is watched, "
@@ -198,7 +220,7 @@ def answered_by(action: str) -> str | None:
         return None
 
     chain = dict(entry.split(":", 1) for entry in model.describe().split(", ") if ":" in entry)
-    return f"{answered[-1]}:{chain.get(answered[-1], '')}".rstrip(":")
+    return ", ".join(f"{name}:{chain.get(name, '')}".rstrip(":") for name in dict.fromkeys(answered))
 
 
 def main() -> None:
@@ -215,7 +237,7 @@ def main() -> None:
 
     curriculum = json.loads(review.CURRICULUM_PATH.read_text(encoding="utf-8"))
     lessons = proposals(material, {copy["notebook"] for copy in curriculum.get("copies", [])})
-    picked = pick_terms(lessons)
+    picked, offered = pick_terms(lessons)
     texts = [concepts.notebook_text(json.loads(path.read_text(encoding="utf-8")))
              for path in sorted(Path(args.notebooks).rglob("*.ipynb"))]
     threads = [thread["id"] for thread in market.hiring_threads(MONTHS)]
@@ -226,12 +248,14 @@ def main() -> None:
             counts[term.lower()] = market.job_posts(term, threads)
         return counts[term.lower()]
 
-    measured = measure(lessons, picked, count_jobs, texts)
+    measured = measure(lessons, picked, count_jobs, texts, offered)
+    held = sum(1 for lesson in measured if lesson["terms"])
     DEMAND_PATH.write_text(json.dumps({
         "checked_on": date.today().isoformat(), "months": MONTHS, "threads": threads,
-        "picked_by": answered_by("pick_lesson_terms"),
+        "picked_by": answered_by("pick_lesson_terms"), "runs": RUNS, "held": held,
         "lessons": measured,
     }, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+    print(f"pass^{RUNS}: a name held in all {RUNS} runs for {held} of {len(measured)} lessons")
 
     for lesson in sorted(measured, key=lambda item: (item["act"], -(item["jobs"] or 0))):
         print(f"{lesson['act']:<22} {str(lesson['jobs']):>4}  {lesson['term'] or '-':<24} {lesson['title'][:60]}")

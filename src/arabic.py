@@ -509,3 +509,11 @@ def lesson_demand(term: str, jobs: int, months: int, mentioned: int, act: str) -
         return f"{posts}، ولا يذكره أي نوتبوك: درس جديد."
 
     return f"{posts}، ولا يذكره أي نوتبوك: مادة اختيارية حتى يطلبه عدد أكبر من أصحاب العمل."
+
+
+TIME = ("مرة واحدة", "مرتان", "مرات", "مرة", "مرتين")
+
+
+def lesson_unstable(runs: int) -> str:
+    return (f"سُئل النموذج {counted(runs, TIME, oblique=True)} ولم يتكرر أي اسم في كل مرة، "
+            "فلم يُقَس الطلب ويبقى الدرس تحت المراقبة.")

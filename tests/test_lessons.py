@@ -33,15 +33,15 @@ def test_a_term_is_a_name_not_a_sentence():
 
 
 def test_the_model_picks_and_the_rules_keep_only_what_passes():
-    picked = lessons.pick_terms([MCP, INJECTION], answers({"1": ["MCP", "LangGraph", "mcp"],
+    picked, _ = lessons.pick_terms([MCP, INJECTION], answers({"1": ["MCP", "LangGraph", "mcp"],
                                                           "2": ["prompt injection", "AI"]}))
 
     assert picked == {MCP["notebook"]: ["MCP"], INJECTION["notebook"]: ["prompt injection"]}
 
 
 def test_no_model_means_no_terms_and_nothing_promoted():
-    picked = lessons.pick_terms([MCP], lambda system, user: None)
-    found = lessons.measure([MCP], picked, lambda term: 99, [])
+    picked, offered = lessons.pick_terms([MCP], lambda system, user: None)
+    found = lessons.measure([MCP], picked, lambda term: 99, [], offered)
 
     assert picked == {MCP["notebook"]: []}
     assert found[0]["act"] == "watch" and found[0]["jobs"] is None
@@ -172,3 +172,51 @@ def test_the_decision_is_remade_from_the_saved_counts_when_the_page_is_built():
 
     assert view["term"] == "LangSmith" and view["act"] == "add_optional_content"
     assert view["why"].startswith("2 job posts named LangSmith")
+
+
+def in_turn(*replies):
+    """A model that gives each reply once, in order, the way five separate runs would."""
+    queue = list(replies)
+    return lambda system, user: queue.pop(0)
+
+
+def test_a_name_counts_only_when_the_model_gives_it_every_time():
+    ask = in_turn({"terms": {"1": ["MCP", "parallel tool calls"]}}, {"terms": {"1": ["MCP"]}},
+                  {"terms": {"1": ["Mcp"]}}, {"terms": {"1": ["MCP", "parallel tool calls"]}},
+                  {"terms": {"1": ["MCP"]}})
+
+    picked, offered = lessons.pick_terms([MCP], ask, runs=5)
+
+    assert picked == {MCP["notebook"]: ["MCP"]}
+    assert len(offered[MCP["notebook"]]) == 5
+
+
+def test_a_lesson_whose_name_keeps_changing_is_watched_and_says_so():
+    lesson = {"notebook": "notebooks/week 3/app.ipynb", "id": "week3/app",
+              "title": "Ship the agent as a Streamlit chat app", "covers": []}
+    ask = in_turn(*[{"terms": {"1": ["Streamlit"]}}, {"terms": {"1": ["Streamlit chat app"]}}] * 2,
+                  {"terms": {"1": ["Streamlit"]}})
+
+    picked, offered = lessons.pick_terms([lesson], ask, runs=5)
+    found = lessons.measure([lesson], picked, lambda term: 3, [], offered)[0]
+
+    assert picked == {lesson["notebook"]: []}
+    assert found["unstable"] and found["act"] == "watch"
+    assert lessons.why(found)[0].startswith("The model was asked 5 times and no name came back every time")
+
+
+def test_one_run_that_fails_to_answer_means_nothing_holds():
+    ask = in_turn(*[{"terms": {"1": ["MCP"]}}] * 4, None)
+
+    picked, _ = lessons.pick_terms([MCP], ask, runs=5)
+
+    assert picked == {MCP["notebook"]: []}
+
+
+def test_the_view_says_how_many_runs_and_how_many_names_held():
+    material = {"schema": review.SCHEMA, "read_on": "2026-09-26", "notebooks": []}
+    demand = {"checked_on": "2026-09-27", "months": 3, "runs": 5, "held": 12, "picked_by": "openai", "lessons": []}
+
+    view = review.build(material, {"chapters": []}, [], None, demand)
+
+    assert view["lessons_checked"]["runs"] == 5 and view["lessons_checked"]["held"] == 12

@@ -300,6 +300,11 @@ every AI job post carries, and, if the course already teaches it, only if it is 
 subject. Hacker News counts it in the last three "Who is hiring?" threads, and the notebooks
 are searched for it.
 
+The model is asked five times, and a name counts only if it comes back every time: pass^5,
+from the week 6 evaluation deck, rather than pass@5, which would accept a name given once. With
+one prompt and gpt-4o-mini answering all five, a name held for all 26 lessons, and 23 of them
+got the identical list each time.
+
 Of 26 proposals: 1 new lesson, MCP (20 posts, no notebook mentions it, the same number the
 concept check found independently); 3 optional (prompt injection in two lessons, 3 posts each,
 and Structured Outputs, 1); 22 watched, because no employer names them yet. The first attempt

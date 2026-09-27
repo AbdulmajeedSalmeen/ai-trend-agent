@@ -234,6 +234,7 @@ def build(review: dict, curriculum: dict, deadlines: list[dict], retirement_data
                  for model in row["ids"]}
     read_on = review.get("read_on")
     months = (demand or {}).get("months", lessons.MONTHS)
+    runs = (demand or {}).get("runs", 1)
     measured = {lesson["notebook"]: lesson for lesson in (demand or {}).get("lessons", [])}
 
     books, unplaced, counted = [], [], []
@@ -289,7 +290,7 @@ def build(review: dict, curriculum: dict, deadlines: list[dict], retirement_data
             "found": len(shown),
             "why": why,
             "why_ar": why_ar,
-            "ld": lesson_view(measured.get(notebook), months) if not original else None,
+            "ld": lesson_view(measured.get(notebook), months, runs) if not original else None,
         }
         (books if chapter_id else unplaced).append(book)
 
@@ -335,7 +336,8 @@ def build(review: dict, curriculum: dict, deadlines: list[dict], retirement_data
             "lessons_optional": sum(1 for lesson in proposed_lessons if lesson["act"] == "add_optional_content"),
             "lessons_watch": sum(1 for lesson in proposed_lessons if lesson["act"] == "watch"),
         },
-        "lessons_checked": {"on": (demand or {}).get("checked_on"), "months": months,
+        "lessons_checked": {"on": (demand or {}).get("checked_on"), "months": months, "runs": runs,
+                            "held": (demand or {}).get("held"),
                             "picked_by": (demand or {}).get("picked_by")} if demand else None,
         "lessons": proposed_lessons,
         "deadline_source": {"url": sources.get("source", ""), "read_on": sources.get("read_on", "")},
@@ -351,13 +353,15 @@ def build(review: dict, curriculum: dict, deadlines: list[dict], retirement_data
     }
 
 
-def lesson_view(lesson: dict | None, months: int) -> dict | None:
+def lesson_view(lesson: dict | None, months: int, runs: int = lessons.RUNS) -> dict | None:
     if lesson is None:
         return None
 
-    settled = lessons.settle(lesson.get("terms", []), lesson.get("title", ""))
-    english, arabic_text = lessons.why(settled, months)
-    return {**settled, "terms": lesson.get("terms", []), "why": english, "why_ar": arabic_text}
+    settled = {**lessons.settle(lesson.get("terms", []), lesson.get("title", "")),
+               "unstable": lesson.get("unstable", False)}
+    english, arabic_text = lessons.why(settled, months, runs)
+    return {**settled, "terms": lesson.get("terms", []), "offered": lesson.get("offered", []),
+            "why": english, "why_ar": arabic_text}
 
 
 def payload(path: Path = REVIEW_PATH, curriculum_path: Path = CURRICULUM_PATH,

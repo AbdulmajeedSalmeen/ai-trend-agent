@@ -110,7 +110,8 @@ using out loud.
 ## Still owed
 
 - The evaluation suite itself: a frozen set of cases from the saved run, several repeats per
-  case, pass^k for stability, a release gate, and the result committed. The vocabulary above
-  is in place; the measurement is not.
+  case, pass^k for stability, a release gate, and the result committed. pass^k is now measured
+  for one model choice, the search term behind each proposed lesson (asked five times, kept only
+  when it comes back every time); the claim reader and the writer are still owed.
 - Validating the judge against a reference, per the *Agent Evaluation* deck: "never assume the
   judge is ground truth".

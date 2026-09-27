@@ -1,6 +1,6 @@
 # Progress
 
-**Last updated:** 2026-09-26 · **Tests:** 432 passing · **Demo:** Sep 26–27
+**Last updated:** 2026-09-26 · **Tests:** 436 passing · **Demo:** Sep 26–27
 
 The pipeline runs end to end, live, from a web app. A model reads, judges and writes;
 rules still decide what counts as confirmed, and every recommendation now carries the reason
@@ -119,7 +119,9 @@ behind it: what the chapter teaches, which version it runs, and how far the rele
 - [ ] Decide whether the material review may be published. Until then it stays on this machine
 - [ ] Two timed rehearsals, and the offline fallback drill
 - [ ] Raise or refill the OpenAI spend limit; until then every run is rules only
-- [ ] The evaluation suite: frozen cases, several repeats, pass^k, a release gate
+- [ ] The evaluation suite: frozen cases, several repeats, pass^k, a release gate. Started with
+  the one model choice that drives a decision: the lesson search term is asked 5 times and kept
+  only if it comes back every time. Still owed for the claim reader and the writer.
 - [ ] Optional: GitHub token per member (60 requests/hour without one)
 
 ## Standup log
@@ -154,7 +156,11 @@ behind it: what the chapter teaches, which version it runs, and how far the rele
   remade from them whenever the page is built.
 - OpenAI answered the term pick (`gpt-4o-mini`): the key works again and `MODEL_ORDER` now
   starts with it.
-- 432 tests, none touching a model or the network.
+- pass^5 on the lesson search term: the model is asked five times and a name counts only if it
+  comes back every time. 26 of 26 held with gpt-4o-mini answering all five, 23 with the identical
+  list each time, and every decision stayed the same. The flips seen earlier in the day came from
+  changing the prompt between runs, not from the model.
+- 436 tests, none touching a model or the network.
 
 ### 2026-09-25
 - The 19 install counts pypistats had refused on Sep 22 are in, filled one request at a time.
