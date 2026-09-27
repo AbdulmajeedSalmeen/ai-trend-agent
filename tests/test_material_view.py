@@ -119,3 +119,10 @@ def test_the_summary_counts_what_the_view_carries():
     assert summary["cells_verified"] == 3 and summary["cells_judged"] == 1
     assert summary["breaks_today"] == 1 and summary["copies"] == 1
     assert summary["stop_running"] == [{"date": "2026-10-23", "notebooks": 1}]
+
+
+def test_the_card_reads_from_cells_so_the_short_list_and_the_run_offers_stay_out():
+    chat = book(material_view.view(curriculum(), TABLE, [], reviewed()), "chat.ipynb")
+
+    assert "f" not in chat and "all" not in chat
+    assert material_view.without_offered({"term": "MCP", "offered": [["MCP"]]}) == {"term": "MCP"}

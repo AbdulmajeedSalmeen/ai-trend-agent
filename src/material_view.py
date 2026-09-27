@@ -28,7 +28,9 @@ from src.plan import chapter_order
 VERIFIED_EN = ("Verified by rule: an import against the source of the release a student installs today, "
                "a model against OpenAI's own deprecations table.")
 KIND_ORDER = {"import": 0, "model": 1, "method": 2}
-REVIEW_FIELDS = ("v", "proposed", "copy_of", "act", "e", "a", "n", "f", "more", "found", "why", "why_ar", "ld")
+# The card reads a notebook's changes from its cells, so the review's own short list
+# of findings (f) and what each model run offered (offered) stay out of the page.
+REVIEW_FIELDS = ("v", "proposed", "copy_of", "act", "e", "a", "n", "more", "found", "why", "why_ar", "ld")
 
 
 def notebook_path(week: int, name: str) -> str:
@@ -98,11 +100,15 @@ def cells_of(path: str, edits: dict, calls: dict, rows: dict, source: dict,
     return [{"cell": cell, "items": sorted(items, key=item_order)} for cell, items in sorted(cells.items())], whole
 
 
+def without_offered(lesson: dict | None) -> dict | None:
+    return {key: value for key, value in lesson.items() if key != "offered"} if lesson else lesson
+
+
 def blank_book(chapter: dict, name: str, copy_of: str | None) -> dict:
     """A notebook as the curriculum knows it, before any review."""
     return {"id": f"week{chapter['week']}/{Path(name).stem}", "file": name, "ch": chapter["chapter_id"],
             "wk": chapter["week"], "v": None, "proposed": None, "copy_of": copy_of, "act": None, "e": None,
-            "a": "", "n": None, "f": [], "more": 0, "found": 0, "why": "", "why_ar": "", "ld": None}
+            "a": "", "n": None, "more": 0, "found": 0, "why": "", "why_ar": "", "ld": None}
 
 
 def unreviewed_counts(notebooks: int, copies: int) -> dict:
@@ -141,6 +147,7 @@ def view(curriculum: dict, data: dict | None, deadlines: list[dict], reviewed: d
 
             if found:
                 base.update({key: found[key] for key in REVIEW_FIELDS if key in found})
+                base["ld"] = without_offered(base["ld"])
 
             if base["copy_of"]:
                 cells, whole = [], []
@@ -188,7 +195,7 @@ def view(curriculum: dict, data: dict | None, deadlines: list[dict], reviewed: d
         "shown": (reviewed or {}).get("shown", 0),
         "counts": (reviewed or {}).get("counts") or unreviewed_counts(len(books_all), len(books_all) - len(kept)),
         "lessons_checked": (reviewed or {}).get("lessons_checked"),
-        "lessons": (reviewed or {}).get("lessons", []),
+        "lessons": [without_offered(lesson) for lesson in (reviewed or {}).get("lessons", [])],
         "course_wide": (reviewed or {}).get("course_wide", []),
         "deadline_source": {"url": source["source"] or "", "read_on": source["read_on"] or ""},
         "deadlines": deadlines,
