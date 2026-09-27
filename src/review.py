@@ -286,6 +286,8 @@ def build(review: dict, curriculum: dict, deadlines: list[dict], retirement_data
             "a": clip(entry.get("action"), 240),
             "n": entry["new_lesson"]["title"] if entry.get("new_lesson") and not original else None,
             "f": [compact(finding, notebook, owned) for finding in shown[:SHOWN_PER_NOTEBOOK]],
+            # Every finding, for the cell-by-cell view; the card itself shows the first few.
+            "all": [compact(finding, notebook, owned) for finding in shown],
             "more": max(0, len(shown) - SHOWN_PER_NOTEBOOK),
             "found": len(shown),
             "why": why,

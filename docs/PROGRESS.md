@@ -1,6 +1,6 @@
 # Progress
 
-**Last updated:** 2026-09-26 · **Tests:** 436 passing · **Demo:** Sep 26–27
+**Last updated:** 2026-09-27 · **Tests:** 445 passing · **Demo:** Sep 26–27
 
 The pipeline runs end to end, live, from a web app. A model reads, judges and writes;
 rules still decide what counts as confirmed, and every recommendation now carries the reason
@@ -125,6 +125,17 @@ behind it: what the chapter teaches, which version it runs, and how far the rele
 - [ ] Optional: GitHub token per member (60 requests/hour without one)
 
 ## Standup log
+
+### 2026-09-27
+- The focus is the material now, decided by Abdulmajeed. `src/material_view.py` lists every
+  notebook and, in it, every cell with something to change, with its evidence: an import change
+  and a model shutdown are verified by rule, a reviewer's method finding is read and judged. The
+  page opens on it; the package cards follow as the evidence.
+- Without the review the view still stands, verified only, so the committed page carries it:
+  66 cells in 44 notebooks, 3 lines that fail on today's install, 2 notebooks stopping on 28
+  September and 22 on 23 October. With the review on this machine: 337 cells in 85 notebooks,
+  66 verified and 271 judged, and where both reach one cell they sit together, verified first.
+- 445 tests.
 
 ### 2026-09-26
 - The material review, the half that asks whether a notebook still teaches the right method:

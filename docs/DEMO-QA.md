@@ -269,6 +269,22 @@ its tag on GitHub, and the name it moved to is found the same way. The table sti
 few calls outside LangChain, such as `openai.ChatCompletion`, and those are labelled as coming
 from our table. It no longer reads comments, and a name must match whole.
 
+## "Isn't this just a package tracker?"
+
+Not any more, and on purpose. The page opens on the material: every notebook, and in it every
+cell with something to change, what to teach instead, and why. Take the LangChain document chat
+in week 3: cell 88 imports `RetrievalQA` from `langchain.chains`, which langchain 1.4.2 no longer
+has, so the notebook fails on today's install; write `from langchain_classic.chains import
+RetrievalQA` instead. Cell 57 of the same notebook calls `ChatOpenAI()` with no model, which
+defaults to gpt-3.5-turbo, and OpenAI shuts that down on 23 October. The packages are still
+read, because a release is often the proof that a cell has to change: the 85 import lines and
+the 24 notebooks calling a model OpenAI is retiring are packages turned into cells. (The AI
+review's own examples are shown on the page, not written here: the review stays on the machine.)
+
+Each change says how it was established. Verified: checked by a rule against a release's source
+or OpenAI's own table (66 cells). Read and judged: AI reviewers, with the source they read (271
+cells). Where both reach the same cell, they sit together, verified first.
+
 ## "Does it check whether the material still teaches the right method?"
 
 Yes, and it is the half of the agent that is judged rather than measured, so it is labelled that

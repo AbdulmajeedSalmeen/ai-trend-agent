@@ -24,6 +24,13 @@ It works in three layers:
 - **What to teach next.** New concepts come from the tools' own source, and every proposed
   lesson is measured against real job posts before it is recommended.
 
+The page opens on the material, not on the packages: every notebook, and in it every cell with
+something to change, what to teach instead, and the evidence, marked verified when a rule
+checked it against a release or a vendor's own table, or read and judged when AI reviewers did
+(`src/material_view.py`). The packages are the evidence behind those changes. Without the
+review, the verified half stands on its own: 66 cells in 44 notebooks, 3 of which fail on
+today's install.
+
 ## What it found
 
 The agent checked every `langchain` import in the 89 course notebooks against the source of
@@ -174,7 +181,7 @@ instead. The run log says so when it happens.
 | Chapters with something to act on | 11 of 25 |
 | Model shutdowns reaching the course | 24 notebooks: 2 on 28 September, 22 on 23 October |
 | Notebooks that are copies of another | 4, identical cell for cell |
-| Tests | 436, none of which calls a model or the network |
+| Tests | 445, none of which calls a model or the network |
 
 Cross-source is zero because no discussion post this week stated anything a release page
 could check. That is a property of the data, not a gap in the checker, and the page prints

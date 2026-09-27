@@ -517,3 +517,17 @@ TIME = ("مرة واحدة", "مرتان", "مرات", "مرة", "مرتين")
 def lesson_unstable(runs: int) -> str:
     return (f"سُئل النموذج {counted(runs, TIME, oblique=True)} ولم يتكرر أي اسم في كل مرة، "
             "فلم يُقَس الطلب ويبقى الدرس تحت المراقبة.")
+
+
+VERIFIED = ("مفحوص بقاعدة: الاستيراد مقابل مصدر الإصدار الذي يثبّته الطالب اليوم، والنموذج مقابل جدول "
+            "الإيقاف في صفحة OpenAI نفسها.")
+
+
+def model_cell(cell: int, model: str, how: str, constructor: str | None, shutdown: str, replacement: str) -> str:
+    """material_view.model_item, from the same facts."""
+    if how == "named":
+        head = f"الخلية {cell} تسمّي {model}"
+    else:
+        head = f"الخلية {cell} تستدعي {constructor}() من LangChain دون تحديد نموذج، فتعمل على {model} افتراضياً"
+
+    return f"{head}. وتوقفه OpenAI في {shutdown}، وتقترح بدلاً منه {replacement}."

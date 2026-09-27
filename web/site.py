@@ -2,7 +2,7 @@ import argparse
 import json
 from pathlib import Path
 
-from src import concepts, feasibility, memory, retirements, review, runio
+from src import concepts, feasibility, material_view, memory, retirements, review, runio
 from src.schema import Recommendation, Score, Signal, Trend
 from src.stages.stage3_score import WEIGHTS
 
@@ -224,14 +224,16 @@ def model_deadlines(curriculum: dict) -> dict:
             "deadlines": retirements.deadlines(curriculum.get("model_calls", []), data, copies)}
 
 
-def material_json(path: Path = review.REVIEW_PATH) -> str:
-    """The material view for the page's material script, or null on a machine with
-    no review. `</` is escaped so no reviewer's sentence can close the script early."""
+def material_json(path: Path = review.REVIEW_PATH, include_review: bool = True) -> str:
+    """The material view for the page's material script: every notebook's cells to
+    change, verified, plus the AI review's judged findings when this machine has the
+    review and the build includes it. A review that cannot be read leaves the verified
+    view standing. `</` is escaped so no sentence can close the script early."""
     try:
-        view = review.payload(path)
+        view = material_view.payload(include_review, review_path=path)
     except (ValueError, KeyError) as error:
         print(f"material review not shown: {error}")
-        view = None
+        view = material_view.payload(include_review=False)
 
     return json.dumps(view, ensure_ascii=False).replace("</", "<\\/")
 
@@ -263,7 +265,7 @@ def main() -> None:
 
     run_dir = runio.RUNS_DIR / args.run_id if args.run_id else latest_run()
     payload = build_payload(run_dir)
-    page = page_html(json.dumps(payload, ensure_ascii=False), material_json() if args.material else "null")
+    page = page_html(json.dumps(payload, ensure_ascii=False), material_json(include_review=args.material))
 
     out = Path(args.out or ("web/dist/site-material.html" if args.material else "web/dist/site.html"))
     out.parent.mkdir(parents=True, exist_ok=True)
