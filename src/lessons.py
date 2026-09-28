@@ -24,7 +24,7 @@ from pathlib import Path
 from src import arabic, concepts, trace
 from src.adapters import model
 from src.notebooks import NOTEBOOK_DIR
-from src.sources import market
+from src.sources import arxiv, market
 
 DEMAND_PATH = Path("fixtures/lesson_demand.json")
 MONTHS = 3
@@ -167,7 +167,8 @@ def settle(terms: list[dict], title: str = "") -> dict:
     mentioned = best["notebooks"] if best else 0
 
     return {"term": best["term"] if best else None, "jobs": jobs, "mentioned": mentioned,
-            "act": decide(jobs, mentioned)}
+            "papers": best.get("papers") if best else None,
+            "papers_skipped": bool(best and best.get("papers_skipped")), "act": decide(jobs, mentioned)}
 
 
 def measure(lessons: list[dict], picked: dict[str, list[str]], count_jobs, texts: list[str],
@@ -208,7 +209,49 @@ def why(lesson: dict, months: int = MONTHS, runs: int = RUNS) -> tuple[str, str]
     else:
         english = f"{posts}, and no notebook names it: optional content until more employers ask."
 
-    return english, arabic.lesson_demand(term, jobs, months, mentioned, act)
+    arabic_text = arabic.lesson_demand(term, jobs, months, mentioned, act)
+
+    # Research is shown beside the demand, and never decides the action.
+    if lesson.get("papers") is not None:
+        english += research_sentence(term, lesson["papers"])
+        arabic_text += " " + arabic.research(term, lesson["papers"], arxiv.DAYS)
+    elif lesson.get("papers_skipped"):
+        english += " Research not counted: the name is too common to search on arXiv."
+        arabic_text += " " + arabic.RESEARCH_SKIPPED
+
+    return english, arabic_text
+
+
+def research_sentence(term: str, papers: int, days: int = arxiv.DAYS) -> str:
+    noun = "paper" if papers == 1 else "papers"
+    return f" Research: {papers} {noun} on arXiv named {term} in the last {days} days."
+
+
+def add_papers(demand: dict, search=arxiv.search) -> dict:
+    """arXiv's count for every name the lessons were measured by, asked once a name.
+    Counts already read today are kept, so running it again asks arXiv only for what
+    is new. A name too common to search is marked, not counted."""
+    today = date.today().isoformat()
+    counts: dict[str, int] = {}
+
+    if (demand.get("papers_checked") or {}).get("on") == today:
+        counts = {item["term"].lower(): item["papers"] for lesson in demand.get("lessons", [])
+                  for item in lesson.get("terms", []) if item.get("papers") is not None}
+
+    for lesson in demand.get("lessons", []):
+        for item in lesson.get("terms", []):
+            if not arxiv.searchable(item["term"]):
+                item.update({"papers": None, "papers_skipped": True})
+                continue
+
+            key = item["term"].lower()
+
+            if key not in counts:
+                counts[key] = search(item["term"])["papers"]
+
+            item.update({"papers": counts[key], "papers_skipped": False})
+
+    return {**demand, "papers_checked": {"on": today, "days": arxiv.DAYS, "source": arxiv.API}}
 
 
 def answered_by(action: str) -> str | None:
@@ -226,7 +269,17 @@ def answered_by(action: str) -> str | None:
 def main() -> None:
     parser = argparse.ArgumentParser(description="Count job posts for the lessons the review proposed.")
     parser.add_argument("--notebooks", default=str(NOTEBOOK_DIR))
+    parser.add_argument("--papers", action="store_true",
+                        help="only add arXiv's count to the lessons already measured; no model, no job posts")
     args = parser.parse_args()
+
+    if args.papers:
+        demand = add_papers(json.loads(DEMAND_PATH.read_text(encoding="utf-8")))
+        DEMAND_PATH.write_text(json.dumps(demand, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+        for lesson in demand["lessons"]:
+            settled = settle(lesson["terms"], lesson["title"])
+            print(f"{str(settled['papers']):>5} papers  {str(settled['term'] or '-'):<26} {lesson['title'][:60]}")
+        return
 
     from src import review
 
@@ -250,11 +303,12 @@ def main() -> None:
 
     measured = measure(lessons, picked, count_jobs, texts, offered)
     held = sum(1 for lesson in measured if lesson["terms"])
-    DEMAND_PATH.write_text(json.dumps({
+    demand = add_papers({
         "checked_on": date.today().isoformat(), "months": MONTHS, "threads": threads,
         "picked_by": answered_by("pick_lesson_terms"), "runs": RUNS, "held": held,
         "lessons": measured,
-    }, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+    })
+    DEMAND_PATH.write_text(json.dumps(demand, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
     print(f"pass^{RUNS}: a name held in all {RUNS} runs for {held} of {len(measured)} lessons")
 
     for lesson in sorted(measured, key=lambda item: (item["act"], -(item["jobs"] or 0))):

@@ -330,8 +330,11 @@ lower-case word no longer counts as a name.
 
 ## "Where do the model shutdown dates come from?"
 
-From OpenAI's deprecations page, read on 2026-09-26 and copied row by row into
-`fixtures/model_retirements.json`. Which notebooks a date reaches is measured from their code:
+From OpenAI's deprecations page, read row by row by `python -m src.retirements --refresh`: on
+2026-09-28 that was 132 rows, each with its shutdown date, every id OpenAI prints for the model
+including its aliases, and the replacement it recommends. The first copy of the table had been
+made by hand two days earlier; the page matched it on every row. Which notebooks a date reaches
+is measured from their code:
 a model id written in a code cell, or LangChain's `OpenAI()` or `ChatOpenAI()` called with no
 model, whose defaults we read in the langchain-openai source at 1.6.6 and 0.3.35
 (`gpt-3.5-turbo-instruct` and `gpt-3.5-turbo`).
@@ -344,6 +347,19 @@ The reviewers had said 6 and 25, and a third date, 11 December, for notebooks us
 `gpt-5-mini`. That row lists only dated snapshots such as `gpt-5-mini-2025-08-07`, and no
 notebook names one, so the rules do not count it. The same table corrected 10 findings that
 said a model was removed while its shutdown is still ahead: they now say deprecated.
+
+## "Do you read research, or only releases and job posts?"
+
+Research too, from arXiv's own API. For every concept and every proposed lesson, the agent
+counts the papers submitted in the last 30 days that name it in their title or abstract, in the
+computing categories, so MCP in medicine or physics is not counted: MCP 53, prompt injection 65,
+Structured Outputs 18, LoRA adapter 32. The count sits beside the job posts and never decides the
+action: employers decide what is worth teaching, papers say where the field is moving.
+
+One word is counted only when the field does not use it for something else, an acronym or a
+coined name such as MCP, LoRA or OpenTelemetry. "Checkpointers" found 245 papers, nearly all
+about saving training checkpoints rather than an agent's saved state, so it is marked as too
+common to search instead of being reported.
 
 ## "What happens if the wifi dies during the demo?"
 

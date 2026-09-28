@@ -1,6 +1,6 @@
 # Progress
 
-**Last updated:** 2026-09-27 · **Tests:** 445 passing · **Demo:** Sep 26–27
+**Last updated:** 2026-09-28 · **Tests:** 464 passing · **Demo:** Sep 26–27
 
 The pipeline runs end to end, live, from a web app. A model reads, judges and writes;
 rules still decide what counts as confirmed, and every recommendation now carries the reason
@@ -125,6 +125,21 @@ behind it: what the chapter teaches, which version it runs, and how far the rele
 - [ ] Optional: GitHub token per member (60 requests/hour without one)
 
 ## Standup log
+
+### 2026-09-28
+- Research is read now, from arXiv's API (`src/sources/arxiv.py`): papers submitted in the last
+  30 days that name each concept and proposed lesson, in the computing categories. MCP 53, prompt
+  injection 65. Shown beside the job posts, never deciding an action. One word counts only when
+  the field does not use it for something else: "Checkpointers" found 245 papers about training
+  checkpoints and is marked too common to search. This closes the one gap left against the brief.
+- OpenAI's deprecations page is read directly (`src/sources/changelogs.py`, `python -m
+  src.retirements --refresh`): 132 rows. The table copied by hand on Sep 26 matched every row.
+  Today is the day gpt-3.5-turbo-instruct shuts down: 2 notebooks stop working.
+- Every change on the material page is now a pair, what is there and what to teach instead, with
+  one line of why; 21 reviewer findings that only restate a verified change are marked as such.
+- aibriefs.news was considered as a source and left out: it sits behind a bot checkpoint, has no
+  feed, and is a secondary digest of news rather than a record of what changed.
+- 464 tests.
 
 ### 2026-09-27
 - The focus is the material now, decided by Abdulmajeed. `src/material_view.py` lists every

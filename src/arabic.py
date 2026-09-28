@@ -523,11 +523,30 @@ VERIFIED = ("مفحوص بقاعدة: الاستيراد مقابل مصدر ا�
             "الإيقاف في صفحة OpenAI نفسها.")
 
 
-def model_cell(cell: int, model: str, how: str, constructor: str | None, shutdown: str, replacement: str) -> str:
+def model_cell(cell: int, model: str, how: str, constructor: str | None, shutdown: str, replacement: str,
+               past: bool = False) -> str:
     """material_view.model_item, from the same facts."""
     if how == "named":
         head = f"الخلية {cell} تسمّي {model}"
     else:
         head = f"الخلية {cell} تستدعي {constructor}() من LangChain دون تحديد نموذج، فتعمل على {model} افتراضياً"
 
-    return f"{head}. وتوقفه OpenAI في {shutdown}، وتقترح بدلاً منه {replacement}."
+    stops = "وقد أوقفته OpenAI في" if past else "وتوقفه OpenAI في"
+    return f"{head}. {stops} {shutdown}، وتقترح بدلاً منه {replacement}."
+
+
+PAPER = ("ورقة بحثية واحدة", "ورقتان بحثيتان", "أوراق بحثية", "ورقة بحثية", "ورقتين بحثيتين")
+# Days only ever follow آخر, so their one and two forms are the genitive.
+DAY = ("يوم", "يومين", "أيام", "يوماً")
+
+
+def research(term: str, papers: int, days: int) -> str:
+    """The research sentence beside the job posts, from arXiv's own count."""
+    period = f"في آخر {counted(days, DAY)}"
+
+    if not papers:
+        return f"البحث: لا ورقة على arXiv ذكرت {term} {period}."
+
+    return f"البحث: {counted(papers, PAPER)} على arXiv {by_count(papers, 'ذكرت', 'ذكرتا', 'ذكرت')} {term} {period}."
+
+RESEARCH_SKIPPED = "البحث: لم يُحصَ على arXiv، الاسم أعمّ من أن يُبحث عنه."

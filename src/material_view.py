@@ -47,21 +47,25 @@ def import_item(edit: dict) -> dict:
 
 def model_item(call: dict, row: dict, cell: int, source: dict) -> dict:
     model, shutdown, replacement = call["model"], row["shutdown"], row["replacement"]
+    past = bool(source.get("read_on")) and shutdown < source["read_on"]
+    stops = "shut it down" if past else "shuts it down"
 
     if call["how"] == "named":
-        english = (f"Cell {cell} names {model}. OpenAI shuts it down on {shutdown} and names {replacement} "
+        english = (f"Cell {cell} names {model}. OpenAI {stops} on {shutdown} and names {replacement} "
                    "to use instead.")
     else:
         english = (f"Cell {cell} calls LangChain's {call['constructor']}() with no model, which defaults to "
-                   f"{model}. OpenAI shuts it down on {shutdown} and names {replacement} to use instead.")
+                   f"{model}. OpenAI {stops} on {shutdown} and names {replacement} to use instead.")
 
     now = model if call["how"] == "named" else f"{call['constructor']}() with no model, so {model}"
 
     return {"kind": "model", "basis": "verified", "now": now, "instead": replacement,
-            "why1": f"OpenAI shuts {model} down on {shutdown}.", "agree": 0, "model": model, "how": call["how"],
+            "why1": f"OpenAI {'shut' if past else 'shuts'} {model} down on {shutdown}.", "agree": 0,
+            "model": model, "how": call["how"],
             "constructor": call.get("constructor"), "shutdown": shutdown, "replacement": replacement,
             "u": source.get("source"), "d": source.get("read_on"), "why": english,
-            "why_ar": arabic.model_cell(cell, model, call["how"], call.get("constructor"), shutdown, replacement)}
+            "why_ar": arabic.model_cell(cell, model, call["how"], call.get("constructor"), shutdown, replacement,
+                                        past)}
 
 
 def method_item(finding: dict) -> dict:

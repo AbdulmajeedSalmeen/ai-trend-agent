@@ -15,7 +15,8 @@ never the reason on its own.
 
 It works in three layers:
 
-- **What shipped.** Release notes and discussion from GitHub, PyPI and Hacker News, for every
+- **What shipped.** Release notes and discussion from GitHub, PyPI and Hacker News, research from
+  arXiv, and OpenAI's own deprecations page, read row by row, for every
   package the course installs. That watchlist is read out of the notebooks, not typed by us,
   and every claim is checked against the release that would have to confirm it.
 - **What the notebooks teach.** Every `langchain` import is checked against the source of the
@@ -179,9 +180,10 @@ instead. The run log says so when it happens.
 | Teaching feasibility | 3.3 to 5.0 of 5; 2 tools watched as not stable enough to teach |
 | Written reasons | 34 of 38 by the model, checked for the facts; 4 by the rules |
 | Chapters with something to act on | 11 of 25 |
-| Model shutdowns reaching the course | 24 notebooks: 2 on 28 September, 22 on 23 October |
+| Model shutdowns reaching the course | 24 notebooks: 2 on 28 September, 22 on 23 October, from OpenAI's page (132 rows) |
+| Research | arXiv papers in the last 30 days for every concept and proposed lesson: MCP 53, prompt injection 65 |
 | Notebooks that are copies of another | 4, identical cell for cell |
-| Tests | 445, none of which calls a model or the network |
+| Tests | 464, none of which calls a model or the network |
 
 Cross-source is zero because no discussion post this week stated anything a release page
 could check. That is a property of the data, not a gap in the checker, and the page prints
