@@ -177,6 +177,11 @@ const T = {
     mat_breaks: "fails on today's install",
     mat_named: "named in the notebook", mat_default: "reached through a default constructor",
     mat_stops: "stops {date}", mat_whole_head: "About the notebook as a whole",
+    mat_agree: "reviewers agree, {n}", mat_more_row: "why, and the source",
+    mat_show_all: "show all {n} cells", mat_today: "today", mat_in_days: "in {n} days",
+    mat_wide_instead: "teach instead",
+    mat_papers: "{n} papers", mat_papers_none: "no papers",
+    cn_papers: "{n} papers in {days} days", cn_papers_recent: "the newest, read {date}",
     mat_seen_none: "no notebook names it",
     mat_seen_n: "{n} name it",
     mat_watched: "{n} watched, because no employer names them yet",
@@ -281,10 +286,10 @@ const T = {
     m_repeat: "asked for since", m_runs: "{n} runs in a row", m_moved: "new version since the last run",
     tr_calls: "model calls", tr_tokens: "tokens", tr_cost: "cost", tr_slow: "slowest call", tr_budget: "budget used", tr_stage: "per stage",
     ov_title: "An agent that keeps the curriculum <em>current</em>.",
-    ov_lede: "Every week it reads what changed in the tools this bootcamp teaches, then reports which chapters have fallen behind and what it would take to bring them up to date.",
-    ov_1: "Collects this week's releases and discussion about every tool on the syllabus.",
-    ov_2: "Checks every claim against the official release, and records what it found, <b>including when it found nothing</b>.",
-    ov_3: "Recommends which chapters to update, and names the tools the course does not teach at all.",
+    ov_lede: "Every week it reads this bootcamp's own notebooks, then names the cells that have fallen behind and what to teach in their place.",
+    ov_1: "Reads every notebook, cell by cell, and pairs what it does now with what to teach instead.",
+    ov_2: "Checks what it can against the release a student installs today, and says plainly which findings were <b>read and judged</b> rather than checked.",
+    ov_3: "Follows the packages and the job posts as evidence for the material, not as the headline.",
     ov_enter: "See this week", ov_replay: "What this is",
     none: "none", theme_light: "Light", theme_dark: "Dark",
     pk_label: "Choose a run", pk_partial: "partial",
@@ -314,6 +319,11 @@ const T = {
     mat_breaks: "يتعطل عند التثبيت اليوم",
     mat_named: "مسمى في النوتبوك", mat_default: "يصل إليه عبر قيمة افتراضية",
     mat_stops: "يتوقف في {date}", mat_whole_head: "عن النوتبوك ككل",
+    mat_agree: "يوافق المراجعون، {n}", mat_more_row: "السبب والمصدر",
+    mat_show_all: "اعرض كل {n} خلية", mat_today: "اليوم", mat_in_days: "بعد {n} يوماً",
+    mat_wide_instead: "يُدرَّس بدلاً منه",
+    mat_papers: "{n} ورقة بحثية", mat_papers_none: "لا أوراق بحثية",
+    cn_papers: "{n} ورقة بحثية في {days} يوماً", cn_papers_recent: "الأحدث، قُرئت في {date}",
     mat_seen_none: "لا يذكره أي نوتبوك",
     mat_seen_n: "يذكره {n}",
     mat_watched: "{n} تحت المراقبة، إذ لم يذكرها أي صاحب عمل بعد",
@@ -419,10 +429,10 @@ const T = {
     tr_calls: "استدعاء للنموذج", tr_tokens: "توكن", tr_cost: "التكلفة", tr_slow: "أبطأ استدعاء", tr_budget: "من الميزانية", tr_stage: "لكل مرحلة",
 
     ov_title: "وكيل يُبقي المنهج <em>محدَّثاً</em>.",
-    ov_lede: "كل أسبوع يقرأ ما تغيّر في الأدوات التي يدرّسها هذا المعسكر، ثم يبيّن الفصول التي تأخّرت وما يلزم لتحديثها.",
-    ov_1: "يجمع إصدارات هذا الأسبوع والنقاش حول كل أداة في المنهج.",
-    ov_2: "يفحص كل ادّعاء أمام الإصدار الرسمي، ويسجّل ما وجده، <b>حتى حين لا يجد شيئاً</b>.",
-    ov_3: "يوصي بالفصول التي تحتاج تحديثاً، ويسمّي الأدوات التي لا يغطيها المقرر.",
+    ov_lede: "كل أسبوع يقرأ نوتبوكات هذا المعسكر نفسها، ثم يسمّي الخلايا التي تأخّرت وما يُدرَّس بدلاً منها.",
+    ov_1: "يقرأ كل نوتبوك خلية خلية، ويضع ما فيه الآن مقابل ما يُدرَّس بدلاً منه.",
+    ov_2: "يفحص ما يمكن فحصه أمام الإصدار الذي يثبّته الطالب اليوم، ويقول بوضوح أي النتائج <b>قرأها مراجع وحكم عليها</b> دون فحص.",
+    ov_3: "يتابع الحزم وإعلانات التوظيف كدليل يسند المادة، لا كعنوان.",
     ov_enter: "اعرض هذا الأسبوع", ov_replay: "ما هذا",
     none: "لا شيء", theme_light: "فاتح", theme_dark: "داكن",
     pk_label: "اختر تشغيلة", pk_partial: "ناقصة",
@@ -649,7 +659,8 @@ const COUNTED = {
   chapter: { en: ["chapter", "chapters"], ar: ["فصل واحد", "فصلان", "فصول", "فصلاً"] },
   tool: { en: ["tool", "tools"], ar: ["أداة واحدة", "أداتان", "أدوات", "أداة"] },
   concept: { en: ["concept", "concepts"], ar: ["مفهوم واحد", "مفهومان", "مفاهيم", "مفهوماً"] },
-  post: { en: ["job post", "job posts"], ar: ["وظيفة واحدة", "وظيفتان", "وظائف", "وظيفة"] }
+  post: { en: ["job post", "job posts"], ar: ["وظيفة واحدة", "وظيفتان", "وظائف", "وظيفة"] },
+  paper: { en: ["paper", "papers"], ar: ["ورقة بحثية واحدة", "ورقتان بحثيتان", "أوراق بحثية", "ورقة بحثية"] }
 };
 function counted(kind, n) {
   const w = COUNTED[kind];
@@ -929,6 +940,8 @@ function renderConcepts() {
         <div class="meta">
           ${added ? `<span dir="auto">${esc(fill(t("cn_new_in"), { release: added.release }))}</span>` : ""}
           ${jobs}
+          ${k.papers === null || k.papers === undefined ? ""
+            : `<span class="research">${esc(fill(t("cn_papers"), { n: k.papers, days: k.papers_days || 30 }))}</span>`}
           <span>${esc(fill(t("cn_notebooks"), { n: k.notebooks, read: k.notebooks_read }))}</span>
         </div>
       </summary>
@@ -937,6 +950,11 @@ function renderConcepts() {
         ${k.summary ? `<figure class="cq"><blockquote dir="ltr" lang="en">${esc(k.summary)}</blockquote>
           <figcaption>${lang === "ar" ? arText(fill(t("cn_quote"), { module: k.module })) : esc(fill(t("cn_quote"), { module: k.module }))}</figcaption></figure>` : ""}
         ${evidence ? `<div class="ed-links">${evidence}</div>` : ""}
+        ${(k.papers_recent || []).length ? `<div class="papers">
+          <span class="papers-head">${esc(fill(t("cn_papers_recent"), { date: k.papers_checked || "" }))}</span>
+          ${k.papers_recent.map((x) => `<a href="${esc(x.url)}" target="_blank" rel="noopener" dir="ltr" lang="en">
+            <span class="paper-date">${esc(x.published)}</span> ${esc(x.title)}</a>`).join("")}
+        </div>` : ""}
       </div>
     </details>`;
   }).join("");
@@ -978,6 +996,14 @@ function codeText(text) {
   return esc(String(text || "")).replace(/`([^`]{1,80})`/g, '<code dir="ltr">$1</code>');
 }
 
+/* A date means more with the reader's own calendar beside it. */
+function whenText(date) {
+  const days = Math.round((new Date(date + "T00:00:00") - new Date(new Date().toDateString())) / 86400000);
+  if (days === 0) return t("mat_today");
+  if (days < 0) return "";
+  return fill(t("mat_in_days"), { n: days });
+}
+
 function matChip(kind, value) {
   return `<span class="chip m-${value}">${esc(t(`mat_${kind}_${value}`))}</span>`;
 }
@@ -1008,58 +1034,84 @@ function matFinding(f, book) {
   </div>`;
 }
 
-/* One change, with the evidence that decided it. The tag says which kind, and the
-   kind decides what the row shows: an import shows the line now and the line to teach,
-   a model shows when it stops and what replaces it, a method shows what moved. */
+/* One change: what is there now, what to teach instead. The pair is the row, because
+   the pair is what a teacher acts on. The reason is one line under it, and the long
+   reason, the source, the date and the confidence sit behind a toggle, closed. */
+function matPair(text, kind) {
+  const asCode = kind === "import" || kind === "model";
+  return asCode ? `<code dir="ltr">${esc(text)}</code>` : codeText(text);
+}
+
 function matItem(it) {
   const tag = `<span class="ci-tag ${it.basis === "verified" ? "ver" : "jud"}">${
     esc(t(it.basis === "verified" ? "mat_verified" : "mat_judged"))}</span>`;
+  const agree = it.agree ? `<span class="ci-agree">${esc(fill(t("mat_agree"), { n: it.agree }))}</span>` : "";
+  const status = it.s ? matChip("s", it.s) : "";
+  const breaks = it.breaks ? `<span class="ci-breaks">${esc(t("mat_breaks"))}</span>` : "";
+  const why1 = it.why1
+    ? (it.why_ar && lang === "ar"
+      ? `<p class="ci-why" dir="rtl" lang="ar">${arText(it.why_ar)}</p>`
+      : `<p class="ci-why${lang === "ar" ? " in-en bare" : ""}" dir="${lang === "ar" ? "ltr" : "auto"}">${codeText(it.why1)}</p>`)
+    : "";
+  const long = [it.w && it.w !== it.why1 ? codeText(it.w) : "",
+                it.r && it.r !== it.instead ? `<span class="ci-label">${esc(t("mat_instead"))}</span> ${codeText(it.r)}` : "",
+                it.why && it.why !== it.why1 ? esc(it.why) : ""].filter(Boolean);
   const source = it.u
     ? `<a class="mf-src" href="${esc(it.u)}" target="_blank" rel="noopener">${esc(t("mat_source"))}${
         it.d || it.checked ? ` <span class="mf-date" dir="ltr">${esc(it.d || it.checked)}</span>` : ""}</a>`
     : "";
-  const why = it.why
-    ? agentText(it.why, it.why_ar, "p", "ci-why")
-    : (it.w ? `<p class="ci-why${lang === "ar" ? " in-en bare" : ""}" dir="${lang === "ar" ? "ltr" : "auto"}">${codeText(it.w)}</p>` : "");
-
-  if (it.kind === "import") {
-    return `<div class="ci">
-      <div class="ci-top">${tag}${it.breaks ? `<span class="ci-breaks">${esc(t("mat_breaks"))}</span>` : ""}</div>
-      <div class="ci-line"><span class="ci-label">${esc(t("mat_now"))}</span><code dir="ltr">${esc(it.current)}</code></div>
-      <div class="ci-line"><span class="ci-label">${esc(t("mat_instead"))}</span><code class="ci-new" dir="ltr">${esc(it.proposed)}</code></div>
-      ${why}<div class="mf-foot">${source}</div>
-    </div>`;
-  }
-  if (it.kind === "model") {
-    return `<div class="ci">
-      <div class="ci-top">${tag}<code dir="ltr">${esc(it.model)}</code>
-        <span class="ci-how">${esc(t(it.how === "default" ? "mat_default" : "mat_named"))}</span>
-        <span class="ci-breaks">${esc(fill(t("mat_stops"), { date: it.shutdown }))}</span></div>
-      ${it.replacement ? `<div class="ci-line"><span class="ci-label">${esc(t("mat_instead"))}</span><code class="ci-new" dir="ltr">${esc(it.replacement)}</code></div>` : ""}
-      ${why}<div class="mf-foot">${source}</div>
-    </div>`;
-  }
+  const extra = long.length || source || it.c
+    ? `<details class="ci-more"><summary>${esc(t("mat_more_row"))}</summary>
+        ${long.map((x) => `<p class="ci-long">${x}</p>`).join("")}
+        <div class="mf-foot">${source}${it.c ? matChip("c", it.c) : ""}${
+          it.own ? `<span class="mf-own">${esc(t("mat_owned"))}</span>` : ""}</div>
+      </details>`
+    : "";
   return `<div class="ci">
-    <div class="ci-top">${tag}<b>${esc(it.t)}</b>${matChip("s", it.s)}${
-      it.own ? `<span class="mf-own">${esc(t("mat_owned"))}</span>` : ""}</div>
-    ${why}
-    ${it.r ? `<div class="ci-line"><span class="ci-label">${esc(t("mat_instead"))}</span><span class="ci-rep">${codeText(it.r)}</span></div>` : ""}
-    <div class="mf-foot">${source}${it.c ? matChip("c", it.c) : ""}</div>
+    <div class="ci-top">${tag}${status}${breaks}${agree}</div>
+    <div class="pair">
+      <span class="pair-now">${matPair(it.now, it.kind)}</span>
+      <span class="pair-arrow" aria-hidden="true"></span>
+      <span class="pair-new">${matPair(it.instead, it.kind)}</span>
+    </div>
+    ${why1}${extra}
   </div>`;
 }
 
+/* A finding that only restates a verified change in the same cell is not a second
+   change. It is agreement, and it is counted on the verified row instead. */
+function matCellItems(items) {
+  const shown = items.filter((i) => !i.dup);
+  let html = "", heading = null;
+  shown.forEach((i) => {
+    if (i.t && i.t !== heading) {
+      heading = i.t;
+      html += `<div class="ci-head">${esc(i.t)}</div>`;
+    } else if (!i.t) {
+      heading = null;
+    }
+    html += matItem(i);
+  });
+  return html;
+}
+
 function matCells(b) {
-  const rows = (b.cells || []).map((c) => `<div class="cellrow">
+  const cells = b.cells || [];
+  const rows = cells.map((c, n) => `<div class="cellrow${n >= 4 ? " extra" : ""}">
     <span class="cell-no">${esc(fill(t("mat_cell_n"), { n: c.cell }))}</span>
-    <div class="cell-items">${c.items.map(matItem).join("")}</div>
+    <div class="cell-items">${matCellItems(c.items)}</div>
   </div>`).join("");
+  const more = cells.length > 4
+    ? `<button type="button" class="showall">${esc(fill(t("mat_show_all"), { n: cells.length }))}</button>` : "";
   const whole = (b.whole || []).length
     ? `<div class="cellrow whole">
         <span class="cell-no">${esc(t("mat_whole_head"))}</span>
-        <div class="cell-items">${b.whole.map(matItem).join("")}</div>
+        <div class="cell-items">${matCellItems(b.whole)}</div>
       </div>`
     : "";
-  return rows + whole;
+  /* The rows live in their own box so the banding counts cells, not whatever else
+     the card happens to hold above them. */
+  return `<div class="cells">${rows}</div>` + more + whole;
 }
 
 /* Every change a notebook carries, wherever the payload keeps them. */
@@ -1073,6 +1125,7 @@ function matBook(b) {
     ? `<div class="mb-lesson"><span>${esc(t("mat_lesson"))}</span> ${esc(b.n)}${b.ld
         ? ` <span class="ls-term"><code dir="ltr">${esc(b.ld.term)}</code>
             <span class="ls-n">${esc(counted("post", b.ld.jobs))}</span>
+            ${b.ld.papers === null || b.ld.papers === undefined ? "" : `<span class="ls-n research">${esc(counted("paper", b.ld.papers))}</span>`}
             <span class="ls-n">${esc(b.ld.mentioned ? fill(t("mat_seen_n"), { n: counted("notebook", b.ld.mentioned) }) : t("mat_seen_none"))}</span></span>` : ""}</div>`
     : "";
   const more = b.more
@@ -1113,7 +1166,7 @@ function renderMaterial() {
   document.getElementById("matDead").innerHTML = `<div class="deadlines">
     <h3>${esc(t("mat_dead"))}</h3>
     ${MAT.deadlines.map((d, i) => `<div class="dl${i === 0 ? " near" : ""}">
-      <b dir="ltr">${esc(d.date)}</b>
+      <b dir="ltr">${esc(d.date)}</b><span class="dl-when">${esc(whenText(d.date))}</span>
       <code dir="ltr">${esc(d.what)}</code>
       <span class="dl-n">${esc(fill(t("mat_dead_row"), { books: d.books }))}</span>
       ${d.named !== undefined || d.by_default !== undefined
@@ -1127,9 +1180,16 @@ function renderMaterial() {
 
   document.getElementById("matWide").innerHTML = (MAT.course_wide || []).length
     ? `<h3>${esc(t("mat_wide"))}</h3>` + MAT.course_wide.map((w) => `<div class="cw">
-        <b>${esc(w.technique)}</b>${matChip("s", w.status)}
-        <span class="cw-n">${esc(fill(t("mat_wide_row"), { notebooks: w.notebooks, chapters: w.chapters }))}</span>
-        ${agentText(w.why, w.why_ar, "span", "cw-why")}
+        ${matChip("s", w.status)}
+        <span class="pair">
+          <span class="pair-now">${esc(w.technique)}</span>
+          <span class="pair-arrow" aria-hidden="true"></span>
+          <span class="pair-new">${w.instead ? codeText(w.instead) : esc(t("none"))}</span>
+        </span>
+        <span class="cw-n">${esc(fill(t("mat_wide_row"), { notebooks: w.notebooks,
+          chapters: Array.isArray(w.chapters) ? w.chapters.length : w.chapters }))}</span>
+        <details class="ci-more"><summary>${esc(t("mat_more_row"))}</summary>
+          ${agentText(w.why, w.why_ar, "p", "ci-long")}</details>
       </div>`).join("")
     : "";
 
@@ -1141,6 +1201,7 @@ function renderMaterial() {
       ? `<span class="ls-unstable">${esc(t("mat_unstable"))}</span>`
       : `<code dir="ltr">${esc(l.term)}</code>`}
       <span class="ls-n">${esc(counted("post", l.jobs))}</span>
+      ${l.papers === null || l.papers === undefined ? "" : `<span class="ls-n research">${esc(counted("paper", l.papers))}</span>`}
       <span class="ls-n">${esc(l.mentioned ? fill(t("mat_seen_n"), { n: counted("notebook", l.mentioned) }) : t("mat_seen_none"))}</span></span>
     ${agentText(l.why, l.why_ar, "span", "ls-why")}
   </div>`;
@@ -1162,7 +1223,9 @@ function renderMaterial() {
   document.getElementById("matFilters").innerHTML = filters.map(([v, k]) =>
     `<button type="button" data-mat="${v}"${matFilter === v ? ' aria-pressed="true"' : ""}>${esc(t(k))}</button>`).join("");
 
-  let html = "", week = null;
+  /* The first chapter stands open, so a reader lands inside the work rather than on a
+     list of closed drawers. The rest wait to be asked. */
+  let html = "", week = null, first = true;
   MAT.chapters.forEach((ch) => {
     const books = ch.books.filter(keeps).filter((b) =>
       !b.cells && !b.whole ? true
@@ -1175,7 +1238,7 @@ function renderMaterial() {
     const tally = {};
     ch.books.forEach((b) => { if (b.v) tally[b.v] = (tally[b.v] || 0) + 1; });
     const chapterCells = ch.books.reduce((n, b) => n + (b.cells || []).length, 0);
-    html += `<details class="match">
+    html += `<details class="match"${first ? " open" : ""}>
       <summary>
         <span class="cid">${esc(ch.id)}</span>
         <h3>${esc(ch.title)}</h3>
@@ -1185,6 +1248,7 @@ function renderMaterial() {
       </summary>
       <div class="mc-body">${books.map(matBook).join("")}</div>
     </details>`;
+    first = false;
   });
   document.getElementById("matList").innerHTML = html;
 
@@ -2292,6 +2356,13 @@ if (matFilterBar) matFilterBar.addEventListener("click", (e) => {
   matFilter = b.dataset.mat;
   renderMaterial();
   requestAnimationFrame(revealOnScroll);
+});
+
+document.getElementById("matList").addEventListener("click", (e) => {
+  const b = e.target.closest("button.showall");
+  if (!b) return;
+  b.closest(".matbook").classList.add("all");
+  b.remove();
 });
 
 document.getElementById("evFilters").addEventListener("click", (e) => {

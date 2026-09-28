@@ -1883,16 +1883,47 @@ body[dir="rtl"] .ls-sub { font-family: var(--ar); font-size: 13px; }
 .ls-n { font: 500 11.5px/1 var(--mono); color: var(--ink-faint); }
 /* A term that did not repeat is not a term: the row says so where the name would be. */
 .ls-unstable { font-size: 12px; color: var(--crit-ink); }
+/* Research is context, not the decision, so it reads a step quieter than the counts
+   beside it and never takes a chip or the accent. */
+.research { color: var(--ink-faint); }
+.papers { margin-top: 10px; display: grid; gap: 5px; }
+.papers-head { font-size: 11.5px; color: var(--ink-faint); }
+body[dir="rtl"] .papers-head { font-family: var(--ar); font-size: 12px; }
+.papers a { font-size: 12.5px; line-height: 1.5; color: var(--ink-soft); text-decoration: none; border-bottom: 1px solid var(--line); }
+.papers a:hover { color: var(--gold-ink); }
+.paper-date { font: 500 11px/1 var(--mono); color: var(--ink-faint); margin-inline-end: 6px; }
 
 /* A change, at the cell it lives in. The cell number is the spine: it is what a
    teacher opens the notebook to, so it holds the left edge and the evidence hangs
    off it. Verified and judged differ by their tag and nothing else, because the
    difference is what the tag says, not how loud the row is. */
-.cellrow { display: grid; grid-template-columns: 78px minmax(0, 1fr); gap: 10px; padding: 9px 0; border-top: 1px solid var(--line-soft); }
-.cellrow:first-of-type { border-top: 0; }
-.cell-no { font: 500 11.5px/1.6 var(--mono); color: var(--ink-faint); }
+/* A hairline was not enough to tell one cell from the next, so every other cell sits
+   on its own band. The tint is the page's own ink at a few percent, not a new colour:
+   it separates without competing with the gold, which still means one thing only. */
+.cellrow {
+  display: grid; grid-template-columns: 78px minmax(0, 1fr); gap: 10px;
+  padding: 10px 12px; border-radius: var(--r-mark);
+  transition: background-color 160ms var(--ease-out), box-shadow 160ms var(--ease-out);
+}
+.cells .cellrow:nth-child(even) { background: color-mix(in srgb, var(--ink) 3.5%, transparent); }
+/* Hovering says which cell is under the pointer, which the card as a whole could not.
+   Colour only, because this list is swept many times and movement there reads as noise. */
+@media (hover: hover) and (pointer: fine) {
+  /* The tint alone was not enough: a banded cell at rest and a plain cell under the
+     pointer landed at similar weights. The outline belongs to hover only, so the two
+     states can never be mistaken for one another. */
+  .cellrow:hover {
+    background: color-mix(in srgb, var(--ink) 7%, transparent);
+    box-shadow: inset 0 0 0 1px var(--line);
+  }
+  .cellrow:hover .cell-no { color: var(--ink); }
+}
+.cell-no { font: 500 11.5px/1.6 var(--mono); color: var(--ink-faint); transition: color 160ms ease; }
 body[dir="rtl"] .cellrow.whole .cell-no, body[dir="rtl"] .cell-no { font-family: var(--ar); font-size: 12px; }
 .cellrow.whole .cell-no { font-family: var(--sans); font-size: 11.5px; }
+/* The whole-notebook row is not a cell, so it keeps its own quiet outline rather than
+   joining the banding and pretending to be one. */
+.cellrow.whole { background: none; border: 1px solid var(--line-soft); margin-top: 8px; }
 .cell-items { display: grid; gap: 10px; min-width: 0; }
 .ci { min-width: 0; }
 .ci-top { display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap; }
@@ -1905,6 +1936,37 @@ body[dir="rtl"] .ci-tag { font-family: var(--ar); letter-spacing: 0; text-transf
 .ci-tag.jud { border: 1px solid var(--line); color: var(--ink-faint); }
 .ci-breaks { font-size: 11.5px; color: var(--crit-ink); }
 .ci-how { font-size: 11.5px; color: var(--ink-faint); }
+/* The pair is the row: what is there, what replaces it, with the arrow between them
+   doing the work a sentence used to do. */
+.pair { display: grid; grid-template-columns: minmax(0, 1fr) 18px minmax(0, 1fr); align-items: baseline; gap: 4px 8px; margin-top: 5px; }
+.pair-now, .pair-new { min-width: 0; font-size: 13px; line-height: 1.5; overflow-wrap: anywhere; }
+.pair-now { color: var(--ink-soft); }
+.pair-new { color: var(--ink); }
+.pair code { font: 500 12px/1.5 var(--mono); background: var(--gray-soft); padding: 2px 6px; border-radius: var(--r-mark); }
+.pair-new code { color: var(--ink); }
+/* The arrow carries the whole sentence the row no longer spells out, so it has to be
+   legible rather than decorative. It points the way the language reads. */
+.pair-arrow { align-self: center; color: var(--ink-faint); font: 400 14px/1 var(--sans); text-align: center; }
+.pair-arrow::before { content: "→ "; }
+body[dir="rtl"] .pair-arrow::before { content: "← "; }
+.ci-head { font: 600 12.5px/1.4 var(--sans); color: var(--ink-soft); margin-top: 8px; }
+body[dir="rtl"] .ci-head { font-family: var(--ar); }
+.ci-agree { font-size: 11.5px; color: var(--ink-faint); }
+.ci-more { margin-top: 4px; }
+.ci-more > summary { font-size: 11.5px; color: var(--ink-faint); cursor: pointer; list-style: none; padding: 3px 0; }
+.ci-more > summary::-webkit-details-marker { display: none; }
+.ci-more > summary::before { content: "+ "; }
+.ci-more[open] > summary::before { content: "- "; }
+.ci-more > summary:hover { color: var(--ink-soft); }
+.ci-long { margin: 4px 0 0; font-size: 12.5px; line-height: 1.55; color: var(--ink-soft); }
+.dl-when { font-size: 11.5px; color: var(--crit-ink); margin-inline-start: 6px; }
+.showall {
+  margin-top: 8px; font: 500 12px/1 var(--sans); color: var(--ink-soft);
+  background: none; border: 1px solid var(--line); border-radius: var(--r-pill); padding: 7px 12px; cursor: pointer;
+}
+body[dir="rtl"] .showall { font-family: var(--ar); }
+.showall:hover { color: var(--ink); border-color: var(--edge); }
+.matbook:not(.all) .cellrow.extra { display: none; }
 .ci-line { display: flex; gap: 8px; align-items: baseline; margin-top: 4px; flex-wrap: wrap; }
 .ci-label { font: 500 10.5px/1.6 var(--sans); text-transform: uppercase; letter-spacing: .04em; color: var(--ink-faint); flex: none; }
 body[dir="rtl"] .ci-label { font-family: var(--ar); text-transform: none; letter-spacing: 0; font-size: 11.5px; }
@@ -1915,7 +1977,12 @@ body[dir="rtl"] .ci-label { font-family: var(--ar); text-transform: none; letter
 .mb-cells { font: 500 11.5px/1 var(--mono); color: var(--ink-faint); }
 
 @media (max-width: 640px) {
-  .cellrow { grid-template-columns: minmax(0, 1fr); gap: 4px; }
+  .cellrow { grid-template-columns: minmax(0, 1fr); gap: 4px; padding: 10px; }
+  /* Side by side needs width. Narrow, the pair stacks and the arrow turns down. */
+  .pair { grid-template-columns: minmax(0, 1fr); }
+  .pair-arrow { text-align: start; }
+  .pair-arrow::before { content: "↓ "; }
+  body[dir="rtl"] .pair-arrow::before { content: "↓ "; }
 }
 body[dir="rtl"] .ls-unstable { font-family: var(--ar); font-size: 12.5px; }
 body[dir="rtl"] .ls-n { font-family: var(--ar); font-size: 12px; }
