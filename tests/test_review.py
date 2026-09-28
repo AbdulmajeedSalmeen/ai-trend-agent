@@ -239,3 +239,10 @@ def test_a_file_of_another_shape_is_refused(tmp_path):
 def test_the_arabic_tables_cover_every_closed_value():
     assert set(arabic.REVIEW_STATUS) >= set(review.SEVERITY) | {"current"}
     assert set(arabic.REVIEW_VERDICT) == set(review.VERDICTS)
+
+
+def test_the_replacement_is_its_first_clause_not_a_bare_tag():
+    assert review.first_clause("OpenAI Responses API for the raw-SDK section; create_agent with a checkpointer") == \
+        "OpenAI Responses API for the raw-SDK section"
+    assert review.first_clause("keep the flag but teach why it is there - load only indexes you built") == \
+        "keep the flag but teach why it is there"

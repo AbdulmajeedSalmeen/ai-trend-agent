@@ -38,9 +38,11 @@ def notebook_path(week: int, name: str) -> str:
 
 
 def import_item(edit: dict) -> dict:
-    return {"kind": "import", "basis": "verified", "current": edit.get("current"), "proposed": edit.get("proposed"),
-            "why": edit.get("reason"), "why_ar": edit.get("reason_ar"), "u": edit.get("evidence_url"),
-            "checked": edit.get("checked"), "breaks": edit.get("runs_as_pinned") is False}
+    return {"kind": "import", "basis": "verified", "now": edit.get("current"), "instead": edit.get("proposed"),
+            "why1": edit.get("reason"), "current": edit.get("current"), "proposed": edit.get("proposed"),
+            "names": edit.get("names", []), "why": edit.get("reason"), "why_ar": edit.get("reason_ar"),
+            "u": edit.get("evidence_url"), "checked": edit.get("checked"), "breaks": edit.get("runs_as_pinned") is False,
+            "agree": 0}
 
 
 def model_item(call: dict, row: dict, cell: int, source: dict) -> dict:
@@ -53,7 +55,10 @@ def model_item(call: dict, row: dict, cell: int, source: dict) -> dict:
         english = (f"Cell {cell} calls LangChain's {call['constructor']}() with no model, which defaults to "
                    f"{model}. OpenAI shuts it down on {shutdown} and names {replacement} to use instead.")
 
-    return {"kind": "model", "basis": "verified", "model": model, "how": call["how"],
+    now = model if call["how"] == "named" else f"{call['constructor']}() with no model, so {model}"
+
+    return {"kind": "model", "basis": "verified", "now": now, "instead": replacement,
+            "why1": f"OpenAI shuts {model} down on {shutdown}.", "agree": 0, "model": model, "how": call["how"],
             "constructor": call.get("constructor"), "shutdown": shutdown, "replacement": replacement,
             "u": source.get("source"), "d": source.get("read_on"), "why": english,
             "why_ar": arabic.model_cell(cell, model, call["how"], call.get("constructor"), shutdown, replacement)}
@@ -62,6 +67,20 @@ def model_item(call: dict, row: dict, cell: int, source: dict) -> dict:
 def method_item(finding: dict) -> dict:
     return {"kind": "method", "basis": "read_and_judged",
             **{key: value for key, value in finding.items() if key != "cell"}}
+
+
+def restates(finding: dict, verified: dict) -> bool:
+    """A reviewer finding that says what a verified change in the same cell already
+    says, naming its model or one of its imported names, adds nothing but a second
+    voice. It is kept, marked, and counted on the verified change as agreement. Only a
+    finding that something is going away can restate one: an unsafe or superseded
+    finding that mentions the same class is saying something else about it."""
+    if finding.get("s") not in ("removed", "deprecated"):
+        return False
+
+    text = " ".join(str(finding.get(key) or "") for key in ("t", "now", "w", "why1"))
+    marks = [verified["model"]] if verified["kind"] == "model" else verified.get("names") or []
+    return any(mark and mark in text for mark in marks)
 
 
 def item_order(item: dict) -> tuple:
@@ -96,6 +115,19 @@ def cells_of(path: str, edits: dict, calls: dict, rows: dict, source: dict,
             whole.append(method_item(finding))
         else:
             cells[finding["cell"]].append(method_item(finding))
+
+    for items in cells.values():
+        checked = [item for item in items if item["basis"] == "verified"]
+
+        for item in items:
+            if item["kind"] != "method":
+                continue
+
+            same = next((verified for verified in checked if restates(item, verified)), None)
+            item["dup"] = same["kind"] if same else None
+
+            if same:
+                same["agree"] += 1
 
     return [{"cell": cell, "items": sorted(items, key=item_order)} for cell, items in sorted(cells.items())], whole
 

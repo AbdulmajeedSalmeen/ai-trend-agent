@@ -41,9 +41,12 @@ def reviewed():
     material = {"schema": review.SCHEMA, "read_on": "2026-09-26", "notebooks": [
         {"id": "week3/chat", "notebook": "notebooks/week 3/chat.ipynb", "week_number": 3, "verdict": "replace",
          "findings": [
-             {"technique": "RetrievalQA over FAISS", "status": "superseded", "cell": 93, "confidence": "high"},
-             {"technique": "Whole-notebook framing", "status": "missing_context", "cell": None},
-             {"technique": "Chat model default", "status": "deprecated", "cell": 70}]},
+             {"technique": "RetrievalQA over FAISS", "status": "superseded", "cell": 93, "confidence": "high",
+              "replacement": "create_agent with a retrieval tool; or create_retrieval_chain", "what_changed": "Moved."},
+             {"technique": "Whole-notebook framing", "status": "missing_context", "cell": None,
+              "replacement": "Frame it as an agent", "what_changed": "Missing context."},
+             {"technique": "Chat model default", "status": "deprecated", "cell": 70,
+              "replacement": "Name the model", "what_changed": "The default is going away."}]},
     ]}
     return review.build(material, curriculum(), [], TABLE)
 
@@ -126,3 +129,22 @@ def test_the_card_reads_from_cells_so_the_short_list_and_the_run_offers_stay_out
 
     assert "f" not in chat and "all" not in chat
     assert material_view.without_offered({"term": "MCP", "offered": [["MCP"]]}) == {"term": "MCP"}
+
+
+def test_every_change_is_a_pair_of_what_is_there_and_what_to_teach_instead():
+    view = material_view.view(curriculum(), TABLE, [], reviewed())
+    items = [item for chapter in view["chapters"] for b in chapter["books"] for cell in b["cells"] for item in cell["items"]]
+
+    assert items and all(item["now"] and item["instead"] and item["why1"] for item in items)
+    imports = [item for item in items if item["kind"] == "import"]
+    assert imports[0]["now"] == "from langchain.chains import RetrievalQA"
+    assert imports[0]["instead"] == "from langchain_classic.chains import RetrievalQA"
+
+
+def test_a_reviewer_finding_that_restates_a_verified_change_is_marked_and_counted_as_agreement():
+    cell = {"t": "Chat model default", "s": "deprecated", "now": "ChatOpenAI()", "w": "resolves to gpt-3.5-turbo"}
+    verified = {"kind": "model", "model": "gpt-3.5-turbo"}
+
+    assert material_view.restates(cell, verified)
+    assert not material_view.restates({**cell, "s": "unsafe"}, verified)
+    assert not material_view.restates(cell, {"kind": "import", "names": ["RetrievalQA"]})

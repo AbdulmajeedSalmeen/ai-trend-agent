@@ -152,9 +152,40 @@ def source_of(finding: dict) -> tuple[str | None, str | None]:
     return sources[0].get("url"), date if DATE_RE.fullmatch(date) else None
 
 
-def compact(finding: dict, notebook: str, owned: set) -> dict:
+def first_sentence(text: str | None, limit: int = 170) -> str:
+    """The first sentence, when it is short enough to stand alone; else a clipped one."""
+    text = clip(text, 10_000)
+    stop = text.find(". ")
+    return text[:stop + 1] if 0 < stop < limit else clip(text, limit)
+
+
+def first_clause(text: str | None, limit: int = 100) -> str:
+    """The first clause of a recommendation, cut where the reviewer moved on to a second
+    thought: "OpenAI Responses API for the raw-SDK section; create_agent with a
+    checkpointer..." gives its first half."""
+    text = clip(text, 10_000)
+
+    for mark in ("; ", " - ", ". "):
+        stop = text.find(mark)
+
+        if 12 < stop < limit:
+            return text[:stop]
+
+    return clip(text, limit)
+
+
+def compact(finding: dict, notebook: str, owned: set, taught: dict | None = None) -> dict:
+    """One finding as the page carries it: a pair, then its reason. `now` is what the
+    notebook does, from the reviewer's own description of the technique; `instead`
+    is the first clause of what to teach in its place, not the bare name the reviewer
+    tagged it with, which can be as vague as "OpenAI"; `why1` is the first sentence
+    of why. The long paragraphs stay behind them, for anyone who opens the detail."""
     url, date = source_of(finding)
+    lesson = (taught or {}).get(finding.get("technique_id")) or {}
     return {
+        "now": first_clause(lesson.get("as_taught") or finding.get("technique"), 120),
+        "instead": first_clause(finding.get("replacement")) or finding.get("replacement_name"),
+        "why1": first_sentence(finding.get("what_changed")),
         "t": clip(finding.get("technique"), 70),
         "s": finding["status"],
         "c": finding.get("confidence") if finding.get("confidence") in CONFIDENCE else "medium",
@@ -206,11 +237,14 @@ def course_wide(entries: list[tuple[str, str, dict]]) -> list[dict]:
 
         status = min((finding["status"] for _, _, finding in items), key=SEVERITY.get)
         technique = Counter(clip(finding.get("technique"), 70) for _, _, finding in items).most_common(1)[0][0]
+        named = Counter(finding.get("replacement_name") for _, _, finding in items if finding.get("replacement_name"))
         notebooks = len({notebook for _, notebook, _ in items})
         found.append({
             "technique_id": technique_id,
             "technique": technique,
             "status": status,
+            # What the reviewers most often named to teach in its place.
+            "instead": named.most_common(1)[0][0] if named else None,
             "chapters": chapters,
             "notebooks": notebooks,
             "act": "investigate_larger_change",
@@ -251,6 +285,7 @@ def build(review: dict, curriculum: dict, deadlines: list[dict], retirement_data
         original = copy_of.get(notebook)
         proposed = proposed_verdict(entry)
 
+        taught = {item.get("technique_id"): item for item in entry.get("teaches", [])}
         findings = [corrected(finding, shutdowns, read_on)
                     for finding in entry.get("findings", []) if finding.get("status") in SEVERITY]
         statuses = {finding["status"] for finding in findings}
@@ -285,9 +320,9 @@ def build(review: dict, curriculum: dict, deadlines: list[dict], retirement_data
             "e": entry.get("effort") if entry.get("effort") in arabic.REVIEW_EFFORT else "medium",
             "a": clip(entry.get("action"), 240),
             "n": entry["new_lesson"]["title"] if entry.get("new_lesson") and not original else None,
-            "f": [compact(finding, notebook, owned) for finding in shown[:SHOWN_PER_NOTEBOOK]],
+            "f": [compact(finding, notebook, owned, taught) for finding in shown[:SHOWN_PER_NOTEBOOK]],
             # Every finding, for the cell-by-cell view; the card itself shows the first few.
-            "all": [compact(finding, notebook, owned) for finding in shown],
+            "all": [compact(finding, notebook, owned, taught) for finding in shown],
             "more": max(0, len(shown) - SHOWN_PER_NOTEBOOK),
             "found": len(shown),
             "why": why,
