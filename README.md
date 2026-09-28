@@ -7,7 +7,7 @@ ecosystem, checks every claim against the official release, then reads the cours
 notebooks and says what to change: which notebook, which cell, what to write instead, and
 which new lesson employers are asking for. In English and Arabic.
 
-https://github.com/user-attachments/assets/c901d9d3-d8a2-4d8f-ab85-5e9055fa0110
+https://github.com/user-attachments/assets/5d9c3856-5ac9-4193-9111-6dafffad7c46
 
 It does not report news. It reports what our material teaches that no longer exists, and
 what employers ask for that the course does not teach yet. A version number is evidence,
