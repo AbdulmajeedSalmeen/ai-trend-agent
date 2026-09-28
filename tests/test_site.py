@@ -1,3 +1,4 @@
+import json
 from datetime import datetime, timezone
 
 from src import runio
@@ -188,12 +189,16 @@ def test_the_material_view_fills_its_own_slot_and_nothing_else(monkeypatch, tmp_
     assert page == '<script>{"run": 1}</script><script id="material">{"read_on": "2026-09-26"}</script>'
 
 
-def test_no_review_on_this_machine_puts_null_in_the_material_slot(tmp_path):
-    assert site.material_json(tmp_path / "absent.json") == "null"
+def test_no_review_on_this_machine_still_opens_on_the_verified_material(tmp_path):
+    view = json.loads(site.material_json(tmp_path / "absent.json"))
+
+    assert view["reviewed"] is False and view["schema"] == "material_view/2"
+    assert all(item["basis"] == "verified" for chapter in view["chapters"] for book in chapter["books"]
+               for cell in book["cells"] for item in cell["items"])
 
 
 def test_a_reviewer_sentence_cannot_close_the_material_script(monkeypatch, tmp_path):
-    monkeypatch.setattr(site.review, "payload", lambda path: {"w": "ends here </script><b>"})
+    monkeypatch.setattr(site.material_view, "payload", lambda *args, **kwargs: {"w": "ends here </script><b>"})
 
     assert "</script>" not in site.material_json(tmp_path / "any.json")
 
@@ -202,7 +207,7 @@ def test_a_review_of_another_shape_is_left_out_rather_than_breaking_the_page(tmp
     path = tmp_path / "review.json"
     path.write_text('{"schema": "other/9", "notebooks": []}', encoding="utf-8")
 
-    assert site.material_json(path) == "null"
+    assert json.loads(site.material_json(path))["reviewed"] is False
 
 
 def test_every_run_carries_the_model_deadlines_measured_from_the_notebooks(tmp_path):
@@ -212,3 +217,15 @@ def test_every_run_carries_the_model_deadlines_measured_from_the_notebooks(tmp_p
 
     assert found["source"].startswith("https://")
     assert all({"date", "books", "why", "why_ar"} <= set(deadline) for deadline in found["deadlines"])
+
+
+def test_the_plain_build_never_carries_a_judged_finding_even_with_the_review_here(tmp_path):
+    path = tmp_path / "review.json"
+    path.write_text(json.dumps({"schema": "material_review/1", "read_on": "2026-09-26", "notebooks": [
+        {"id": "week3/x", "notebook": "notebooks/week 3/x.ipynb", "week_number": 3, "verdict": "revise",
+         "findings": [{"technique": "Secret sauce", "status": "superseded", "cell": 2,
+                       "what_changed": "A reviewer sentence about the course."}]}]}), encoding="utf-8")
+
+    plain = site.material_json(path, include_review=False)
+
+    assert "reviewer sentence" not in plain and json.loads(plain)["reviewed"] is False

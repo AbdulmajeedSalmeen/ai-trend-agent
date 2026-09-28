@@ -268,6 +268,11 @@ def why(concept: dict) -> tuple[str, str]:
         arabic_parts.append(f"{arabic.counted(jobs, arabic.JOB)} {verb} {term} في آخر "
                             f"{arabic.counted(months, arabic.MONTH)}.")
 
+    if concept.get("papers") is not None:
+        english.append(f"Research: {concept['papers']} paper{'s' if concept['papers'] != 1 else ''} on arXiv "
+                       f"named {term} in the last {concept.get('papers_days', 30)} days.")
+        arabic_parts.append(arabic.research(term, concept["papers"], concept.get("papers_days", 30)))
+
     if used == 0:
         english.append(f"None of the {total} notebooks mentions it.")
         arabic_parts.append(f"لا يذكره أي نوتبوك من {total}.")
@@ -276,3 +281,42 @@ def why(concept: dict) -> tuple[str, str]:
         arabic_parts.append(f"يذكره {arabic.counted(used, arabic.NOTEBOOK)} من {total} بالفعل.")
 
     return " ".join(english), " ".join(arabic_parts)
+
+
+def with_papers(found: list[dict], search) -> list[dict]:
+    """arXiv's count beside the job posts, for every concept with a name to search."""
+    from src.sources.arxiv import searchable
+
+    for concept in found:
+        if concept.get("term") and searchable(concept["term"]):
+            result = search(concept["term"])
+            concept.update({"papers": result["papers"], "papers_days": result["days"],
+                            "papers_recent": result["recent"], "papers_checked": result["checked_on"]})
+
+    return found
+
+
+def main() -> None:
+    import argparse
+
+    from src.sources import arxiv
+
+    parser = argparse.ArgumentParser(description="Concepts the course does not teach yet.")
+    parser.add_argument("--papers", action="store_true", help="add arXiv's count to the concepts on file")
+    args = parser.parse_args()
+
+    if not args.papers:
+        raise SystemExit("run `python -m src.curriculum` to find concepts; --papers adds arXiv's count to them")
+
+    path = Path("fixtures/curriculum.json")
+    data = json.loads(path.read_text(encoding="utf-8"))
+    data["concepts"] = with_papers(data.get("concepts", []), arxiv.search)
+    path.write_text(json.dumps(data, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+
+    for concept in data["concepts"]:
+        print(f"{concept.get('term') or concept['module']}: {concept.get('papers')} papers in "
+              f"{concept.get('papers_days')} days")
+
+
+if __name__ == "__main__":
+    main()

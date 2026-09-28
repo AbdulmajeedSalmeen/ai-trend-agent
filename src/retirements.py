@@ -7,12 +7,14 @@ quotes, or a LangChain constructor called with no model, whose default was read
 from the release source. A reviewer can say a notebook is affected; only this
 says how many, and a count on the page is never typed.
 """
+import argparse
 import json
 import re
 from collections import defaultdict
 from pathlib import Path
 
 from src import arabic
+from src.sources import changelogs
 from src.notebooks import without_comments
 
 RETIREMENTS_PATH = Path("fixtures/model_retirements.json")
@@ -140,7 +142,7 @@ def deadlines(model_calls: list[dict], data: dict | None, left_out: set[str] = f
         by_default = set().union(*date["default"].values()) if date["default"] else set()
         models = sorted(set(date["named"]) | {model for _, model in date["default"]})
         constructors = sorted({constructor for constructor, _ in date["default"]})
-        english, arabic_text = explain(shutdown, date, named, by_default)
+        english, arabic_text = explain(shutdown, date, named, by_default, data.get("read_on"))
         found.append({
             "date": shutdown,
             "announced": sorted(date["announced"]),
@@ -158,7 +160,8 @@ def deadlines(model_calls: list[dict], data: dict | None, left_out: set[str] = f
     return found
 
 
-def explain(shutdown: str, date: dict, named: set, by_default: set) -> tuple[str, str]:
+def explain(shutdown: str, date: dict, named: set, by_default: set,
+            read_on: str | None = None) -> tuple[str, str]:
     parts, parts_ar = [], []
 
     if named:
@@ -174,5 +177,67 @@ def explain(shutdown: str, date: dict, named: set, by_default: set) -> tuple[str
         parts_ar.append(arabic.default_model(len(notebooks), constructor, model))
 
     reached = set(date["named"]) | {model for _, model in date["default"]}
-    english = "; ".join(parts) + f". OpenAI shuts {'it' if len(reached) == 1 else 'them'} down on {shutdown}."
+    pronoun = "it" if len(reached) == 1 else "them"
+    verb = "shut" if read_on and shutdown < read_on else "shuts"
+    english = "; ".join(parts) + f". OpenAI {verb} {pronoun} down on {shutdown}."
     return english, arabic.shutdown_sentence(parts_ar, shutdown)
+
+
+def refresh(fetch=changelogs.fetch, path: Path = RETIREMENTS_PATH) -> tuple[dict, dict]:
+    """Read OpenAI's deprecations page again and write the table from it, keeping the
+    constructor defaults, which come from the LangChain source, not from OpenAI.
+    Returns the new table and what changed against the one on file."""
+    rows = changelogs.openai_deprecations(fetch(changelogs.DEPRECATIONS_URL))
+
+    if not rows:
+        raise SystemExit("no rows read from the deprecations page; keeping the table on file")
+
+    old = load(path) or {}
+    before = {model: row["shutdown"] for row in old.get("retirements", []) for model in row["ids"]}
+    after = {model: row["shutdown"] for row in rows for model in row["ids"]}
+    data = {
+        "source": changelogs.DEPRECATIONS_URL,
+        "read_on": changelogs.today(),
+        "note": ("Read row by row from OpenAI's deprecations page by `python -m src.retirements --refresh`: "
+                 "every shutdown date, every id OpenAI prints for a model including its aliases, and the "
+                 "replacement it recommends. A notebook counts against a row only when a code cell names one of "
+                 "those ids exactly, or calls a constructor whose default is one of them; the defaults were read "
+                 "from the release source, at the line given."),
+        "retirements": rows,
+        "defaults": old.get("defaults", {}),
+    }
+    header = {key: data[key] for key in ("source", "read_on", "note")}
+    lines = json.dumps(header, indent=2, ensure_ascii=False)[:-2].splitlines()
+    lines[-1] += ","
+    lines.append('  "retirements": [')
+    lines.append(",\n".join("    " + json.dumps(row, ensure_ascii=False) for row in rows))
+    lines.append("  ],")
+    lines.append('  "defaults": ' + json.dumps(data["defaults"], indent=2, ensure_ascii=False).replace("\n", "\n  "))
+    lines.append("}")
+    path.write_text("\n".join(lines) + "\n", encoding="utf-8")
+    changed = {"added": sorted(set(after) - set(before)), "removed": sorted(set(before) - set(after)),
+               "moved": sorted(model for model in set(before) & set(after) if before[model] != after[model])}
+    return data, changed
+
+
+def main() -> None:
+    parser = argparse.ArgumentParser(description="The model shutdowns the course runs into.")
+    parser.add_argument("--refresh", action="store_true", help="read OpenAI's deprecations page again")
+    args = parser.parse_args()
+
+    if args.refresh:
+        data, changed = refresh()
+        print(f"read {len(data['retirements'])} rows from {data['source']} on {data['read_on']}; "
+              f"{len(changed['added'])} ids added, {len(changed['removed'])} removed, "
+              f"{len(changed['moved'])} with a new date")
+
+    data = load()
+    curriculum = json.loads(Path("fixtures/curriculum.json").read_text(encoding="utf-8"))
+    copies = {copy["notebook"] for copy in curriculum.get("copies", [])}
+
+    for deadline in deadlines(curriculum.get("model_calls", []), data, copies):
+        print(f"{deadline['date']}: {deadline['books']} notebooks, {deadline['what']}")
+
+
+if __name__ == "__main__":
+    main()

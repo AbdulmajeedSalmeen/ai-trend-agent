@@ -7,7 +7,7 @@ ecosystem, checks every claim against the official release, then reads the cours
 notebooks and says what to change: which notebook, which cell, what to write instead, and
 which new lesson employers are asking for. In English and Arabic.
 
-https://github.com/user-attachments/assets/c901d9d3-d8a2-4d8f-ab85-5e9055fa0110
+https://github.com/user-attachments/assets/5d9c3856-5ac9-4193-9111-6dafffad7c46
 
 It does not report news. It reports what our material teaches that no longer exists, and
 what employers ask for that the course does not teach yet. A version number is evidence,
@@ -15,7 +15,8 @@ never the reason on its own.
 
 It works in three layers:
 
-- **What shipped.** Release notes and discussion from GitHub, PyPI and Hacker News, for every
+- **What shipped.** Release notes and discussion from GitHub, PyPI and Hacker News, research from
+  arXiv, and OpenAI's own deprecations page, read row by row, for every
   package the course installs. That watchlist is read out of the notebooks, not typed by us,
   and every claim is checked against the release that would have to confirm it.
 - **What the notebooks teach.** Every `langchain` import is checked against the source of the
@@ -23,6 +24,13 @@ It works in three layers:
   has moved past, and rules decide what the page may say about it.
 - **What to teach next.** New concepts come from the tools' own source, and every proposed
   lesson is measured against real job posts before it is recommended.
+
+The page opens on the material, not on the packages: every notebook, and in it every cell with
+something to change, what to teach instead, and the evidence, marked verified when a rule
+checked it against a release or a vendor's own table, or read and judged when AI reviewers did
+(`src/material_view.py`). The packages are the evidence behind those changes. Without the
+review, the verified half stands on its own: 66 cells in 44 notebooks, 3 of which fail on
+today's install.
 
 ## What it found
 
@@ -62,8 +70,9 @@ the machine. Two facts from it are measured rather than judged, and those travel
   from its deprecations page; the defaults were read in the langchain-openai source.
 
 The reviewers also proposed 26 new lessons. Each is measured the way MCP was: a model picks the
-name a job post would use, the rules keep it only if the lesson itself uses that name and it is
-not a word every AI job post carries, and Hacker News counts it (`src/lessons.py`). **1 is asked
+name a job post would use, five times over, and a name counts only if it comes back every time;
+the rules keep it only if the lesson itself uses that name and it is not a word every AI job post
+carries, and Hacker News counts it (`src/lessons.py`). **1 is asked
 for often enough to be a new lesson, MCP, and 3 are optional content**; the other 22 are
 watched, since no employer names them yet.
 
@@ -171,9 +180,10 @@ instead. The run log says so when it happens.
 | Teaching feasibility | 3.3 to 5.0 of 5; 2 tools watched as not stable enough to teach |
 | Written reasons | 34 of 38 by the model, checked for the facts; 4 by the rules |
 | Chapters with something to act on | 11 of 25 |
-| Model shutdowns reaching the course | 24 notebooks: 2 on 28 September, 22 on 23 October |
+| Model shutdowns reaching the course | 24 notebooks: 2 on 28 September, 22 on 23 October, from OpenAI's page (132 rows) |
+| Research | arXiv papers in the last 30 days for every concept and proposed lesson: MCP 53, prompt injection 65 |
 | Notebooks that are copies of another | 4, identical cell for cell |
-| Tests | 432, none of which calls a model or the network |
+| Tests | 464, none of which calls a model or the network |
 
 Cross-source is zero because no discussion post this week stated anything a release page
 could check. That is a property of the data, not a gap in the checker, and the page prints

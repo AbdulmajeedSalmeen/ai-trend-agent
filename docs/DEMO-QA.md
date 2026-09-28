@@ -269,6 +269,22 @@ its tag on GitHub, and the name it moved to is found the same way. The table sti
 few calls outside LangChain, such as `openai.ChatCompletion`, and those are labelled as coming
 from our table. It no longer reads comments, and a name must match whole.
 
+## "Isn't this just a package tracker?"
+
+Not any more, and on purpose. The page opens on the material: every notebook, and in it every
+cell with something to change, what to teach instead, and why. Take the LangChain document chat
+in week 3: cell 88 imports `RetrievalQA` from `langchain.chains`, which langchain 1.4.2 no longer
+has, so the notebook fails on today's install; write `from langchain_classic.chains import
+RetrievalQA` instead. Cell 57 of the same notebook calls `ChatOpenAI()` with no model, which
+defaults to gpt-3.5-turbo, and OpenAI shuts that down on 23 October. The packages are still
+read, because a release is often the proof that a cell has to change: the 85 import lines and
+the 24 notebooks calling a model OpenAI is retiring are packages turned into cells. (The AI
+review's own examples are shown on the page, not written here: the review stays on the machine.)
+
+Each change says how it was established. Verified: checked by a rule against a release's source
+or OpenAI's own table (66 cells). Read and judged: AI reviewers, with the source they read (271
+cells). Where both reach the same cell, they sit together, verified first.
+
 ## "Does it check whether the material still teaches the right method?"
 
 Yes, and it is the half of the agent that is judged rather than measured, so it is labelled that
@@ -300,6 +316,11 @@ every AI job post carries, and, if the course already teaches it, only if it is 
 subject. Hacker News counts it in the last three "Who is hiring?" threads, and the notebooks
 are searched for it.
 
+The model is asked five times, and a name counts only if it comes back every time: pass^5,
+from the week 6 evaluation deck, rather than pass@5, which would accept a name given once. With
+one prompt and gpt-4o-mini answering all five, a name held for all 26 lessons, and 23 of them
+got the identical list each time.
+
 Of 26 proposals: 1 new lesson, MCP (20 posts, no notebook mentions it, the same number the
 concept check found independently); 3 optional (prompt injection in two lessons, 3 posts each,
 and Structured Outputs, 1); 22 watched, because no employer names them yet. The first attempt
@@ -309,8 +330,11 @@ lower-case word no longer counts as a name.
 
 ## "Where do the model shutdown dates come from?"
 
-From OpenAI's deprecations page, read on 2026-09-26 and copied row by row into
-`fixtures/model_retirements.json`. Which notebooks a date reaches is measured from their code:
+From OpenAI's deprecations page, read row by row by `python -m src.retirements --refresh`: on
+2026-09-28 that was 132 rows, each with its shutdown date, every id OpenAI prints for the model
+including its aliases, and the replacement it recommends. The first copy of the table had been
+made by hand two days earlier; the page matched it on every row. Which notebooks a date reaches
+is measured from their code:
 a model id written in a code cell, or LangChain's `OpenAI()` or `ChatOpenAI()` called with no
 model, whose defaults we read in the langchain-openai source at 1.6.6 and 0.3.35
 (`gpt-3.5-turbo-instruct` and `gpt-3.5-turbo`).
@@ -323,6 +347,19 @@ The reviewers had said 6 and 25, and a third date, 11 December, for notebooks us
 `gpt-5-mini`. That row lists only dated snapshots such as `gpt-5-mini-2025-08-07`, and no
 notebook names one, so the rules do not count it. The same table corrected 10 findings that
 said a model was removed while its shutdown is still ahead: they now say deprecated.
+
+## "Do you read research, or only releases and job posts?"
+
+Research too, from arXiv's own API. For every concept and every proposed lesson, the agent
+counts the papers submitted in the last 30 days that name it in their title or abstract, in the
+computing categories, so MCP in medicine or physics is not counted: MCP 53, prompt injection 65,
+Structured Outputs 18, LoRA adapter 32. The count sits beside the job posts and never decides the
+action: employers decide what is worth teaching, papers say where the field is moving.
+
+One word is counted only when the field does not use it for something else, an acronym or a
+coined name such as MCP, LoRA or OpenTelemetry. "Checkpointers" found 245 papers, nearly all
+about saving training checkpoints rather than an agent's saved state, so it is marked as too
+common to search instead of being reported.
 
 ## "What happens if the wifi dies during the demo?"
 

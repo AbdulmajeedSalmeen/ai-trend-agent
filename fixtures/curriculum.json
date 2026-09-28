@@ -3171,7 +3171,30 @@
         }
       ],
       "suggested_chapter": null,
-      "action": "add_new_lesson"
+      "action": "add_new_lesson",
+      "papers": 53,
+      "papers_days": 30,
+      "papers_recent": [
+        {
+          "id": "2609.31358v1",
+          "title": "A Safety-Bounded SDC-to-MCP Gateway for Medical AI Agents",
+          "published": "2026-09-25",
+          "url": "http://arxiv.org/abs/2609.31358v1"
+        },
+        {
+          "id": "2609.30717v1",
+          "title": "RecToolBench: Benchmarking Recommendation-Specific Tool Orchestration under Fuzzy User Intent",
+          "published": "2026-09-25",
+          "url": "http://arxiv.org/abs/2609.30717v1"
+        },
+        {
+          "id": "2609.30341v1",
+          "title": "Bridging LLM Agents and Data Spaces: An Architectural Mediation Approach using the Model Context Protocol",
+          "published": "2026-09-24",
+          "url": "http://arxiv.org/abs/2609.30341v1"
+        }
+      ],
+      "papers_checked": "2026-09-28"
     },
     {
       "concept": "langchain.messages",

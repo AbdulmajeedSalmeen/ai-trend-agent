@@ -1,6 +1,6 @@
 # Progress
 
-**Last updated:** 2026-09-26 · **Tests:** 432 passing · **Demo:** Sep 26–27
+**Last updated:** 2026-09-28 · **Tests:** 464 passing · **Demo:** Sep 26–27
 
 The pipeline runs end to end, live, from a web app. A model reads, judges and writes;
 rules still decide what counts as confirmed, and every recommendation now carries the reason
@@ -119,10 +119,38 @@ behind it: what the chapter teaches, which version it runs, and how far the rele
 - [ ] Decide whether the material review may be published. Until then it stays on this machine
 - [ ] Two timed rehearsals, and the offline fallback drill
 - [ ] Raise or refill the OpenAI spend limit; until then every run is rules only
-- [ ] The evaluation suite: frozen cases, several repeats, pass^k, a release gate
+- [ ] The evaluation suite: frozen cases, several repeats, pass^k, a release gate. Started with
+  the one model choice that drives a decision: the lesson search term is asked 5 times and kept
+  only if it comes back every time. Still owed for the claim reader and the writer.
 - [ ] Optional: GitHub token per member (60 requests/hour without one)
 
 ## Standup log
+
+### 2026-09-28
+- Research is read now, from arXiv's API (`src/sources/arxiv.py`): papers submitted in the last
+  30 days that name each concept and proposed lesson, in the computing categories. MCP 53, prompt
+  injection 65. Shown beside the job posts, never deciding an action. One word counts only when
+  the field does not use it for something else: "Checkpointers" found 245 papers about training
+  checkpoints and is marked too common to search. This closes the one gap left against the brief.
+- OpenAI's deprecations page is read directly (`src/sources/changelogs.py`, `python -m
+  src.retirements --refresh`): 132 rows. The table copied by hand on Sep 26 matched every row.
+  Today is the day gpt-3.5-turbo-instruct shuts down: 2 notebooks stop working.
+- Every change on the material page is now a pair, what is there and what to teach instead, with
+  one line of why; 21 reviewer findings that only restate a verified change are marked as such.
+- aibriefs.news was considered as a source and left out: it sits behind a bot checkpoint, has no
+  feed, and is a secondary digest of news rather than a record of what changed.
+- 464 tests.
+
+### 2026-09-27
+- The focus is the material now, decided by Abdulmajeed. `src/material_view.py` lists every
+  notebook and, in it, every cell with something to change, with its evidence: an import change
+  and a model shutdown are verified by rule, a reviewer's method finding is read and judged. The
+  page opens on it; the package cards follow as the evidence.
+- Without the review the view still stands, verified only, so the committed page carries it:
+  66 cells in 44 notebooks, 3 lines that fail on today's install, 2 notebooks stopping on 28
+  September and 22 on 23 October. With the review on this machine: 337 cells in 85 notebooks,
+  66 verified and 271 judged, and where both reach one cell they sit together, verified first.
+- 445 tests.
 
 ### 2026-09-26
 - The material review, the half that asks whether a notebook still teaches the right method:
@@ -154,7 +182,11 @@ behind it: what the chapter teaches, which version it runs, and how far the rele
   remade from them whenever the page is built.
 - OpenAI answered the term pick (`gpt-4o-mini`): the key works again and `MODEL_ORDER` now
   starts with it.
-- 432 tests, none touching a model or the network.
+- pass^5 on the lesson search term: the model is asked five times and a name counts only if it
+  comes back every time. 26 of 26 held with gpt-4o-mini answering all five, 23 with the identical
+  list each time, and every decision stayed the same. The flips seen earlier in the day came from
+  changing the prompt between runs, not from the model.
+- 436 tests, none touching a model or the network.
 
 ### 2026-09-25
 - The 19 install counts pypistats had refused on Sep 22 are in, filled one request at a time.
