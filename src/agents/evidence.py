@@ -76,18 +76,25 @@ def release_notes_tool(run_dir: Path):
     return release_notes
 
 
+def _squashed(text: str) -> str:
+    """A name as it is meant, not as it is spelled: no case, underscores, hyphens or spaces."""
+    return re.sub(r"[\s_-]+", "", str(text or "")).lower()
+
+
 def course_uses_tool(notebook_dir: Path | None = None):
     """The notebook cells of the course that use a name, with their cell numbers.
 
-    Case is ignored: an agent asking after "AgentExecutor" and a notebook writing
-    agent_executor are asking and answering about the same thing, and a search that
-    missed on a capital would report the course has never heard of it."""
+    Case, underscores, hyphens and spaces are ignored: an agent asking after
+    "AgentExecutor" and a notebook writing endgame_agent_executor are asking and
+    answering about the same thing, and a search that missed on the spelling would
+    report the course has never heard of it."""
     root = Path(notebook_dir or NOTEBOOK_DIR)
 
     def course_uses(symbol: str = "") -> str:
         needle = str(symbol or "").strip()
         if len(needle) < 3:
             return "give a name of three characters or more"
+        wanted = _squashed(needle)
         hits = []
         for path in sorted(root.glob("*/*.ipynb")):
             try:
@@ -97,7 +104,7 @@ def course_uses_tool(notebook_dir: Path | None = None):
             for position, cell in enumerate(cells, start=1):
                 source = cell.get("source", "")
                 source = "".join(source) if isinstance(source, list) else str(source)
-                if needle.lower() in source.lower():
+                if wanted in _squashed(source):
                     hits.append(f"{path.name} cell {position}")
                     break
             if len(hits) >= MAX_HITS:

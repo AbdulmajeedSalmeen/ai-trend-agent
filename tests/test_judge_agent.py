@@ -224,3 +224,18 @@ def test_it_looks_at_most_four_times_and_is_told_when_to_answer():
     assert judge.judge("langchain", ["something changed"], None, kit, ask=ask) is None
     assert len(ran) == 4 and len(ask.asked) == 5
     assert "no tool calls left" in ask.asked[-1].lower()
+
+
+def test_the_course_is_searched_past_capitals_underscores_and_spaces(tmp_path):
+    # The docstring promised AgentExecutor would find agent_executor; lower-casing both
+    # sides does not make "agentexecutor" a part of "agent_executor".
+    week = tmp_path / "week 3"
+    week.mkdir(parents=True)
+    (week / "wiki.ipynb").write_text(json.dumps({"cells": [
+        {"cell_type": "code", "source": "endgame_agent_executor = make_agent()"}]}), encoding="utf-8")
+
+    uses = evidence.course_uses_tool(tmp_path)
+
+    assert "wiki.ipynb cell 1" in uses(symbol="AgentExecutor")
+    assert "wiki.ipynb cell 1" in uses(symbol="agent executor")
+    assert "no notebook uses" in uses(symbol="ToolNode")

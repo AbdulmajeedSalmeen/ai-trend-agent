@@ -332,6 +332,10 @@ def build(review: dict, curriculum: dict, deadlines: list[dict], retirement_data
             "copy_of": original,
             "act": "watch" if verdict == "keep" else "update_existing_material",
             "e": entry.get("effort") if entry.get("effort") in arabic.REVIEW_EFFORT else "medium",
+            # Whether that effort was judged or assumed, and what the change is worth to a
+            # teacher, when the reviewer agent said; the served review says neither.
+            "es": entry.get("effort_source") if entry.get("effort_source") in ("judged", "default") else None,
+            "w": entry.get("worth") if entry.get("worth") in (1, 2, 3, 4, 5) else None,
             "a": clip(entry.get("action"), 240),
             "n": entry["new_lesson"]["title"] if entry.get("new_lesson") and not original else None,
             "f": [compact(finding, notebook, owned, taught) for finding in shown[:SHOWN_PER_NOTEBOOK]],
@@ -396,7 +400,7 @@ def build(review: dict, curriculum: dict, deadlines: list[dict], retirement_data
         "course_wide": course_wide(counted),
         "chapters": [
             {"id": chapter_id, "title": chapters[chapter_id]["title"], "week": chapters[chapter_id]["week"],
-             "books": sorted(members, key=lambda book: (VERDICTS[book["v"]], book["id"]))}
+             "books": sorted(members, key=lambda book: (VERDICTS[book["v"]], -(book["w"] or 0), book["id"]))}
             for chapter_id, members in sorted(by_chapter.items(),
                                               key=lambda item: (chapters[item[0]]["week"], chapter_order(item[0])))
         ],
