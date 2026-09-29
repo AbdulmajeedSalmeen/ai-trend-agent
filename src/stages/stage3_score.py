@@ -4,6 +4,9 @@ from pathlib import Path
 import json
 
 from src import changes, feasibility, gap, memory, runio
+from src.adapters import model
+from src.agents import evidence
+from src.agents import judge as judge_agent
 from src.reading import judge_educational_value
 from src.schema import MarketSignal, PackageFacts, Score, Signal, Trend
 
@@ -208,6 +211,7 @@ def score_trend(
     facts: dict[str, dict] | None = None,
     as_of: datetime | None = None,
     taught: set[str] | None = None,
+    tools: dict | None = None,
 ) -> Score:
     chapter_id = match_chapter(trend, chapters)
 
@@ -224,7 +228,13 @@ def score_trend(
         (c["title"] for c in chapters if c["chapter_id"] == chapter_id),
         None,
     )
-    judgement = judge_educational_value(trend.subject, judge_input(trend, summary), chapter_title)
+    # The agent looks before it scores: it may read this run's releases, search the
+    # course for the names that moved, and read the demand already counted. What it
+    # cites is checked against the tool output before any of it is kept, and when it
+    # has nothing left the old single question answers instead.
+    claims_seen = judge_input(trend, summary)
+    judged_by_agent = judge_agent.judge(trend.subject, claims_seen, chapter_title, tools or {})
+    judgement = judged_by_agent or judge_educational_value(trend.subject, claims_seen, chapter_title)
 
     impact, impact_source = impact_of(trend, summary)
     market_relevance, market_source = market_score(demand)
@@ -251,12 +261,22 @@ def score_trend(
     provenance = {
         "relevance": "measured",
         "impact": impact_source,
-        "educational_value": "judged" if judgement else "default",
+        "educational_value": "agent" if judged_by_agent else ("judged" if judgement else "default"),
         "market_relevance": market_source,
         "maturity": mature_source,
         "prerequisites": ready_source,
         "difficulty": effort_source,
     }
+
+    factors = {"maturity": mature_detail, "prerequisites": ready_detail, "difficulty": effort_detail}
+    if judged_by_agent:
+        # What the agent read travels with the score, so the number can be opened.
+        factors["educational_value"] = {
+            "reason": judged_by_agent["reason"],
+            "cites": judged_by_agent["cites"],
+            "dropped": judged_by_agent["dropped"],
+            "looked": judged_by_agent["looked"],
+        }
 
     return Score(
         trend_id=trend.id,
@@ -268,7 +288,7 @@ def score_trend(
         changes=summary,
         market=demand.model_dump() if demand else {},
         feasibility=feasibility.score(dimensions),
-        factors={"maturity": mature_detail, "prerequisites": ready_detail, "difficulty": effort_detail},
+        factors=factors,
     )
 
 
@@ -286,8 +306,9 @@ def run(run_dir: Path) -> None:
     # A run collected before market data existed has no market artifact. Its
     # scores come out as unmeasured on that dimension rather than failing.
     market_path = run_dir / "market.json"
-    market = ({entry.subject: entry for entry in runio.load_artifact(run_dir, "market", MarketSignal)}
-              if market_path.exists() else {})
+    market_rows = ([entry.model_dump() for entry in runio.load_artifact(run_dir, "market", MarketSignal)]
+                   if market_path.exists() else [])
+    market = {row["subject"]: MarketSignal(**row) for row in market_rows}
 
     # The same goes for package histories: without them maturity and
     # prerequisites fall back to default, and say so.
@@ -300,8 +321,12 @@ def run(run_dir: Path) -> None:
     as_of = memory.run_started(run_dir.name) or datetime.now(timezone.utc)
     taught = feasibility.taught_packages(chapters)
 
+    # The agent's tools read this run's own artifacts and the course on disk, so a
+    # replay without keys simply finds no model, and the rules answer as they always did.
+    tools = evidence.tools_for(run_dir, market_rows) if model.available() else {}
+
     scores = [
-        score_trend(trend, chapters, signals, market, facts, as_of, taught)
+        score_trend(trend, chapters, signals, market, facts, as_of, taught, tools)
         for trend in trends
     ]
 

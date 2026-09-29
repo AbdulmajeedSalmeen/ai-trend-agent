@@ -265,7 +265,9 @@ const T = {
     sc_weights: "Each counts equally, weighted {w}.", sc_ease: "Ease is 6 minus difficulty, {d} here.",
     dim_relevance: "Relevance", dim_impact: "Impact", dim_educational_value: "Educational value", dim_market_relevance: "Market relevance",
     dim_maturity: "Maturity", dim_prerequisites: "Prerequisites", dim_ease: "Ease",
-    prov_measured: "measured", prov_judged: "judged", prov_default: "default",
+    prov_measured: "measured", prov_judged: "judged", prov_default: "default", prov_agent: "agent",
+    sc_read: "what the agent read", sc_cite_dropped: "{n} cited nothing it had seen, dropped",
+    sc_looked: "looked up: {list}",
     immature: "Not stable yet", im_note: "Maturity {n} or lower: watched until it is stable enough to teach.",
     cn_note: "Read from the tools' own source, comparing the newest release with the newest version the course's pins allow: {list}. Checked on {date}.",
     cn_pair: "{tool} {latest} against {course}",
@@ -407,7 +409,9 @@ const T = {
     sc_weights: "لكلٍّ منها الوزن نفسه: {w}.", sc_ease: "السهولة هي 6 ناقص الصعوبة، وهي هنا {d}.",
     dim_relevance: "الصلة بالمقرر", dim_impact: "الأثر", dim_educational_value: "القيمة التعليمية", dim_market_relevance: "الطلب في السوق",
     dim_maturity: "النضج", dim_prerequisites: "المتطلبات السابقة", dim_ease: "السهولة",
-    prov_measured: "مقيس", prov_judged: "مقدَّر", prov_default: "افتراضي",
+    prov_measured: "مقيس", prov_judged: "مقدَّر", prov_default: "افتراضي", prov_agent: "وكيل",
+    sc_read: "ما الذي قرأه الوكيل", sc_cite_dropped: "{n} استشهد بما لم يره، فأُسقط",
+    sc_looked: "بحث في: {list}",
     immature: "غير مستقر بعد", im_note: "نضج {n} أو أقل: تحت المراقبة حتى يستقر بما يكفي للتدريس.",
     cn_note: "مقروءة من مصدر الأدوات نفسها، بمقارنة أحدث إصدار بأحدث نسخة تسمح بها تثبيتات المقرر: {list}. رُوجعت في {date}.",
     cn_pair: "{tool} {latest} مقابل {course}",
@@ -758,6 +762,23 @@ function editsBlock(item) {
    score came from (measured, judged, or a default when nothing could be
    measured), and the arithmetic with the weights, so the reader can check the
    total rather than take it. */
+/* A score an agent reached carries the tools it called and the lines it quoted, and
+   the count of what it cited without having seen. Closed by default: the number is the
+   answer, this is the working. */
+function agentRead(item) {
+  const judged = item.factors && item.factors.educational_value;
+  if (!judged || !(judged.cites || []).length) return "";
+  const looked = (judged.looked || []).map((x) => x.tool);
+  return `<details class="sc-read">
+    <summary>${esc(t("sc_read"))}</summary>
+    ${looked.length ? `<p class="sc-note">${esc(fill(t("sc_looked"), { list: looked.join(", ") }))}</p>` : ""}
+    <ul class="sc-cites">${judged.cites.map((c) => `<li>
+      <span class="sc-cite-tool" dir="ltr">${esc(c.tool)}</span>
+      <span class="sc-cite-q" dir="auto">${esc(c.quote)}</span></li>`).join("")}</ul>
+    ${judged.dropped ? `<p class="sc-note">${esc(fill(t("sc_cite_dropped"), { n: judged.dropped }))}</p>` : ""}
+  </details>`;
+}
+
 function scoreBlock(item) {
   const sc = DATA.scoring;
   if (!sc || !item.dimensions) return "";
@@ -777,7 +798,8 @@ function scoreBlock(item) {
   const pCol = `<div class="sc-col"><div class="sc-head"><span class="why-t">${esc(t("sc_priority"))}</span>
       <b class="sc-total">${item.priority.toFixed(2)}</b>${math(pMath)}</div>
       <ul class="sc-rows">${pRows}</ul>
-      ${same ? `<p class="sc-note">${esc(fill(t("sc_weights"), { w: weights[0][1] }))}</p>` : ""}</div>`;
+      ${same ? `<p class="sc-note">${esc(fill(t("sc_weights"), { w: weights[0][1] }))}</p>` : ""}
+      ${agentRead(item)}</div>`;
 
   let fCol = "";
   const f = item.factors;
