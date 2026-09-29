@@ -168,9 +168,10 @@ def run(notebook: str, cells: list[dict], tools: dict, ask=None, max_steps: int 
         if not answer:
             return None
 
-        proposal = answer.get("answer")
-        if isinstance(proposal, dict):
-            return {"proposal": proposal, "seen": seen}
+        if "answer" in answer:
+            # An answer of null is it saying it has nothing, which is a finish.
+            proposal = answer.get("answer")
+            return {"proposal": proposal if isinstance(proposal, dict) else {}, "seen": seen}
 
         name = answer.get("tool")
         tool = tools.get(name) if isinstance(name, str) else None

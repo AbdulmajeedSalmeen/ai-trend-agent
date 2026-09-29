@@ -147,10 +147,11 @@ def run(claim: Claim, post: Signal, releases: list[dict], tools: dict,
         if not answer:
             return None
 
-        proposal = answer.get("answer")
-
-        if isinstance(proposal, dict):
-            return {"proposal": proposal, "seen": seen}
+        if "answer" in answer:
+            # An answer of null is it saying it cannot tell, which is a finish, not a
+            # turn to skip. Letting it fall through spends the rest of the budget.
+            proposal = answer.get("answer")
+            return {"proposal": proposal if isinstance(proposal, dict) else {}, "seen": seen}
 
         name = answer.get("tool")
         tool = tools.get(name) if isinstance(name, str) else None

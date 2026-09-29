@@ -97,6 +97,14 @@ def test_saying_it_cannot_tell_is_an_answer(said):
     assert extractor.extract(claim(), post(), signals, ask=ask) is None
 
 
+def test_answering_null_ends_it_instead_of_spending_the_rest_of_the_budget():
+    signals = [release(), post()]
+    ask = scripted({"tool": "releases", "args": {}}, {"answer": None}, answer())
+
+    assert extractor.extract(claim(), post(), signals, ask=ask) is None
+    assert len(ask.asked) == 2
+
+
 def test_it_cannot_look_forever():
     signals = [release(), post()]
     ask = scripted(*[{"tool": "releases", "args": {}} for _ in range(9)])

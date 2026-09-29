@@ -34,6 +34,9 @@ class Claim(BaseModel):
     # Whether the post wrote the version down or an agent worked out which release it
     # meant. An inferred link is worth less than a stated one, and the page says so.
     version_source: Optional[Literal['stated', 'extracted']] = None
+    # Whether the evidence was among the documents this run collected, or an agent
+    # worked out where a second record would be and went and read it.
+    evidence_found_by: Optional[Literal['collected', 'searched']] = None
 
 
 class MarketSignal(BaseModel):
