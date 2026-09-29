@@ -165,7 +165,7 @@ def run(notebook: str, cells: list[dict], tools: dict, ask=None, max_steps: int 
 
     for _ in range(max_steps + 1):
         answer = ask(SYSTEM, turn(notebook, cells, seen))
-        if not answer:
+        if not isinstance(answer, dict) or not answer:
             return None
 
         if "answer" in answer:
@@ -208,7 +208,8 @@ def check(gathered: dict, cells: list[dict]) -> dict:
     returned = " ".join(step["text"] for step in (gathered or {}).get("seen") or [])
     teaches, dropped, recalled = [], 0, 0
 
-    for claim in proposal.get("teaches") or []:
+    listed = proposal.get("teaches")
+    for claim in listed if isinstance(listed, list) else []:
         if not isinstance(claim, dict):
             dropped += 1
             continue
@@ -226,7 +227,8 @@ def check(gathered: dict, cells: list[dict]) -> dict:
 
     named = {c["technique"] for c in teaches}
     findings = []
-    for finding in proposal.get("findings") or []:
+    listed = proposal.get("findings")
+    for finding in listed if isinstance(listed, list) else []:
         if not isinstance(finding, dict):
             dropped += 1
             continue
@@ -235,7 +237,8 @@ def check(gathered: dict, cells: list[dict]) -> dict:
         if technique not in named or status not in STATUSES:
             dropped += 1
             continue
-        sources = [s for s in (finding.get("sources") or []) if isinstance(s, dict) and s.get("url")]
+        given = finding.get("sources")
+        sources = [s for s in (given if isinstance(given, list) else []) if isinstance(s, dict) and s.get("url")]
         if status != "current" and not sources:
             # A claim that something moved, with nothing to read, is an opinion.
             dropped += 1

@@ -133,3 +133,23 @@ def test_the_tools_read_the_run_and_the_course(tmp_path):
     assert "no notebook uses" in kit["course_uses"](symbol="NoSuchName")
     assert "20 job posts" in kit["demand"](subject="langchain")
     assert "nothing counted" in kit["demand"](subject="unknown-package")
+
+
+def test_a_reply_that_is_not_an_object_ends_it_without_a_crash():
+    for reply in (["4"], "4", 7):
+        assert judge.judge("langchain", ["AgentExecutor moved"], "Week 3 - LangChain", tools(),
+                           ask=scripted(reply)) is None
+
+
+def test_fields_of_the_wrong_type_are_refused_not_crashed_on():
+    good = {"factor": "the course uses it", "tool": "course_uses", "quote": "intro.ipynb cell 7"}
+
+    def verdict(**fields):
+        ask = scripted({"tool": "course_uses", "args": {"symbol": "AgentExecutor"}},
+                       {"answer": {"educational_value": 4, **fields}})
+        return judge.judge("langchain", ["AgentExecutor moved"], "Week 3 - LangChain", tools(), ask=ask)
+
+    assert verdict(cites=3) is None
+    assert verdict(cites="course_uses") is None
+    assert verdict(reason=5, cites=[good])["reason"] == ""
+    assert verdict(reason=["kept"], cites=[good])["value"] == 4

@@ -116,3 +116,15 @@ def test_an_unreadable_first_provider_lets_the_second_answer(monkeypatch):
 
     assert model.ask_json("s", "u", action="probe") == {"ok": True}
     assert call.asked == ["first", "second"]
+
+
+@pytest.mark.parametrize("text", ['["a", "b"]', "7", '"just a string"'])
+def test_json_that_is_not_an_object_is_an_answer_we_cannot_read(text):
+    # Every caller asked for one object and reads it with .get; a list or a number
+    # handed through crashed the stage that asked.
+    with pytest.raises(ValueError):
+        model.parse_json(text)
+
+
+def test_an_object_after_a_sentence_is_still_read():
+    assert model.parse_json('Here it is: {"a": 1}') == {"a": 1}

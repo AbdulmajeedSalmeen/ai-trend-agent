@@ -168,7 +168,7 @@ def run(entry: dict, tools: dict, ask=None, max_steps: int = MAX_STEPS,
     for _ in range(max_steps + 1):
         answer = ask(SYSTEM, turn(entry, seen, complaint))
 
-        if not answer:
+        if not isinstance(answer, dict) or not answer:
             return None
 
         if "answer" in answer:

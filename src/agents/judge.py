@@ -83,7 +83,7 @@ def run(subject: str, claims: list[str], chapter_title: str | None, tools: dict,
 
     for _ in range(max_steps + 1):
         answer = ask(SYSTEM, _turn(subject, chapter_title, claims, seen))
-        if not answer:
+        if not isinstance(answer, dict) or not answer:
             return None
 
         proposal = answer.get("answer")
@@ -139,7 +139,8 @@ def check(gathered: dict) -> dict | None:
     # and a lookup that misses on the punctuation drops a citation that was good.
     returned = {tool_name(step["tool"]): step["text"] for step in gathered.get("seen", [])}
     kept, dropped = [], 0
-    for cite in proposal.get("cites") or []:
+    cites = proposal.get("cites")
+    for cite in cites if isinstance(cites, list) else []:
         if not isinstance(cite, dict):
             dropped += 1
             continue
@@ -155,7 +156,8 @@ def check(gathered: dict) -> dict | None:
     if not kept:
         return None
 
-    reason = (proposal.get("reason") or "").strip()
+    reason = proposal.get("reason")
+    reason = reason.strip() if isinstance(reason, str) else ""
     return {"value": value, "reason": reason[:200], "cites": kept, "dropped": dropped,
             "looked": [{"tool": s["tool"], "args": s.get("args", {})} for s in gathered.get("seen", [])]}
 

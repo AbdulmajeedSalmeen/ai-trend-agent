@@ -158,7 +158,7 @@ def run(subject: str, about: str, chapters: list[dict], tools: dict, ask=None,
     for step in range(max_steps + 1):
         answer = ask(SYSTEM, turn(subject, about, chapters, seen, max_steps - step))
 
-        if not answer:
+        if not isinstance(answer, dict) or not answer:
             return None
 
         if "answer" in answer:

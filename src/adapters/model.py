@@ -202,18 +202,31 @@ def parse_json(text: str) -> dict:
     Asked for one object and nothing else, a reasoning model still sometimes
     says a sentence first or after. Two of those in a row dropped a working
     provider for the end of a run, when the object was right there in the text.
+
+    Anything that is not one object is an answer we cannot read. Every caller reads
+    the answer with .get, so a list or a bare value handed through crashed the stage
+    that asked instead of counting as a bad answer.
     """
     cleaned = FENCE.sub("", text).strip()
 
     try:
-        return json.loads(cleaned)
+        parsed = json.loads(cleaned)
     except json.JSONDecodeError:
-        start, end = cleaned.find("{"), cleaned.rfind("}")
+        parsed = None
 
-        if start == -1 or end <= start:
-            raise
+    if isinstance(parsed, dict):
+        return parsed
 
-        return json.loads(cleaned[start:end + 1])
+    # A sentence around the object, or the object inside a list: read the braces.
+    start, end = cleaned.find("{"), cleaned.rfind("}")
+
+    if start != -1 and end > start:
+        inner = json.loads(cleaned[start:end + 1])
+
+        if isinstance(inner, dict):
+            return inner
+
+    raise json.JSONDecodeError("expected one JSON object", cleaned, 0)
 
 
 def halted() -> str | None:

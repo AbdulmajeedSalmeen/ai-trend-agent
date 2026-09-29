@@ -193,3 +193,8 @@ def test_a_claim_whose_post_is_gone_is_left_alone():
 
     left = stage2b_verify.verify_claim(orphan, [release()], {}, extract=lambda *a: called.append(a))
     assert left.version is None and called == []
+
+
+@pytest.mark.parametrize("reply", [["1.2.12"], "1.2.12", 7])
+def test_a_reply_that_is_not_an_object_ends_it_without_a_crash(reply):
+    assert extractor.extract(claim(), post(), [release(), post()], ask=scripted(reply)) is None

@@ -218,3 +218,8 @@ def test_the_budget_is_what_stops_it():
         stage2b_verify.verify_claim(claim(), [signal()], {"pypi_1": 1}, second=second)
 
     assert len(calls) == 2
+
+
+@pytest.mark.parametrize("reply", [["found"], "found", 7])
+def test_a_reply_that_is_not_an_object_ends_it_without_a_crash(reply):
+    assert verifier.confirm(claim(), "pypi", tools(), ask=scripted(reply)) is None

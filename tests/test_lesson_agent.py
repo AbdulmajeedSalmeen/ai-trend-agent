@@ -197,3 +197,8 @@ def test_the_course_is_counted_here_and_case_does_not_hide_it(tmp_path):
     assert lesson.taught_in("evaluation harness", tmp_path) == 2
     assert lesson.taught_in("MCP", tmp_path) == 0
     assert lesson.taught_in("ha", tmp_path) == 0
+
+
+@pytest.mark.parametrize("reply", [["x"], "x", 7])
+def test_a_reply_that_is_not_an_object_ends_it_without_a_crash(reply):
+    assert lesson.propose(entry(), tools(), ask=scripted(reply), count=lambda term: 0) is None

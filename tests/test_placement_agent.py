@@ -216,3 +216,8 @@ def test_without_a_curriculum_nothing_is_placed(tmp_path):
     assert review_run.chapters_of(tmp_path / "gone.json") == []
     (tmp_path / "half.json").write_text('{"chapters": ', encoding="utf-8")
     assert review_run.chapters_of(tmp_path / "half.json") == []
+
+
+@pytest.mark.parametrize("reply", [["C8"], "C8", 7])
+def test_a_reply_that_is_not_an_object_ends_it_without_a_crash(reply):
+    assert placement.place("langchain", "ToolNode was removed", CHAPTERS, tools(), ask=scripted(reply)) is None

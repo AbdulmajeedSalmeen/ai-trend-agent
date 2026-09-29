@@ -118,7 +118,7 @@ def run(entry: dict, tools: dict, ask=None, max_steps: int = MAX_STEPS) -> dict 
     for step in range(max_steps + 1):
         answer = ask(SYSTEM, turn(entry, seen, max_steps - step))
 
-        if not answer:
+        if not isinstance(answer, dict) or not answer:
             return None
 
         if "answer" in answer:
@@ -172,7 +172,9 @@ def check(gathered: dict) -> dict | None:
 
     kept, dropped = [], 0
 
-    for cite in proposal.get("cites") or []:
+    cites = proposal.get("cites")
+
+    for cite in cites if isinstance(cites, list) else []:
         if not isinstance(cite, dict):
             dropped += 1
             continue

@@ -145,7 +145,7 @@ def run(claim: Claim, post: Signal, releases: list[dict], tools: dict,
     for _ in range(max_steps + 1):
         answer = ask(SYSTEM, turn(claim, post, releases, seen))
 
-        if not answer:
+        if not isinstance(answer, dict) or not answer:
             return None
 
         if "answer" in answer:

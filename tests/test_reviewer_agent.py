@@ -183,3 +183,21 @@ def test_research_that_cannot_be_asked_says_so():
 def test_nonsense_answers_produce_nothing(tmp_path, bad):
     path = notebook(tmp_path)
     assert reviewer.review(path, tools(reviewer.cells_of(path)), ask=scripted(bad)) is None
+
+
+@pytest.mark.parametrize("reply", [["x"], "x", 7])
+def test_a_reply_that_is_not_an_object_ends_it_without_a_crash(tmp_path, reply):
+    path = notebook(tmp_path)
+    assert reviewer.review(path, tools(reviewer.cells_of(path)), ask=scripted(reply)) is None
+
+
+def test_lists_that_are_not_lists_are_refused_not_crashed_on(tmp_path):
+    path = notebook(tmp_path)
+    cells = reviewer.cells_of(path)
+    quote = "from langchain.agents import create_react_agent"
+
+    for reply in ({"answer": {"teaches": 3, "findings": []}},
+                  {"answer": {"teaches": [], "findings": 3}},
+                  answer(quote, sources=3)):
+        entry = reviewer.review(path, tools(cells), ask=scripted(reply))
+        assert entry is None or entry["findings"] == []

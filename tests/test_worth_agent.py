@@ -165,3 +165,14 @@ def test_the_tools_pass_the_name_through_whatever_it_is_called():
 
 def test_no_model_means_the_rules_decide():
     assert worth.judge(entry(), tools(), ask=lambda system, user: None) is None
+
+
+@pytest.mark.parametrize("reply", [["4"], "4", 7])
+def test_a_reply_that_is_not_an_object_ends_it_without_a_crash(reply):
+    assert worth.judge(entry(), tools(), ask=scripted(reply)) is None
+
+
+@pytest.mark.parametrize("cites", [3, "course_uses"])
+def test_citations_that_are_not_a_list_are_refused_not_crashed_on(cites):
+    ask = scripted({"tool": "course_uses", "args": {"term": "ReAct agent"}}, answer(cites=cites))
+    assert worth.judge(entry(), tools(), ask=ask) is None

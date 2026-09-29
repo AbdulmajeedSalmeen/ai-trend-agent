@@ -218,7 +218,7 @@ def run(claim: Claim, came_from: str, tools: dict, ask=None, max_steps: int = MA
     for _ in range(max_steps + 1):
         answer = ask(SYSTEM, turn(claim, came_from, seen))
 
-        if not answer:
+        if not isinstance(answer, dict) or not answer:
             return None
 
         if "answer" in answer:
