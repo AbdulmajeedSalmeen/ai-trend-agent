@@ -74,7 +74,9 @@ def test_a_sentence_too_long_for_a_card_is_sent_back_with_the_number():
 def test_three_failures_leave_it_to_the_rules():
     ask = scripted(*["Update the chapter, several releases landed."] * 4)
 
-    assert writer.write(BRIEF, ["1.4.2"], "update_existing_material", ask=ask) is None
+    written = writer.write(BRIEF, ["1.4.2"], "update_existing_material", ask=ask)
+    # it gave up on the rules, and says so: that is not the same as the model saying nothing
+    assert written["sentence"] is None and written["tries"] == 3 and len(written["complaints"]) == 3
     assert len(ask.asked) == 3
 
 
@@ -124,3 +126,45 @@ def test_the_rules_are_reachable_where_the_pipeline_looks_for_them():
     assert reading.keeps_the_facts is writer.keeps_the_facts
     assert reading.contradicts_the_verdict is writer.contradicts_the_verdict
     assert reading.WRITE_SYSTEM == writer.WRITE_SYSTEM
+
+
+def test_under_forty_five_words_means_under():
+    forty_four = " ".join(["word"] * 43) + " 1.4.2"
+    forty_five = forty_four + " more"
+
+    assert writer.too_long(forty_four) == 0
+    assert writer.too_long(forty_five) == 1
+    assert "1 word too long" in " ".join(writer.faults(forty_five, [], "update_existing_material"))
+
+
+def test_two_sentences_at_most_is_a_rule_it_is_held_to():
+    three = "Update the chapter. RetrievalQA is gone in 1.4.2. The notebooks call it."
+    said = " ".join(writer.faults(three, ["1.4.2"], "update_existing_material"))
+
+    assert "3 sentences" in said
+    assert writer.faults("Update the chapter for 1.4.2. RetrievalQA is gone.", ["1.4.2"],
+                         "update_existing_material") == []
+
+
+def test_the_retry_shows_the_sentence_it_threw_away():
+    # Each call is its own conversation, so "keep what was right" meant nothing unless
+    # the sentence it is keeping from is in front of it.
+    ask = scripted("Update the chapter, several releases landed.",
+                   "The notebooks still call RetrievalQA, gone in 1.4.2.")
+
+    writer.write(BRIEF, ["1.4.2", "RetrievalQA"], "update_existing_material", ask=ask)
+
+    assert "Update the chapter, several releases landed." in ask.asked[1]
+
+
+def test_the_page_is_told_whether_the_model_said_nothing_or_the_rules_refused_it(capsys, monkeypatch):
+    monkeypatch.setattr(reading.model, "available", lambda: True)
+
+    monkeypatch.setattr(reading.writer, "write", lambda *args, **kwargs: None)
+    assert reading.write_recommendation("langchain", "update_existing_material", "C8", 3, 1, 3.5) is None
+    assert "wrote nothing" in capsys.readouterr().out
+
+    monkeypatch.setattr(reading.writer, "write",
+                        lambda *args, **kwargs: {"sentence": None, "tries": 3, "complaints": ["x"]})
+    assert reading.write_recommendation("langchain", "update_existing_material", "C8", 3, 1, 3.5) is None
+    assert "passed the rules" in capsys.readouterr().out

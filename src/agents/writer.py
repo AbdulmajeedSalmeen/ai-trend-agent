@@ -95,9 +95,19 @@ def contradicts_the_verdict(sentence: str) -> str | None:
     return None
 
 
+# The end of a sentence: a stop followed by a space or the end, so 1.4.2 is not three.
+SENTENCE_END = re.compile(r"[.!?](?=\s|$)")
+
+
 def too_long(sentence: str) -> int:
-    """How many words over the limit, or zero. A card has a width."""
-    return max(0, len(sentence.split()) - MAX_WORDS)
+    """How many words over the limit, or zero. A card has a width, and the prompt says
+    under 45, so 45 is one too many."""
+    return max(0, len(sentence.split()) - (MAX_WORDS - 1))
+
+
+def sentences(text: str) -> int:
+    """How many sentences, counting one for text with no stop at all."""
+    return max(1, len(SENTENCE_END.findall(text.strip())))
 
 
 def faults(sentence: str, must_mention: list[str] | None, action: str) -> list[str]:
@@ -119,32 +129,45 @@ def faults(sentence: str, must_mention: list[str] | None, action: str) -> list[s
     over = too_long(sentence)
 
     if over:
-        said.append(f"It is {over} words too long. Two sentences, under {MAX_WORDS} words.")
+        said.append(f"It is {over} word{'s' if over > 1 else ''} too long. Two sentences, "
+                    f"under {MAX_WORDS} words.")
+
+    count = sentences(sentence)
+
+    if count > 2:
+        said.append(f"It is {count} sentences. Write two at most.")
 
     return said
 
 
-def turn(brief: str, complaint: str, attempt: int) -> str:
+def turn(brief: str, complaint: str, attempt: int, last: str = "") -> str:
     if not complaint:
         return brief
 
+    # Each call is its own conversation, so the sentence it is to keep what was right
+    # from has to be in front of it.
+    said = f' It said: "{last}"' if last else ""
     return (f"{brief}\n\n"
-            f"Attempt {attempt - 1} was thrown away: {complaint} "
+            f"Attempt {attempt - 1} was thrown away.{said} What was wrong: {complaint} "
             f"Write it again, fixing that and keeping what was right.")
 
 
 def write(brief: str, must_mention: list[str] | None = None, action: str = "",
           ask=None, tries: int = TRIES) -> dict | None:
-    """The sentence, and what it took to get one, or None when the rules should write it."""
+    """The sentence, and what it took to get one.
+
+    None when the model wrote nothing; a sentence of None, with the complaints, when every
+    attempt broke a rule. Either way the rules write it.
+    """
     if not model.available() and ask is None:
         return None
 
     ask = ask or (lambda system, user: model.ask_json(system, user, max_tokens=380,
                                                       action="write_reason"))
-    complaint, complaints = "", []
+    complaint, complaints, last = "", [], ""
 
     for attempt in range(1, tries + 1):
-        answer = ask(WRITE_SYSTEM, turn(brief, complaint, attempt))
+        answer = ask(WRITE_SYSTEM, turn(brief, complaint, attempt, last))
         sentence = (answer or {}).get("sentence") if isinstance(answer, dict) else None
 
         if not isinstance(sentence, str) or not sentence.strip():
@@ -158,9 +181,11 @@ def write(brief: str, must_mention: list[str] | None = None, action: str = "",
                 f"kept on attempt {attempt}" + (f" after: {complaints[-1][:70]}" if complaints else "")))
             return {"sentence": sentence, "tries": attempt, "complaints": complaints}
 
-        complaint = " ".join(said)
+        complaint, last = " ".join(said), sentence
         complaints.append(complaint)
 
     trace.current.record("writer_agent", 0, ok=False, note=(
         f"{tries} attempts, still wrong: {complaints[-1][:80]}"))
-    return None
+    # Every attempt broke a rule. Saying so, rather than returning nothing, lets the
+    # caller tell this apart from a model that wrote nothing at all.
+    return {"sentence": None, "tries": tries, "complaints": complaints}

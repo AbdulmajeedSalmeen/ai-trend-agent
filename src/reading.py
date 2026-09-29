@@ -1,5 +1,3 @@
-import re
-
 from src.adapters import model
 from src.agents import writer
 from src.schema import Signal
@@ -89,25 +87,6 @@ def judge_educational_value(subject: str, claim_texts: list[str], chapter_title:
     return {"value": value, "reason": reason}
 
 
-# A sentence can pass every structural check and still say the opposite of what the
-# rules decided. These are the phrases that would contradict a verdict of "behind",
-# unless the phrase is itself negated.
-CONTRADICTIONS = [
-    "up to date", "no action", "no changes needed", "nothing to change",
-    "already current", "still supported", "not affected", "no update needed",
-]
-
-NEGATED = re.compile(
-    r"(?:\bnot|\bnever|\bno longer|\bisn't|\baren't|\bis not|\bare not|\bwasn't)\s+(?:\w+\s+){0,1}$"
-)
-
-
-
-def keeps_the_facts(sentence: str, must_mention: list[str]) -> bool:
-    """A written sentence is only worth keeping if it still carries the facts it was given."""
-    return all(fact in sentence for fact in must_mention if fact)
-
-
 # What each action asks of a teacher, in the words the writer should use. The bare
 # key let the model turn "add_optional_content" into "a new chapter should be added".
 ACTION_MEANING = {
@@ -157,7 +136,11 @@ def write_recommendation(subject: str, action: str, chapter: str | None, confirm
         must_mention=must_mention, action=action)
 
     if written is None:
-        print(f"think: nothing written for {subject} survived the rules, keeping ours")
+        print(f"think: the model wrote nothing for {subject}, keeping ours")
+        return None
+
+    if written["sentence"] is None:
+        print(f"think: nothing it wrote for {subject} passed the rules, keeping ours")
         return None
 
     if written["tries"] > 1:
