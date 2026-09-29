@@ -113,6 +113,11 @@ def run(subject: str, claims: list[str], chapter_title: str | None, tools: dict,
     return None
 
 
+def tool_name(said) -> str:
+    """The tool it meant, with the brackets it wrote it with taken off."""
+    return re.sub(r"[^a-z0-9_]", "", str(said or "").lower())
+
+
 def check(gathered: dict) -> dict | None:
     """Keep the citations the tool output supports, and only those.
 
@@ -130,17 +135,19 @@ def check(gathered: dict) -> dict | None:
     if not 1 <= value <= 5:
         return None
 
-    returned = {step["tool"]: step["text"] for step in gathered.get("seen", [])}
+    # A model that credits a line to "demand()" has named the tool that returned it,
+    # and a lookup that misses on the punctuation drops a citation that was good.
+    returned = {tool_name(step["tool"]): step["text"] for step in gathered.get("seen", [])}
     kept, dropped = [], 0
     for cite in proposal.get("cites") or []:
         if not isinstance(cite, dict):
             dropped += 1
             continue
         quote = _flat(cite.get("quote"))
-        text = returned.get(str(cite.get("tool")), "")
+        text = returned.get(tool_name(cite.get("tool")), "")
         if quote and quote in text:
             kept.append({"factor": str(cite.get("factor") or "")[:80],
-                         "tool": str(cite.get("tool")),
+                         "tool": tool_name(cite.get("tool")),
                          "quote": str(cite.get("quote"))[:200]})
         else:
             dropped += 1

@@ -62,6 +62,17 @@ def test_a_citation_the_tools_never_returned_is_dropped():
     assert [c["quote"] for c in verdict["cites"]] == ["20 job posts"]
 
 
+def test_a_tool_named_with_its_brackets_on_is_the_same_tool():
+    ask = scripted(
+        {"tool": "demand", "args": {"subject": "langchain"}},
+        {"answer": {"educational_value": 3, "reason": "what the market asks for",
+                    "cites": [{"factor": "demand", "tool": "demand()", "quote": "20 job posts"}]}},
+    )
+    verdict = judge.judge("langchain", ["x"], None, tools(), ask=ask)
+
+    assert verdict["dropped"] == 0 and verdict["cites"][0]["tool"] == "demand"
+
+
 def test_a_score_with_nothing_left_under_it_is_not_a_score():
     ask = scripted({"answer": {"educational_value": 5, "reason": "trust me",
                                "cites": [{"factor": "demand", "tool": "demand", "quote": "600 job posts"}]}})

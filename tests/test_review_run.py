@@ -13,7 +13,7 @@ import json
 
 import pytest
 
-from src import lessons
+from src import arabic, lessons
 from src import review as rules
 from src.agents import review_run
 
@@ -85,6 +85,23 @@ def test_a_written_lesson_travels_in_the_shape_the_demand_rules_read():
     assert none["new_lesson"] is None and none["lesson_answers"] == []
 
 
+def test_effort_is_what_the_judge_said_or_says_it_was_assumed():
+    weighed = {"worth": 4, "effort": "large", "reason": "six notebooks teach it",
+               "cites": [{"factor": "reach", "tool": "course_uses", "quote": "6 notebooks"}],
+               "dropped": 0, "looked": []}
+    judged = review_run.entry_for_page(entry(), weighed=weighed)
+
+    assert judged["effort"] == "large" and judged["effort_source"] == "judged"
+    assert judged["worth"] == 4 and judged["worth_why"] == "six notebooks teach it"
+    assert judged["worth_cites"][0]["tool"] == "course_uses"
+    # and the page reads effort from the same place it always did
+    assert judged["effort"] in arabic.REVIEW_EFFORT
+
+    assumed = review_run.entry_for_page(entry())
+    assert assumed["effort"] == "medium" and assumed["effort_source"] == "default"
+    assert assumed["worth"] is None and assumed["worth_cites"] == []
+
+
 def test_a_finding_carries_the_cell_its_technique_was_located_in():
     page = review_run.entry_for_page(entry(cell=11))
     assert page["findings"][0]["cell"] == 11
@@ -123,7 +140,7 @@ def test_what_it_writes_loads_as_the_file_the_rules_expect(tmp_path):
     assert loaded["schema"] == "material_review/1"
     assert loaded["counts"] == {"notebooks_reviewed": 2, "claims_located_in_a_cell": 2,
                                 "claims_dropped_as_unfound": 4, "sources_recalled_not_read": 2,
-                                "lessons_written": 0}
+                                "lessons_written": 0, "effort_judged_not_assumed": 0}
 
 
 def test_it_resumes_and_does_not_read_a_notebook_twice(tmp_path, monkeypatch):

@@ -22,7 +22,7 @@ from datetime import date
 from pathlib import Path
 
 from src import runio
-from src.agents import evidence, lesson, placement, reviewer
+from src.agents import evidence, lesson, placement, reviewer, worth
 from src.notebooks import NOTEBOOK_DIR
 from src.sources import arxiv
 
@@ -41,7 +41,7 @@ def newest_run() -> Path | None:
 
 
 def entry_for_page(entry: dict, written: dict | None = None,
-                   placed: dict | None = None) -> dict:
+                   placed: dict | None = None, weighed: dict | None = None) -> dict:
     """The agent's answer, in the shape the rules read.
 
     The agent speaks in pairs: what the notebook does now, what to teach instead. The
@@ -82,7 +82,16 @@ def entry_for_page(entry: dict, written: dict | None = None,
         "week": entry["week"],
         "notebook": entry["notebook"],
         "verdict": proposed,
-        "effort": "medium",
+        # Effort was this word, written once, for all eighty-nine entries. It is now
+        # what the judge said after reading how far the technique reaches, and the word
+        # again only when there was nothing it could stand behind.
+        "effort": weighed["effort"] if weighed else "medium",
+        "effort_source": "judged" if weighed else "default",
+        # Worth is what a teacher loses by leaving it alone, which severity cannot say.
+        # The page still orders by verdict; this is here for the day it orders by more.
+        "worth": weighed["worth"] if weighed else None,
+        "worth_why": weighed["reason"] if weighed else None,
+        "worth_cites": weighed["cites"] if weighed else [],
         "action": action,
         "teaches": teaches,
         "findings": findings,
@@ -129,6 +138,13 @@ def lesson_tools(entry: dict, notebook_dir: Path, research: bool) -> dict:
                             papers=lambda term: papers(term=term))
 
 
+def worth_tools(entry: dict, notebook_dir: Path, research: bool) -> dict:
+    papers = reviewer.papers_tool((lambda term: arxiv.search(term)) if research else None)
+    return worth.tools_for(lesson.findings_tool(entry),
+                           course_uses=evidence.course_uses_tool(notebook_dir),
+                           papers=lambda term: papers(term=term))
+
+
 def load_existing(out_path: Path) -> dict:
     if not out_path.exists():
         return {}
@@ -151,6 +167,7 @@ def write(out_path: Path, entries: dict) -> None:
             "claims_dropped_as_unfound": sum(n["unlocated_claims"] for n in notebooks),
             "sources_recalled_not_read": sum(n.get("recalled_sources", 0) for n in notebooks),
             "lessons_written": sum(1 for n in notebooks if n.get("new_lesson")),
+            "effort_judged_not_assumed": sum(1 for n in notebooks if n.get("effort_source") == "judged"),
         },
         "notebooks": notebooks,
     }
@@ -195,11 +212,13 @@ def main() -> None:
                                        count=lambda term: lesson.taught_in(term, Path(args.notebooks))))
         placed = (placement.place(written["term"], written["why"], chapters, place_kit)
                   if written and chapters else None)
-        entries[key] = entry_for_page(entry, written, placed)
+        weighed = worth.judge(entry, worth_tools(entry, Path(args.notebooks), research))
+        entries[key] = entry_for_page(entry, written, placed, weighed)
         done += 1
         write(out_path, entries)
         print(f"read: {path.name} | {entries[key]['located_claims']} located | "
               f"{len(entries[key]['findings'])} findings | {entries[key]['verdict']}"
+              + (f" | {weighed['worth']}/5 {weighed['effort']}" if weighed else "")
               + (f" | lesson: {written['title'][:46]}" if written else "")
               + (f" | {placed['relation']} {placed['chapter']}" if placed else ""))
 
