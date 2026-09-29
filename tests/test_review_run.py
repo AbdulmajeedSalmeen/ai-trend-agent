@@ -187,14 +187,86 @@ def test_a_notebook_it_could_not_locate_anything_in_is_left_out(tmp_path, monkey
     monkeypatch.setattr(review_run.reviewer, "review", lambda path, tools, **kw: None)
     monkeypatch.setattr("sys.argv", ["x", "--notebooks", str(root), "--out", str(out)])
     review_run.main()
-    assert rules.load(out)["notebooks"] == []
+    # nothing was read, so nothing is written: no file claims a review that did not happen
+    assert not out.exists()
 
 
-def test_a_half_written_file_does_not_stop_a_rerun(tmp_path):
+def test_the_default_output_is_not_the_review_the_page_reads():
+    # fixtures/material_review.json came from another process, is richer, and is what the
+    # page serves. Writing over it is a decision, never a default.
+    assert review_run.OUT_PATH != review_run.SERVED_PATH
+    with open(".gitignore", encoding="utf-8") as ignored:
+        assert str(review_run.OUT_PATH).replace("\\", "/") in ignored.read()
+
+
+def served(tmp_path):
+    """A review this driver did not write, like the one the page serves."""
+    out = tmp_path / "material_review.json"
+    out.write_text(json.dumps({"schema": "material_review/1", "read_on": "2026-09-26",
+                               "source": "the 89 notebooks under notebooks/, read as teaching material",
+                               "counts": {"verdicts": {"revise": 1}},
+                               "notebooks": [review_run.entry_for_page(entry())]}), encoding="utf-8")
+    return out
+
+
+def test_a_review_something_else_wrote_is_left_alone(tmp_path, monkeypatch):
+    root = notebooks(tmp_path)
+    out = served(tmp_path)
+    before = out.read_bytes()
+    monkeypatch.setattr(review_run.reviewer, "review", lambda path, tools, **kw: entry(name=path.name))
+
+    monkeypatch.setattr("sys.argv", ["x", "--notebooks", str(root), "--out", str(out)])
+    with pytest.raises(SystemExit):
+        review_run.main()
+    monkeypatch.setattr("sys.argv", ["x", "--notebooks", str(root), "--out", str(out), "--again"])
+    with pytest.raises(SystemExit):
+        review_run.main()
+    assert out.read_bytes() == before
+
+    monkeypatch.setattr("sys.argv", ["x", "--notebooks", str(root), "--out", str(out), "--replace"])
+    review_run.main()
+    assert rules.load(out)["source"] == review_run.SOURCE
+
+
+def test_a_file_it_cannot_read_is_never_written_over(tmp_path):
     out = tmp_path / "out.json"
     out.write_text('{"schema": "material_review/1", "notebo', encoding="utf-8")
-    assert review_run.load_existing(out) == {}
+    with pytest.raises(SystemExit):
+        review_run.load_existing(out)
+    assert out.read_text(encoding="utf-8") == '{"schema": "material_review/1", "notebo'
     assert review_run.load_existing(tmp_path / "nothing.json") == {}
+
+
+def test_a_run_that_reads_nothing_new_leaves_the_file_as_it_was(tmp_path, monkeypatch):
+    root = notebooks(tmp_path)
+    out = tmp_path / "out.json"
+    monkeypatch.setattr(review_run.reviewer, "review", lambda path, tools, **kw: entry(name=path.name))
+    monkeypatch.setattr("sys.argv", ["x", "--notebooks", str(root), "--out", str(out), "--no-research"])
+    review_run.main()
+    before = out.read_bytes()
+
+    review_run.main()  # every notebook is already there
+    assert out.read_bytes() == before
+
+
+def test_reading_one_notebook_again_keeps_the_others(tmp_path, monkeypatch):
+    root = notebooks(tmp_path)
+    out = tmp_path / "out.json"
+    monkeypatch.setattr(review_run.reviewer, "review", lambda path, tools, **kw: entry(name=path.name))
+    monkeypatch.setattr("sys.argv", ["x", "--notebooks", str(root), "--out", str(out), "--no-research"])
+    review_run.main()
+
+    monkeypatch.setattr(review_run.reviewer, "review",
+                        lambda path, tools, **kw: entry(name=path.name, status="deprecated"))
+    monkeypatch.setattr("sys.argv", ["x", "--notebooks", str(root), "--out", str(out), "--no-research",
+                                     "--again", "--only", "rag"])
+    review_run.main()
+
+    rows = {names(row): row for row in rules.load(out)["notebooks"]}
+    assert sorted(rows) == ["Demo_LangChain_Intro.ipynb", "Demo_RAG.ipynb"]
+    assert rows["Demo_RAG.ipynb"]["findings"][0]["status"] == "deprecated"
+    assert rows["Demo_LangChain_Intro.ipynb"]["findings"][0]["status"] == "superseded"
+    assert not list(tmp_path.glob("*.tmp"))
 
 
 def test_research_is_only_wired_up_when_asked(tmp_path):

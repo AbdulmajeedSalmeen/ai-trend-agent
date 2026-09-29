@@ -7,16 +7,23 @@ replacement that rests on an absence, still count a copy once, and still refuse 
 any of it verified.
 
 It is a collector, like stage 1: it reads the course from disk and may ask arXiv, and
-it is the only agent allowed to reach the network. It resumes, because 89 notebooks at
-several model calls each is not something to start from the beginning twice, and it
-writes after every notebook so a run that dies keeps what it learned.
+so may the lesson and worth agents it drives. (The verifier in stage 2b reaches the
+registries too; this is not the only agent with the network.) It resumes, because 89
+notebooks at several model calls each is not something to start from the beginning
+twice, and it writes after every notebook so a run that dies keeps what it learned.
 
-The output describes the course in detail and the repository is public, so the file it
-writes is gitignored and stays on the machine that ran it.
+It writes beside the review the page reads, never over it. fixtures/material_review.json
+came from another process, covers more, and is what the page serves; replacing it is a
+decision made with --replace, not a default. A file this driver did not write, or one it
+cannot read, is left exactly as it is, and a run that reads nothing new writes nothing.
+
+The output describes the course in detail, so the file it writes is gitignored and stays
+on the machine that ran it.
 """
 
 import argparse
 import json
+import os
 import re
 from datetime import date
 from pathlib import Path
@@ -26,8 +33,10 @@ from src.agents import evidence, lesson, placement, reviewer, worth
 from src.notebooks import NOTEBOOK_DIR
 from src.sources import arxiv
 
-OUT_PATH = Path("fixtures/material_review.json")
+OUT_PATH = Path("fixtures/material_review.agent.json")
+SERVED_PATH = Path("fixtures/material_review.json")
 SCHEMA = "material_review/1"
+SOURCE = "the course notebooks, read by the reviewer agent"
 HARD = {"removed", "deprecated", "unsafe", "superseded"}
 
 
@@ -145,14 +154,30 @@ def worth_tools(entry: dict, notebook_dir: Path, research: bool) -> dict:
                            papers=lambda term: papers(term=term))
 
 
-def load_existing(out_path: Path) -> dict:
+def load_existing(out_path: Path, replace: bool = False) -> dict:
+    """What an earlier run of this driver wrote, so a rerun resumes where it stopped.
+
+    A file it cannot read, or one something else wrote, is never taken as empty, because
+    the next write would replace it. With replace, a file something else wrote is
+    started over, which is what replace means.
+    """
     if not out_path.exists():
         return {}
+
     try:
         old = json.loads(out_path.read_text(encoding="utf-8"))
     except (OSError, json.JSONDecodeError):
-        return {}
-    return {entry["notebook"]: entry for entry in old.get("notebooks", [])}
+        raise SystemExit(f"{out_path} cannot be read, so it is left as it is. "
+                         f"Move it aside to start again.")
+
+    ours = isinstance(old, dict) and old.get("source") == SOURCE
+
+    if not ours and not replace:
+        said = old.get("source") if isinstance(old, dict) else None
+        raise SystemExit(f"{out_path} was not written by this driver (source: {said!r}), so it is left "
+                         f"as it is. Pass --replace to write over it.")
+
+    return {entry["notebook"]: entry for entry in old.get("notebooks", [])} if ours else {}
 
 
 def write(out_path: Path, entries: dict) -> None:
@@ -160,7 +185,7 @@ def write(out_path: Path, entries: dict) -> None:
     payload = {
         "schema": SCHEMA,
         "read_on": date.today().isoformat(),
-        "source": "the course notebooks, read by the reviewer agent",
+        "source": SOURCE,
         "counts": {
             "notebooks_reviewed": len(notebooks),
             "claims_located_in_a_cell": sum(n["located_claims"] for n in notebooks),
@@ -172,7 +197,11 @@ def write(out_path: Path, entries: dict) -> None:
         "notebooks": notebooks,
     }
     out_path.parent.mkdir(parents=True, exist_ok=True)
-    out_path.write_text(json.dumps(payload, indent=1, ensure_ascii=False), encoding="utf-8")
+    # Written aside and moved into place, so a run killed mid-write leaves the last
+    # good file rather than half of one.
+    partial = out_path.with_name(out_path.name + ".tmp")
+    partial.write_text(json.dumps(payload, indent=1, ensure_ascii=False), encoding="utf-8")
+    os.replace(partial, out_path)
 
 
 def main() -> None:
@@ -181,7 +210,10 @@ def main() -> None:
     parser.add_argument("--out", default=str(OUT_PATH))
     parser.add_argument("--limit", type=int, default=0, help="stop after this many notebooks")
     parser.add_argument("--only", default="", help="review only notebooks whose name contains this")
-    parser.add_argument("--again", action="store_true", help="review notebooks already in the file")
+    parser.add_argument("--again", action="store_true",
+                        help="review again the notebooks already in the file; the others are kept")
+    parser.add_argument("--replace", action="store_true",
+                        help="write over a file this driver did not write, such as the review the page reads")
     parser.add_argument("--no-research", action="store_true", help="do not ask arXiv")
     parser.add_argument("--no-lessons", action="store_true", help="do not write a lesson for each notebook")
     parser.add_argument("--curriculum", default="fixtures/curriculum.json",
@@ -189,7 +221,7 @@ def main() -> None:
     args = parser.parse_args()
 
     out_path = Path(args.out)
-    entries = {} if args.again else load_existing(out_path)
+    entries = load_existing(out_path, replace=args.replace)
     run_dir = newest_run()
     chapters = chapters_of(args.curriculum)
     place_kit = placement.tools_for(chapters, course_uses=evidence.course_uses_tool(Path(args.notebooks)))
@@ -198,7 +230,7 @@ def main() -> None:
 
     for path in paths:
         key = f"notebooks/{path.parent.name}/{path.name}"
-        if key in entries:
+        if key in entries and not args.again:
             continue
         if args.limit and done >= args.limit:
             break
@@ -222,8 +254,10 @@ def main() -> None:
               + (f" | lesson: {written['title'][:46]}" if written else "")
               + (f" | {placed['relation']} {placed['chapter']}" if placed else ""))
 
-    write(out_path, entries)
-    print(f"{len(entries)} notebooks in {out_path}")
+    if done:
+        print(f"{len(entries)} notebooks in {out_path}")
+    else:
+        print(f"nothing new was read; {out_path} is left as it was")
 
 
 if __name__ == "__main__":
