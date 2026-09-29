@@ -68,7 +68,8 @@ def test_a_sentence_too_long_for_a_card_is_sent_back_with_the_number():
     written = writer.write(BRIEF, ["1.4.2"], "update_existing_material", ask=ask)
 
     assert written["tries"] == 2
-    assert "16 words too long" in ask.asked[1]
+    # 61 words, and under 45 means at most 44
+    assert "17 words too long" in ask.asked[1]
 
 
 def test_three_failures_leave_it_to_the_rules():
