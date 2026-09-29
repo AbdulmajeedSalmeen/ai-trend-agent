@@ -13,6 +13,7 @@ import json
 
 import pytest
 
+from src import lessons
 from src import review as rules
 from src.agents import review_run
 
@@ -68,6 +69,22 @@ def test_the_rules_can_read_every_field_the_driver_writes():
     assert compact["u"] == "https://docs.example/migrate" and compact["d"] == "2026-09-01"
 
 
+def test_a_written_lesson_travels_in_the_shape_the_demand_rules_read():
+    written = {"title": "Building an agent loop with checkpointers", "term": "checkpointers",
+               "why": "The course teaches a constructor that no longer exists.",
+               "covers": ["Rebuild the week 3 agent", "Resume a run from its last state"],
+               "answers": ["ReAct agent"], "already_in": 0, "looked": []}
+    page = review_run.entry_for_page(entry(), written)
+
+    assert sorted(page["new_lesson"]) == ["covers", "title", "why"]
+    assert page["lesson_term"] == "checkpointers" and page["lesson_answers"] == ["ReAct agent"]
+    # src/lessons.py reads a proposal by title and covers, and nothing else
+    assert lessons.proposals({"notebooks": [page]}, copies=set())[0]["title"] == written["title"]
+
+    none = review_run.entry_for_page(entry())
+    assert none["new_lesson"] is None and none["lesson_answers"] == []
+
+
 def test_a_finding_carries_the_cell_its_technique_was_located_in():
     page = review_run.entry_for_page(entry(cell=11))
     assert page["findings"][0]["cell"] == 11
@@ -105,7 +122,8 @@ def test_what_it_writes_loads_as_the_file_the_rules_expect(tmp_path):
     loaded = rules.load(out)
     assert loaded["schema"] == "material_review/1"
     assert loaded["counts"] == {"notebooks_reviewed": 2, "claims_located_in_a_cell": 2,
-                                "claims_dropped_as_unfound": 4, "sources_recalled_not_read": 2}
+                                "claims_dropped_as_unfound": 4, "sources_recalled_not_read": 2,
+                                "lessons_written": 0}
 
 
 def test_it_resumes_and_does_not_read_a_notebook_twice(tmp_path, monkeypatch):

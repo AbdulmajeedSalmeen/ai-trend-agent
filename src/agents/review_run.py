@@ -22,7 +22,7 @@ from datetime import date
 from pathlib import Path
 
 from src import runio
-from src.agents import evidence, reviewer
+from src.agents import evidence, lesson, reviewer
 from src.notebooks import NOTEBOOK_DIR
 from src.sources import arxiv
 
@@ -40,7 +40,7 @@ def newest_run() -> Path | None:
     return runs[-1] if runs else None
 
 
-def entry_for_page(entry: dict) -> dict:
+def entry_for_page(entry: dict, written: dict | None = None) -> dict:
     """The agent's answer, in the shape the rules read.
 
     The agent speaks in pairs: what the notebook does now, what to teach instead. The
@@ -89,7 +89,13 @@ def entry_for_page(entry: dict) -> dict:
         "unlocated_claims": entry["dropped"],
         "recalled_sources": entry.get("recalled", 0),
         "looked": entry["looked"],
-        "new_lesson": None,
+        # The reviewer says what moved; the lesson agent says what to teach instead.
+        # src/lessons.py measures whether employers ask for it, and the rules there
+        # decide whether it becomes a lesson, optional content, or something to watch.
+        "new_lesson": ({"title": written["title"], "why": written["why"], "covers": written["covers"]}
+                       if written else None),
+        "lesson_term": written["term"] if written else None,
+        "lesson_answers": written["answers"] if written else [],
         "basis": "read_and_judged",
     }
 
@@ -101,6 +107,12 @@ def tools_for(path: Path, run_dir: Path | None, research: bool) -> dict:
                             else lambda package="": "this run collected no releases")
     kit["papers"] = reviewer.papers_tool((lambda term: arxiv.search(term)) if research else None)
     return kit
+
+
+def lesson_tools(entry: dict, notebook_dir: Path, research: bool) -> dict:
+    papers = reviewer.papers_tool((lambda term: arxiv.search(term)) if research else None)
+    return lesson.tools_for(entry, course_uses=evidence.course_uses_tool(notebook_dir),
+                            papers=lambda term: papers(term=term))
 
 
 def load_existing(out_path: Path) -> dict:
@@ -124,6 +136,7 @@ def write(out_path: Path, entries: dict) -> None:
             "claims_located_in_a_cell": sum(n["located_claims"] for n in notebooks),
             "claims_dropped_as_unfound": sum(n["unlocated_claims"] for n in notebooks),
             "sources_recalled_not_read": sum(n.get("recalled_sources", 0) for n in notebooks),
+            "lessons_written": sum(1 for n in notebooks if n.get("new_lesson")),
         },
         "notebooks": notebooks,
     }
@@ -139,6 +152,7 @@ def main() -> None:
     parser.add_argument("--only", default="", help="review only notebooks whose name contains this")
     parser.add_argument("--again", action="store_true", help="review notebooks already in the file")
     parser.add_argument("--no-research", action="store_true", help="do not ask arXiv")
+    parser.add_argument("--no-lessons", action="store_true", help="do not write a lesson for each notebook")
     args = parser.parse_args()
 
     out_path = Path(args.out)
@@ -153,15 +167,20 @@ def main() -> None:
             continue
         if args.limit and done >= args.limit:
             break
-        entry = reviewer.review(path, tools_for(path, run_dir, not args.no_research))
+        research = not args.no_research
+        entry = reviewer.review(path, tools_for(path, run_dir, research))
         if entry is None:
             print(f"read: {path.name} | nothing located, left out")
             continue
-        entries[key] = entry_for_page(entry)
+        written = (None if args.no_lessons
+                   else lesson.propose(entry, lesson_tools(entry, Path(args.notebooks), research),
+                                       count=lambda term: lesson.taught_in(term, Path(args.notebooks))))
+        entries[key] = entry_for_page(entry, written)
         done += 1
         write(out_path, entries)
         print(f"read: {path.name} | {entries[key]['located_claims']} located | "
-              f"{len(entries[key]['findings'])} findings | {entries[key]['verdict']}")
+              f"{len(entries[key]['findings'])} findings | {entries[key]['verdict']}"
+              + (f" | lesson: {written['title'][:50]}" if written else ""))
 
     write(out_path, entries)
     print(f"{len(entries)} notebooks in {out_path}")
