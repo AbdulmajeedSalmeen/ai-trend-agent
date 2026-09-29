@@ -1768,6 +1768,19 @@ body[dir="rtl"] .rd-table > summary { font-family: var(--ar); }
 body[dir="rtl"] .sc-name { font-family: var(--ar); }
 .sc-meter { display: inline-flex; gap: 2px; }
 .sc-meter i { display: block; width: 8px; height: 8px; border-radius: 2px; background: var(--neutral-mark); }
+
+/* The agent's working, under the score it produced. Quiet by default: a reader who
+   trusts the number never has to see it, and one who does not can read every line. */
+.sc-read { margin-top: 10px; }
+.sc-read > summary { font-size: 11.5px; color: var(--ink-faint); cursor: pointer; list-style: none; padding: 3px 0; }
+.sc-read > summary::-webkit-details-marker { display: none; }
+.sc-read > summary::before { content: "+ "; }
+.sc-read[open] > summary::before { content: "- "; }
+.sc-cites { list-style: none; margin: 4px 0 0; padding: 0; display: grid; gap: 5px; }
+.sc-cites li { display: grid; grid-template-columns: 96px minmax(0, 1fr); gap: 8px; align-items: baseline; }
+.sc-cite-tool { font: 500 11px/1.5 var(--mono); color: var(--ink-faint); }
+.sc-cite-q { font-size: 12.5px; line-height: 1.5; color: var(--ink-soft); overflow-wrap: anywhere; }
+@media (max-width: 640px) { .sc-cites li { grid-template-columns: minmax(0, 1fr); gap: 2px; } }
 .sc-meter i.on { background: var(--ink-soft); }
 .sc-v { font: 600 13px/1 var(--sans); color: var(--ink); text-align: end; font-variant-numeric: tabular-nums; }
 .sc-prov {

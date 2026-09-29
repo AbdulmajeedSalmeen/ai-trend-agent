@@ -1,6 +1,5 @@
-import re
-
 from src.adapters import model
+from src.agents import writer
 from src.schema import Signal
 
 EXTRACT_SYSTEM = (
@@ -30,37 +29,6 @@ JUDGE_SYSTEM = (
     "Answer with one JSON object and nothing else: "
     '{"educational_value": <integer 1-5>, "reason": <one short sentence naming the change that decided it>}.'
 )
-
-WRITE_SYSTEM = (
-    "You tell a curriculum owner what to do and, above all, why. "
-    "Think like a school, not a changelog. Lead with the strongest fact you are given, in this "
-    "order: an API the notebooks still call that a newer release removed; a breaking change or a "
-    "new concept in what the releases changed; whether employers ask for the tool; and only then "
-    "the version distance. A version number is evidence, never the reason on its own. "
-    "Never lead with how many releases landed, and never make release counts the whole reason. "
-    "The reason must name what changed and what it means for the chapter's material - "
-    "never restate the decision as its own reason, and never write 'due to N confirmed claims'. "
-    "Use only the facts given. Never add numbers, versions or claims that are not in the input, "
-    "and never count anything yourself: if you mention how many releases landed, copy the "
-    "number from the Staleness line exactly. "
-    "If the input says the version the chapter teaches is not recorded, say that instead of "
-    "asserting the chapter is outdated. "
-    "Say the action exactly as it is described to you: optional material is not a new lesson, "
-    "and watching is not a change. "
-    "Every item on the Must appear line has to appear in your sentence exactly as written. "
-    'Answer with one JSON object: {"sentence": <two sentences at most, under 45 words>}.'
-)
-
-# What each action asks of a teacher, in the words the writer should use. The bare
-# key let the model turn "add_optional_content" into "a new chapter should be added".
-ACTION_MEANING = {
-    "update_existing_material": "update the existing chapter",
-    "add_new_lesson": "add a new lesson",
-    "add_optional_content": "offer optional material outside the core path, not a new lesson",
-    "investigate_larger_change": "decide once for the whole course, since the change reaches several chapters",
-    "watch": "change nothing now and keep watching",
-}
-
 
 def read_claim(signal: Signal, known_subjects: list[str]) -> dict | None:
     """What does this discussion post actually claim? None when the model is off or unsure."""
@@ -119,41 +87,24 @@ def judge_educational_value(subject: str, claim_texts: list[str], chapter_title:
     return {"value": value, "reason": reason}
 
 
-# A sentence can pass every structural check and still say the opposite of what the
-# rules decided. These are the phrases that would contradict a verdict of "behind",
-# unless the phrase is itself negated.
-CONTRADICTIONS = [
-    "up to date", "no action", "no changes needed", "nothing to change",
-    "already current", "still supported", "not affected", "no update needed",
-]
-
-NEGATED = re.compile(
-    r"(?:\bnot|\bnever|\bno longer|\bisn't|\baren't|\bis not|\bare not|\bwasn't)\s+(?:\w+\s+){0,1}$"
-)
+# What each action asks of a teacher, in the words the writer should use. The bare
+# key let the model turn "add_optional_content" into "a new chapter should be added".
+ACTION_MEANING = {
+    "update_existing_material": "update the existing chapter",
+    "add_new_lesson": "add a new lesson",
+    "add_optional_content": "offer optional material outside the core path, not a new lesson",
+    "investigate_larger_change": "decide once for the whole course, since the change reaches several chapters",
+    "watch": "change nothing now and keep watching",
+}
 
 
-
-def keeps_the_facts(sentence: str, must_mention: list[str]) -> bool:
-    """A written sentence is only worth keeping if it still carries the facts it was given."""
-    return all(fact in sentence for fact in must_mention if fact)
-
-
-def contradicts_the_verdict(sentence: str) -> str | None:
-    """The phrase that undoes the decision, or None.
-
-    A phrase only counts when it is asserted. "not up to date" agrees with us;
-    "up to date" does not.
-    """
-    lower = sentence.lower()
-
-    for phrase in CONTRADICTIONS:
-        for match in re.finditer(re.escape(phrase), lower):
-            before = lower[max(0, match.start() - 40):match.start()]
-
-            if not NEGATED.search(before):
-                return phrase
-
-    return None
+# The sentence rules, and the loop that applies them, live with the writer. They
+# keep their names here: this is where the pipeline has always found them.
+WRITE_SYSTEM = writer.WRITE_SYSTEM
+CONTRADICTIONS = writer.CONTRADICTIONS
+NEGATED = writer.NEGATED
+keeps_the_facts = writer.keeps_the_facts
+contradicts_the_verdict = writer.contradicts_the_verdict
 
 
 def write_recommendation(subject: str, action: str, chapter: str | None, confirmed: int,
@@ -166,8 +117,9 @@ def write_recommendation(subject: str, action: str, chapter: str | None, confirm
         return None
 
     changes = "\n- ".join((claim_texts or [])[:5]) or "nothing specific"
-    answer = model.ask_json(
-        WRITE_SYSTEM,
+    # Write, check, say what is wrong, write again. The rules are the same on every
+    # attempt, and a sentence that never passes leaves the rules to write it.
+    written = writer.write(
         f"Package: {subject}\n"
         f"Action decided by our rules: {ACTION_MEANING.get(action, action)}\n"
         f"Chapter: {chapter or 'none, this is a curriculum gap'}\n"
@@ -181,25 +133,18 @@ def write_recommendation(subject: str, action: str, chapter: str | None, confirm
         f"Evidence: {confirmed} confirmed claims, {unverified} unverified\n"
         f"Priority score: {priority:.2f}\n"
         f"Must appear, exactly as written: {', '.join(must_mention or []) or 'nothing'}",
-        max_tokens=380,
-        action="write_reason",
-    )
-    sentence = (answer or {}).get("sentence")
+        must_mention=must_mention, action=action)
 
-    if not isinstance(sentence, str) or not sentence.strip():
+    if written is None:
+        print(f"think: the model wrote nothing for {subject}, keeping ours")
         return None
 
-    sentence = sentence.strip()
-
-    if not keeps_the_facts(sentence, must_mention or []):
-        print(f"think: the written sentence for {subject} dropped the facts, keeping ours")
+    if written["sentence"] is None:
+        print(f"think: nothing it wrote for {subject} passed the rules, keeping ours")
         return None
 
-    if action != "watch":
-        contradiction = contradicts_the_verdict(sentence)
+    if written["tries"] > 1:
+        print(f"think: the sentence for {subject} was rewritten {written['tries'] - 1} "
+              f"time{'s' if written['tries'] > 2 else ''} and then passed")
 
-        if contradiction:
-            print(f"think: the written sentence for {subject} said \"{contradiction}\", keeping ours")
-            return None
-
-    return sentence
+    return written["sentence"]

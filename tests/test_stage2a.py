@@ -446,3 +446,96 @@ def test_make_claims_deduplicates_discussion_with_same_subject_version():
     ]
 
     assert pairs.count(("langgraph", "1.2.10")) == 1
+
+# A post that says something real and never writes the version down used to be thrown
+# away here, which is most of them. The extractor gets one chance at it first, and when
+# it cannot say, the reading is dropped exactly as it always was.
+
+from datetime import datetime, timezone
+
+from src.stages import stage2a_cluster
+from src.schema import Trend
+
+
+def _post(ident="hn_1"):
+    return Signal(id=ident, source="hackernews", tier=2, subject=None,
+                  title="The new langgraph release broke my agent",
+                  url="https://news.ycombinator.com/item?id=1",
+                  published_at=datetime(2026, 9, 22, tzinfo=timezone.utc), body="")
+
+
+def _release():
+    return Signal(id="gh_1", source="github", tier=1, subject="langgraph", title="langgraph==1.2.12",
+                  url="https://github.com/x/releases/1.2.12",
+                  published_at=datetime(2026, 9, 21, tzinfo=timezone.utc), body="notes")
+
+
+def _trend():
+    return Trend(id="trend_001", subject="langgraph", signal_ids=["hn_1", "gh_1"], claims=[])
+
+
+def _never_asked(*args):
+    raise AssertionError("the extractor was asked about a version the post already stated")
+
+
+def _reading(version=None):
+    return {"subject": "langgraph", "assertion": "the react agent constructor is gone", "version": version}
+
+
+def test_a_version_the_post_stated_needs_no_agent(monkeypatch):
+    monkeypatch.setattr(stage2a_cluster, "read_claim", lambda post, vocabulary: _reading("1.2.12"))
+    trends = [_trend()]
+
+    read, checkable, worked_out = stage2a_cluster.read_discussion_claims(
+        trends, [_post(), _release()], budget=5, extract=_never_asked)
+
+    assert (read, checkable, worked_out) == (1, 1, 0)
+    assert trends[0].claims[0].version_source == "stated"
+
+
+def test_a_version_the_agent_worked_out_becomes_a_claim_that_says_so(monkeypatch):
+    monkeypatch.setattr(stage2a_cluster, "read_claim", lambda post, vocabulary: _reading(None))
+    trends = [_trend()]
+
+    read, checkable, worked_out = stage2a_cluster.read_discussion_claims(
+        trends, [_post(), _release()], budget=5,
+        extract=lambda claim, post, signals: {"version": "1.2.12"})
+
+    assert (read, checkable, worked_out) == (1, 1, 1)
+    claim = trends[0].claims[0]
+    assert claim.version == "1.2.12" and claim.version_source == "extracted"
+    assert claim.source_signal_id == "hn_1" and claim.confidence == 0.2
+
+
+def test_a_reading_the_agent_cannot_place_is_dropped_the_way_it_always_was(monkeypatch):
+    monkeypatch.setattr(stage2a_cluster, "read_claim", lambda post, vocabulary: _reading(None))
+    trends = [_trend()]
+
+    assert stage2a_cluster.read_discussion_claims(
+        trends, [_post(), _release()], budget=5, extract=lambda *args: None) == (1, 0, 0)
+    assert trends[0].claims == []
+
+    # and with no extractor at all, nothing about this door changes
+    assert stage2a_cluster.read_discussion_claims(trends, [_post(), _release()], budget=5) == (1, 0, 0)
+    assert trends[0].claims == []
+
+
+def test_a_post_about_another_package_is_never_extracted_for(monkeypatch):
+    monkeypatch.setattr(stage2a_cluster, "read_claim",
+                        lambda post, vocabulary: {**_reading(None), "subject": "transformers"})
+    trends = [_trend()]
+    asked = []
+
+    assert stage2a_cluster.read_discussion_claims(
+        trends, [_post(), _release()], budget=5,
+        extract=lambda *args: asked.append(args)) == (1, 0, 0)
+    assert asked == []
+
+
+def test_the_budget_is_what_stops_it(monkeypatch):
+    monkeypatch.setattr(stage2a_cluster, "read_claim", lambda post, vocabulary: _reading("1.2.12"))
+    posts = [_post(f"hn_{n}") for n in range(3)]
+    trends = [Trend(id="trend_001", subject="langgraph", signal_ids=[p.id for p in posts], claims=[])]
+
+    read, checkable, _ = stage2a_cluster.read_discussion_claims(trends, posts + [_release()], budget=2)
+    assert (read, checkable) == (2, 2)

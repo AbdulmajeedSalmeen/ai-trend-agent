@@ -19,5 +19,6 @@ notebooks/
 # the material review describes the course notebooks in detail, and this repo is
 # public: it stays on this machine until the course owners say otherwise
 fixtures/material_review.json
+fixtures/material_review.agent.json
 web/dist/site-material.html
 fixtures/lesson_demand.json

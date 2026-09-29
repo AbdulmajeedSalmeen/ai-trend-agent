@@ -7,6 +7,7 @@ from pathlib import Path
 from src import runio
 from src.schema import Claim, Signal, Trend
 from src.adapters import model
+from src.agents import extractor
 from src.reading import read_claim
 from src.versions import extract_version 
 
@@ -309,12 +310,19 @@ def known_subjects(signals: list[Signal]) -> list[str]:
     return sorted({s.subject for s in signals if s.tier == 1 and s.subject})
 
 
-def read_discussion_claims(trends, signals, budget):
-    """Have the model read what the community says, and keep only what a release page could check."""
+def read_discussion_claims(trends, signals, budget, extract=None):
+    """Have the model read what the community says, and keep only what a release page could check.
+
+    A post that says something real about a package and never writes the version down used
+    to be thrown away here, which is most of them. The extractor gets one chance at it
+    first: which release was this post about? When it cannot say, the reading is dropped
+    exactly as before, so nothing unverifiable enters a trend by this door.
+    """
     by_id = {signal.id: signal for signal in signals}
     vocabulary = known_subjects(signals)
     read = 0
     checkable = 0
+    worked_out = 0
 
     for trend in trends:
         if budget <= 0:
@@ -328,21 +336,36 @@ def read_discussion_claims(trends, signals, budget):
             read += 1
             reading = read_claim(post, vocabulary)
 
-            if not reading or reading["subject"] != trend.subject or not reading["version"]:
+            if not reading or reading["subject"] != trend.subject:
+                continue
+
+            version, version_source = reading["version"], "stated"
+
+            if not version and extract is not None:
+                unversioned = Claim(text=reading["assertion"], subject=trend.subject,
+                                    version=None, source_signal_id=post.id)
+                found = extract(unversioned, post, signals)
+
+                if found:
+                    version, version_source = found["version"], "extracted"
+                    worked_out += 1
+
+            if not version:
                 continue
 
             trend.claims.append(Claim(
                 text=reading["assertion"],
                 subject=trend.subject,
-                version=reading["version"],
+                version=version,
                 verdict="unverified",
                 evidence_url=None,
                 confidence=0.2,
                 source_signal_id=post.id,
+                version_source=version_source,
             ))
             checkable += 1
 
-    return read, checkable
+    return read, checkable, worked_out
 
 
 def run(run_dir: Path) -> None:
@@ -373,7 +396,11 @@ def run(run_dir: Path) -> None:
     if model.available():
         budget = int(os.environ.get("MODEL_READ_BUDGET", "20"))
         print(f"think: reading discussion posts about our {len(known_subjects(signals))} packages")
-        read, checkable = read_discussion_claims(trends, signals, budget)
+        read, checkable, worked_out = read_discussion_claims(trends, signals, budget,
+                                                             extract=extractor.extract)
         print(f"model read {read} discussion posts, {checkable} stated something a release page can check")
+
+        if worked_out:
+            print(f"{worked_out} of those named no version until an agent worked out which release they meant")
 
     runio.save_artifact(run_dir, "trends", trends)

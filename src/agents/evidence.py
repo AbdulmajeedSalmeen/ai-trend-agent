@@ -1,0 +1,143 @@
+"""What an agent is allowed to look at: this run's own artifacts, and the course.
+
+Nothing here reaches the network. Stage 1 already collected the releases, the market
+numbers and the signals into the run directory, and the notebooks sit on the machine.
+Reading from those keeps three properties the project depends on: a frozen run replays
+offline with no keys, the tests never call anything, and every citation an agent makes
+can be checked later against the same bytes the agent saw.
+"""
+
+import json
+import re
+from pathlib import Path
+
+from src.notebooks import NOTEBOOK_DIR
+
+MAX_HITS = 8
+
+
+def _releases(run_dir: Path) -> list[dict]:
+    raw = run_dir / "raw"
+    if not raw.is_dir():
+        return []
+    out = []
+    for path in sorted(raw.glob("github_*.json")):
+        try:
+            out.append(json.loads(path.read_text(encoding="utf-8")))
+        except (OSError, json.JSONDecodeError):
+            continue
+    return out
+
+
+# The repositories whose name is not their package's, so the package name finds them too.
+REPO_PACKAGES = {"openai-python": "openai", "anthropic-sdk-python": "anthropic"}
+# A release that names its package: "langchain-core==1.6.5", "langgraph-cli==0.4.32".
+TAGGED = re.compile(r"^([a-z0-9][a-z0-9._-]*?)(?:==|@)v?\d")
+
+
+def _package(text) -> str:
+    return str(text or "").strip().lower().replace("_", "-")
+
+
+def release_notes_tool(run_dir: Path):
+    """What this run's releases say about one package, and only that package.
+
+    A release belongs to a package when its name says so ("langchain-core==1.6.5"), or,
+    when it names no package ("v5.17.0"), when it comes from the repository of that name.
+    Matching the name anywhere in "owner/repo" found "langchain" inside
+    "langchain-ai/langgraph" and answered a question about langchain with langgraph's
+    notes; a monorepo's other packages came along the same way.
+    """
+    blobs = _releases(Path(run_dir))
+
+    def release_notes(package: str = "", **kwargs) -> str:
+        name = _package(package or next((value for value in kwargs.values()
+                                         if isinstance(value, str) and value.strip()), ""))
+        if not name:
+            return ""
+        lines = []
+        for blob in blobs:
+            repo = str(blob.get("repo", ""))
+            repo_name = _package(repo.rsplit("/", 1)[-1])
+            owners = {repo_name, REPO_PACKAGES.get(repo_name)}
+            for release in blob.get("releases") or []:
+                said = TAGGED.match(_package(release.get("name"))) or TAGGED.match(_package(release.get("tag_name")))
+                if said and _package(said.group(1)) != name:
+                    continue
+                if not said and name not in owners:
+                    continue
+                title = str(release.get("name") or release.get("tag_name") or "")
+                body = re.sub(r"\s+", " ", str(release.get("body") or ""))
+                lines.append(f"{repo} {title}: {body[:600]}")
+                if len(lines) == 4:
+                    return " | ".join(lines)
+        return " | ".join(lines)
+
+    return release_notes
+
+
+def _squashed(text: str) -> str:
+    """A name as it is meant, not as it is spelled: no case, underscores, hyphens or spaces."""
+    return re.sub(r"[\s_-]+", "", str(text or "")).lower()
+
+
+def course_uses_tool(notebook_dir: Path | None = None):
+    """The notebook cells of the course that use a name, with their cell numbers.
+
+    Case, underscores, hyphens and spaces are ignored: an agent asking after
+    "AgentExecutor" and a notebook writing endgame_agent_executor are asking and
+    answering about the same thing, and a search that missed on the spelling would
+    report the course has never heard of it."""
+    root = Path(notebook_dir or NOTEBOOK_DIR)
+
+    def course_uses(symbol: str = "") -> str:
+        needle = str(symbol or "").strip()
+        if len(needle) < 3:
+            return "give a name of three characters or more"
+        wanted = _squashed(needle)
+        hits = []
+        for path in sorted(root.glob("*/*.ipynb")):
+            try:
+                cells = json.loads(path.read_text(encoding="utf-8", errors="replace")).get("cells", [])
+            except (OSError, json.JSONDecodeError):
+                continue
+            for position, cell in enumerate(cells, start=1):
+                source = cell.get("source", "")
+                source = "".join(source) if isinstance(source, list) else str(source)
+                if wanted in _squashed(source):
+                    hits.append(f"{path.name} cell {position}")
+                    break
+            if len(hits) >= MAX_HITS:
+                break
+        return f"{needle} appears in {len(hits)} notebooks: " + "; ".join(hits) if hits else f"no notebook uses {needle}"
+
+    return course_uses
+
+
+def demand_tool(market: list[dict] | None):
+    """The job posts and installs this run already counted for a package."""
+    rows = {str(row.get("subject")): row for row in (market or [])}
+
+    def demand(subject: str = "") -> str:
+        row = rows.get(str(subject or "").strip())
+        if not row:
+            return f"nothing counted for {subject}"
+        jobs = row.get("jobs")
+        downloads = row.get("downloads")
+        months = row.get("months") or 3
+        parts = []
+        parts.append(f"{jobs} job posts in {months} months" if jobs is not None else "job posts not counted")
+        if downloads is not None:
+            parts.append(f"{downloads} installs")
+        return f"{subject}: " + ", ".join(parts)
+
+    return demand
+
+
+def tools_for(run_dir: Path, market: list[dict] | None, notebook_dir: Path | None = None) -> dict:
+    """The three tools, bound to one run. An agent gets these and nothing else."""
+    return {
+        "release_notes": release_notes_tool(run_dir),
+        "course_uses": course_uses_tool(notebook_dir),
+        "demand": demand_tool(market),
+    }
