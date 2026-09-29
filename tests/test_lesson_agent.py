@@ -241,3 +241,50 @@ def test_the_course_is_counted_by_the_rule_that_counts_demand(tmp_path):
 
     assert lesson.taught_in("MCP", tmp_path) == lessons.taught("MCP", [said]) == 1
     assert lesson.taught_in("MCPS", tmp_path) == lessons.taught("MCPS", [said]) == 0
+
+
+def test_declining_is_an_answer_and_is_not_sent_back_for_a_rewrite():
+    # The prompt offers declining: answers empty, saying why. A decline counted as a
+    # broken rule and was sent back for a rewrite, asking it to write what it had just
+    # said should not be written.
+    decline = {"answer": {"title": "", "term": "", "covers": [], "answers": [],
+                          "why": "The findings are one import that moved; that is an edit, not a lesson."}}
+    ask = scripted(decline, answer())
+
+    assert lesson.propose(entry(), tools(), ask=ask, count=lambda term: 0) is None
+    assert len(ask.asked) == 1
+
+
+def test_the_rewrite_is_told_it_has_no_tools_left():
+    ask = scripted(answer(term="retention"), answer())
+
+    lesson.propose(entry(), tools(), ask=ask, count=lambda term: 0)
+
+    assert "no tool calls left" in ask.asked[1].lower()
+    assert "may call at most" not in ask.asked[1]
+
+
+@pytest.mark.parametrize("term, reason", [
+    ("retention", "one ordinary word in lower case"),
+    ("agent_memory", "written as code"),
+    ("Agents", "a word nearly every AI job post carries"),
+    ("a checkpointed durable agent loop", "more than three words"),
+])
+def test_a_term_it_cannot_search_for_is_told_the_rule_it_broke(term, reason):
+    # The complaint was written from memory of the rule: it left out two of its tests,
+    # and told a term that was in the title that the title did not contain it.
+    said = " ".join(lesson.faults(lesson.read_proposal(answer(term=term)["answer"], entry()),
+                                  count=lambda name: 0))
+
+    assert reason in said
+    assert "does not contain it" not in said
+
+
+def test_a_term_missing_from_the_title_and_covers_is_told_exactly_that():
+    proposal = answer(term="Durable execution", title="Rebuilding the week 3 agent",
+                      covers=["Resume a run", "Interrupt a run", "Compare the loops"])["answer"]
+    said = " ".join(lesson.faults(lesson.read_proposal(proposal, entry()), count=lambda name: 0))
+
+    assert "not in your title or any covers line" in said
+    assert lessons.why_not("Durable execution", {"title": proposal["title"], "covers": proposal["covers"]})
+    assert lessons.valid("MCP", {"title": "Serving tools over MCP", "covers": []})

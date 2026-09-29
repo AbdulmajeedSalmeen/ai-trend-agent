@@ -134,7 +134,7 @@ def tools_for(entry: dict, course_uses=None, papers=None) -> dict:
     return kit
 
 
-def turn(entry: dict, seen: list[dict], complaint: str = "") -> str:
+def turn(entry: dict, seen: list[dict], complaint: str = "", left: int = MAX_STEPS) -> str:
     moved = [item for item in entry.get("findings") or [] if item["status"] != "current"]
     lines = [f"Notebook: {entry['title']} ({entry['week']})",
              f"It teaches: {', '.join(claim['technique'] for claim in entry.get('teaches') or []) or 'nothing located'}",
@@ -150,7 +150,9 @@ def turn(entry: dict, seen: list[dict], complaint: str = "") -> str:
     else:
         lines.append("You have read nothing yet. Start with the findings.")
 
-    lines += ["", f"You may call at most {MAX_STEPS} tools, then you must answer."]
+    # A rewrite has no tool calls, so it must not be told it has four.
+    lines += ["", f"You have {left} tool calls left, then you must answer." if left > 0
+              else "You have no tool calls left. Answer now."]
 
     if complaint:
         lines += ["", "Your last answer was thrown away:", complaint,
@@ -165,8 +167,8 @@ def run(entry: dict, tools: dict, ask=None, max_steps: int = MAX_STEPS,
                                                       action="lesson_agent"))
     seen = list(seen or [])
 
-    for _ in range(max_steps + 1):
-        answer = ask(SYSTEM, turn(entry, seen, complaint))
+    for step in range(max_steps + 1):
+        answer = ask(SYSTEM, turn(entry, seen, complaint, max_steps - step))
 
         if not isinstance(answer, dict) or not answer:
             return None
@@ -174,6 +176,10 @@ def run(entry: dict, tools: dict, ask=None, max_steps: int = MAX_STEPS,
         if "answer" in answer:
             proposal = answer.get("answer")
             return {"proposal": proposal if isinstance(proposal, dict) else {}, "seen": seen}
+
+        if step == max_steps:
+            # Its last turn was for answering, and it looked again instead.
+            break
 
         name = answer.get("tool")
         tool = tools.get(name) if isinstance(name, str) else None
@@ -256,13 +262,12 @@ def faults(clean: dict, count=taught_in) -> list[str]:
 
     if not clean["term"]:
         said.append("You did not say what the lesson adds. Give a term of at most three words.")
-    elif not lessons.valid(clean["term"], {"title": clean["title"], "covers": clean["covers"]}):
-        # The rule that decides a name is measurable lives in src/lessons.py, and this is
-        # that rule: a proposal it would drop later is dropped here, where it costs nothing.
-        said.append(f'Your term "{clean["term"]}" cannot be searched for. It must be at most three '
-                    f"words, not a word every AI job post carries, and your title or one of your "
-                    f"covers lines must contain it letter for letter. Your title is "
-                    f'"{clean["title"]}", which does not.')
+    elif reason := lessons.why_not(clean["term"], {"title": clean["title"], "covers": clean["covers"]}):
+        # The rule that decides a name is measurable lives in src/lessons.py, and so do its
+        # words: a proposal it would drop later is dropped here, told which test it failed.
+        said.append(f'Your term "{clean["term"]}" {reason}. It is searched for in hiring threads, so '
+                    f"it has to be a name an employer writes, at most three words, in your title or a "
+                    f'covers line. Your title is "{clean["title"]}".')
     elif count(clean["term"]) >= ALREADY_TAUGHT:
         # The course already runs this, whatever the proposal calls it.
         said.append(f'The course already teaches "{clean["term"]}" in {count(clean["term"])} of its '
@@ -292,7 +297,12 @@ def propose(entry: dict, tools: dict, ask=None, max_steps: int = MAX_STEPS, coun
     gathered = run(entry, tools, ask=ask, max_steps=max_steps)
     written = check(gathered, entry, count=count) if gathered else None
 
-    if written is None and gathered:
+    raw = (gathered or {}).get("proposal") or {}
+    # Declining is an answer the prompt offers: no answers and nothing a student does,
+    # only why. It is not a broken rule to be sent back.
+    declined = not raw.get("answers") and not raw.get("covers")
+
+    if written is None and gathered and not declined:
         # A rule that can say what is wrong should say it. One rewrite, with what it
         # already read still in front of it, and the same rules on the way back.
         said = faults(read_proposal(gathered.get("proposal") or {}, entry), count)
