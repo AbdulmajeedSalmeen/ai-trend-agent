@@ -22,7 +22,7 @@ from datetime import date
 from pathlib import Path
 
 from src import runio
-from src.agents import evidence, lesson, reviewer
+from src.agents import evidence, lesson, placement, reviewer
 from src.notebooks import NOTEBOOK_DIR
 from src.sources import arxiv
 
@@ -40,7 +40,8 @@ def newest_run() -> Path | None:
     return runs[-1] if runs else None
 
 
-def entry_for_page(entry: dict, written: dict | None = None) -> dict:
+def entry_for_page(entry: dict, written: dict | None = None,
+                   placed: dict | None = None) -> dict:
     """The agent's answer, in the shape the rules read.
 
     The agent speaks in pairs: what the notebook does now, what to teach instead. The
@@ -96,6 +97,11 @@ def entry_for_page(entry: dict, written: dict | None = None) -> dict:
                        if written else None),
         "lesson_term": written["term"] if written else None,
         "lesson_answers": written["answers"] if written else [],
+        # A lesson that does not exist yet is in no chapter's topic list, so nothing
+        # could place it. It owns a chapter when that chapter already carries the name,
+        # and otherwise it follows one, which is still a week and an order.
+        "lesson_place": ({"relation": placed["relation"], "chapter": placed["chapter"],
+                          "week": placed["week"], "why": placed["why"]} if placed else None),
         "basis": "read_and_judged",
     }
 
@@ -107,6 +113,14 @@ def tools_for(path: Path, run_dir: Path | None, research: bool) -> dict:
                             else lambda package="": "this run collected no releases")
     kit["papers"] = reviewer.papers_tool((lambda term: arxiv.search(term)) if research else None)
     return kit
+
+
+def chapters_of(path: Path) -> list[dict]:
+    """The course's chapters, or none, in which case nothing is placed."""
+    try:
+        return json.loads(Path(path).read_text(encoding="utf-8"))["chapters"]
+    except (OSError, KeyError, json.JSONDecodeError):
+        return []
 
 
 def lesson_tools(entry: dict, notebook_dir: Path, research: bool) -> dict:
@@ -153,11 +167,15 @@ def main() -> None:
     parser.add_argument("--again", action="store_true", help="review notebooks already in the file")
     parser.add_argument("--no-research", action="store_true", help="do not ask arXiv")
     parser.add_argument("--no-lessons", action="store_true", help="do not write a lesson for each notebook")
+    parser.add_argument("--curriculum", default="fixtures/curriculum.json",
+                        help="the chapters a written lesson is placed against")
     args = parser.parse_args()
 
     out_path = Path(args.out)
     entries = {} if args.again else load_existing(out_path)
     run_dir = newest_run()
+    chapters = chapters_of(args.curriculum)
+    place_kit = placement.tools_for(chapters, course_uses=evidence.course_uses_tool(Path(args.notebooks)))
     paths = [p for p in sorted(Path(args.notebooks).glob("*/*.ipynb")) if args.only.lower() in p.name.lower()]
     done = 0
 
@@ -175,12 +193,15 @@ def main() -> None:
         written = (None if args.no_lessons
                    else lesson.propose(entry, lesson_tools(entry, Path(args.notebooks), research),
                                        count=lambda term: lesson.taught_in(term, Path(args.notebooks))))
-        entries[key] = entry_for_page(entry, written)
+        placed = (placement.place(written["term"], written["why"], chapters, place_kit)
+                  if written and chapters else None)
+        entries[key] = entry_for_page(entry, written, placed)
         done += 1
         write(out_path, entries)
         print(f"read: {path.name} | {entries[key]['located_claims']} located | "
               f"{len(entries[key]['findings'])} findings | {entries[key]['verdict']}"
-              + (f" | lesson: {written['title'][:50]}" if written else ""))
+              + (f" | lesson: {written['title'][:46]}" if written else "")
+              + (f" | {placed['relation']} {placed['chapter']}" if placed else ""))
 
     write(out_path, entries)
     print(f"{len(entries)} notebooks in {out_path}")

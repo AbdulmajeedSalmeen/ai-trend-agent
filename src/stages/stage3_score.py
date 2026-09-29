@@ -7,6 +7,7 @@ from src import changes, feasibility, gap, memory, runio
 from src.adapters import model
 from src.agents import evidence
 from src.agents import judge as judge_agent
+from src.agents import placement
 from src.reading import judge_educational_value
 from src.schema import MarketSignal, PackageFacts, Score, Signal, Trend
 
@@ -212,8 +213,19 @@ def score_trend(
     as_of: datetime | None = None,
     taught: set[str] | None = None,
     tools: dict | None = None,
+    place=None,
 ) -> Score:
     chapter_id = match_chapter(trend, chapters)
+    placed_by_agent = None
+
+    if chapter_id is None and place is not None:
+        # The rules place a trend by overlap, and say nothing when there is none. That
+        # silence is often right, so only a chapter whose own words carry the name is
+        # taken: anything weaker establishes an order, not an owner, and is left out.
+        proposed = place(trend, chapters)
+
+        if proposed and proposed["relation"] == "owns":
+            chapter_id, placed_by_agent = proposed["chapter"], proposed
 
     subject_in_curriculum = any(
         trend.subject.lower() in topic.lower()
@@ -259,6 +271,7 @@ def score_trend(
     }
 
     provenance = {
+        "chapter": "agent" if placed_by_agent else ("matched" if chapter_id else "none"),
         "relevance": "measured",
         "impact": impact_source,
         "educational_value": "agent" if judged_by_agent else ("judged" if judgement else "default"),
@@ -269,6 +282,11 @@ def score_trend(
     }
 
     factors = {"maturity": mature_detail, "prerequisites": ready_detail, "difficulty": effort_detail}
+
+    if placed_by_agent:
+        # A chapter nothing matched travels with the line that put it there.
+        factors["chapter"] = {"why": placed_by_agent["why"], "quote": placed_by_agent["quote"],
+                              "looked": placed_by_agent["looked"]}
     if judged_by_agent:
         # What the agent read travels with the score, so the number can be opened.
         factors["educational_value"] = {
@@ -324,10 +342,28 @@ def run(run_dir: Path) -> None:
     # The agent's tools read this run's own artifacts and the course on disk, so a
     # replay without keys simply finds no model, and the rules answer as they always did.
     tools = evidence.tools_for(run_dir, market_rows) if model.available() else {}
+    place = placer(chapters) if model.available() else None
 
     scores = [
-        score_trend(trend, chapters, signals, market, facts, as_of, taught, tools)
+        score_trend(trend, chapters, signals, market, facts, as_of, taught, tools, place)
         for trend in trends
     ]
 
+    homeless = sum(1 for score in scores if not score.chapter_id)
+    found = sum(1 for score in scores if score.provenance.get("chapter") == "agent")
+
+    if place is not None:
+        print(f"placed: {found} chapters an agent found, {homeless} trends the course has no chapter for")
+
     runio.save_artifact(run_dir, "scores", scores)
+
+
+def placer(chapters: list[dict]):
+    """Ask where a trend belongs, with the tools already built once for the whole run."""
+    kit = placement.tools_for(chapters, course_uses=evidence.course_uses_tool())
+
+    def place(trend: Trend, _chapters: list[dict]):
+        about = " ".join(claim.text for claim in trend.claims[:4])
+        return placement.place(trend.subject, about, chapters, kit)
+
+    return place
