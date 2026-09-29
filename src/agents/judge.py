@@ -27,6 +27,7 @@ import time
 
 from src import trace
 from src.adapters import model
+from src.agents import citations
 
 MAX_STEPS = 4
 MAX_TOOL_CHARS = 2400
@@ -94,7 +95,7 @@ def run(subject: str, claims: list[str], chapter_title: str | None, tools: dict,
         tool = tools.get(name) if isinstance(name, str) else None
         if tool is None:
             # A tool it invented is not a turn it gets to keep: say so and let it try again.
-            seen.append({"tool": str(name), "args": {}, "text": "no such tool"})
+            seen.append(citations.note(name, {}, "no such tool"))
             continue
 
         args = answer.get("args") if isinstance(answer.get("args"), dict) else {}
@@ -102,12 +103,11 @@ def run(subject: str, claims: list[str], chapter_title: str | None, tools: dict,
         try:
             result = tool(**args)
         except TypeError:
-            seen.append({"tool": name, "args": args, "text": "wrong arguments for this tool"})
+            seen.append(citations.note(name, args, "wrong arguments for this tool"))
             continue
-        text = _flat(result)[:MAX_TOOL_CHARS] or "nothing found"
         trace.current.record(f"judge_tool:{name}", (time.time() - started) * 1000,
                                note=f"{subject} · {json.dumps(args, ensure_ascii=False)[:60]}")
-        seen.append({"tool": name, "args": args, "text": text, "raw": result})
+        seen.append({**citations.step(name, args, result, MAX_TOOL_CHARS), "raw": result})
 
     # It spent every turn looking and never answered, which is not a judgement.
     return None
@@ -135,18 +135,16 @@ def check(gathered: dict) -> dict | None:
     if not 1 <= value <= 5:
         return None
 
-    # A model that credits a line to "demand()" has named the tool that returned it,
-    # and a lookup that misses on the punctuation drops a citation that was good.
-    returned = {tool_name(step["tool"]): step["text"] for step in gathered.get("seen", [])}
+    # Every call to the tool it credits counts, not only the last one, and the tool's
+    # name is matched without the brackets a model writes it with.
+    seen = gathered.get("seen", [])
     kept, dropped = [], 0
     cites = proposal.get("cites")
     for cite in cites if isinstance(cites, list) else []:
         if not isinstance(cite, dict):
             dropped += 1
             continue
-        quote = _flat(cite.get("quote"))
-        text = returned.get(tool_name(cite.get("tool")), "")
-        if quote and quote in text:
+        if citations.backed(cite.get("quote"), seen, tool=cite.get("tool")):
             kept.append({"factor": str(cite.get("factor") or "")[:80],
                          "tool": tool_name(cite.get("tool")),
                          "quote": str(cite.get("quote"))[:200]})

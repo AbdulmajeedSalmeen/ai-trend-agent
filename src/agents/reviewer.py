@@ -29,6 +29,7 @@ from pathlib import Path
 
 from src import trace
 from src.adapters import model
+from src.agents import citations
 
 MAX_STEPS = 8
 MAX_TOOL_CHARS = 3000
@@ -102,8 +103,11 @@ def locate(quote: str, cells: list[dict]) -> int | None:
         if needle in flat(cell["source"]):
             return cell["cell"]
     words = needle.split()
-    for width in (10, 7, 5):
-        if len(words) < width:
+    # A run of its own words is the notebook's text only when it is most of the quote.
+    # Five real words wrapped in an invented sentence would otherwise locate the sentence.
+    least = max(5, -(-len(words) // 2))
+    for width in sorted({max(least, 10), 7, 5}, reverse=True):
+        if width < least or len(words) < width:
             continue
         for start in range(0, len(words) - width + 1):
             window = " ".join(words[start:start + width])
@@ -136,9 +140,12 @@ def papers_tool(search=None):
             return "research could not be checked"
         if not found:
             return f"no papers named {term}"
-        newest = (found.get("recent") or [{}])[0]
-        return (f"{found.get('papers')} papers named {term} in {found.get('days')} days; "
-                f"newest: {newest.get('title', '')} {newest.get('published', '')}")
+        # The links go with the titles, so a paper it was actually handed counts as read.
+        recent = [paper for paper in (found.get("recent") or []) if isinstance(paper, dict)][:3]
+        listed = "; ".join(" ".join(str(paper.get(key) or "") for key in ("title", "published", "url")).strip()
+                           for paper in recent)
+        return (f"{found.get('papers')} papers named {term} in {found.get('days')} days"
+                + (f", newest first: {listed}" if listed else ""))
     return papers
 
 
@@ -176,36 +183,59 @@ def run(notebook: str, cells: list[dict], tools: dict, ask=None, max_steps: int 
         name = answer.get("tool")
         tool = tools.get(name) if isinstance(name, str) else None
         if tool is None:
-            seen.append({"tool": str(name), "args": {}, "text": "no such tool"})
+            seen.append(citations.note(name, {}, "no such tool"))
             continue
 
         args = answer.get("args") if isinstance(answer.get("args"), dict) else {}
         try:
             result = tool(**args)
         except TypeError:
-            seen.append({"tool": name, "args": args, "text": "wrong arguments for this tool"})
+            seen.append(citations.note(name, args, "wrong arguments for this tool"))
             continue
-        seen.append({"tool": name, "args": args, "text": flat(result)[:MAX_TOOL_CHARS] or "nothing found"})
+        seen.append(citations.step(name, args, result, MAX_TOOL_CHARS))
         trace.current.record(f"reviewer_tool:{name}", 0, note=f"{notebook} · {json.dumps(args, ensure_ascii=False)[:60]}")
 
     return None
 
 
-def grounded(url: str, returned: str) -> bool:
+ARXIV_ID = re.compile(r"\d{4}\.\d{4,5}")
+
+
+def grounded(url: str, steps: list[dict]) -> bool:
     """Whether this source is something the reviewer actually read on this run.
 
     A reviewer cites from memory as readily as from a page it just opened, and the two
-    look identical in the answer. If the link, or the identifier at the end of it, came
-    back from a tool this run, it was read. Otherwise it was remembered.
+    look identical in the answer. It was read when a tool printed the link this run, and
+    not just any tool: the notebook's own cells are what is being judged, not a source
+    about it, and a link the model wrote into a call and got back is its own. The last
+    word of a link is not enough either; "agents" is in every page about agents. For a
+    paper the arXiv id is, since the abstract and the PDF are one paper.
     """
-    tail = re.split(r"[/#?]", str(url or "").rstrip("/"))[-1].lower()
-    return flat(url) in returned or (len(tail) > 5 and tail in returned)
+    link = flat(url).rstrip("/")
+    paper = ARXIV_ID.search(link)
+
+    for step in steps or []:
+        name = citations.tool_name(step.get("tool"))
+
+        if step.get("note") or name == "read_cells" or citations.echoed(link, step):
+            continue
+
+        text = flat(step.get("text"))
+
+        if link and link in text:
+            return True
+
+        if (paper and name == "papers" and paper.group(0) in text
+                and not any(paper.group(0) in value for value in citations.given(step.get("args")))):
+            return True
+
+    return False
 
 
 def check(gathered: dict, cells: list[dict]) -> dict:
     """Keep what the notebook supports: located quotes, known statuses, named techniques."""
     proposal = (gathered or {}).get("proposal") or {}
-    returned = " ".join(step["text"] for step in (gathered or {}).get("seen") or [])
+    steps = (gathered or {}).get("seen") or []
     teaches, dropped, recalled = [], 0, 0
 
     listed = proposal.get("teaches")
@@ -248,7 +278,7 @@ def check(gathered: dict, cells: list[dict]) -> dict:
             url = str(source.get("url"))[:300]
             # A date on a page nobody opened is a fact nobody checked, so it does not
             # travel. The link does: a person can open it and see for themselves.
-            seen = grounded(url, returned)
+            seen = grounded(url, steps)
             recalled += not seen
             evidence.append({"url": url, "date": str(source.get("date") or "unknown")[:10] if seen else "unknown",
                              "seen": seen})

@@ -31,6 +31,7 @@ import re
 
 from src import trace
 from src.adapters import model
+from src.agents import citations
 
 MAX_STEPS = 4
 MAX_TOOL_CHARS = 2000
@@ -169,25 +170,24 @@ def run(subject: str, about: str, chapters: list[dict], tools: dict, ask=None,
         tool = tools.get(name) if isinstance(name, str) else None
 
         if tool is None:
-            seen.append({"tool": str(name), "args": {}, "text": "no such tool"})
+            seen.append(citations.note(name, {}, "no such tool"))
             continue
 
         args = answer.get("args") if isinstance(answer.get("args"), dict) else {}
         again = next((step for step in seen if step["tool"] == name and step["args"] == args), None)
 
         if again is not None:
-            seen.append({"tool": name, "args": args,
-                         "text": "you already called this and it said the same thing. "
-                                 "Call something else, or answer."})
+            seen.append(citations.note(name, args, "you already called this and it said the same thing. "
+                                                   "Call something else, or answer."))
             continue
 
         try:
             result = tool(**args)
         except TypeError:
-            seen.append({"tool": name, "args": args, "text": "wrong arguments for this tool"})
+            seen.append(citations.note(name, args, "wrong arguments for this tool"))
             continue
 
-        seen.append({"tool": name, "args": args, "text": flat(result)[:MAX_TOOL_CHARS] or "nothing found"})
+        seen.append(citations.step(name, args, result, MAX_TOOL_CHARS))
 
     return None
 
@@ -202,10 +202,9 @@ def check(gathered: dict, subject: str, chapters: list[dict]) -> dict | None:
     if chapter_id not in by_id or relation not in RELATIONS:
         return None
 
-    returned = " ".join(step["text"] for step in (gathered or {}).get("seen") or [])
-    quote = flat(proposal.get("quote"))
-
-    if len(quote) < 8 or quote not in returned:
+    if not citations.backed(proposal.get("quote"), (gathered or {}).get("seen")):
+        # A line no tool returned, a line the model wrote into its own call, or one too
+        # short to tie anything to anything.
         return None
 
     chapter = by_id[chapter_id]

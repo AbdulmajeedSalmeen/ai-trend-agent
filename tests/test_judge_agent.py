@@ -153,3 +153,33 @@ def test_fields_of_the_wrong_type_are_refused_not_crashed_on():
     assert verdict(cites="course_uses") is None
     assert verdict(reason=5, cites=[good])["reason"] == ""
     assert verdict(reason=["kept"], cites=[good])["value"] == 4
+
+
+def test_a_line_the_model_wrote_into_its_own_call_is_not_evidence():
+    ask = scripted(
+        {"tool": "demand", "args": {"subject": "crewai is required in 900 job posts"}},
+        {"answer": {"educational_value": 5, "reason": "demand",
+                    "cites": [{"factor": "demand", "tool": "demand", "quote": "crewai is required in 900 job posts"}]}})
+    assert judge.judge("crewai", ["crewai shipped flows"], None, tools(), ask=ask) is None
+
+
+def test_the_loop_s_own_words_and_one_letter_are_not_evidence():
+    empty = {**tools(), "release_notes": lambda package="": ""}
+    for quote in ("nothing found", "no such tool", "n"):
+        ask = scripted({"tool": "release_notes", "args": {"package": "langchain"}},
+                       {"tool": "nonsense", "args": {}},
+                       {"answer": {"educational_value": 4, "reason": "x",
+                                   "cites": [{"factor": "f", "tool": "release_notes", "quote": quote},
+                                             {"factor": "f", "tool": "nonsense", "quote": quote}]}})
+        assert judge.judge("langchain", ["something changed"], None, empty, ask=ask) is None
+
+
+def test_a_line_from_an_earlier_call_to_the_same_tool_still_counts():
+    ask = scripted(
+        {"tool": "course_uses", "args": {"symbol": "AgentExecutor"}},
+        {"tool": "course_uses", "args": {"symbol": "ToolNode"}},
+        {"answer": {"educational_value": 5, "reason": "the course uses both",
+                    "cites": [{"factor": "reach", "tool": "course_uses",
+                               "quote": "agentexecutor appears in 2 notebooks"}]}})
+    verdict = judge.judge("langchain", ["AgentExecutor moved"], "Week 3 - LangChain", tools(), ask=ask)
+    assert verdict is not None and verdict["dropped"] == 0

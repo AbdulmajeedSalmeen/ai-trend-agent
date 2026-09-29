@@ -223,3 +223,31 @@ def test_the_budget_is_what_stops_it():
 @pytest.mark.parametrize("reply", [["found"], "found", 7])
 def test_a_reply_that_is_not_an_object_ends_it_without_a_crash(reply):
     assert verifier.confirm(claim(), "pypi", tools(), ask=scripted(reply)) is None
+
+
+def test_a_link_the_model_wrote_into_its_own_call_is_not_a_second_record():
+    url = "https://pypi.org/project/langchain-core/1.4.2/"
+    ask = scripted({"tool": "registry", "args": {"distribution": url}},
+                   answer(url=url, quote=f"{url} is on the registry"))
+    assert verifier.confirm(claim(), "github", tools(), ask=ask) is None
+
+
+def test_a_neighbouring_version_is_not_this_version():
+    link = "https://github.com/langchain-ai/langchain/releases/tag/langchain-core%3D%3D1.4.20"
+    neighbour = {**tools(), "releases": lambda repo="": f"langchain-core==1.4.20 at {link}"}
+    ask = scripted({"tool": "releases", "args": {"repo": "langchain-ai/langchain"}},
+                   answer(url=link, quote="langchain-core==1.4.20"))
+    assert verifier.confirm(claim("1.4.2"), "pypi", neighbour, ask=ask) is None
+
+
+def test_the_line_and_the_link_come_from_the_other_party_on_one_page():
+    # We hold PyPI's word. PyPI's own line with a GitHub link that never names the
+    # version is not a second record.
+    held = {"registry": lambda distribution="": "langchain-core 1.4.2 at https://pypi.org/project/langchain-core/1.4.2/",
+            "releases": lambda repo="": RELEASES,
+            "changelog": lambda repo="": "see https://github.com/langchain-ai/langchain/blob/master/CHANGELOG.md"}
+    ask = scripted({"tool": "registry", "args": {"distribution": "langchain-core"}},
+                   {"tool": "changelog", "args": {"repo": "langchain-ai/langchain"}},
+                   answer(url="https://github.com/langchain-ai/langchain/blob/master/CHANGELOG.md",
+                          quote="langchain-core 1.4.2 at https://pypi.org"))
+    assert verifier.confirm(claim(), "pypi", held, ask=ask) is None

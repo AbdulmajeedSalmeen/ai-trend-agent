@@ -35,6 +35,7 @@ import re
 
 from src import trace
 from src.adapters import model
+from src.agents import citations
 
 MAX_STEPS = 3
 MAX_TOOL_CHARS = 1800
@@ -129,25 +130,24 @@ def run(entry: dict, tools: dict, ask=None, max_steps: int = MAX_STEPS) -> dict 
         tool = tools.get(name) if isinstance(name, str) else None
 
         if tool is None:
-            seen.append({"tool": str(name), "args": {}, "text": "no such tool"})
+            seen.append(citations.note(name, {}, "no such tool"))
             continue
 
         args = answer.get("args") if isinstance(answer.get("args"), dict) else {}
         again = next((item for item in seen if item["tool"] == name and item["args"] == args), None)
 
         if again is not None:
-            seen.append({"tool": name, "args": args,
-                         "text": "you already called this and it said the same thing. "
-                                 "Call something else, or answer."})
+            seen.append(citations.note(name, args, "you already called this and it said the same thing. "
+                                                   "Call something else, or answer."))
             continue
 
         try:
             result = tool(**args)
         except TypeError:
-            seen.append({"tool": name, "args": args, "text": "wrong arguments for this tool"})
+            seen.append(citations.note(name, args, "wrong arguments for this tool"))
             continue
 
-        seen.append({"tool": name, "args": args, "text": flat(result)[:MAX_TOOL_CHARS] or "nothing found"})
+        seen.append(citations.step(name, args, result, MAX_TOOL_CHARS))
 
     return None
 
@@ -155,7 +155,7 @@ def run(entry: dict, tools: dict, ask=None, max_steps: int = MAX_STEPS) -> dict 
 def check(gathered: dict) -> dict | None:
     """Keep the citations the tools support, and refuse a score left standing on none."""
     proposal = (gathered or {}).get("proposal") or {}
-    returned = {tool_name(step["tool"]): step["text"] for step in (gathered or {}).get("seen") or []}
+    seen = (gathered or {}).get("seen") or []
 
     try:
         score = int(proposal.get("worth"))
@@ -180,9 +180,8 @@ def check(gathered: dict) -> dict | None:
             continue
 
         tool = tool_name(cite.get("tool"))
-        quote = flat(cite.get("quote"))
 
-        if len(quote) < 6 or quote not in returned.get(tool, ""):
+        if not citations.backed(cite.get("quote"), seen, tool=tool):
             # It cited a line that tool never returned, so the line is not evidence.
             dropped += 1
             continue

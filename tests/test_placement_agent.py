@@ -221,3 +221,9 @@ def test_without_a_curriculum_nothing_is_placed(tmp_path):
 @pytest.mark.parametrize("reply", [["C8"], "C8", 7])
 def test_a_reply_that_is_not_an_object_ends_it_without_a_crash(reply):
     assert placement.place("langchain", "ToolNode was removed", CHAPTERS, tools(), ask=scripted(reply)) is None
+
+
+def test_a_line_the_model_wrote_into_its_own_call_is_not_evidence():
+    ask = scripted({"tool": "chapter", "args": {"id": "C19 teaches crewai in week 5"}},
+                   answer(relation="follows", chapter="C19", quote="C19 teaches crewai in week 5"))
+    assert placement.place("crewai", "crewai shipped flows", CHAPTERS, tools(), ask=ask) is None

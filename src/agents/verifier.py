@@ -34,6 +34,7 @@ import requests
 
 from src import trace
 from src.adapters import model
+from src.agents import citations
 from src.schema import Claim
 
 MAX_STEPS = 4
@@ -42,6 +43,9 @@ MAX_TOOL_CHARS = 1800
 # other party; we hold the repository's, so the registry is. Another page of the record
 # we already have is the same publisher saying the same thing in the same place.
 OTHER_PARTY = {"pypi": "github.com", "github": "pypi.org"}
+# The tools that read the other party's record. We hold the registry's word for a claim
+# PyPI gave us, so only the repository can second it, and the other way round.
+OTHER_TOOLS = {"pypi": {"releases", "changelog"}, "github": {"registry"}}
 TIMEOUT = 20
 HEADERS = {"User-Agent": "ai-trend-agent/1.0 (SDA bootcamp capstone)",
            "Accept": "application/json", "Accept-Encoding": "gzip"}
@@ -230,7 +234,7 @@ def run(claim: Claim, came_from: str, tools: dict, ask=None, max_steps: int = MA
         tool = tools.get(name) if isinstance(name, str) else None
 
         if tool is None:
-            seen.append({"tool": str(name), "args": {}, "text": "no such tool"})
+            seen.append(citations.note(name, {}, "no such tool"))
             continue
 
         args = answer.get("args") if isinstance(answer.get("args"), dict) else {}
@@ -238,52 +242,71 @@ def run(claim: Claim, came_from: str, tools: dict, ask=None, max_steps: int = MA
                       if step["tool"] == name and step["args"] == args), None)
 
         if again is not None:
-            seen.append({"tool": name, "args": args,
-                         "text": "you already called this and it said the same thing. "
-                                 "Call something else, or answer."})
+            seen.append(citations.note(name, args, "you already called this and it said the same thing. "
+                                                   "Call something else, or answer."))
             continue
 
         try:
             result = tool(**args)
         except TypeError:
-            seen.append({"tool": name, "args": args, "text": "wrong arguments for this tool"})
+            seen.append(citations.note(name, args, "wrong arguments for this tool"))
             continue
 
-        seen.append({"tool": name, "args": args, "text": flat(result)[:MAX_TOOL_CHARS] or "nothing found"})
+        seen.append(citations.step(name, args, result, MAX_TOOL_CHARS))
 
     return None
 
 
+def names_version(text, version: str) -> bool:
+    """Whether the text names exactly this version: 1.7.1 is not 1.7.10, 11.7.1 or 1.7.1rc1."""
+    wanted = re.escape(flat(version))
+    return bool(wanted) and re.search(rf"(?<![\d.]){wanted}(?![\w]|\.\d|-\w)", flat(text)) is not None
+
+
 def check(gathered: dict, version: str, came_from: str = "") -> dict | None:
-    """Three rules: a line it read, naming the version, at a link it was shown from the
-    other party. The last one is the one that makes this worth anything: the release page
-    we already hold, quoted back at us, is not a second record of anything."""
+    """A line and a link, both on one page the other party's tool returned, both naming
+    this version exactly. The page matters most: the release we already hold, quoted back
+    at us, is not a second record of anything, and neither is a line from one page pinned
+    to a link from another."""
     proposal = (gathered or {}).get("proposal") or {}
 
     if proposal.get("found") is not True:
         return None
 
-    returned = " ".join(step["text"] for step in (gathered or {}).get("seen") or [])
-    quote = flat(proposal.get("quote"))
+    quote = proposal.get("quote")
     url = str(proposal.get("url") or "").strip()
 
-    if len(quote) < 8 or quote not in returned:
-        return None
-
-    if version not in quote:
+    if not url.startswith("http") or not names_version(quote, version):
         # A record that does not name this version is a second source for something else.
         return None
 
-    if not url.startswith("http") or flat(url) not in returned:
-        return None
-
-    other = OTHER_PARTY.get(came_from)
+    other, tools = OTHER_PARTY.get(came_from), OTHER_TOOLS.get(came_from)
 
     if other and other not in flat(url):
         return None
 
-    return {"url": url, "quote": str(proposal.get("quote"))[:220],
-            "looked": [{"tool": step["tool"], "args": step.get("args", {})} for step in gathered["seen"]]}
+    for step in (gathered or {}).get("seen") or []:
+        name = citations.tool_name(step.get("tool"))
+
+        if tools and name not in tools:
+            continue
+
+        if not citations.backed(quote, [step]):
+            continue
+
+        if flat(url) not in flat(step.get("text")) or citations.echoed(url, step):
+            # A link that page never printed, or one the model wrote into the call itself.
+            continue
+
+        if name != "changelog" and not names_version(url, version):
+            # A release page for some other version. A changelog is one file for every
+            # version, so its link cannot name one; its line has to.
+            continue
+
+        return {"url": url, "quote": str(quote)[:220],
+                "looked": [{"tool": s["tool"], "args": s.get("args", {})} for s in gathered["seen"]]}
+
+    return None
 
 
 def confirm(claim: Claim, came_from: str, tools: dict | None = None, ask=None,

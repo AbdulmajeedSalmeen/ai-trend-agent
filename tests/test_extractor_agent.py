@@ -198,3 +198,9 @@ def test_a_claim_whose_post_is_gone_is_left_alone():
 @pytest.mark.parametrize("reply", [["1.2.12"], "1.2.12", 7])
 def test_a_reply_that_is_not_an_object_ends_it_without_a_crash(reply):
     assert extractor.extract(claim(), post(), [release(), post()], ask=scripted(reply)) is None
+
+
+def test_a_line_the_model_wrote_into_its_own_call_is_not_evidence():
+    said = "create_react_agent moved to langchain-classic in 1.2.12"
+    ask = scripted({"tool": "notes", "args": {"version": said}}, answer(quote=said))
+    assert extractor.extract(claim(), post(), [release(), post()], ask=ask) is None

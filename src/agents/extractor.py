@@ -31,6 +31,7 @@ from datetime import timezone
 
 from src import trace
 from src.adapters import model
+from src.agents import citations
 from src.schema import Claim, Signal
 from src.versions import extract_version
 
@@ -158,7 +159,7 @@ def run(claim: Claim, post: Signal, releases: list[dict], tools: dict,
         tool = tools.get(name) if isinstance(name, str) else None
 
         if tool is None:
-            seen.append({"tool": str(name), "args": {}, "text": "no such tool"})
+            seen.append(citations.note(name, {}, "no such tool"))
             continue
 
         args = answer.get("args") if isinstance(answer.get("args"), dict) else {}
@@ -166,10 +167,10 @@ def run(claim: Claim, post: Signal, releases: list[dict], tools: dict,
         try:
             result = tool(**args)
         except TypeError:
-            seen.append({"tool": name, "args": args, "text": "wrong arguments for this tool"})
+            seen.append(citations.note(name, args, "wrong arguments for this tool"))
             continue
 
-        seen.append({"tool": name, "args": args, "text": flat(result)[:MAX_TOOL_CHARS] or "nothing found"})
+        seen.append(citations.step(name, args, result, MAX_TOOL_CHARS))
 
     return None
 
@@ -192,10 +193,9 @@ def check(gathered: dict, post: Signal, releases: list[dict]) -> dict | None:
         # The post is older than the release, so it cannot be reporting it.
         return None
 
-    returned = " ".join(step["text"] for step in (gathered or {}).get("seen") or [])
-    quote = flat(proposal.get("quote"))
-
-    if len(quote) < 8 or quote not in returned:
+    if not citations.backed(proposal.get("quote"), (gathered or {}).get("seen")):
+        # A line no tool returned, a line the model wrote into its own call, or one too
+        # short to tie anything to anything.
         return None
 
     return {"version": row["version"], "evidence_url": row["url"], "release_id": row["id"],

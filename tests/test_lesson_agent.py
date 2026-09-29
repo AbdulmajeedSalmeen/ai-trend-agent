@@ -202,3 +202,12 @@ def test_the_course_is_counted_here_and_case_does_not_hide_it(tmp_path):
 @pytest.mark.parametrize("reply", [["x"], "x", 7])
 def test_a_reply_that_is_not_an_object_ends_it_without_a_crash(reply):
     assert lesson.propose(entry(), tools(), ask=scripted(reply), count=lambda term: 0) is None
+
+
+@pytest.mark.parametrize("answers", [[""], ["a"], ["e"], [None], [3], 3])
+def test_an_answer_that_names_no_finding_answers_nothing(answers):
+    assert lesson.read_proposal({"answers": answers}, entry())["answers"] == []
+
+
+def test_one_answer_given_as_text_is_one_answer_not_its_letters():
+    assert lesson.read_proposal({"answers": "ReAct agent"}, entry())["answers"] == ["ReAct agent"]

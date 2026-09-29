@@ -201,3 +201,27 @@ def test_lists_that_are_not_lists_are_refused_not_crashed_on(tmp_path):
                   answer(quote, sources=3)):
         entry = reviewer.review(path, tools(cells), ask=scripted(reply))
         assert entry is None or entry["findings"] == []
+
+
+def test_five_real_words_do_not_make_an_invented_quote_the_notebook_s(tmp_path):
+    cells = reviewer.cells_of(notebook(tmp_path))
+    invented = "The agent decides which tool to call via OpenAI function calling and stores API keys in plain text"
+    assert reviewer.locate(invented, cells) is None
+
+
+def test_a_source_counts_as_read_only_if_a_tool_other_than_the_notebook_returned_it():
+    steps = [{"tool": "read_cells", "args": {"start": 1}, "text": "cell 1: see https://docs.example/agents"},
+             {"tool": "release_notes", "args": {"package": "langchain"}, "text": "langchain 1.4.2: agents moved"}]
+    assert not reviewer.grounded("https://docs.example/agents", steps)
+    assert not reviewer.grounded("https://made.up/docs/agents", steps)
+
+    papers = [{"tool": "papers", "args": {"term": "MCP"},
+               "text": "12 papers named mcp in 30 days: on agents 2026-09-01 http://arxiv.org/abs/2609.01234v1"}]
+    assert reviewer.grounded("http://arxiv.org/abs/2609.01234v1", papers)
+    assert reviewer.grounded("https://arxiv.org/pdf/2609.01234", papers)
+
+
+def test_the_papers_tool_gives_the_links_it_found():
+    tool = reviewer.papers_tool(lambda term: {"papers": 2, "days": 30, "recent": [
+        {"title": "On agents", "published": "2026-09-01", "url": "http://arxiv.org/abs/2609.01234v1"}]})
+    assert "http://arxiv.org/abs/2609.01234v1" in tool(term="MCP")

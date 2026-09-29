@@ -176,3 +176,17 @@ def test_a_reply_that_is_not_an_object_ends_it_without_a_crash(reply):
 def test_citations_that_are_not_a_list_are_refused_not_crashed_on(cites):
     ask = scripted({"tool": "course_uses", "args": {"term": "ReAct agent"}}, answer(cites=cites))
     assert worth.judge(entry(), tools(), ask=ask) is None
+
+
+def test_a_line_the_model_wrote_into_its_own_call_is_not_evidence():
+    said = "this is taught in thirty notebooks"
+    ask = scripted({"tool": "course_uses", "args": {"term": said}},
+                   answer(cites=[{"factor": "reach", "tool": "course_uses", "quote": said}]))
+    assert worth.judge(entry(), tools(), ask=ask) is None
+
+
+def test_the_loop_s_own_words_are_not_evidence():
+    ask = scripted({"tool": "course_uses", "args": {"term": "ReAct agent"}},
+                   {"tool": "course_uses", "args": {"term": "ReAct agent"}},
+                   answer(cites=[{"factor": "f", "tool": "course_uses", "quote": "you already called this"}]))
+    assert worth.judge(entry(), tools(), ask=ask) is None

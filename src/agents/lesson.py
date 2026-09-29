@@ -35,6 +35,7 @@ from pathlib import Path
 
 from src import lessons, trace
 from src.adapters import model
+from src.agents import citations
 from src.notebooks import NOTEBOOK_DIR
 
 MAX_STEPS = 4
@@ -179,25 +180,24 @@ def run(entry: dict, tools: dict, ask=None, max_steps: int = MAX_STEPS,
         tool = tools.get(name) if isinstance(name, str) else None
 
         if tool is None:
-            seen.append({"tool": str(name), "args": {}, "text": "no such tool"})
+            seen.append(citations.note(name, {}, "no such tool"))
             continue
 
         args = answer.get("args") if isinstance(answer.get("args"), dict) else {}
         again = next((step for step in seen if step["tool"] == name and step["args"] == args), None)
 
         if again is not None:
-            seen.append({"tool": name, "args": args,
-                         "text": "you already called this and it said the same thing. "
-                                 "Call something else, or answer."})
+            seen.append(citations.note(name, args, "you already called this and it said the same thing. "
+                                                   "Call something else, or answer."))
             continue
 
         try:
             result = tool(**args)
         except TypeError:
-            seen.append({"tool": name, "args": args, "text": "wrong arguments for this tool"})
+            seen.append(citations.note(name, args, "wrong arguments for this tool"))
             continue
 
-        seen.append({"tool": name, "args": args, "text": flat(result)[:MAX_TOOL_CHARS] or "nothing found"})
+        seen.append(citations.step(name, args, result, MAX_TOOL_CHARS))
 
     return None
 
@@ -207,11 +207,20 @@ def read_proposal(proposal: dict, entry: dict) -> dict:
     moved = [item["technique"] for item in entry.get("findings") or [] if item["status"] != "current"]
     answers = []
 
-    for said in (proposal or {}).get("answers") or []:
+    given = (proposal or {}).get("answers")
+    # One answer written as text is one answer, not a list of its letters.
+    given = [given] if isinstance(given, str) else given if isinstance(given, list) else []
+
+    for said in given:
+        if not isinstance(said, str):
+            continue
+
         # It names the finding in its own words ("tf-idf vectorization is superseded"),
         # so match on the technique inside what it said and keep the reviewer's spelling,
-        # which is what the page and the counts are keyed on.
-        found = next((name for name in moved if flat(name) in flat(said) or flat(said) in flat(name)), None)
+        # which is what the page and the counts are keyed on. The other way round, what it
+        # said has to be most of the technique's name: "e" is inside "ReAct agent" too.
+        found = next((name for name in moved if flat(name) in flat(said)
+                      or (len(flat(said)) >= max(4, len(flat(name)) / 2) and flat(said) in flat(name))), None)
 
         if found and found not in answers:
             answers.append(found)
