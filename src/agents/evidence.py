@@ -29,24 +29,49 @@ def _releases(run_dir: Path) -> list[dict]:
     return out
 
 
+# The repositories whose name is not their package's, so the package name finds them too.
+REPO_PACKAGES = {"openai-python": "openai", "anthropic-sdk-python": "anthropic"}
+# A release that names its package: "langchain-core==1.6.5", "langgraph-cli==0.4.32".
+TAGGED = re.compile(r"^([a-z0-9][a-z0-9._-]*?)(?:==|@)v?\d")
+
+
+def _package(text) -> str:
+    return str(text or "").strip().lower().replace("_", "-")
+
+
 def release_notes_tool(run_dir: Path):
-    """What this run's releases say about a package, by the repository that shipped them."""
+    """What this run's releases say about one package, and only that package.
+
+    A release belongs to a package when its name says so ("langchain-core==1.6.5"), or,
+    when it names no package ("v5.17.0"), when it comes from the repository of that name.
+    Matching the name anywhere in "owner/repo" found "langchain" inside
+    "langchain-ai/langgraph" and answered a question about langchain with langgraph's
+    notes; a monorepo's other packages came along the same way.
+    """
     blobs = _releases(Path(run_dir))
 
-    def release_notes(package: str = "") -> str:
-        name = str(package or "").strip().lower().replace("_", "-")
+    def release_notes(package: str = "", **kwargs) -> str:
+        name = _package(package or next((value for value in kwargs.values()
+                                         if isinstance(value, str) and value.strip()), ""))
         if not name:
             return ""
         lines = []
         for blob in blobs:
             repo = str(blob.get("repo", ""))
-            if name not in repo.lower().replace("_", "-"):
-                continue
-            for release in (blob.get("releases") or [])[:4]:
+            repo_name = _package(repo.rsplit("/", 1)[-1])
+            owners = {repo_name, REPO_PACKAGES.get(repo_name)}
+            for release in blob.get("releases") or []:
+                said = TAGGED.match(_package(release.get("name"))) or TAGGED.match(_package(release.get("tag_name")))
+                if said and _package(said.group(1)) != name:
+                    continue
+                if not said and name not in owners:
+                    continue
                 title = str(release.get("name") or release.get("tag_name") or "")
                 body = re.sub(r"\s+", " ", str(release.get("body") or ""))
                 lines.append(f"{repo} {title}: {body[:600]}")
-        return " | ".join(lines[:4])
+                if len(lines) == 4:
+                    return " | ".join(lines)
+        return " | ".join(lines)
 
     return release_notes
 

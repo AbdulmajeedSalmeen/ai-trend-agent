@@ -5,9 +5,9 @@ it, and six sentences of claims. From that it returned a number between 1 and 5 
 carries a quarter of every priority score, and when the model was absent it silently
 defaulted to 3. Nobody could ask it how it decided.
 
-This one is a loop. It may call three tools before it answers, and each tool reads the
-run's own artifacts rather than the network, so a frozen run replays offline and the
-tests need no key:
+This one is a loop. It may look up to four times, with three tools, before it answers,
+and each tool reads the run's own artifacts rather than the network, so a frozen run
+replays offline and the tests need no key:
 
     release_notes(package)  what the releases in this run actually say
     course_uses(symbol)     which notebook cells of the course use a name
@@ -16,9 +16,9 @@ tests need no key:
 Then the part that matters: it has to cite what it used, and `check` verifies every
 citation against the tool output this run produced. A quote that is not in the text we
 fetched is dropped. A cell that is not in the search result is dropped. If nothing it
-cited survives, the score is not used at all and the caller falls back to the rules,
-exactly as it does today when there is no model. The agent gathers and proposes; the
-rule decides what the run is allowed to record.
+cited survives, the score is not used at all: the stage asks the single question it
+asked before the agent existed, and uses the default when there is no model. The agent
+gathers and proposes; the rule decides what the run is allowed to record.
 """
 
 import json
@@ -59,7 +59,8 @@ def _flat(text) -> str:
     return re.sub(r"\s+", " ", str(text or "")).strip().lower()
 
 
-def _turn(subject: str, chapter_title: str | None, claims: list[str], seen: list[dict]) -> str:
+def _turn(subject: str, chapter_title: str | None, claims: list[str], seen: list[dict],
+          left: int = MAX_STEPS) -> str:
     where = f"The course already has a chapter: {chapter_title}." if chapter_title else "No chapter covers this yet."
     lines = [f"Package: {subject}", where, "What changed:"]
     lines += [f"- {c}" for c in claims[:6]]
@@ -71,7 +72,10 @@ def _turn(subject: str, chapter_title: str | None, claims: list[str], seen: list
     else:
         lines.append("You have not looked anything up yet.")
     lines.append("")
-    lines.append(f"You may call at most {MAX_STEPS} tools in total, then you must answer.")
+    # A loop that runs out of turns while still looking has spent a call on nothing,
+    # so it is told how many it has, and when the next one is for answering.
+    lines.append(f"You have {left} tool calls left, then you must answer." if left > 0
+                 else "You have no tool calls left. Answer now, with what you have.")
     return "\n".join(lines)
 
 
@@ -82,14 +86,18 @@ def run(subject: str, claims: list[str], chapter_title: str | None, tools: dict,
                                                       action="judge_agent"))
     seen: list[dict] = []
 
-    for _ in range(max_steps + 1):
-        answer = ask(SYSTEM, _turn(subject, chapter_title, claims, seen))
+    for step in range(max_steps + 1):
+        answer = ask(SYSTEM, _turn(subject, chapter_title, claims, seen, max_steps - step))
         if not isinstance(answer, dict) or not answer:
             return None
 
         proposal = answer.get("answer")
         if isinstance(proposal, dict):
             return {"proposal": proposal, "seen": seen}
+
+        if step == max_steps:
+            # Its last turn was for answering, and it looked again instead.
+            break
 
         name = answer.get("tool")
         tool = tools.get(name) if isinstance(name, str) else None

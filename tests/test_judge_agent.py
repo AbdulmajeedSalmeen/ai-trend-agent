@@ -183,3 +183,44 @@ def test_a_line_from_an_earlier_call_to_the_same_tool_still_counts():
                                "quote": "agentexecutor appears in 2 notebooks"}]}})
     verdict = judge.judge("langchain", ["AgentExecutor moved"], "Week 3 - LangChain", tools(), ask=ask)
     assert verdict is not None and verdict["dropped"] == 0
+
+
+def test_release_notes_are_the_package_s_own_and_not_its_neighbours(tmp_path):
+    # "langchain" is inside "langchain-ai/langgraph", so a name matched anywhere in the
+    # repository returned langgraph's notes for langchain, and the first four lines won.
+    run_dir = tmp_path / "run"
+    (run_dir / "raw").mkdir(parents=True)
+    blobs = [
+        {"repo": "langchain-ai/langgraph", "releases": [
+            {"tag_name": "1.2.12", "name": "langgraph==1.2.12", "body": "graph notes"},
+            {"tag_name": "cli==0.4.32", "name": "langgraph-cli==0.4.32", "body": "cli notes"}]},
+        {"repo": "langchain-ai/langchain", "releases": [
+            {"tag_name": "langchain-core==1.6.5", "name": "langchain-core==1.6.5", "body": "core notes"},
+            {"tag_name": "langchain==1.0.3", "name": "langchain==1.0.3", "body": "chain notes"}]},
+        {"repo": "openai/openai-python", "releases": [{"tag_name": "v3.19.2", "name": "v3.19.2", "body": "sdk notes"}]},
+        {"repo": "huggingface/transformers", "releases": [{"tag_name": "v5.17.0", "name": "Release 5.17.0",
+                                                           "body": "model notes"}]},
+    ]
+    for n, blob in enumerate(blobs):
+        (run_dir / "raw" / f"github_{n}.json").write_text(json.dumps(blob), encoding="utf-8")
+
+    notes = evidence.release_notes_tool(run_dir)
+
+    assert "chain notes" in notes(package="langchain")
+    assert "graph notes" not in notes(package="langchain") and "core notes" not in notes(package="langchain")
+    assert "core notes" in notes(package="langchain-core") and "chain notes" not in notes(package="langchain-core")
+    assert "cli notes" in notes(package="langgraph-cli") and "graph notes" not in notes(package="langgraph-cli")
+    assert "graph notes" in notes(package="langgraph") and "cli notes" not in notes(package="langgraph")
+    assert "sdk notes" in notes(package="openai") and "sdk notes" in notes(package="openai-python")
+    assert "model notes" in notes(package="transformers")
+    assert notes(package="llama-index") == ""
+
+
+def test_it_looks_at_most_four_times_and_is_told_when_to_answer():
+    ran = []
+    kit = {**tools(), "demand": lambda subject="": ran.append(subject) or f"{subject}: 20 job posts in 3 months"}
+    ask = scripted(*[{"tool": "demand", "args": {"subject": f"package{n}"}} for n in range(6)])
+
+    assert judge.judge("langchain", ["something changed"], None, kit, ask=ask) is None
+    assert len(ran) == 4 and len(ask.asked) == 5
+    assert "no tool calls left" in ask.asked[-1].lower()
