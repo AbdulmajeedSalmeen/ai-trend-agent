@@ -33,7 +33,7 @@ import json
 import re
 from pathlib import Path
 
-from src import lessons, trace
+from src import concepts, lessons, trace
 from src.adapters import model
 from src.agents import citations
 from src.notebooks import NOTEBOOK_DIR
@@ -101,29 +101,28 @@ def findings_tool(entry: dict):
 
 
 def taught_in(term: str, root: Path | None = None) -> int:
-    """How many of the course's notebooks use a name, counted here rather than asked.
+    """How many of the course's notebooks name a term, counted here rather than asked.
 
-    Case is ignored, because a lesson proposing "Evaluation harnesses" is proposing what
-    a notebook spells "evaluation harness", and a rule that missed that would wave
-    through a lesson the course already runs.
+    It is counted by the rule src/lessons.py measures demand with: the whole name, any
+    case, in the cells a student reads or runs. So a lesson this lets through is one the
+    demand count will not call taught, and the other way round.
+
+    Stored outputs do not count. Searching the raw file found MCP in five notebooks, every
+    time inside an embedded image, and would have refused the MCP lesson as one the
+    course already runs, when no notebook mentions it.
     """
-    needle = flat(term)
-
-    if len(needle) < 3:
+    if len(flat(term)) < 3:
         return 0
 
-    found = 0
+    texts = []
 
     for path in sorted(Path(root or NOTEBOOK_DIR).glob("*/*.ipynb")):
         try:
-            text = path.read_text(encoding="utf-8", errors="replace")
-        except OSError:
+            texts.append(concepts.notebook_text(json.loads(path.read_text(encoding="utf-8"))))
+        except (OSError, json.JSONDecodeError):
             continue
 
-        if needle in flat(text):
-            found += 1
-
-    return found
+    return lessons.taught(term, texts)
 
 
 def tools_for(entry: dict, course_uses=None, papers=None) -> dict:

@@ -211,3 +211,33 @@ def test_an_answer_that_names_no_finding_answers_nothing(answers):
 
 def test_one_answer_given_as_text_is_one_answer_not_its_letters():
     assert lesson.read_proposal({"answers": "ReAct agent"}, entry())["answers"] == ["ReAct agent"]
+
+
+def test_a_name_in_a_cell_s_stored_output_is_not_a_name_the_course_teaches(tmp_path):
+    # Stored outputs carry base64 pictures and pip logs. "MCP" turned up in five real
+    # notebooks that way, every time inside an embedded image, which would have refused
+    # the MCP lesson as one the course already runs.
+    week = tmp_path / "week 1"
+    week.mkdir(parents=True)
+    (week / "a.ipynb").write_text(json.dumps({"cells": [{
+        "cell_type": "code", "source": "plot()",
+        "outputs": [{"data": {"image/png": "iVBORw0KGgoAAA MCP xx"}},
+                    {"text": "Requirement already satisfied: opentelemetry-api"}]}]}), encoding="utf-8")
+    (week / "b.ipynb").write_text(json.dumps({"cells": [{"cell_type": "code",
+                                                          "source": "from langchain.mcp import client"}]}),
+                                  encoding="utf-8")
+
+    assert lesson.taught_in("MCP", tmp_path) == 1
+    assert lesson.taught_in("OpenTelemetry", tmp_path) == 0
+
+
+def test_the_course_is_counted_by_the_rule_that_counts_demand(tmp_path):
+    # The same rule as src/lessons.py, so a lesson this lets through is one the demand
+    # count will not call taught, and the other way round.
+    week = tmp_path / "week 1"
+    week.mkdir(parents=True)
+    said = "an MCPServer class, and MCP itself"
+    (week / "a.ipynb").write_text(json.dumps({"cells": [{"source": said}]}), encoding="utf-8")
+
+    assert lesson.taught_in("MCP", tmp_path) == lessons.taught("MCP", [said]) == 1
+    assert lesson.taught_in("MCPS", tmp_path) == lessons.taught("MCPS", [said]) == 0
