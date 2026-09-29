@@ -274,3 +274,28 @@ def test_research_is_only_wired_up_when_asked(tmp_path):
     assert "not checked" in review_run.tools_for(path, None, research=False)["papers"](term="MCP")
     assert "no releases" in review_run.tools_for(path, None, research=True)["release_notes"](package="langchain")
     assert set(review_run.tools_for(path, None, research=True)) == {"read_cells", "release_notes", "papers"}
+
+
+@pytest.mark.parametrize("instead, name", [
+    ("create_agent, which carries the same loop with a checkpointer", "create_agent"),
+    ("Use create_agent from langchain.agents", "create_agent"),
+    ("from langchain_classic.chains import RetrievalQA", "langchain_classic.chains"),
+    ("ChatOpenAI with an explicit model", "ChatOpenAI"),
+    ("a retrieval chain built by hand, e.g. with LCEL", None),
+    ("", None),
+])
+def test_the_replacement_is_named_by_the_code_it_names_not_by_its_first_word(instead, name):
+    # The first word made "create_agent," and "Use" into names the course-wide count
+    # then tallied as what the reviewers most often said to teach instead.
+    assert review_run.code_name(instead) == name
+
+
+def test_the_page_says_who_read_the_notebooks():
+    # The served review was written by Claude agents searching the web; the driver's is
+    # the reviewer agent's. A page captioning one with the other's words misstates both.
+    by_agent = rules.basis({"source": review_run.SOURCE})
+    by_others = rules.basis({"source": "the 89 notebooks under notebooks/, read as teaching material"})
+
+    assert "reviewer agent" in by_agent[0] and "Claude" not in by_agent[0]
+    assert "Claude agents" in by_others[0]
+    assert by_agent[1] != by_others[1] and "وكيل" in by_agent[1]

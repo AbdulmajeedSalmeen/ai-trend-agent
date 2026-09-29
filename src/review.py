@@ -57,6 +57,20 @@ MODEL_RE = re.compile(r"(?<![\w.-])((?:gpt|chatgpt)-[a-z0-9.\-]*[a-z0-9]|o[1-9](
 BASIS_EN = ("Read and judged by AI reviewers, Claude agents searching the web, with the source they read "
             "beside it. A rule then looked for every quote they gave in the notebook's cells and dropped "
             "what it could not find. This is not one of the checked claims.")
+# The source line the reviewer agent writes into its own review (src/agents/review_run.py),
+# and what the page says about a review written that way.
+AGENT_SOURCE = "the course notebooks, read by the reviewer agent"
+AGENT_BASIS_EN = ("Read and judged by the reviewer agent, which read each notebook and looked up this run's "
+                  "releases and research, with the source it read beside it. A rule then looked for every quote "
+                  "it gave in the notebook's cells and dropped what it could not find. This is not one of the "
+                  "checked claims.")
+
+
+def basis(review: dict) -> tuple[str, str]:
+    """Who read the notebooks, in English and Arabic, from what the review says it is."""
+    if (review or {}).get("source") == AGENT_SOURCE:
+        return AGENT_BASIS_EN, arabic.REVIEW_BASIS_AGENT
+    return BASIS_EN, arabic.REVIEW_BASIS
 
 
 def load(path: Path = REVIEW_PATH) -> dict | None:
@@ -347,8 +361,8 @@ def build(review: dict, curriculum: dict, deadlines: list[dict], retirement_data
         "schema": "material_view/1",
         "read_on": review.get("read_on"),
         "basis": "read_and_judged",
-        "basis_en": BASIS_EN,
-        "basis_ar": arabic.REVIEW_BASIS,
+        "basis_en": basis(review)[0],
+        "basis_ar": basis(review)[1],
         "shown": sum(len(book["f"]) for book in books + unplaced),
         "counts": {
             "notebooks": len(books) + len(unplaced),

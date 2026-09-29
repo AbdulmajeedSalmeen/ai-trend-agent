@@ -225,3 +225,39 @@ def test_the_papers_tool_gives_the_links_it_found():
     tool = reviewer.papers_tool(lambda term: {"papers": 2, "days": 30, "recent": [
         {"title": "On agents", "published": "2026-09-01", "url": "http://arxiv.org/abs/2609.01234v1"}]})
     assert "http://arxiv.org/abs/2609.01234v1" in tool(term="MCP")
+
+
+def long_notebook(tmp_path, cells=12, lines=150):
+    week = tmp_path / "week 3"
+    week.mkdir(parents=True, exist_ok=True)
+    path = week / "Long.ipynb"
+    path.write_text(json.dumps({"cells": [{"cell_type": "code", "source": f"# cell {n}\n" + "x = 1\n" * lines}
+                                          for n in range(1, cells + 1)]}), encoding="utf-8")
+    return path
+
+
+def test_no_cell_is_counted_as_read_that_was_never_handed_over(tmp_path):
+    # Twelve cells of up to 700 characters do not fit in a 3000-character reply. The
+    # reply was cut after it was built, so most cells never reached the model, and it
+    # was told it had read them all: 271 of the course's 2000 cells went that way.
+    import re
+
+    from src.agents import citations
+
+    cells = reviewer.cells_of(long_notebook(tmp_path))
+    said = reviewer.read_cells_tool(cells)(start=1)
+    first, last = map(int, re.search(r"cells (\d+) to (\d+) of 12", said).groups())
+
+    assert len(said) <= reviewer.MAX_TOOL_CHARS
+    assert first == 1 and last < 12
+    assert f"cell {last} (code)" in said and f"cell {last + 1} (code)" not in said
+    steps = [citations.step("read_cells", {"start": 1}, said, reviewer.MAX_TOOL_CHARS)]
+    assert f"not read past cell {last} of 12" in reviewer.turn("Long.ipynb", cells, steps)
+
+
+def test_a_cell_too_long_for_one_reply_says_how_much_is_missing(tmp_path):
+    cells = reviewer.cells_of(long_notebook(tmp_path, cells=1, lines=900))
+    said = reviewer.read_cells_tool(cells)(start=1)
+
+    assert len(said) <= reviewer.MAX_TOOL_CHARS
+    assert "more characters" in said and "cells 1 to 1 of 1" in said

@@ -31,13 +31,35 @@ from pathlib import Path
 from src import runio
 from src.agents import evidence, lesson, placement, reviewer, worth
 from src.notebooks import NOTEBOOK_DIR
+from src.review import AGENT_SOURCE
 from src.sources import arxiv
 
 OUT_PATH = Path("fixtures/material_review.agent.json")
 SERVED_PATH = Path("fixtures/material_review.json")
 SCHEMA = "material_review/1"
-SOURCE = "the course notebooks, read by the reviewer agent"
+SOURCE = AGENT_SOURCE
 HARD = {"removed", "deprecated", "unsafe", "superseded"}
+
+
+# A name written as code: create_agent, langchain_classic.chains, ChatOpenAI.
+CODE_NAME = re.compile(r"[A-Za-z_]\w*(?:\.[A-Za-z_]\w*)*")
+
+
+def code_name(text) -> str | None:
+    """The first thing in a suggestion that is a name in code, or None.
+
+    "create_agent, which keeps the loop" names create_agent, and "Use create_agent" does
+    too; the first word made those "create_agent," and "Use", and the course-wide count
+    tallied them as what to teach instead. A snake_case or dotted name is taken before a
+    CamelCase one, and prose that names no code names nothing.
+    """
+    words = CODE_NAME.findall(str(text or ""))
+
+    def dotted(word: str) -> bool:
+        return ("_" in word or "." in word) and all(len(part) > 1 for part in word.split("."))
+
+    return next((word for word in words if dotted(word)), None) or next(
+        (word for word in words if re.search(r"[a-z][A-Z]", word)), None)
 
 
 def slug(text: str) -> str:
@@ -69,7 +91,7 @@ def entry_for_page(entry: dict, written: dict | None = None,
             "status": finding["status"],
             "what_changed": finding["why1"],
             "replacement": finding["instead"],
-            "replacement_name": finding["instead"].split()[0] if finding["instead"] else None,
+            "replacement_name": code_name(finding["instead"]),
             "confidence": finding["confidence"],
             "evidence": finding["evidence"],
             "cell": claim.get("cell"),

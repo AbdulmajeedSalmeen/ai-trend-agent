@@ -34,6 +34,10 @@ from src.agents import citations
 MAX_STEPS = 8
 MAX_TOOL_CHARS = 3000
 WINDOW = 12
+# The most of one cell a window shows; a longer cell says how much of it is missing.
+CELL_CHARS = 700
+# What a window reply says it carried, read back to tell the agent what it has not read.
+READ_RANGE = re.compile(r"cells (\d+) to (\d+)")
 STATUSES = ("superseded", "deprecated", "removed", "unsafe", "missing_context", "current")
 
 SYSTEM = (
@@ -118,14 +122,33 @@ def locate(quote: str, cells: list[dict]) -> int | None:
 
 
 def read_cells_tool(cells: list[dict], window: int = WINDOW):
-    """The notebook itself, handed over a window at a time so the agent chooses."""
+    """The notebook itself, handed over a window at a time so the agent chooses.
+
+    A window is whole cells, as many as one reply can carry and never more than `window`.
+    The reply used to be built for twelve cells and cut to size afterwards, so most of a
+    window of long cells never reached the agent while the header said it had: 271 of
+    the course's 2000 cells went unread that way. Now the header names exactly the cells
+    in the reply, and a cell longer than CELL_CHARS says how much of it is missing.
+    """
+    budget = MAX_TOOL_CHARS - 60  # room for the header
+
     def read_cells(start: int = 1) -> str:
         first = whole(start)
         chosen = [c for c in cells if first <= c["cell"] < first + window]
         if not chosen:
             return f"no cells from {first}; this notebook has {len(cells)}"
-        parts = [f"cell {c['cell']} ({c['kind']}): {c['source'][:700]}" for c in chosen]
-        return f"cells {chosen[0]['cell']} to {chosen[-1]['cell']} of {len(cells)}. " + " || ".join(parts)
+        parts, used = [], 0
+        for cell in chosen:
+            source = cell["source"]
+            missing = len(source) - CELL_CHARS
+            part = (f"cell {cell['cell']} ({cell['kind']}): {source[:CELL_CHARS]}"
+                    + (f" [... {missing} more characters]" if missing > 0 else ""))
+            if parts and used + len(part) + 4 > budget:
+                break
+            parts.append(part[:budget])
+            used += len(part) + 4
+        last = chosen[len(parts) - 1]["cell"]
+        return f"cells {chosen[0]['cell']} to {last} of {len(cells)}. " + " || ".join(parts)
     return read_cells
 
 
@@ -155,10 +178,12 @@ def turn(notebook: str, cells: list[dict], seen: list[dict]) -> str:
         lines.append("What you have read so far:")
         for step in seen:
             lines.append(f"- {step['tool']}({json.dumps(step['args'], ensure_ascii=False)}): {step['text']}")
-        # A window tool is easy to call once and forget, so say what is still unread.
-        read = max((whole(s["args"].get("start")) for s in seen if s["tool"] == "read_cells"), default=0)
-        if read and read + WINDOW <= len(cells):
-            lines.append(f"You have not read past cell {read + WINDOW - 1} of {len(cells)}.")
+        # A window tool is easy to call once and forget, so say what is still unread,
+        # counting only the cells a reply really carried.
+        furthest = max((int(found.group(2)) for s in seen if s["tool"] == "read_cells"
+                        for found in [READ_RANGE.search(str(s.get("text") or ""))] if found), default=0)
+        if furthest and furthest < len(cells):
+            lines.append(f"You have not read past cell {furthest} of {len(cells)}.")
     else:
         lines.append("You have read nothing yet. Start by reading cells.")
     lines += ["", f"You may call at most {MAX_STEPS} tools in total, then you must answer."]
