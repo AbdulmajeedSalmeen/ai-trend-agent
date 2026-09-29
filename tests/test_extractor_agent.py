@@ -14,7 +14,7 @@ from datetime import datetime, timedelta, timezone
 import pytest
 
 from src.agents import extractor
-from src.schema import Claim, Signal
+from src.schema import Claim, Signal, Trend
 from src.stages import stage2b_verify
 
 DAY = datetime(2026, 9, 21, tzinfo=timezone.utc)
@@ -204,3 +204,48 @@ def test_a_line_the_model_wrote_into_its_own_call_is_not_evidence():
     said = "create_react_agent moved to langchain-classic in 1.2.12"
     ask = scripted({"tool": "notes", "args": {"version": said}}, answer(quote=said))
     assert extractor.extract(claim(), post(), [release(), post()], ask=ask) is None
+
+
+def test_a_post_that_already_gave_its_claim_is_not_asked_about_again():
+    # Stage 2a asks while reading the post and adds the claim when a version comes back.
+    # Stage 2b then met the same post as its version-less discussion claim and asked
+    # again, so one post could put two claims into one trend.
+    signals = [release(), post()]
+    tiers = {"hn_1": 2, signals[0].id: 1}
+    read_in_2a = claim().model_copy(update={"version": "1.2.12", "version_source": "extracted"})
+    discussion = Claim(text=post().title, subject="langgraph", version=None, source_signal_id="hn_1")
+    trend = Trend(id="trend_001", subject="langgraph", signal_ids=["hn_1"], claims=[read_in_2a, discussion])
+    asked = []
+
+    def extract(found_claim, found_post, found_signals):
+        asked.append(found_claim.text)
+        return {"version": "1.2.12"}
+
+    verified = stage2b_verify.verify_trend(trend, signals, tiers, extract=extract)
+
+    assert asked == []
+    assert [c.version for c in verified.claims] == ["1.2.12", None]
+
+
+def test_no_post_is_asked_about_twice_in_a_run():
+    signals = [release(), post()]
+    tiers = {"hn_1": 2, signals[0].id: 1}
+    trends = [Trend(id=f"trend_00{n}", subject="langgraph", signal_ids=["hn_1"],
+                    claims=[Claim(text=f"reading {n}", subject="langgraph", version=None, source_signal_id="hn_1")])
+              for n in (1, 2)]
+    asked, seen = [], set()
+
+    def extract(found_claim, found_post, found_signals):
+        asked.append(found_claim.text)
+        return None
+
+    for trend in trends:
+        stage2b_verify.verify_trend(trend, signals, tiers, extract=extract, asked=seen)
+
+    assert asked == ["reading 1"]
+
+
+def test_the_notes_tool_takes_the_version_whatever_the_parameter_is_called():
+    tools = extractor.tools_for(post(), extractor.candidates("langgraph", [release(), post()]))
+    assert "langchain-classic" in tools["notes"](release="1.2.12")
+    assert "langchain-classic" in tools["notes"](v="1.2.12")

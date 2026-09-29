@@ -140,6 +140,34 @@ def verify_claim(claim: Claim, signals: list[Signal], tiers: dict[str, int] | No
     )
 
 
+def verify_trend(trend: Trend, signals: list[Signal], tiers: dict[str, int] | None = None,
+                 extract=None, second=None, asked: set | None = None) -> Trend:
+    """Every claim of one trend, with the extractor asked at most once about any post.
+
+    Stage 2a asks it while reading a post, and adds a claim only when a version comes
+    back. This stage then met the same post again as its version-less discussion claim
+    and asked again, so one post could put two claims into a trend. A post that already
+    gave this trend a claim with a version is not asked about again, and no post is asked
+    about twice in a run.
+    """
+    asked = set() if asked is None else asked
+    answered = {claim.source_signal_id for claim in trend.claims if claim.version}
+    verified = []
+
+    for claim in trend.claims:
+        ask = extract
+
+        if claim.version is None and extract is not None:
+            if claim.source_signal_id in answered or claim.source_signal_id in asked:
+                ask = None
+            else:
+                asked.add(claim.source_signal_id)
+
+        verified.append(verify_claim(claim, signals, tiers, extract=ask, second=second))
+
+    return trend.model_copy(update={"claims": verified})
+
+
 def searcher(budget: int | None = None, tools: dict | None = None, confirm=None):
     """Ask for a second source, until the budget for asking is spent.
 
@@ -178,17 +206,17 @@ def run(run_dir: Path) -> None:
         blank = sum(1 for trend in trends for claim in trend.claims if claim.version is None)
         print(f"think: {blank} claims state no version; asking which release each post meant")
 
-    for trend in trends:
-        verified_claims = []
+    asked: set = set()
 
-        for claim in trend.claims:
-            verified = verify_claim(claim, signals, tiers, extract=extract, second=second)
+    for trend in trends:
+        verified_trend = verify_trend(trend, signals, tiers, extract=extract, second=second, asked=asked)
+
+        for verified in verified_trend.claims:
             counts[verified.evidence_kind or "unverified"] += 1
             extracted += verified.version_source == "extracted"
             searched += verified.evidence_found_by == "searched"
-            verified_claims.append(verified)
 
-        verified_trends.append(trend.model_copy(update={"claims": verified_claims}))
+        verified_trends.append(verified_trend)
 
     print(
         f"verified: {counts['cross_source']} cross-source, "

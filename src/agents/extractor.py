@@ -108,7 +108,10 @@ def tools_for(post: Signal, releases: list[dict]) -> dict:
         return "; ".join(f"{row['version']} on {row['published_at'].date().isoformat()}"
                          f"{': ' + row['notes'][:120] if row['notes'] else ''}" for row in releases)
 
-    def notes_tool(version: str = "") -> str:
+    def notes_tool(version: str = "", **kwargs) -> str:
+        # A model that writes release= where the help says version= has still said which
+        # release it means; one argument has nothing to disambiguate.
+        version = version or next((str(value) for value in kwargs.values() if str(value).strip()), "")
         row = by_version.get(str(version).strip())
 
         if row is None:
