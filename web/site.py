@@ -35,17 +35,29 @@ def read_trace(run_dir: Path) -> dict | None:
 
 
 def factors_of(score: Score, subject: str) -> dict:
-    """Each teaching-feasibility factor with its value, what it was measured from,
-    and why, in both languages. Empty for a run scored before the factors existed."""
-    if not all(name in score.dimensions for name in feasibility.FACTORS):
-        return {}
+    """Each teaching-feasibility factor with its value, what it was measured from and
+    why, in both languages, and beside them what the judge read to reach its score.
 
+    The feasibility factors are reshaped for the page. What the judge read travels as
+    it was recorded, because the page shows the lines it quoted rather than a sentence
+    about them. A run with neither gets nothing, which is what a run scored before any
+    of this existed has.
+    """
     found = {}
 
-    for name in feasibility.FACTORS:
-        value, source = score.dimensions[name], score.provenance.get(name, "default")
-        english, arabic_reason = feasibility.explain(name, value, source, score.factors.get(name, {}), subject)
-        found[name] = {"score": value, "provenance": source, "why": english, "why_ar": arabic_reason}
+    if all(name in score.dimensions for name in feasibility.FACTORS):
+        for name in feasibility.FACTORS:
+            value, source = score.dimensions[name], score.provenance.get(name, "default")
+            english, arabic_reason = feasibility.explain(name, value, source, score.factors.get(name, {}), subject)
+            found[name] = {"score": value, "provenance": source, "why": english, "why_ar": arabic_reason}
+
+    # The panel under the priority column reads factors.educational_value for the tools
+    # the agent called and the lines it quoted. Nothing ever wrote that key, so the
+    # panel returned an empty string on every card from the day it was added.
+    judged = score.factors.get("educational_value")
+
+    if isinstance(judged, dict) and judged.get("cites"):
+        found["educational_value"] = judged
 
     return found
 
