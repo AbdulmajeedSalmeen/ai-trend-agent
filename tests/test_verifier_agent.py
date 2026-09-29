@@ -251,3 +251,18 @@ def test_the_line_and_the_link_come_from_the_other_party_on_one_page():
                    answer(url="https://github.com/langchain-ai/langchain/blob/master/CHANGELOG.md",
                           quote="langchain-core 1.4.2 at https://pypi.org"))
     assert verifier.confirm(claim(), "pypi", held, ask=ask) is None
+
+
+def test_the_registry_lists_its_newest_versions_by_version_not_by_spelling():
+    # Sorted as text, 1.10.0 came before 1.9.0, so the newest releases could fall out
+    # of the dozen the tool shows, and the second record of a new release with them.
+    releases = {f"1.{minor}.0": [] for minor in range(1, 14)}
+    releases["1.13.0rc1"] = []
+    releases["not-a-version"] = []
+    payload = {"info": {"project_urls": {}}, "releases": releases}
+
+    said = verifier.registry_tool(get=lambda url: payload)(name="langchain-core")
+
+    assert "1.13.0 at https://pypi.org/project/langchain-core/1.13.0/" in said
+    assert "1.10.0 at" in said and "1.1.0 at" not in said
+    assert said.index("1.9.0 at") < said.index("1.10.0 at") < said.index("1.13.0 at")

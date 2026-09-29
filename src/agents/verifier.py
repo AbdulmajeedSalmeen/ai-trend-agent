@@ -31,6 +31,7 @@ import json
 import re
 
 import requests
+from packaging.version import InvalidVersion, Version
 
 from src import trace
 from src.adapters import model
@@ -75,6 +76,15 @@ TOOL_HELP = ("registry(distribution): what the registry lists for a package, and
 
 def flat(text) -> str:
     return re.sub(r"\s+", " ", str(text or "")).strip().lower()
+
+
+def by_version(label: str):
+    """Versions in version order, 1.10.0 after 1.9.0. A label that is not a version
+    sorts first, so it never crowds a real release out of the newest."""
+    try:
+        return (1, Version(label))
+    except InvalidVersion:
+        return (0, Version("0"))
 
 
 def named(kwargs: dict) -> str:
@@ -124,7 +134,7 @@ def registry_tool(get=get_json):
         info = payload.get("info") or {}
         urls = " ".join(str(value) for value in (info.get("project_urls") or {}).values())
         repo = REPO_RE.search(f"{urls} {info.get('home_page') or ''}")
-        versions = sorted(payload.get("releases") or {})
+        versions = sorted(payload.get("releases") or {}, key=by_version)
         # Each recent version with the page that records it, so a citation can point at
         # the release rather than at the package.
         recent = "; ".join(f"{version} at https://pypi.org/project/{name}/{version}/"
