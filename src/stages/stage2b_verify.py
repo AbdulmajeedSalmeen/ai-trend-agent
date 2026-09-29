@@ -1,8 +1,14 @@
 from pathlib import Path
 
 from src import runio
+from src.adapters import model
+from src.agents import extractor
 from src.schema import Claim, Signal, Trend
 from src.versions import extract_version
+
+# A version nobody wrote down was worked out by reading, so it is weaker than one the
+# post stated. Every kind of check drops by this much when the version was extracted.
+EXTRACTED_PENALTY = 0.15
 
 
 def find_evidence(claim: Claim, signals: list[Signal]) -> Signal | None:
@@ -40,17 +46,54 @@ def classify(claim: Claim, evidence: Signal, source_tier: int | None) -> tuple[s
     version is stronger, but both are the publisher speaking, so it is not an
     independent check. Only a claim made somewhere else and then confirmed by an
     official release counts as cross-source.
+
+    A version an agent worked out, rather than one the post wrote down, buys less of
+    whichever of those it is: the check is the same, the thing being checked is an
+    inference.
     """
     if evidence.id == claim.source_signal_id:
-        return "primary_report", 0.7
+        kind, confidence = "primary_report", 0.7
 
-    if source_tier == 1:
-        return "registry_match", 0.8
+    elif source_tier == 1:
+        kind, confidence = "registry_match", 0.8
 
-    return "cross_source", 0.9
+    else:
+        kind, confidence = "cross_source", 0.9
+
+    if claim.version_source == "extracted":
+        confidence -= EXTRACTED_PENALTY
+
+    return kind, round(confidence, 2)
 
 
-def verify_claim(claim: Claim, signals: list[Signal], tiers: dict[str, int] | None = None) -> Claim:
+def fill_version(claim: Claim, signals: list[Signal], extract) -> Claim:
+    """Ask the extractor which release this post meant, and take it only if it stands.
+
+    The agent answers with a version or with nothing, and nothing is the usual answer.
+    What comes back has already been checked against the releases this run collected,
+    so all that is left is to say on the claim that it was worked out, not stated.
+    """
+    post = next((signal for signal in signals if signal.id == claim.source_signal_id), None)
+
+    if post is None:
+        return claim
+
+    found = extract(claim, post, signals)
+
+    if not found:
+        return claim
+
+    return claim.model_copy(update={"version": found["version"], "version_source": "extracted"})
+
+
+def verify_claim(claim: Claim, signals: list[Signal], tiers: dict[str, int] | None = None,
+                 extract=None) -> Claim:
+    if claim.version is None and extract is not None:
+        claim = fill_version(claim, signals, extract)
+
+    if claim.version is not None and claim.version_source is None:
+        claim = claim.model_copy(update={"version_source": "stated"})
+
     evidence = find_evidence(claim, signals)
 
     if evidence is None:
@@ -83,13 +126,20 @@ def run(run_dir: Path) -> None:
     tiers = {signal.id: signal.tier for signal in signals}
     verified_trends = []
     counts = {"cross_source": 0, "registry_match": 0, "primary_report": 0, "unverified": 0}
+    extract = extractor.extract if model.available() else None
+    extracted = 0
+
+    if extract is not None:
+        blank = sum(1 for trend in trends for claim in trend.claims if claim.version is None)
+        print(f"think: {blank} claims state no version; asking which release each post meant")
 
     for trend in trends:
         verified_claims = []
 
         for claim in trend.claims:
-            verified = verify_claim(claim, signals, tiers)
+            verified = verify_claim(claim, signals, tiers, extract=extract)
             counts[verified.evidence_kind or "unverified"] += 1
+            extracted += verified.version_source == "extracted"
             verified_claims.append(verified)
 
         verified_trends.append(trend.model_copy(update={"claims": verified_claims}))
@@ -100,5 +150,8 @@ def run(run_dir: Path) -> None:
         f"{counts['primary_report']} primary report, "
         f"{counts['unverified']} unverified"
     )
+
+    if extracted:
+        print(f"{extracted} of those had no version until an agent worked out which release the post meant")
 
     runio.save_artifact(run_dir, "trends", verified_trends)

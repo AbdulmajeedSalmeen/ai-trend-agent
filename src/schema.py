@@ -31,6 +31,9 @@ class Claim(BaseModel):
     confidence: float = Field(0.2, ge=0.0, le=1.0)
     source_signal_id: Optional[str] = None
     evidence_kind: Optional[Literal['primary_report', 'cross_source', 'registry_match']] = None
+    # Whether the post wrote the version down or an agent worked out which release it
+    # meant. An inferred link is worth less than a stated one, and the page says so.
+    version_source: Optional[Literal['stated', 'extracted']] = None
 
 
 class MarketSignal(BaseModel):
