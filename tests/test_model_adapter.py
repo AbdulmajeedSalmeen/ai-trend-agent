@@ -128,3 +128,97 @@ def test_json_that_is_not_an_object_is_an_answer_we_cannot_read(text):
 
 def test_an_object_after_a_sentence_is_still_read():
     assert model.parse_json('Here it is: {"a": 1}') == {"a": 1}
+
+
+def refusing(code, generation=None):
+    """A provider that turns the request down with a 400 and says why, as Groq does."""
+    import io
+    import json
+    import urllib.error
+
+    error = {"message": "Tool choice is none, but model called a tool", "type": "invalid_request_error", "code": code}
+    if generation is not None:
+        error["failed_generation"] = generation
+    body = json.dumps({"error": error}).encode("utf-8")
+
+    def urlopen(request, timeout=None):
+        raise urllib.error.HTTPError(request.full_url, 400, "Bad Request", {}, io.BytesIO(body))
+
+    return urlopen
+
+
+GROQ = {"provider": "groq", "base_url": "https://api.groq.test/v1", "model": "openai/gpt-oss-120b", "key": "k"}
+
+
+def test_an_answer_sent_as_a_tool_call_is_read_out_of_the_refusal(monkeypatch):
+    # gpt-oss on Groq answered placement's first turn through its own tool calling.
+    # Groq refused the call (400, tool_use_failed) and handed back what it tried to
+    # send, which was the answer. Every placement on 2026-09-29 was lost this way.
+    import json
+
+    generation = json.dumps({"name": "tool.exec", "arguments": {"tool": "chapters", "args": {}}})
+    monkeypatch.setattr(model.urllib.request, "urlopen", refusing("tool_use_failed", generation))
+    monkeypatch.setattr(model.time, "sleep", lambda seconds: None)
+
+    answer, fatal, limited, unreadable = model._call(GROQ, "s", "u", 100, 5, "placement_agent")
+
+    assert answer == {"tool": "chapters", "args": {}}
+    assert fatal is None and not limited and not unreadable
+
+
+def test_any_other_refusal_says_its_code_and_is_not_an_answer(monkeypatch):
+    from src import trace
+
+    monkeypatch.setattr(model.urllib.request, "urlopen", refusing("context_length_exceeded"))
+    monkeypatch.setattr(model.time, "sleep", lambda seconds: None)
+    monkeypatch.setattr(trace, "current", trace.Trace(run_id="run_test", model="groq", budget=1000))
+
+    answer, fatal, limited, unreadable = model._call(GROQ, "s", "u", 100, 5, "placement_agent")
+
+    assert answer is None and fatal is None
+    assert any("context_length_exceeded" in step.note for step in trace.current.steps)
+
+
+@pytest.mark.parametrize("generation, meant", [
+    ({"name": "tool.exec", "arguments": {"tool": "chapters", "args": {}}}, {"tool": "chapters", "args": {}}),
+    ({"name": "functions.chapter", "arguments": {"id": "C8"}}, {"tool": "chapter", "args": {"id": "C8"}}),
+    ({"name": "answer", "arguments": {"answer": {"chapter": "C8"}}}, {"answer": {"chapter": "C8"}}),
+    ({"name": "tool.exec", "arguments": '{"sentence": "Update C8."}'}, {"sentence": "Update C8."}),
+    ({"name": "tool.exec", "arguments": [1, 2]}, None),
+    ("not a call at all", None),
+    (None, None),
+])
+def test_what_a_refused_tool_call_meant(generation, meant):
+    import json
+
+    text = generation if generation is None or isinstance(generation, str) else json.dumps(generation)
+    assert model.from_tool_call(text) == meant
+
+
+def test_an_answer_cut_off_at_its_ceiling_is_asked_again_with_room(monkeypatch):
+    # A reasoning model bills its thinking against the same ceiling. When it runs out
+    # halfway through the object, the reply is not a bad answer, it is a short budget:
+    # the same as an empty reply, which already got a second, larger try.
+    import io
+    import json
+
+    replies = ['{"answer": {"chapter": "C14", "quote": "c14 (week 4): agents for real', 
+               '{"answer": {"chapter": "C14", "quote": "c14 (week 4): agents for real-world tasks"}}']
+    ceilings = []
+
+    def urlopen(request, timeout=None):
+        ceilings.append(json.loads(request.data)["max_tokens"])
+        finish = "length" if len(ceilings) == 1 else "stop"
+        reply = io.BytesIO(json.dumps({"choices": [{"finish_reason": finish,
+                                                    "message": {"content": replies[len(ceilings) - 1]}}],
+                                       "usage": {}}).encode("utf-8"))
+        reply.headers = {}
+        return reply
+
+    monkeypatch.setattr(model.urllib.request, "urlopen", urlopen)
+    monkeypatch.setattr(model.time, "sleep", lambda seconds: None)
+
+    answer, fatal, limited, unreadable = model._call(GROQ, "s", "u", 500, 5, "placement_agent")
+
+    assert answer == {"answer": {"chapter": "C14", "quote": "c14 (week 4): agents for real-world tasks"}}
+    assert ceilings == [500, 2000]
