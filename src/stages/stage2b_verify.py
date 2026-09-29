@@ -13,7 +13,7 @@ from src.versions import extract_version
 VERIFY_BUDGET = 8
 
 # A version nobody wrote down was worked out by reading, so it is weaker than one the
-# post stated. Every kind of check drops by this much when the version was extracted.
+# post stated. Its check drops by this much.
 EXTRACTED_PENALTY = 0.15
 
 
@@ -53,11 +53,13 @@ def classify(claim: Claim, evidence: Signal, source_tier: int | None) -> tuple[s
     independent check. Only a claim made somewhere else and then confirmed by an
     official release counts as cross-source.
 
-    A version an agent worked out, rather than one the post wrote down, buys less of
-    whichever of those it is: the check is the same, the thing being checked is an
-    inference.
+    A version an agent worked out, rather than one the post wrote down, was read off
+    the very release that would check it. That release cannot also be the independent
+    check on the post, or the document is confirming itself. So it only ever counts as
+    the release speaking for itself, and for less than that, because the link between
+    the post and the release is an inference.
     """
-    if evidence.id == claim.source_signal_id:
+    if claim.version_source == "extracted" or evidence.id == claim.source_signal_id:
         kind, confidence = "primary_report", 0.7
 
     elif source_tier == 1:
@@ -116,14 +118,16 @@ def verify_claim(claim: Claim, signals: list[Signal], tiers: dict[str, int] | No
     evidence_kind, confidence = classify(claim, evidence, source_tier)
     evidence_url, found_by = evidence.url, "collected"
 
-    if evidence_kind == "primary_report" and second is not None:
+    if evidence_kind == "primary_report" and second is not None and claim.version_source != "extracted":
         # The release page repeating itself is the weakest thing we call confirmed.
         # Ask where a second record of this version would be, and go and read it.
+        # Not for a version an agent worked out: a second record of the version is
+        # not a second record of the link to the post.
         found = second(claim, evidence.source)
 
         if found:
             evidence_kind, evidence_url, found_by = "registry_match", found["url"], "searched"
-            confidence = 0.8 - (EXTRACTED_PENALTY if claim.version_source == "extracted" else 0)
+            confidence = 0.8
 
     return claim.model_copy(
         update={

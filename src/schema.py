@@ -32,7 +32,8 @@ class Claim(BaseModel):
     source_signal_id: Optional[str] = None
     evidence_kind: Optional[Literal['primary_report', 'cross_source', 'registry_match']] = None
     # Whether the post wrote the version down or an agent worked out which release it
-    # meant. An inferred link is worth less than a stated one, and the page says so.
+    # meant. An inferred link is worth less than a stated one, and never counts as an
+    # independent check: the version was read off the release that would confirm it.
     version_source: Optional[Literal['stated', 'extracted']] = None
     # Whether the evidence was among the documents this run collected, or an agent
     # worked out where a second record would be and went and read it.

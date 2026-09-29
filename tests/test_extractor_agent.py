@@ -142,7 +142,10 @@ def test_the_tools_hand_over_the_post_the_list_and_one_set_of_notes():
     assert "collected no releases" in extractor.tools_for(post(), [])["releases"]()
 
 
-def test_a_version_worked_out_is_confirmed_for_less_than_one_stated():
+def test_a_version_worked_out_is_never_an_independent_check():
+    # The version was read off this release, so the release cannot also be the check
+    # on the post: that is the document confirming itself. It counts as the release
+    # speaking for itself, less the penalty for the link being inferred.
     signals = [release(), post()]
     tiers = {"hn_1": 2, signals[0].id: 1}
     ask = scripted({"tool": "notes", "args": {"version": "1.2.12"}}, answer())
@@ -150,12 +153,30 @@ def test_a_version_worked_out_is_confirmed_for_less_than_one_stated():
     worked_out = stage2b_verify.verify_claim(
         claim(), signals, tiers, extract=lambda c, p, s: extractor.extract(c, p, s, ask=ask))
     assert worked_out.verdict == "confirmed"
-    assert worked_out.evidence_kind == "cross_source"
+    assert worked_out.evidence_kind == "primary_report"
     assert worked_out.version_source == "extracted"
-    assert worked_out.confidence == 0.75
+    assert worked_out.confidence == 0.55
 
     stated = stage2b_verify.verify_claim(claim().model_copy(update={"version": "1.2.12"}), signals, tiers)
+    assert stated.evidence_kind == "cross_source"
     assert stated.confidence == 0.9 and stated.version_source == "stated"
+
+
+def test_a_version_worked_out_is_not_sent_looking_for_a_second_record():
+    # A second record of the version is not a second record of the link to the post.
+    signals = [release(), post()]
+    tiers = {"hn_1": 2, signals[0].id: 1}
+    ask = scripted({"tool": "notes", "args": {"version": "1.2.12"}}, answer())
+    searched = []
+
+    def second(found_claim, came_from):
+        searched.append(found_claim.version)
+        return {"url": "https://pypi.org/project/langgraph/1.2.12/"}
+
+    worked_out = stage2b_verify.verify_claim(
+        claim(), signals, tiers, extract=lambda c, p, s: extractor.extract(c, p, s, ask=ask), second=second)
+    assert searched == []
+    assert worked_out.evidence_kind == "primary_report" and worked_out.evidence_found_by == "collected"
 
 
 def test_without_an_extractor_nothing_changes():

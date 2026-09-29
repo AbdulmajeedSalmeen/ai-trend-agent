@@ -19,9 +19,10 @@ Three rules stand under it, and they are what separate this from guessing:
      that did not exist yet, however well the notes match.
   3. The line it quotes to tie the two together must be in something a tool returned.
 
-What survives fills in the claim's version and nothing else. The verify stage then
-does what it always did, and records that this version was extracted rather than
-stated, because a link somebody inferred is worth less than one somebody wrote down.
+What survives fills in the claim's version and nothing else. The verify stage records
+that this version was extracted rather than stated, and never counts it as a check
+from somewhere else: the version was read off the release that would confirm it, so
+the most it can be is that release speaking for itself, for less.
 """
 
 import json
