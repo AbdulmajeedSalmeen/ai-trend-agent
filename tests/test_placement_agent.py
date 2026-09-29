@@ -173,17 +173,24 @@ def test_a_trend_the_rules_could_not_place_takes_an_owned_chapter():
     assert score.chapter_id == "C8"
     assert score.provenance["chapter"] == "agent"
     assert score.factors["chapter"]["quote"] == "c8 (week 3)"
+    assert score.factors["chapter"]["relation"] == "owns"
 
 
-def test_a_trend_it_could_only_put_in_order_stays_unplaced():
-    # following a chapter is a real answer, and it is not a chapter that owns the trend
+def test_a_trend_it_could_only_put_in_order_stays_unplaced_and_keeps_where_it_would_go():
+    # Following a chapter is a real answer, and it is not a chapter that owns the trend,
+    # so nothing in the score moves. What it said is kept beside the score, because
+    # "a new lesson, after C19" is the half of the answer a course owner asks next;
+    # it used to be thrown away.
     follows = {"relation": "follows", "chapter": "C19", "week": 5, "owned": False,
                "why": "it comes after agents", "quote": "c19 (week 5)", "looked": []}
 
     score = stage3_score.score_trend(trend(), CHAPTERS, [], place=lambda t, c: follows)
+    unasked = stage3_score.score_trend(trend(), CHAPTERS, [])
 
     assert score.chapter_id is None and score.provenance["chapter"] == "none"
-    assert "chapter" not in score.factors
+    assert score.factors["chapter"]["relation"] == "follows"
+    assert score.factors["chapter"]["chapter"] == "C19" and score.factors["chapter"]["week"] == 5
+    assert (score.priority, score.feasibility, score.dimensions) ==            (unasked.priority, unasked.feasibility, unasked.dimensions)
 
 
 def test_a_trend_the_rules_did_place_is_never_sent_asking():

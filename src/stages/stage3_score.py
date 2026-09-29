@@ -216,7 +216,7 @@ def score_trend(
     place=None,
 ) -> Score:
     chapter_id = match_chapter(trend, chapters)
-    placed_by_agent = None
+    placed_by_agent = placed_after = None
 
     if chapter_id is None and place is not None:
         # The rules place a trend by overlap, and say nothing when there is none. That
@@ -226,6 +226,10 @@ def score_trend(
 
         if proposed and proposed["relation"] == "owns":
             chapter_id, placed_by_agent = proposed["chapter"], proposed
+        elif proposed:
+            # Following a chapter says where a lesson would go, not who owns the trend.
+            # It travels beside the score and changes nothing in it.
+            placed_after = proposed
 
     subject_in_curriculum = any(
         trend.subject.lower() in topic.lower()
@@ -283,10 +287,14 @@ def score_trend(
 
     factors = {"maturity": mature_detail, "prerequisites": ready_detail, "difficulty": effort_detail}
 
-    if placed_by_agent:
-        # A chapter nothing matched travels with the line that put it there.
-        factors["chapter"] = {"why": placed_by_agent["why"], "quote": placed_by_agent["quote"],
-                              "looked": placed_by_agent["looked"]}
+    placed = placed_by_agent or placed_after
+
+    if placed:
+        # A chapter nothing matched travels with the line that put it there, and so does
+        # the chapter it would only follow.
+        factors["chapter"] = {"relation": placed["relation"], "chapter": placed["chapter"],
+                              "week": placed.get("week"), "why": placed["why"], "quote": placed["quote"],
+                              "looked": placed["looked"]}
     if judged_by_agent:
         # What the agent read travels with the score, so the number can be opened.
         factors["educational_value"] = {
@@ -351,9 +359,11 @@ def run(run_dir: Path) -> None:
 
     homeless = sum(1 for score in scores if not score.chapter_id)
     found = sum(1 for score in scores if score.provenance.get("chapter") == "agent")
+    after = sum(1 for score in scores if (score.factors.get("chapter") or {}).get("relation") == "follows")
 
     if place is not None:
-        print(f"placed: {found} chapters an agent found, {homeless} trends the course has no chapter for")
+        print(f"placed: {found} chapters an agent found, {homeless} trends the course has no chapter for, "
+              f"{after} of them with the chapter they would follow")
 
     runio.save_artifact(run_dir, "scores", scores)
 
