@@ -1,14 +1,15 @@
 # Progress
 
-**Last updated:** 2026-09-28 · **Tests:** 464 passing · **Demo:** Sep 26–27
+**Last updated:** 2026-09-29 · **Tests:** 715 passing · **Demo:** Sep 26–27
 
-The pipeline runs end to end, live, from a web app. A model reads, judges and writes;
-rules still decide what counts as confirmed, and every recommendation now carries the reason
-behind it: what the chapter teaches, which version it runs, and how far the release has moved.
+The pipeline runs end to end, live, from a web app. Eight agents work inside it where a step
+needs a loop; they look, cite what they read, and propose. Rules still decide what counts as
+confirmed, and every recommendation carries the reason behind it: what the chapter teaches,
+which version it runs, and how far the release has moved.
 
 ## Next actions
 
-1. **Lead:** push the day's work, then merge `dev` into `main` (it is ~50 commits behind).
+1. **Lead:** merge `dev` into `main`: it lacks the agents and everything since PR #5.
 2. **Everyone:** `pip install -r requirements.txt` and create a `.env` with `GROQ_API_KEY=...`
    and `MODEL_ORDER=groq-fast,groq`. Without a key the stages fall back to rules and say so.
 3. **Everyone:** when a new week is published, drop its notebooks into `notebooks/<week n>/` and run
@@ -28,7 +29,10 @@ behind it: what the chapter teaches, which version it runs, and how far the rele
 
 ## Decisions made
 
-- One agent, five stages. Not one agent per stage: the stages have no open decisions to negotiate.
+- Five stages, not one agent per stage: the stages have no open decisions to negotiate. Eight
+  agents sit inside the stages, each only where a step needs a loop (2026-09-29). An agent
+  proposes and cites; one rule, `src/agents/citations.py`, keeps a citation only if a tool
+  returned it, and with none left the rules answer as they did before.
 - The model reads, judges and writes. **The verification gate stays rules** — a claim is confirmed
   only when a tier-1 release states the same subject and the exact same version.
 - A claim can never be confirmed by the document it was read from (`source_signal_id`).
@@ -112,19 +116,65 @@ behind it: what the chapter teaches, which version it runs, and how far the rele
 - [x] `docs/DEMO-QA.md` — the hard questions, each answered from the frozen run
 - [x] Demo run frozen: `run_20260921T104824Z` now travels with the repo, so anyone can
       replay it offline
+- [x] `src/agents/` — eight agents, one citation rule for all of them, each fixed after an
+      adversarial review (2026-09-29)
 
 ## Not done
 
 - [ ] `dev` merged into `main`
 - [ ] Decide whether the material review may be published. Until then it stays on this machine
 - [ ] Two timed rehearsals, and the offline fallback drill
-- [ ] Raise or refill the OpenAI spend limit; until then every run is rules only
+- [ ] Top up the OpenAI key, or take `openai` out of `MODEL_ORDER`: on 2026-09-29 its first call
+  came back HTTP 429, out of credit. Groq still answers.
+- [ ] Measure the eight agents on a live run. None has run live since they were fixed, and no
+  number on the page comes from them.
+- [ ] Run the review driver over the course (`python -m src.agents.review_run`). It writes
+  `fixtures/material_review.agent.json`; the page still shows the Sep 26 review.
 - [ ] The evaluation suite: frozen cases, several repeats, pass^k, a release gate. Started with
   the one model choice that drives a decision: the lesson search term is asked 5 times and kept
   only if it comes back every time. Still owed for the claim reader and the writer.
 - [ ] Optional: GitHub token per member (60 requests/hour without one)
 
 ## Standup log
+
+### 2026-09-29
+- Eight agents, in `src/agents/`, built in the design session at Abdulmajeed's request: the
+  extractor (which release a post meant, stages 2a and 2b), the verifier (a second record of a
+  version, 2b), the judge and placement (teaching value and the chapter, 3), the writer (the
+  reason on each card, 4), and the reviewer, lesson and worth agents in the review driver
+  (`src/agents/review_run.py`). Each loops over its tools, cites what it read, and a rule checks
+  the citations before anything is recorded.
+- Five AI reviewers then read every agent against what its commit message claimed. Four serious
+  findings, all fixed test-first:
+  - The extractor could make a cross-source check out of the release a version had just been
+    read from, and a test said that was correct. An extracted version now counts only as the
+    release speaking for itself (0.55) and is never sent looking for a second record.
+  - The citation checks took tool echoes, one-letter quotes and the loop's own "nothing found".
+    A live run scored one trend 4 out of 5 on the citation "nothing found", which tipped it from
+    watch to update. One rule, `src/agents/citations.py`, now decides for every agent.
+  - A model reply that parsed as a list crashed stages 2a, 2b and 3. It is now an unreadable
+    answer.
+  - The review driver, run with no arguments, would have rewritten the served review's date and
+    source line and flipped 2 findings on the page. It now writes
+    `fixtures/material_review.agent.json` and refuses any file it did not write.
+- Per agent: placement lost every call on Groq because gpt-oss answered through its own tool
+  calls and Groq refused them (HTTP 400, `tool_use_failed`); the answer is now read from the
+  refusal, and one live placement put crewai after C14. The judge was handed langgraph's notes
+  for langchain; now exact. The lesson agent counted MCP in 5 notebooks, all inside embedded
+  images; now 0, counted like the demand rule. The reviewer lost 271 of 2,000 cells to
+  truncation; every cell now reaches it. Also fixed: registry versions in version order, one
+  question per post for the extractor, the writer shown the sentence it is rewriting and held to
+  two sentences under 45 words, worth ordering notebooks within a verdict, and an assumed effort
+  marked as assumed.
+- The model adapter no longer drops a working provider over unreadable answers: a live run lost
+  81 calls that way; the same replay afterwards made 325 and dropped none.
+- The OpenAI key is out of credit (HTTP 429 on its first call); Groq carries runs.
+- Replaying the frozen run offline, with no model and the network blocked, still gives the same 38
+  actions and 0 cross-source. No agent has been measured on a live run since the fixes.
+- The agents were kept on a branch, `agents`, until they were fixed, then merged into `dev`
+  (e8d904b). The design session now owns all of `web/`: the Material tab reads like a brief, how
+  the material was checked sits under About this run, and an assumed effort is not shown.
+- 715 tests.
 
 ### 2026-09-28
 - Research is read now, from arXiv's API (`src/sources/arxiv.py`): papers submitted in the last
