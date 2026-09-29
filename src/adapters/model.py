@@ -58,11 +58,18 @@ MAX_BACKOFF = 30.0
 # Which provider is out, and why. A key is refused per provider, not globally:
 # OpenAI running out of quota should not stop a working Groq key.
 _halted: dict[str, str] = {}
+_unreadable: dict[str, int] = {}
 
 # A provider that times out is not refusing us, so it is worth one more try.
 # A provider that times out twice running is costing the run two timeouts per
 # call and is dropped like a refused one.
 STRIKES = 2
+# An answer we could not read is not a provider that is down. It replied, over a
+# working key, with prose where JSON was asked for. Counting that as a strike drops
+# a live provider after two chatty answers, which is what emptied a whole run:
+# thirty-four unreadable answers took every provider out and eighty-one calls after
+# them were skipped without being tried.
+UNREADABLE_STRIKES = 8
 _strikes: dict[str, int] = {}
 
 # What each provider said it had left, from its rate-limit headers. Groq counts a
@@ -78,6 +85,7 @@ MAX_PACE_WAIT = 65.0
 def reset() -> None:
     """Start of a run: give every provider another chance."""
     _halted.clear()
+    _unreadable.clear()
     _strikes.clear()
     _budget.clear()
 
@@ -219,8 +227,14 @@ def halted() -> str | None:
 
 
 def _call(settings: dict, system: str, user: str, max_tokens: int, timeout: int,
-          action: str) -> tuple[dict | None, str | None, bool]:
-    """One provider, one question. Returns (answer, fatal_reason, rate_limited)."""
+          action: str) -> tuple[dict | None, str | None, bool, bool]:
+    """One provider, one question.
+
+    Returns (answer, fatal_reason, rate_limited, unreadable). The last one says the
+    provider answered and the answer could not be parsed, which is a different thing
+    from the provider failing and is counted separately.
+    """
+    unreadable = False
     body = json.dumps({
         "model": settings["model"],
         "messages": [{"role": "system", "content": system}, {"role": "user", "content": user}],
@@ -270,7 +284,7 @@ def _call(settings: dict, system: str, user: str, max_tokens: int, timeout: int,
 
                 # Our ceiling was too low for this model, which is not the
                 # provider failing. Counting it dropped a working key.
-                return None, None, True
+                return None, None, True, False
 
             answer = parse_json(text)
             usage = payload.get("usage") or {}
@@ -279,12 +293,14 @@ def _call(settings: dict, system: str, user: str, max_tokens: int, timeout: int,
                 tokens_in=usage.get("prompt_tokens", 0),
                 tokens_out=usage.get("completion_tokens", 0),
             )
-            return answer, None, False
+            return answer, None, False, False
         except (urllib.error.URLError, TimeoutError, KeyError, ValueError, json.JSONDecodeError) as problem:
             http = isinstance(problem, urllib.error.HTTPError)
             fatal = http and problem.code in FATAL_STATUS
             note = f"HTTP {problem.code}" if http else type(problem).__name__
             wait = 0.0
+            # It replied and we could not read it. That is a bad answer, not a dead key.
+            unreadable = unreadable or (not http and isinstance(problem, (json.JSONDecodeError, KeyError)))
 
             if http and problem.code == 429:
                 detail = ""
@@ -315,13 +331,13 @@ def _call(settings: dict, system: str, user: str, max_tokens: int, timeout: int,
             )
 
             if fatal:
-                return None, note, False
+                return None, note, False, False
 
             if attempt == 0:
                 time.sleep(wait or 1.5)
                 continue
 
-    return None, None, bool(wait)
+    return None, None, bool(wait), unreadable
 
 
 def ask_json(system: str, user: str, max_tokens: int = 400, timeout: int = 40,
@@ -348,10 +364,11 @@ def ask_json(system: str, user: str, max_tokens: int = 400, timeout: int = 40,
 
     for settings in candidates:
         name = settings["provider"]
-        answer, fatal, rate_limited = _call(settings, system, user, max_tokens, timeout, action)
+        answer, fatal, rate_limited, unreadable = _call(settings, system, user, max_tokens,
+                                                        timeout, action)
 
         if answer is not None:
-            _strikes[name] = 0
+            _strikes[name] = _unreadable[name] = 0
             return answer
 
         # Being told to wait is not the provider failing. Counting it as one
@@ -361,6 +378,18 @@ def ask_json(system: str, user: str, max_tokens: int = 400, timeout: int = 40,
             continue
 
         if fatal is None:
+            # A provider that cannot be reached is dropped after two tries. One that
+            # answers with something we cannot read is given longer, because it is
+            # working and the next question may go better.
+            if unreadable:
+                _unreadable[name] = _unreadable.get(name, 0) + 1
+
+                if _unreadable[name] >= UNREADABLE_STRIKES:
+                    _halted[name] = f"{UNREADABLE_STRIKES} answers running that could not be read"
+                    print(f"{name} keeps answering with something we cannot read; dropped for this run")
+
+                continue
+
             _strikes[name] = _strikes.get(name, 0) + 1
 
             if _strikes[name] >= STRIKES:
