@@ -1768,6 +1768,19 @@ body[dir="rtl"] .rd-table > summary { font-family: var(--ar); }
 body[dir="rtl"] .sc-name { font-family: var(--ar); }
 .sc-meter { display: inline-flex; gap: 2px; }
 .sc-meter i { display: block; width: 8px; height: 8px; border-radius: 2px; background: var(--neutral-mark); }
+
+/* The agent's working, under the score it produced. Quiet by default: a reader who
+   trusts the number never has to see it, and one who does not can read every line. */
+.sc-read { margin-top: 10px; }
+.sc-read > summary { font-size: 11.5px; color: var(--ink-faint); cursor: pointer; list-style: none; padding: 3px 0; }
+.sc-read > summary::-webkit-details-marker { display: none; }
+.sc-read > summary::before { content: "+ "; }
+.sc-read[open] > summary::before { content: "- "; }
+.sc-cites { list-style: none; margin: 4px 0 0; padding: 0; display: grid; gap: 5px; }
+.sc-cites li { display: grid; grid-template-columns: 96px minmax(0, 1fr); gap: 8px; align-items: baseline; }
+.sc-cite-tool { font: 500 11px/1.5 var(--mono); color: var(--ink-faint); }
+.sc-cite-q { font-size: 12.5px; line-height: 1.5; color: var(--ink-soft); overflow-wrap: anywhere; }
+@media (max-width: 640px) { .sc-cites li { grid-template-columns: minmax(0, 1fr); gap: 2px; } }
 .sc-meter i.on { background: var(--ink-soft); }
 .sc-v { font: 600 13px/1 var(--sans); color: var(--ink); text-align: end; font-variant-numeric: tabular-nums; }
 .sc-prov {
@@ -1798,201 +1811,185 @@ body[dir="rtl"] .sc-note { font-family: var(--ar); }
 
 /* ------------------------------------------------------------- material -- */
 
-/* The review reads as a second opinion on the chapter, so it sits in the same
-   card as the curriculum map, with the finding as the new unit inside it. A
-   finding is not a claim the run checked, so it never takes the gold: state
-   travels in the chip, and the source line carries the weight instead. */
-.basis {
-  margin: -2px 0 14px; font-size: 12.5px; line-height: 1.5; color: var(--ink-faint);
-  border-inline-start: 2px solid var(--line); padding-inline-start: 10px;
+/* The tab reads like a brief: when notebooks stop working, what changes across the
+   whole course, the course chapter by chapter, then what is worth adding. Each part is
+   a heading over quiet rows, with no tags. A tick says a change was checked against a
+   release, a red word says a line breaks or a method is unsafe, and every other label
+   the reviewers gave waits behind the detail. */
+.panel[data-panel="mat"] > .sub { margin-bottom: 6px; }
+.panel[data-panel="mat"] h3 {
+  margin: 36px 0 8px; font: 600 21px/1.2 var(--display); color: var(--ink);
+  letter-spacing: -.005em; font-variant-numeric: lining-nums;
 }
-body[dir="rtl"] .basis { font-family: var(--ar); font-size: 13px; }
+body[dir="rtl"] .panel[data-panel="mat"] h3 { font-family: var(--ar); font-size: 17px; letter-spacing: 0; }
+.panel[data-panel="mat"] h3.weekhead { margin: 30px 0 4px; font-size: 18px; color: var(--ink-faint); }
+body[dir="rtl"] .panel[data-panel="mat"] h3.weekhead { font-size: 15px; }
+.mblock:empty { display: none; }
 
-.deadlines { border: 1px solid var(--line); border-radius: var(--radius); padding: 12px 14px; margin-bottom: 18px; }
-.deadlines h3 { margin: 0 0 8px; font: 600 13px/1.3 var(--sans); letter-spacing: .04em; text-transform: uppercase; color: var(--ink-soft); }
-body[dir="rtl"] .deadlines h3 { font-family: var(--ar); letter-spacing: 0; text-transform: none; }
-.dl {
-  display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 10px;
-  padding: 7px 0; border-top: 1px solid var(--line-soft);
+.ok {
+  display: inline-block; margin-inline-start: 7px;
+  font: 600 13px/1 var(--sans); color: var(--gold-ink);
 }
-.dl:first-of-type { border-top: 0; }
-.dl b { font: 600 13px/1 var(--mono); color: var(--ink); }
-.dl code { font: 500 12px/1.4 var(--mono); color: var(--ink-soft); }
-.dl-n { font-size: 12px; color: var(--ink-faint); }
-.dl-why { flex: 1 1 100%; font-size: 12.5px; line-height: 1.5; color: var(--ink-faint); }
-/* The nearest date is a real gap, so it takes the one alert hue the page owns. */
-.dl.near b { color: var(--crit-ink); }
-.dl.near { background: var(--crit-soft); margin: 0 -14px; padding: 7px 14px; }
+/* In the legend the tick is a word in a sentence, so it takes the sentence's spacing. */
+.panel[data-panel="mat"] > .sub .ok { margin-inline-start: 0; }
+.warn-word { color: var(--crit-ink); }
+.vh {
+  position: absolute; width: 1px; height: 1px; overflow: hidden;
+  clip-path: inset(50%); white-space: nowrap;
+}
 
-.match { border: 1px solid var(--line); border-radius: var(--radius); background: var(--surface); margin-bottom: 10px; }
-.match > summary { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; padding: 12px 14px; cursor: pointer; list-style: none; }
-.match > summary::-webkit-details-marker { display: none; }
-.match > summary h3 { margin: 0; font: 600 16px/1.3 var(--display); flex: 1 1 auto; }
-body[dir="rtl"] .match > summary h3 { font-family: var(--ar); font-size: 15px; }
-.mc-tally { display: flex; gap: 6px; flex-wrap: wrap; }
-.mc-body { padding: 0 14px 12px; display: grid; gap: 12px; }
+/* Code is set as code and nothing more: no box behind it. A tinted box on every name
+   turned each sentence into a row of buttons. */
+.pair code, .ci-why code, .ci-long code, .ci-facts code, .ci-rep code, .nb-action code {
+  font: 400 12.5px/1.5 var(--mono); color: inherit; background: none; padding: 0;
+}
 
-.matbook { border-top: 1px solid var(--line-soft); padding-top: 12px; }
-.mb-head { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 6px; }
-.mb-file { font: 500 12px/1.4 var(--mono); color: var(--ink-soft); word-break: break-all; }
-.mb-action { margin: 0 0 8px; font-size: 13.5px; line-height: 1.55; color: var(--ink); }
-.mb-lesson { margin-top: 8px; font-size: 12.5px; color: var(--ink-soft); }
-.mb-lesson span { color: var(--gold-ink); font-weight: 600; }
-.mb-more { margin-top: 6px; font-size: 12px; color: var(--ink-faint); }
+/* The pair is the row: what is there, what replaces it, with the arrow between them
+   doing the work a sentence used to do. */
+.pair { display: grid; grid-template-columns: minmax(0, 1fr) 22px minmax(0, 1fr); align-items: baseline; gap: 4px 6px; }
+.pair-now, .pair-new { min-width: 0; font-size: 13.5px; line-height: 1.55; overflow-wrap: anywhere; }
+.pair-now { color: var(--ink-soft); }
+.pair-new { color: var(--ink); }
+.pair-arrow { color: var(--ink-faint); font: 400 14px/1 var(--sans); text-align: center; }
+.pair-arrow::before { content: "→"; }
+body[dir="rtl"] .pair-arrow::before { content: "←"; }
 
-.mf { border-inline-start: 2px solid var(--line); padding-inline-start: 10px; margin-top: 10px; }
-.mf-top { display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap; }
-.mf-top b { font-size: 13.5px; }
-.mf-cell { font: 500 11.5px/1 var(--mono); color: var(--ink-faint); }
-.mf-own { font-size: 11.5px; color: var(--ink-faint); }
-.mf-why { margin: 4px 0 0; font-size: 13px; line-height: 1.55; color: var(--ink-soft); }
-.mf-rep { margin: 4px 0 0; font-size: 13px; line-height: 1.55; color: var(--ink); }
-.mf-rep code { font: 500 12.5px/1.4 var(--mono); background: var(--gray-soft); padding: 1px 5px; border-radius: var(--r-mark); }
-.mf-arrow { display: inline-block; width: 12px; height: 1px; background: var(--ink-faint); vertical-align: middle; margin-inline-end: 6px; }
-.mf-foot { display: flex; align-items: center; gap: 10px; margin-top: 5px; }
-.mf-src { font-size: 12px; color: var(--ink-soft); text-decoration: none; border-bottom: 1px solid var(--line); }
-.mf-src:hover { color: var(--gold-ink); }
-.mf-date { font: 500 11.5px/1 var(--mono); color: var(--ink-faint); }
-.matfoot { margin-top: 18px; }
-.dl-src { margin: 8px 0 0; font-size: 11.5px; color: var(--ink-faint); word-break: break-all; }
-.dl-src a { color: inherit; }
-.dl-src a:hover { color: var(--gold-ink); }
-.mb-found { font: 500 11px/1 var(--mono); color: var(--ink-faint); }
-.dl-split, .dl-rep { font-size: 12px; color: var(--ink-faint); }
-.dl-rep code { font: 500 12px/1.4 var(--mono); color: var(--ink-soft); }
-#matWide { margin-bottom: 18px; }
-#matWide h3 { margin: 0 0 8px; font: 600 13px/1.3 var(--sans); letter-spacing: .04em; text-transform: uppercase; color: var(--ink-soft); }
-body[dir="rtl"] #matWide h3 { font-family: var(--ar); letter-spacing: 0; text-transform: none; }
-.cw { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 10px; padding: 7px 0; border-top: 1px solid var(--line-soft); }
-.cw:first-of-type { border-top: 0; }
-.cw-n { font: 500 11.5px/1 var(--mono); color: var(--ink-faint); }
-.cw-why { flex: 1 1 100%; font-size: 12.5px; line-height: 1.5; color: var(--ink-faint); }
+.dl, .cw, .ls { padding: 11px 0; border-top: 1px solid var(--line-soft); }
+.dl:first-of-type, .cw:first-of-type, .ls:first-of-type { border-top: 0; }
+.dl-row { display: grid; grid-template-columns: 136px minmax(0, 1fr) auto; gap: 6px 18px; align-items: baseline; }
+.cw-row, .ls-row { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 6px 18px; align-items: baseline; }
+/* The date and how far off it is stack, so "already shut down" never breaks mid-phrase
+   inside a column sized for a date. */
+.dl-date { display: grid; gap: 2px; }
+.dl-date b { font-weight: 600; color: var(--ink); font-variant-numeric: lining-nums tabular-nums; }
+.dl-when { font-size: 12px; color: var(--ink-faint); }
+/* On a wide screen two equal halves left a short name stranded far from its arrow.
+   Capped, the arrows still line up down the list, and nothing floats. */
+.dl-row .pair, .cw-row .pair { max-width: 620px; }
+.dl-date.hot b, .dl-date.hot .dl-when { color: var(--crit-ink); }
+.dl-n, .cw-n, .ls-n, .ch-meta, .nb-meta {
+  font-size: 12.5px; color: var(--ink-faint); white-space: nowrap; font-variant-numeric: tabular-nums;
+}
+.dl-src { margin: 10px 0 0; font-size: 12px; color: var(--ink-faint); }
+.dl-src a { color: inherit; text-decoration: none; border-bottom: 1px solid var(--line); }
+.ls-row b { font: 500 14px/1.45 var(--sans); color: var(--ink); }
+body[dir="rtl"] .ls-row b, body[dir="rtl"] .ls-n, body[dir="rtl"] .dl-n, body[dir="rtl"] .cw-n { font-family: var(--ar); }
 
-/* A proposal with its measure beside it. The count is not a confirmed claim, so it
-   takes no gold: the action chip carries the decision, the term carries the proof. */
-#matLessons { margin-bottom: 18px; }
-#matLessons h3 { margin: 0 0 6px; font: 600 13px/1.3 var(--sans); letter-spacing: .04em; text-transform: uppercase; color: var(--ink-soft); }
-body[dir="rtl"] #matLessons h3 { font-family: var(--ar); letter-spacing: 0; text-transform: none; }
-.ls-sub { margin: 0 0 10px; font-size: 12.5px; line-height: 1.55; color: var(--ink-faint); }
-body[dir="rtl"] .ls-sub { font-family: var(--ar); font-size: 13px; }
-.ls { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 10px; padding: 8px 0; border-top: 1px solid var(--line-soft); }
-.ls:first-of-type { border-top: 0; }
-.ls > b { font-size: 13.5px; flex: 1 1 260px; }
-.ls-term { display: inline-flex; align-items: baseline; gap: 8px; flex-wrap: wrap; }
-.ls-term code { font: 500 12px/1.4 var(--mono); background: var(--gray-soft); padding: 1px 6px; border-radius: var(--r-mark); }
-.ls-n { font: 500 11.5px/1 var(--mono); color: var(--ink-faint); }
-/* A term that did not repeat is not a term: the row says so where the name would be. */
-.ls-unstable { font-size: 12px; color: var(--crit-ink); }
-/* Research is context, not the decision, so it reads a step quieter than the counts
-   beside it and never takes a chip or the accent. */
-.research { color: var(--ink-faint); }
-.papers { margin-top: 10px; display: grid; gap: 5px; }
-.papers-head { font-size: 11.5px; color: var(--ink-faint); }
-body[dir="rtl"] .papers-head { font-family: var(--ar); font-size: 12px; }
-.papers a { font-size: 12.5px; line-height: 1.5; color: var(--ink-soft); text-decoration: none; border-bottom: 1px solid var(--line); }
-.papers a:hover { color: var(--gold-ink); }
-.paper-date { font: 500 11px/1 var(--mono); color: var(--ink-faint); margin-inline-end: 6px; }
+/* Only the order the reviewers' verdicts give is filtered here, so the filter is a row
+   of words rather than a row of buttons, and the chosen one is underlined in ink: the
+   gold belongs to checked changes and nothing else. */
+#matFilters { gap: 4px 20px; margin: 34px 0 2px; }
+#matFilters button {
+  min-height: 0; padding: 6px 0; border: 0; border-radius: 0; background: none;
+  font: 500 13px/1.3 var(--sans); color: var(--ink-faint);
+  box-shadow: inset 0 -1.5px 0 transparent;
+  transition: color 160ms var(--ease-out), box-shadow 160ms var(--ease-out);
+}
+#matFilters button::first-letter { text-transform: uppercase; }
+#matFilters button[aria-pressed="true"] { background: none; color: var(--ink); box-shadow: inset 0 -1.5px 0 var(--ink); }
+#matFilters button:active { transform: none; color: var(--ink); }
+body[dir="rtl"] #matFilters button { font-family: var(--ar); }
+@media (hover: hover) and (pointer: fine) {
+  #matFilters button:hover:not([aria-pressed="true"]) { color: var(--ink-soft); }
+}
+@media (pointer: coarse) { #matFilters button { min-height: 44px; } }
 
-/* A change, at the cell it lives in. The cell number is the spine: it is what a
-   teacher opens the notebook to, so it holds the left edge and the evidence hangs
-   off it. Verified and judged differ by their tag and nothing else, because the
-   difference is what the tag says, not how loud the row is. */
-/* A hairline was not enough to tell one cell from the next, so every other cell sits
-   on its own band. The tint is the page's own ink at a few percent, not a new colour:
-   it separates without competing with the gold, which still means one thing only. */
+/* A chapter and a notebook are both one line until asked for. The same chevron opens
+   both, pointing down while closed and up while open. */
+.ch { border-top: 1px solid var(--line-soft); }
+.ch > summary, .nb > summary {
+  display: grid; grid-template-columns: minmax(0, 1fr) auto 12px; gap: 14px; align-items: baseline;
+  cursor: pointer; list-style: none; border-radius: var(--r-mark);
+  transition: background-color 160ms var(--ease-out);
+}
+.ch > summary { padding: 14px 10px; margin: 0 -10px; }
+.ch > summary::-webkit-details-marker, .nb > summary::-webkit-details-marker { display: none; }
+.ch > summary::after, .nb > summary::after {
+  content: ""; width: 7px; height: 7px; justify-self: end; align-self: center;
+  border-right: 1.5px solid var(--ink-faint); border-bottom: 1.5px solid var(--ink-faint);
+  transform: translateY(-2px) rotate(45deg); transition: transform 200ms var(--ease-out);
+}
+.ch[open] > summary::after, .nb[open] > summary::after { transform: translateY(2px) rotate(-135deg); }
+@media (hover: hover) and (pointer: fine) {
+  .ch > summary:hover, .nb > summary:hover { background: color-mix(in srgb, var(--ink) 4%, transparent); }
+}
+.ch > summary:active, .nb > summary:active { background: color-mix(in srgb, var(--ink) 7%, transparent); }
+.ch > summary:focus-visible, .nb > summary:focus-visible { outline: 2px solid var(--edge); outline-offset: 2px; }
+.ch-title { min-width: 0; font: 500 15px/1.4 var(--sans); color: var(--ink); }
+body[dir="rtl"] .ch-title, body[dir="rtl"] .ch-meta, body[dir="rtl"] .nb-meta { font-family: var(--ar); }
+.ch-body { padding: 0 0 16px; }
+
+.nb { border-top: 1px solid var(--line-soft); }
+.nb > summary { padding-block: 11px; padding-inline: 20px 10px; margin-inline: -10px; }
+.nb-name { min-width: 0; font-size: 14px; line-height: 1.45; color: var(--ink-soft); overflow-wrap: anywhere; }
+.nb[open] > summary .nb-name { color: var(--ink); }
+.nb-body { padding-block: 2px 16px; padding-inline-start: 20px; }
+.nb-plan { margin: 0 0 4px; font-size: 12.5px; color: var(--ink-faint); }
+.nb-plan::first-letter { text-transform: uppercase; }
+body[dir="rtl"] .nb-plan { font-family: var(--ar); }
+.nb-action { margin: 0 0 12px; max-width: 76ch; font-size: 13.5px; line-height: 1.6; color: var(--ink); }
+.nb-lesson { margin: 14px 0 0; font-size: 13px; line-height: 1.5; color: var(--ink); }
+.nb-lesson > span:first-child { color: var(--ink-faint); margin-inline-end: 8px; }
+.nb-lesson-n { color: var(--ink-faint); }
+body[dir="rtl"] .nb-lesson > span:first-child, body[dir="rtl"] .nb-lesson-n { font-family: var(--ar); }
+
+/* Every other cell sits on its own band, the page's own ink at a few percent, so one
+   cell reads apart from the next without a colour competing with the tick. Hover
+   says which cell is under the pointer, by colour only, since this list is swept. */
+.cells { display: grid; }
 .cellrow {
-  display: grid; grid-template-columns: 78px minmax(0, 1fr); gap: 10px;
-  padding: 10px 12px; border-radius: var(--r-mark);
+  display: grid; grid-template-columns: 30px minmax(0, 1fr); gap: 12px;
+  padding: 11px 12px; border-radius: var(--r-mark);
   transition: background-color 160ms var(--ease-out), box-shadow 160ms var(--ease-out);
 }
 .cells .cellrow:nth-child(even) { background: color-mix(in srgb, var(--ink) 3.5%, transparent); }
-/* Hovering says which cell is under the pointer, which the card as a whole could not.
-   Colour only, because this list is swept many times and movement there reads as noise. */
 @media (hover: hover) and (pointer: fine) {
-  /* The tint alone was not enough: a banded cell at rest and a plain cell under the
-     pointer landed at similar weights. The outline belongs to hover only, so the two
-     states can never be mistaken for one another. */
-  .cellrow:hover {
-    background: color-mix(in srgb, var(--ink) 7%, transparent);
-    box-shadow: inset 0 0 0 1px var(--line);
-  }
+  .cellrow:hover { background: color-mix(in srgb, var(--ink) 7%, transparent); box-shadow: inset 0 0 0 1px var(--line); }
   .cellrow:hover .cell-no { color: var(--ink); }
 }
-.cell-no { font: 500 11.5px/1.6 var(--mono); color: var(--ink-faint); transition: color 160ms ease; }
-body[dir="rtl"] .cellrow.whole .cell-no, body[dir="rtl"] .cell-no { font-family: var(--ar); font-size: 12px; }
-.cellrow.whole .cell-no { font-family: var(--sans); font-size: 11.5px; }
-/* The whole-notebook row is not a cell, so it keeps its own quiet outline rather than
-   joining the banding and pretending to be one. */
-.cellrow.whole { background: none; border: 1px solid var(--line-soft); margin-top: 8px; }
-.cell-items { display: grid; gap: 10px; min-width: 0; }
-.ci { min-width: 0; }
-.ci-top { display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap; }
-.ci-tag {
-  font: 600 10px/1 var(--sans); letter-spacing: .04em; text-transform: uppercase;
-  padding: 4px 7px; border-radius: var(--r-mark); white-space: nowrap;
+.cell-no {
+  font: 500 12.5px/1.55 var(--sans); color: var(--ink-faint);
+  font-variant-numeric: tabular-nums; transition: color 160ms var(--ease-out);
 }
-body[dir="rtl"] .ci-tag { font-family: var(--ar); letter-spacing: 0; text-transform: none; }
-.ci-tag.ver { background: var(--gold-soft); color: var(--gold-ink); }
-.ci-tag.jud { border: 1px solid var(--line); color: var(--ink-faint); }
-.ci-breaks { font-size: 11.5px; color: var(--crit-ink); }
-.ci-how { font-size: 11.5px; color: var(--ink-faint); }
-/* The pair is the row: what is there, what replaces it, with the arrow between them
-   doing the work a sentence used to do. */
-.pair { display: grid; grid-template-columns: minmax(0, 1fr) 18px minmax(0, 1fr); align-items: baseline; gap: 4px 8px; margin-top: 5px; }
-.pair-now, .pair-new { min-width: 0; font-size: 13px; line-height: 1.5; overflow-wrap: anywhere; }
-.pair-now { color: var(--ink-soft); }
-.pair-new { color: var(--ink); }
-.pair code { font: 500 12px/1.5 var(--mono); background: var(--gray-soft); padding: 2px 6px; border-radius: var(--r-mark); }
-.pair-new code { color: var(--ink); }
-/* The arrow carries the whole sentence the row no longer spells out, so it has to be
-   legible rather than decorative. It points the way the language reads. */
-.pair-arrow { align-self: center; color: var(--ink-faint); font: 400 14px/1 var(--sans); text-align: center; }
-.pair-arrow::before { content: "→ "; }
-body[dir="rtl"] .pair-arrow::before { content: "← "; }
-.ci-head { font: 600 12.5px/1.4 var(--sans); color: var(--ink-soft); margin-top: 8px; }
-body[dir="rtl"] .ci-head { font-family: var(--ar); }
-.ci-agree { font-size: 11.5px; color: var(--ink-faint); }
-.ci-more { margin-top: 4px; }
-.ci-more > summary { font-size: 11.5px; color: var(--ink-faint); cursor: pointer; list-style: none; padding: 3px 0; }
+body[dir="rtl"] .cell-no { font-family: var(--ar); }
+.cellrow.whole { grid-template-columns: minmax(0, 1fr); gap: 6px; margin-top: 8px; box-shadow: inset 0 0 0 1px var(--line-soft); }
+.cell-items { display: grid; gap: 16px; min-width: 0; }
+.ci { min-width: 0; }
+.ci-why { margin: 5px 0 0; font-size: 12.5px; line-height: 1.55; color: var(--ink-faint); }
+.ci-flag { margin: 5px 0 0; font-size: 12.5px; line-height: 1.5; color: var(--crit-ink); }
+.ci-flag::first-letter { text-transform: uppercase; }
+body[dir="rtl"] .ci-flag { font-family: var(--ar); }
+.ci-rep { margin: 5px 0 0; font-size: 13px; line-height: 1.55; color: var(--ink); }
+
+/* The detail: the label the reviewers gave, the long reason, the source. Closed by
+   default, because the pair and its one line are the answer and this is the working. */
+.ci-more { margin-top: 3px; }
+.ci-more > summary {
+  display: inline-block; padding: 2px 0; cursor: pointer; list-style: none;
+  font-size: 12px; color: var(--ink-faint); transition: color 160ms var(--ease-out);
+}
 .ci-more > summary::-webkit-details-marker { display: none; }
 .ci-more > summary::before { content: "+ "; }
 .ci-more[open] > summary::before { content: "- "; }
-.ci-more > summary:hover { color: var(--ink-soft); }
-.ci-long { margin: 4px 0 0; font-size: 12.5px; line-height: 1.55; color: var(--ink-soft); }
-.dl-when { font-size: 11.5px; color: var(--crit-ink); margin-inline-start: 6px; }
-.showall {
-  margin-top: 8px; font: 500 12px/1 var(--sans); color: var(--ink-soft);
-  background: none; border: 1px solid var(--line); border-radius: var(--r-pill); padding: 7px 12px; cursor: pointer;
+.ci-more > summary:active { color: var(--ink); }
+@media (hover: hover) and (pointer: fine) { .ci-more > summary:hover { color: var(--ink-soft); } }
+body[dir="rtl"] .ci-more > summary { font-family: var(--ar); }
+.ci-facts { display: flex; flex-wrap: wrap; gap: 4px 14px; margin: 6px 0 0; font-size: 12.5px; color: var(--ink-soft); }
+.ci-facts b { font-weight: 600; color: var(--ink); }
+.ci-long { max-width: 72ch; margin: 6px 0 0; font-size: 12.5px; line-height: 1.6; color: var(--ink-soft); }
+.ci-label { color: var(--ink-faint); }
+.mf-foot { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 14px; margin-top: 6px; font-size: 12px; color: var(--ink-faint); }
+.mf-src { color: var(--ink-soft); text-decoration: none; border-bottom: 1px solid var(--line); }
+.mf-date { font-variant-numeric: tabular-nums; }
+@media (hover: hover) and (pointer: fine) {
+  .mf-src:hover, .dl-src a:hover { color: var(--ink); }
 }
-body[dir="rtl"] .showall { font-family: var(--ar); }
-.showall:hover { color: var(--ink); border-color: var(--edge); }
-.matbook:not(.all) .cellrow.extra { display: none; }
-.ci-line { display: flex; gap: 8px; align-items: baseline; margin-top: 4px; flex-wrap: wrap; }
-.ci-label { font: 500 10.5px/1.6 var(--sans); text-transform: uppercase; letter-spacing: .04em; color: var(--ink-faint); flex: none; }
-body[dir="rtl"] .ci-label { font-family: var(--ar); text-transform: none; letter-spacing: 0; font-size: 11.5px; }
-.ci-line code { font: 500 12px/1.5 var(--mono); background: var(--gray-soft); padding: 2px 6px; border-radius: var(--r-mark); overflow-wrap: anywhere; }
-.ci-line code.ci-new { color: var(--ink); }
-.ci-rep { font-size: 13px; line-height: 1.55; color: var(--ink); }
-.ci-why { margin: 4px 0 0; font-size: 12.5px; line-height: 1.55; color: var(--ink-soft); }
-.mb-cells { font: 500 11.5px/1 var(--mono); color: var(--ink-faint); }
 
-@media (max-width: 640px) {
-  .cellrow { grid-template-columns: minmax(0, 1fr); gap: 4px; padding: 10px; }
-  /* Side by side needs width. Narrow, the pair stacks and the arrow turns down. */
-  .pair { grid-template-columns: minmax(0, 1fr); }
-  .pair-arrow { text-align: start; }
-  .pair-arrow::before { content: "↓ "; }
-  body[dir="rtl"] .pair-arrow::before { content: "↓ "; }
-}
-body[dir="rtl"] .ls-unstable { font-family: var(--ar); font-size: 12.5px; }
-body[dir="rtl"] .ls-n { font-family: var(--ar); font-size: 12px; }
-.ls-why { flex: 1 1 100%; font-size: 12.5px; line-height: 1.5; color: var(--ink-faint); }
-.ls-watch { margin-top: 6px; border-top: 1px solid var(--line-soft); }
+.ls-watch { margin-top: 8px; border-top: 1px solid var(--line-soft); }
 .ls-watch > summary {
-  padding: 9px 0; cursor: pointer; list-style: none; font-size: 12.5px; color: var(--ink-soft);
-  display: flex; align-items: center; gap: 8px;
+  display: flex; align-items: center; gap: 8px; padding: 11px 0;
+  cursor: pointer; list-style: none; font-size: 12.5px; color: var(--ink-soft);
 }
-/* The same chevron the cards use, so a group that opens looks like one. */
 .ls-watch > summary::before {
   content: ""; width: 6px; height: 6px; flex: none;
   border-right: 1.5px solid currentColor; border-bottom: 1.5px solid currentColor;
@@ -2002,21 +1999,20 @@ body[dir="rtl"] .ls-watch > summary::before { transform: rotate(135deg); }
 .ls-watch[open] > summary::before { transform: rotate(45deg); }
 .ls-watch > summary::-webkit-details-marker { display: none; }
 .ls-watch[open] > summary { color: var(--ink); }
-/* The English note is carried by the notebook's own line, so the findings under it
-   are marked only by their direction. */
-.mf-why.bare .en-note { display: none; }
-body[dir="rtl"] .mf-why.bare { border-inline-start: 0; padding-inline-start: 0; }
+body[dir="rtl"] .ls-watch > summary { font-family: var(--ar); }
 
-/* State reads as state, so the verdict and the status chips take ink weight
-   rather than colour, with the one exception the page reserves for a real gap. */
-.chip.m-replace, .chip.m-retire, .chip.m-unsafe { background: var(--crit-soft); color: var(--crit-ink); border-color: transparent; }
-.chip.m-revise, .chip.m-keep { background: var(--gray-soft); color: var(--ink-soft); }
-.chip.m-superseded, .chip.m-deprecated, .chip.m-removed { background: var(--gray-soft); color: var(--ink-soft); }
-.chip.m-missing_context { background: transparent; color: var(--ink-faint); border: 1px solid var(--line); }
-.chip.m-small, .chip.m-medium, .chip.m-large { background: transparent; color: var(--ink-faint); border: 1px solid var(--line); }
-.chip.m-high, .chip.m-low { background: transparent; color: var(--ink-faint); border: 1px solid var(--line); }
+.matfoot { margin-top: 26px; font-size: 12.5px; color: var(--ink-faint); }
+.note p + p { margin-top: 8px; }
 
 @media (max-width: 640px) {
-  .mc-body { padding-inline: 10px; }
-  .dl.near { margin: 0 -10px; padding-inline: 10px; }
+  .dl-row { grid-template-columns: minmax(0, 1fr) auto; }
+  .dl-row .pair { grid-column: 1 / -1; grid-row: 2; }
+  .cw-row, .ls-row { grid-template-columns: minmax(0, 1fr); }
+  .cellrow { grid-template-columns: 24px minmax(0, 1fr); gap: 8px; padding: 10px 8px; }
+  /* Side by side needs width. Narrow, the pair stacks and the arrow turns down. */
+  .pair { grid-template-columns: minmax(0, 1fr); }
+  .pair-arrow { text-align: start; }
+  .pair-arrow::before, body[dir="rtl"] .pair-arrow::before { content: "↓"; }
+  .nb > summary { padding-inline-start: 12px; }
+  .nb-body { padding-inline-start: 12px; }
 }

@@ -7,7 +7,8 @@ fixtures/runs/*
 !fixtures/runs/run_20260925T191944Z
 fixtures/runs/run_20260925T191944Z/raw
 .agents/
-.claude/skills/
+.claude/
+skills-lock.json
 .pytest_cache/
 
 # course notebooks, read locally, never published
@@ -19,5 +20,6 @@ notebooks/
 # the material review describes the course notebooks in detail, and this repo is
 # public: it stays on this machine until the course owners say otherwise
 fixtures/material_review.json
+fixtures/material_review.agent.json
 web/dist/site-material.html
 fixtures/lesson_demand.json

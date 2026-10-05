@@ -30,7 +30,7 @@ VERIFIED_EN = ("Verified by rule: an import against the source of the release a 
 KIND_ORDER = {"import": 0, "model": 1, "method": 2}
 # The card reads a notebook's changes from its cells, so the review's own short list
 # of findings (f) and what each model run offered (offered) stay out of the page.
-REVIEW_FIELDS = ("v", "proposed", "copy_of", "act", "e", "a", "n", "more", "found", "why", "why_ar", "ld")
+REVIEW_FIELDS = ("v", "proposed", "copy_of", "act", "e", "es", "w", "a", "n", "more", "found", "why", "why_ar", "ld")
 
 
 def notebook_path(week: int, name: str) -> str:
@@ -143,7 +143,7 @@ def without_offered(lesson: dict | None) -> dict | None:
 def blank_book(chapter: dict, name: str, copy_of: str | None) -> dict:
     """A notebook as the curriculum knows it, before any review."""
     return {"id": f"week{chapter['week']}/{Path(name).stem}", "file": name, "ch": chapter["chapter_id"],
-            "wk": chapter["week"], "v": None, "proposed": None, "copy_of": copy_of, "act": None, "e": None,
+            "wk": chapter["week"], "v": None, "proposed": None, "copy_of": copy_of, "act": None, "e": None, "es": None, "w": None,
             "a": "", "n": None, "more": 0, "found": 0, "why": "", "why_ar": "", "ld": None}
 
 
@@ -196,7 +196,7 @@ def view(curriculum: dict, data: dict | None, deadlines: list[dict], reviewed: d
             continue
 
         if reviewed:
-            members.sort(key=lambda book: (review.VERDICTS.get(book["v"], 9), book["id"]))
+            members.sort(key=lambda book: (review.VERDICTS.get(book["v"], 9), -(book.get("w") or 0), book["id"]))
         else:
             members.sort(key=lambda book: (-book["changes"], book["file"]))
 

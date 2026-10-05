@@ -246,3 +246,25 @@ def test_the_replacement_is_its_first_clause_not_a_bare_tag():
         "OpenAI Responses API for the raw-SDK section"
     assert review.first_clause("keep the flag but teach why it is there - load only indexes you built") == \
         "keep the flag but teach why it is there"
+
+
+def test_within_a_verdict_the_notebook_worth_more_to_a_teacher_comes_first():
+    # Worth was recorded and ordered nothing. Within one verdict it now does; a review
+    # with no worth in it, like the one the page serves, keeps its order exactly.
+    chapters = {"chapters": [{"chapter_id": "C12", "week": 4, "title": "Week 4 - Agents",
+                              "notebooks": ["alpha.ipynb", "beta.ipynb"], "material_edits": []}], "copies": []}
+
+    def books(*entries):
+        data = {"schema": review.SCHEMA, "read_on": "2026-09-26", "notebooks": list(entries)}
+        return review.build(data, chapters, [], None)["chapters"][0]["books"]
+
+    weighed = books(entry(4, "alpha", "revise", [finding("superseded")], worth=2, effort_source="judged"),
+                    entry(4, "beta", "revise", [finding("superseded")], worth=5, effort_source="default"))
+    unweighed = books(entry(4, "alpha", "revise", [finding("superseded")]),
+                      entry(4, "beta", "revise", [finding("superseded")]))
+
+    assert [b["file"] for b in weighed] == ["beta.ipynb", "alpha.ipynb"]
+    # whether an effort was judged or assumed travels with it, so the page can say which
+    assert [b["es"] for b in weighed] == ["default", "judged"] and [b["w"] for b in weighed] == [5, 2]
+    assert [b["file"] for b in unweighed] == ["alpha.ipynb", "beta.ipynb"]
+    assert [b["es"] for b in unweighed] == [None, None]

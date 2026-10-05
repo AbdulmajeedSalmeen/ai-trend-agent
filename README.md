@@ -32,6 +32,13 @@ checked it against a release or a vendor's own table, or read and judged when AI
 review, the verified half stands on its own: 66 cells in 44 notebooks, 3 of which fail on
 today's install.
 
+## Demonstration
+
+A walkthrough of the project (3:34): how it works, the tests and the offline replay of the
+frozen run, then the website on a real finding, in English and in Arabic.
+
+https://github.com/user-attachments/assets/1a223d9f-2bf5-4756-a6af-081bca23ad4b
+
 ## What it found
 
 The agent checked every `langchain` import in the 89 course notebooks against the source of

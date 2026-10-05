@@ -127,12 +127,11 @@ __STYLE__
   <section class="panel" data-panel="mat">
     <h2 data-i18n="h_mat"></h2>
     <p class="sub" id="matSub"></p>
-    <p class="basis" id="matBasis"></p>
-    <div id="matDead"></div>
-    <div id="matWide"></div>
-    <div id="matLessons"></div>
+    <div class="mblock" id="matDead"></div>
+    <div class="mblock" id="matWide"></div>
     <div class="filters" id="matFilters"></div>
     <div id="matList"></div>
+    <div class="mblock" id="matLessons"></div>
     <p class="sub matfoot" id="matFoot"></p>
   </section>
 
@@ -156,15 +155,15 @@ const T = {
   en: {
     sub: "Confirmed means an official release says the same thing. Everything else stays unverified.",
     tab_act: "What to do", tab_map: "Curriculum map", tab_ev: "Evidence", tab_run: "About this run",
-    tab_mat: "Material", h_mat: "What the notebooks teach, and what has moved",
+    tab_mat: "Material", h_mat: "What to change in the course",
     mat_sub: "{books} notebooks read on {date}. Every claim about the material had to be found in the notebook it came from: {located} of {claims} were, and {dropped} were dropped.",
     mat_shape: "{found} findings, of which {shown} are shown here, the most serious four per notebook; the rest are in the report. {anchored} sit at a numbered cell, {whole} describe a notebook as a whole.",
     mat_lowered: "Lowered to a revision: {n} asked to be replaced on an absence alone, and nothing is published about what is not there.",
     mat_dead_src: "read on {date} at",
     mat_dead_split: "{named} name it, {by} reach it through a default",
-    mat_wide: "Techniques the whole course shares",
+    mat_wide: "Changes across the course",
     mat_wide_row: "{notebooks} notebooks, {chapters} chapters",
-    mat_lessons: "Lessons the review proposed",
+    mat_lessons: "Lessons worth adding",
     mat_lessons_sub: "{n} measured against the last {months} months of hiring posts. The term to count was chosen by {model}, asked {runs} times and kept only where the same name came back every time and the lesson itself uses it, then counted in the threads and searched for in the notebooks. A name held in all {runs} runs for {held} of {n}. Read on {date}.",
     mat_unstable: "no name held in every run",
     mat_v2_sub: "{verified} of those cells were checked by rule against the release a student installs today.",
@@ -185,15 +184,22 @@ const T = {
     mat_seen_none: "no notebook names it",
     mat_seen_n: "{n} name it",
     mat_watched: "{n} watched, because no employer names them yet",
-    mat_dead: "Model retirements inside this course",
+    mat_dead: "When notebooks stop running",
     mat_dead_row: "{books} notebooks",
     mat_basis: "Read and judged by AI reviewers that searched the web for each technique, with the source beside it. Not a checked claim.",
+    mat_legend: "A {tick} marks a change checked against the release students install today.",
+    mat_legend_judged: "The rest was read by AI reviewers, and each keeps its source.",
+    mat_verified_t: "Checked against the release students install today",
+    mat_past: "already shut down", mat_dead_from: "Source: {site}, read {date}.",
+    mat_whole_short: "Whole notebook", mat_nb_copy: "a copy",
+    mat_flag_breaks: "breaks today", mat_flag_unsafe: "unsafe", mat_hot_n: "{n} urgent",
+    mat_how_t: "How the material was checked",
     mat_cell: "cell", mat_source: "source", mat_more: "{n} more in the report",
     mat_lesson: "Proposed new lesson", mat_owned: "the import check owns this line",
     mat_all: "All", mat_unsafe_f: "Unsafe as taught",
     mat_foot: "{n} credential findings are kept out of this page and named in the private report.",
     mat_v_keep: "keep", mat_v_revise: "revise", mat_v_replace: "replace", mat_v_retire: "retire",
-    mat_e_small: "small", mat_e_medium: "medium", mat_e_large: "large",
+    mat_e_small: "a small edit", mat_e_medium: "a medium edit", mat_e_large: "a large edit",
     mat_c_high: "high confidence", mat_c_medium: "medium confidence", mat_c_low: "low confidence",
     mat_s_superseded: "superseded", mat_s_deprecated: "deprecated", mat_s_removed: "removed",
     mat_s_unsafe: "unsafe as taught", mat_s_missing_context: "missing what the job needs",
@@ -265,7 +271,9 @@ const T = {
     sc_weights: "Each counts equally, weighted {w}.", sc_ease: "Ease is 6 minus difficulty, {d} here.",
     dim_relevance: "Relevance", dim_impact: "Impact", dim_educational_value: "Educational value", dim_market_relevance: "Market relevance",
     dim_maturity: "Maturity", dim_prerequisites: "Prerequisites", dim_ease: "Ease",
-    prov_measured: "measured", prov_judged: "judged", prov_default: "default",
+    prov_measured: "measured", prov_judged: "judged", prov_default: "default", prov_agent: "agent",
+    sc_read: "what the agent read", sc_cite_dropped: "{n} cited nothing it had seen, dropped",
+    sc_looked: "looked up: {list}",
     immature: "Not stable yet", im_note: "Maturity {n} or lower: watched until it is stable enough to teach.",
     cn_note: "Read from the tools' own source, comparing the newest release with the newest version the course's pins allow: {list}. Checked on {date}.",
     cn_pair: "{tool} {latest} against {course}",
@@ -298,15 +306,15 @@ const T = {
   ar: {
     sub: "المؤكد يعني أن إصداراً رسمياً قال الشيء نفسه. وما عداه يبقى غير مؤكد.",
     tab_act: "ماذا نفعل", tab_map: "خريطة المنهج", tab_ev: "الأدلة", tab_run: "عن هذه التشغيلة",
-    tab_mat: "المادة", h_mat: "ما تدرّسه النوتبوكات، وما الذي تغيّر",
+    tab_mat: "المادة", h_mat: "ما الذي يُغيَّر في المقرر",
     mat_sub: "قُرئ {books} نوتبوك في {date}. كل ادعاء عن المادة كان لا بد أن يوجد في النوتبوك نفسه: وُجد {located} من {claims}، وأُسقط {dropped}.",
     mat_shape: "{found} نتيجة، يظهر منها هنا {shown}، أشدّ أربع لكل نوتبوك، وبقيتها في التقرير. منها {anchored} عند خلية محددة، و{whole} تصف النوتبوك كله.",
     mat_lowered: "خُفض إلى تعديل: {n} طلبت الاستبدال اعتماداً على غياب شيء فقط، والغياب لا يسنده إصدار.",
     mat_dead_src: "قُرئ في {date} من",
     mat_dead_split: "{named} تسميه، و{by} تصل إليه عبر قيمة افتراضية",
-    mat_wide: "طرق يتشاركها المقرر كله",
+    mat_wide: "تغييرات تمسّ المقرر كله",
     mat_wide_row: "{notebooks} نوتبوك، {chapters} فصلاً",
-    mat_lessons: "دروس اقترحتها المراجعة",
+    mat_lessons: "دروس تستحق الإضافة",
     mat_lessons_sub: "قيس {n} مقابل آخر {months} أشهر من إعلانات التوظيف. المصطلح الذي يُعدّ اختاره {model}، وسُئل {runs} مرات، ولا يُعتمد إلا إذا تكرر الاسم نفسه في كل مرة وكان الدرس يستعمله، ثم عُدّ في الإعلانات وبُحث عنه في النوتبوكات. ثبت الاسم في {runs} من المحاولات لـ {held} من {n}. قُرئ في {date}.",
     mat_unstable: "لم يثبت اسم في كل المحاولات",
     mat_v2_sub: "{verified} من هذه الخلايا مفحوصة آلياً مقابل الإصدار الذي يثبّته الطالب اليوم.",
@@ -327,9 +335,16 @@ const T = {
     mat_seen_none: "لا يذكره أي نوتبوك",
     mat_seen_n: "يذكره {n}",
     mat_watched: "{n} تحت المراقبة، إذ لم يذكرها أي صاحب عمل بعد",
-    mat_dead: "نماذج تتوقف داخل عمر هذا المقرر",
+    mat_dead: "متى تتوقف النوتبوكات عن العمل",
     mat_dead_row: "{books} نوتبوك",
     mat_basis: "قرأته مراجعات آلية بحثت في الويب عن كل طريقة، وحكمت عليها، والمصدر مذكور بجانبه. هذا ليس ادعاءً مفحوصاً.",
+    mat_legend: "العلامة {tick} تعني تغييراً فُحص مقابل الإصدار الذي يثبّته الطلاب اليوم.",
+    mat_legend_judged: "أما الباقي فقرأه مراجعون من الذكاء الاصطناعي، ومع كلٍّ منه مصدره.",
+    mat_verified_t: "فُحص مقابل الإصدار الذي يثبّته الطلاب اليوم",
+    mat_past: "أُوقف بالفعل", mat_dead_from: "المصدر: {site}، قُرئ في {date}.",
+    mat_whole_short: "النوتبوك كله", mat_nb_copy: "نسخة مكررة",
+    mat_flag_breaks: "يتعطل اليوم", mat_flag_unsafe: "غير آمن", mat_hot_n: "عاجل: {n}",
+    mat_how_t: "كيف فُحصت المادة",
     mat_cell: "الخلية", mat_source: "المصدر", mat_more: "و{n} في التقرير",
     mat_lesson: "درس جديد مقترح", mat_owned: "هذا السطر يتبع فحص الاستيرادات",
     mat_all: "الكل", mat_unsafe_f: "غير آمن كما يُدرَّس",
@@ -407,7 +422,9 @@ const T = {
     sc_weights: "لكلٍّ منها الوزن نفسه: {w}.", sc_ease: "السهولة هي 6 ناقص الصعوبة، وهي هنا {d}.",
     dim_relevance: "الصلة بالمقرر", dim_impact: "الأثر", dim_educational_value: "القيمة التعليمية", dim_market_relevance: "الطلب في السوق",
     dim_maturity: "النضج", dim_prerequisites: "المتطلبات السابقة", dim_ease: "السهولة",
-    prov_measured: "مقيس", prov_judged: "مقدَّر", prov_default: "افتراضي",
+    prov_measured: "مقيس", prov_judged: "مقدَّر", prov_default: "افتراضي", prov_agent: "وكيل",
+    sc_read: "ما الذي قرأه الوكيل", sc_cite_dropped: "{n} استشهد بما لم يره، فأُسقط",
+    sc_looked: "بحث في: {list}",
     immature: "غير مستقر بعد", im_note: "نضج {n} أو أقل: تحت المراقبة حتى يستقر بما يكفي للتدريس.",
     cn_note: "مقروءة من مصدر الأدوات نفسها، بمقارنة أحدث إصدار بأحدث نسخة تسمح بها تثبيتات المقرر: {list}. رُوجعت في {date}.",
     cn_pair: "{tool} {latest} مقابل {course}",
@@ -655,6 +672,8 @@ function agentText(en, ar, tag, cls) {
    own, three to ten take the plural, and eleven and up the singular. */
 const COUNTED = {
   edit: { en: ["edit", "edits"], ar: ["تعديل واحد", "تعديلان", "تعديلات", "تعديلاً"] },
+  change: { en: ["change", "changes"], ar: ["تعديل واحد", "تعديلان", "تعديلات", "تعديلاً"] },
+  cell: { en: ["cell", "cells"], ar: ["خلية واحدة", "خليتان", "خلايا", "خلية"] },
   notebook: { en: ["notebook", "notebooks"], ar: ["نوتبوك واحد", "نوتبوكان", "نوتبوكات", "نوتبوكاً"] },
   chapter: { en: ["chapter", "chapters"], ar: ["فصل واحد", "فصلان", "فصول", "فصلاً"] },
   tool: { en: ["tool", "tools"], ar: ["أداة واحدة", "أداتان", "أدوات", "أداة"] },
@@ -758,6 +777,23 @@ function editsBlock(item) {
    score came from (measured, judged, or a default when nothing could be
    measured), and the arithmetic with the weights, so the reader can check the
    total rather than take it. */
+/* A score an agent reached carries the tools it called and the lines it quoted, and
+   the count of what it cited without having seen. Closed by default: the number is the
+   answer, this is the working. */
+function agentRead(item) {
+  const judged = item.factors && item.factors.educational_value;
+  if (!judged || !(judged.cites || []).length) return "";
+  const looked = (judged.looked || []).map((x) => x.tool);
+  return `<details class="sc-read">
+    <summary>${esc(t("sc_read"))}</summary>
+    ${looked.length ? `<p class="sc-note">${esc(fill(t("sc_looked"), { list: looked.join(", ") }))}</p>` : ""}
+    <ul class="sc-cites">${judged.cites.map((c) => `<li>
+      <span class="sc-cite-tool" dir="ltr">${esc(c.tool)}</span>
+      <span class="sc-cite-q" dir="auto">${esc(c.quote)}</span></li>`).join("")}</ul>
+    ${judged.dropped ? `<p class="sc-note">${esc(fill(t("sc_cite_dropped"), { n: judged.dropped }))}</p>` : ""}
+  </details>`;
+}
+
 function scoreBlock(item) {
   const sc = DATA.scoring;
   if (!sc || !item.dimensions) return "";
@@ -777,7 +813,8 @@ function scoreBlock(item) {
   const pCol = `<div class="sc-col"><div class="sc-head"><span class="why-t">${esc(t("sc_priority"))}</span>
       <b class="sc-total">${item.priority.toFixed(2)}</b>${math(pMath)}</div>
       <ul class="sc-rows">${pRows}</ul>
-      ${same ? `<p class="sc-note">${esc(fill(t("sc_weights"), { w: weights[0][1] }))}</p>` : ""}</div>`;
+      ${same ? `<p class="sc-note">${esc(fill(t("sc_weights"), { w: weights[0][1] }))}</p>` : ""}
+      ${agentRead(item)}</div>`;
 
   let fCol = "";
   const f = item.factors;
@@ -996,122 +1033,148 @@ function codeText(text) {
   return esc(String(text || "")).replace(/`([^`]{1,80})`/g, '<code dir="ltr">$1</code>');
 }
 
-/* A date means more with the reader's own calendar beside it. */
+/* A date means more with the reader's own calendar beside it. A date already behind
+   us is not soon: the notebooks that depend on it have stopped working. */
+function daysTo(date) {
+  return Math.round((new Date(date + "T00:00:00") - new Date(new Date().toDateString())) / 86400000);
+}
+
 function whenText(date) {
-  const days = Math.round((new Date(date + "T00:00:00") - new Date(new Date().toDateString())) / 86400000);
+  const days = daysTo(date);
   if (days === 0) return t("mat_today");
-  if (days < 0) return "";
+  if (days < 0) return t("mat_past");
   return fill(t("mat_in_days"), { n: days });
 }
 
-function matChip(kind, value) {
-  return `<span class="chip m-${value}">${esc(t(`mat_${kind}_${value}`))}</span>`;
+/* 28 Sep rather than 2026-09-28: a teacher reads a calendar, not a timestamp. The
+   year shows only when it is not this one. */
+function dayText(date) {
+  const d = new Date(date + "T00:00:00");
+  if (isNaN(d)) return date;
+  const opts = { day: "numeric", month: "short" };
+  if (d.getFullYear() !== new Date().getFullYear()) opts.year = "numeric";
+  try {
+    return new Intl.DateTimeFormat(lang === "ar" ? "ar-u-nu-latn" : "en-GB", opts).format(d);
+  } catch (err) {
+    return date;
+  }
 }
 
-function matFinding(f, book) {
-  const cell = f.cell ? `<span class="mf-cell">${esc(t("mat_cell"))} ${f.cell}</span>` : "";
-  const owned = f.own ? `<span class="mf-own">${esc(t("mat_owned"))}</span>` : "";
-  const source = f.u
-    ? `<a class="mf-src" href="${esc(f.u)}" target="_blank" rel="noopener">${esc(t("mat_source"))}${
-        f.d ? ` <span class="mf-date" dir="ltr">${esc(f.d)}</span>` : ""}</a>`
+const comma = () => (lang === "ar" ? "، " : ", ");
+
+/* A notebook's file, said the way a person would say it. The file name itself stays
+   one hover away, because that is what a teacher opens. */
+function bookName(file) {
+  return String(file || "")
+    .replace(/\.ipynb$/i, "")
+    .replace(/\s*\((?:lab[_ ])?solution\)\s*$/i, "")
+    .replace(/[_\s]+(?:sol|solution)$/i, "")
+    .replace(/_/g, " ")
+    .replace(/\s+/g, " ")
+    .trim() || String(file || "");
+}
+
+/* The one mark a change carries: it was checked against the release a student
+   installs today. A change with no mark was read by the AI reviewers. */
+function matTick() {
+  const label = esc(t("mat_verified_t"));
+  return `<span class="ok" role="img" aria-label="${label}" title="${label}">✓</span>`;
+}
+
+const matUrgent = (x) => x.breaks || x.s === "unsafe";
+
+/* Two things earn a word in the row itself: a line that fails on today's install and
+   a method that is unsafe as taught. Every other label waits behind the detail. */
+function matFlag(it) {
+  if (it.breaks) return `<p class="ci-flag">${esc(t("mat_breaks"))}</p>`;
+  if (it.s === "unsafe") return `<p class="ci-flag">${esc(t("mat_s_unsafe"))}</p>`;
+  return "";
+}
+
+function matSource(url, date) {
+  return url
+    ? `<a class="mf-src" href="${esc(url)}" target="_blank" rel="noopener">${esc(t("mat_source"))}${
+        date ? ` <span class="mf-date" dir="ltr">${esc(date)}</span>` : ""}</a>`
     : "";
-  const head = lang === "ar"
-    ? `<b dir="ltr">${esc(f.t)}</b> ${matChip("s", f.s)}${cell}`
-    : `<b>${esc(f.t)}</b> ${matChip("s", f.s)}${cell}`;
-  /* English reads the reviewer's sentence, Arabic reads the name: the sentence is
-     English prose, and a rule cannot render it faithfully in Arabic. */
+}
+
+/* An older payload kept a notebook's findings as a flat list rather than by cell. It
+   reads the same way: the change, its reason, then the detail. */
+function matFinding(f) {
   const body = lang === "ar"
     ? (f.rn ? `<code dir="ltr">${esc(f.rn)}</code>` : "")
     : codeText(f.r);
-  const replacement = body
-    ? `<p class="mf-rep"><span class="mf-arrow" aria-hidden="true"></span>${body}</p>` : "";
-  return `<div class="mf">
-    <div class="mf-top">${head}${owned}</div>
-    <p class="mf-why${lang === "ar" ? " in-en bare" : ""}" dir="${lang === "ar" ? "ltr" : "auto"}"${
+  const facts = [`<b dir="auto">${esc(f.t)}</b>`, f.s ? `<span>${esc(t(`mat_s_${f.s}`))}</span>` : "",
+                 f.cell ? `<span>${esc(t("mat_cell"))} ${f.cell}</span>` : ""].filter(Boolean).join("");
+  return `<div class="ci">
+    <p class="ci-facts">${facts}</p>
+    ${body ? `<p class="ci-rep"><span class="pair-arrow" aria-hidden="true"></span> ${body}</p>` : ""}
+    <p class="ci-why${lang === "ar" ? " in-en bare" : ""}" dir="${lang === "ar" ? "ltr" : "auto"}"${
       lang === "ar" ? ' lang="en"' : ""}>${codeText(f.w)}</p>
-    ${replacement}
-    <div class="mf-foot">${source}${matChip("c", f.c)}</div>
+    <div class="mf-foot">${matSource(f.u, f.d)}${f.c ? `<span>${esc(t(`mat_c_${f.c}`))}</span>` : ""}</div>
   </div>`;
 }
 
 /* One change: what is there now, what to teach instead. The pair is the row, because
-   the pair is what a teacher acts on. The reason is one line under it, and the long
-   reason, the source, the date and the confidence sit behind a toggle, closed. */
+   the pair is what a teacher acts on. One line of reason sits under it; the long
+   reason, the label the reviewers gave it, the source and the confidence wait behind
+   the detail, closed. */
 function matPair(text, kind) {
   const asCode = kind === "import" || kind === "model";
   return asCode ? `<code dir="ltr">${esc(text)}</code>` : codeText(text);
 }
 
 function matItem(it) {
-  const tag = `<span class="ci-tag ${it.basis === "verified" ? "ver" : "jud"}">${
-    esc(t(it.basis === "verified" ? "mat_verified" : "mat_judged"))}</span>`;
-  const agree = it.agree ? `<span class="ci-agree">${esc(fill(t("mat_agree"), { n: it.agree }))}</span>` : "";
-  const status = it.s ? matChip("s", it.s) : "";
-  const breaks = it.breaks ? `<span class="ci-breaks">${esc(t("mat_breaks"))}</span>` : "";
   const why1 = it.why1
     ? (it.why_ar && lang === "ar"
       ? `<p class="ci-why" dir="rtl" lang="ar">${arText(it.why_ar)}</p>`
       : `<p class="ci-why${lang === "ar" ? " in-en bare" : ""}" dir="${lang === "ar" ? "ltr" : "auto"}">${codeText(it.why1)}</p>`)
     : "";
+  const facts = [it.t ? `<b dir="auto">${esc(it.t)}</b>` : "",
+                 it.s && it.s !== "unsafe" ? `<span>${esc(t(`mat_s_${it.s}`))}</span>` : "",
+                 it.agree ? `<span>${esc(fill(t("mat_agree"), { n: it.agree }))}</span>` : ""].filter(Boolean);
   const long = [it.w && it.w !== it.why1 ? codeText(it.w) : "",
                 it.r && it.r !== it.instead ? `<span class="ci-label">${esc(t("mat_instead"))}</span> ${codeText(it.r)}` : "",
                 it.why && it.why !== it.why1 ? esc(it.why) : ""].filter(Boolean);
-  const source = it.u
-    ? `<a class="mf-src" href="${esc(it.u)}" target="_blank" rel="noopener">${esc(t("mat_source"))}${
-        it.d || it.checked ? ` <span class="mf-date" dir="ltr">${esc(it.d || it.checked)}</span>` : ""}</a>`
-    : "";
-  const extra = long.length || source || it.c
+  const foot = [matSource(it.u, it.d || it.checked), it.c ? `<span>${esc(t(`mat_c_${it.c}`))}</span>` : "",
+                it.own ? `<span>${esc(t("mat_owned"))}</span>` : ""].filter(Boolean).join("");
+  const extra = facts.length || long.length || foot
     ? `<details class="ci-more"><summary>${esc(t("mat_more_row"))}</summary>
+        ${facts.length ? `<p class="ci-facts">${facts.join("")}</p>` : ""}
         ${long.map((x) => `<p class="ci-long">${x}</p>`).join("")}
-        <div class="mf-foot">${source}${it.c ? matChip("c", it.c) : ""}${
-          it.own ? `<span class="mf-own">${esc(t("mat_owned"))}</span>` : ""}</div>
+        ${foot ? `<div class="mf-foot">${foot}</div>` : ""}
       </details>`
     : "";
   return `<div class="ci">
-    <div class="ci-top">${tag}${status}${breaks}${agree}</div>
     <div class="pair">
-      <span class="pair-now">${matPair(it.now, it.kind)}</span>
+      <span class="pair-now" dir="auto">${matPair(it.now, it.kind)}</span>
       <span class="pair-arrow" aria-hidden="true"></span>
-      <span class="pair-new">${matPair(it.instead, it.kind)}</span>
+      <span class="pair-new" dir="auto">${matPair(it.instead, it.kind)}${it.basis === "verified" ? matTick() : ""}</span>
     </div>
-    ${why1}${extra}
+    ${matFlag(it)}${why1}${extra}
   </div>`;
 }
 
 /* A finding that only restates a verified change in the same cell is not a second
    change. It is agreement, and it is counted on the verified row instead. */
 function matCellItems(items) {
-  const shown = items.filter((i) => !i.dup);
-  let html = "", heading = null;
-  shown.forEach((i) => {
-    if (i.t && i.t !== heading) {
-      heading = i.t;
-      html += `<div class="ci-head">${esc(i.t)}</div>`;
-    } else if (!i.t) {
-      heading = null;
-    }
-    html += matItem(i);
-  });
-  return html;
+  return items.filter((i) => !i.dup).map(matItem).join("");
 }
 
+/* The cell number is the spine: it is what a teacher scrolls the notebook to. The
+   rows live in their own box so the banding counts cells and nothing else. */
 function matCells(b) {
-  const cells = b.cells || [];
-  const rows = cells.map((c, n) => `<div class="cellrow${n >= 4 ? " extra" : ""}">
-    <span class="cell-no">${esc(fill(t("mat_cell_n"), { n: c.cell }))}</span>
+  const rows = (b.cells || []).map((c) => `<div class="cellrow">
+    <span class="cell-no"><span class="vh">${esc(t("mat_cell"))} </span>${c.cell}</span>
     <div class="cell-items">${matCellItems(c.items)}</div>
   </div>`).join("");
-  const more = cells.length > 4
-    ? `<button type="button" class="showall">${esc(fill(t("mat_show_all"), { n: cells.length }))}</button>` : "";
   const whole = (b.whole || []).length
     ? `<div class="cellrow whole">
-        <span class="cell-no">${esc(t("mat_whole_head"))}</span>
+        <span class="cell-no">${esc(t("mat_whole_short"))}</span>
         <div class="cell-items">${matCellItems(b.whole)}</div>
       </div>`
     : "";
-  /* The rows live in their own box so the banding counts cells, not whatever else
-     the card happens to hold above them. */
-  return `<div class="cells">${rows}</div>` + more + whole;
+  return (rows ? `<div class="cells">${rows}</div>` : "") + whole;
 }
 
 /* Every change a notebook carries, wherever the payload keeps them. */
@@ -1119,103 +1182,135 @@ function matItems(b) {
   return (b.cells || []).flatMap((c) => c.items).concat(b.whole || [], b.f || []);
 }
 const matUnsafe = (b) => matItems(b).some((x) => x.s === "unsafe");
+const matShown = (b) => matItems(b).filter((x) => !x.dup);
 
-function matBook(b) {
+/* A notebook is one line until it is asked for: its name, how many cells change, and
+   a word only when something in it breaks or is unsafe. Opened, it says what to do
+   with the notebook, then shows the changes cell by cell. */
+function matBook(b, open) {
+  const shown = matShown(b);
+  const cells = (b.cells || []).length;
+  const size = b.copy_of ? t("mat_nb_copy")
+    : cells ? counted("cell", cells) : (b.whole || []).length ? t("mat_whole_short") : "";
+  const flag = shown.some((x) => x.breaks) ? t("mat_flag_breaks")
+    : shown.some((x) => x.s === "unsafe") ? t("mat_flag_unsafe") : "";
+  /* An effort nobody measured is a guess, so a default one is not said. */
+  const plan = b.copy_of
+    ? (lang === "ar" && b.why_ar ? b.why_ar : b.why)
+    : [b.v ? t(`mat_v_${b.v}`) : "", b.e && b.es !== "default" ? t(`mat_e_${b.e}`) : ""].filter(Boolean).join(comma());
   const lesson = b.n
-    ? `<div class="mb-lesson"><span>${esc(t("mat_lesson"))}</span> ${esc(b.n)}${b.ld
-        ? ` <span class="ls-term"><code dir="ltr">${esc(b.ld.term)}</code>
-            <span class="ls-n">${esc(counted("post", b.ld.jobs))}</span>
-            ${b.ld.papers === null || b.ld.papers === undefined ? "" : `<span class="ls-n research">${esc(counted("paper", b.ld.papers))}</span>`}
-            <span class="ls-n">${esc(b.ld.mentioned ? fill(t("mat_seen_n"), { n: counted("notebook", b.ld.mentioned) }) : t("mat_seen_none"))}</span></span>` : ""}</div>`
+    ? `<p class="nb-lesson"><span>${esc(t("mat_lesson"))}</span>${esc(b.n)}${
+        b.ld && b.ld.jobs ? `<span class="nb-lesson-n">${esc(comma() + counted("post", b.ld.jobs))}</span>` : ""}</p>`
     : "";
-  const more = b.more
-    ? `<div class="mb-more">${esc(fill(t("mat_more"), { n: b.more }))} <span class="mb-found">${b.found}</span></div>` : "";
-  return `<div class="matbook" data-verdict="${b.v}"${matUnsafe(b) ? " data-unsafe" : ""}>
-    <div class="mb-head"><code class="mb-file" dir="ltr">${esc(b.file)}</code>${b.v ? matChip("v", b.v) : ""}${b.e ? matChip("e", b.e) : ""}${
-      b.changes ? `<span class="mb-cells">${esc(fill(t("mat_cells_n"), { n: b.changes }))}</span>` : ""}</div>
-    <p class="mb-action${lang === "ar" ? " in-en" : ""}" dir="${lang === "ar" ? "ltr" : "auto"}"${lang === "ar" ? ' lang="en"' : ""}>${
-      lang === "ar" ? `<span class="en-note" dir="rtl" lang="ar">${esc(t("en_only"))}</span>` : ""}${codeText(b.a)}</p>
-    ${b.cells || b.whole ? matCells(b) : (b.f || []).map((f) => matFinding(f, b)).join("")}${more}${lesson}
-  </div>`;
+  return `<details class="nb" data-verdict="${esc(b.v || "")}"${matUnsafe(b) ? " data-unsafe" : ""}${open ? " open" : ""}>
+    <summary>
+      <span class="nb-name" dir="auto" title="${esc(b.file)}">${esc(bookName(b.file))}</span>
+      <span class="nb-meta">${esc(size)}${flag ? ` <span class="warn-word">${esc(flag)}</span>` : ""}</span>
+    </summary>
+    <div class="nb-body">
+      ${plan ? `<p class="nb-plan">${esc(plan)}</p>` : ""}
+      ${b.a ? `<p class="nb-action${lang === "ar" ? " in-en" : ""}" dir="${lang === "ar" ? "ltr" : "auto"}"${
+        lang === "ar" ? ' lang="en"' : ""}>${lang === "ar"
+        ? `<span class="en-note" dir="rtl" lang="ar">${esc(t("en_only"))}</span>` : ""}${codeText(b.a)}</p>` : ""}
+      ${b.cells || b.whole ? matCells(b) : (b.f || []).map(matFinding).join("")}
+      ${lesson}
+    </div>
+  </details>`;
+}
+
+/* How the review was made is a question for whoever audits it, not for whoever acts
+   on it, so it lives under About this run with the rest of the method. */
+function matHow() {
+  const counts = MAT.counts, s = MAT.summary;
+  const paras = [];
+  if (s) {
+    paras.push([fill(t("mat_v2_sub"), { verified: s.cells_verified }),
+      s.cells_judged ? fill(t("mat_v2_judged"), { judged: s.cells_judged, claims: counts.claims,
+        located: counts.located, dropped: counts.dropped }) : "",
+      s.copies ? fill(t("mat_copies"), { n: s.copies }) : ""].filter(Boolean).join(" "));
+    paras.push([lang === "ar" ? MAT.verified_ar : MAT.verified_en,
+      s.cells_judged ? (lang === "ar" ? MAT.basis_ar : MAT.basis_en) : ""].filter(Boolean).join(" "));
+  } else {
+    const found = Object.values(counts.statuses || {}).reduce((a, b) => a + b, 0);
+    paras.push(fill(t("mat_sub"), { books: counts.notebooks, date: MAT.read_on, located: counts.located,
+      claims: counts.claims, dropped: counts.dropped }) + " " + fill(t("mat_shape"), { found, shown: MAT.shown,
+      anchored: counts.anchored, whole: counts.whole_notebook }) + (counts.lowered
+        ? " " + fill(t("mat_lowered"), { n: counted("notebook", counts.lowered) }) : ""));
+    paras.push((lang === "ar" ? MAT.basis_ar : MAT.basis_en) || t("mat_basis"));
+  }
+  if ((MAT.lessons || []).length && MAT.lessons_checked) {
+    paras.push(fill(t("mat_lessons_sub"), { n: MAT.lessons.length, months: MAT.lessons_checked.months,
+      model: MAT.lessons_checked.picked_by, date: MAT.lessons_checked.on,
+      runs: MAT.lessons_checked.runs, held: MAT.lessons_checked.held }));
+  }
+  return `<div class="note mat-how"><h3>${esc(t("mat_how_t"))}</h3>${
+    paras.filter(Boolean).map((p) => `<p>${esc(p)}</p>`).join("")}</div>`;
 }
 
 function renderMaterial() {
   if (!MAT) return;
-  const keeps = (b) => matFilter === "all" || (matFilter === "unsafe"
-    ? matUnsafe(b) : b.v === matFilter);
-  const counts = MAT.counts;
-  const s = MAT.summary;
-  if (s) {
-    document.getElementById("matSub").innerHTML = esc(fill(t("mat_v2_sub"), { verified: s.cells_verified }))
-      + (s.cells_judged ? " " + esc(fill(t("mat_v2_judged"), { judged: s.cells_judged,
-          claims: counts.claims, located: counts.located, dropped: counts.dropped })) : "")
-      + (s.stop_running || []).slice(1).map((x) => " " + esc(fill(t("mat_stop"), { books: x.notebooks, date: x.date }))).join("")
-      + (s.copies ? " " + esc(fill(t("mat_copies"), { n: s.copies })) : "");
-    document.getElementById("matBasis").textContent = [
-      (lang === "ar" ? MAT.verified_ar : MAT.verified_en),
-      s.cells_judged ? (lang === "ar" ? MAT.basis_ar : MAT.basis_en) : ""].filter(Boolean).join(" ");
-  }
-  const found = Object.values(counts.statuses || {}).reduce((a, b) => a + b, 0);
-  if (!s) document.getElementById("matSub").innerHTML = esc(fill(t("mat_sub"), {
-    books: counts.notebooks, date: MAT.read_on, located: counts.located, claims: counts.claims, dropped: counts.dropped }))
-    + " " + esc(fill(t("mat_shape"), { found, shown: MAT.shown, anchored: counts.anchored, whole: counts.whole_notebook }))
-    + (counts.lowered ? " " + esc(fill(t("mat_lowered"), { n: counted("notebook", counts.lowered) })) : "");
-  if (!s) document.getElementById("matBasis").textContent = (lang === "ar" ? MAT.basis_ar : MAT.basis_en) || t("mat_basis");
-  document.getElementById("matFoot").textContent = fill(t("mat_foot"), { n: counts.credentials });
+  const keeps = (b) => matFilter === "all" || (matFilter === "unsafe" ? matUnsafe(b) : b.v === matFilter);
+  const every = MAT.chapters.flatMap((ch) => ch.books.flatMap(matShown));
 
-  document.getElementById("matDead").innerHTML = `<div class="deadlines">
-    <h3>${esc(t("mat_dead"))}</h3>
-    ${MAT.deadlines.map((d, i) => `<div class="dl${i === 0 ? " near" : ""}">
-      <b dir="ltr">${esc(d.date)}</b><span class="dl-when">${esc(whenText(d.date))}</span>
-      <code dir="ltr">${esc(d.what)}</code>
-      <span class="dl-n">${esc(fill(t("mat_dead_row"), { books: d.books }))}</span>
-      ${d.named !== undefined || d.by_default !== undefined
-        ? `<span class="dl-split">${esc(fill(t("mat_dead_split"), { named: d.named || 0, by: d.by_default || 0 }))}</span>` : ""}
-      ${agentText(d.why, d.why_ar, "span", "dl-why")}
-      ${d.replacement ? `<span class="dl-rep"><span class="mf-arrow" aria-hidden="true"></span><code dir="ltr">${esc(d.replacement)}</code></span>` : ""}
-    </div>`).join("")}
-    <p class="dl-src">${esc(fill(t("mat_dead_src"), { date: MAT.deadline_source.read_on }))}
-      <a href="${esc(MAT.deadline_source.url)}" dir="ltr" target="_blank" rel="noopener">${esc(MAT.deadline_source.url)}</a></p>
-  </div>`;
+  /* One legend, said once, in place of a tag on every row. */
+  document.getElementById("matSub").innerHTML = fill(esc(t("mat_legend")), { tick: matTick() })
+    + (every.some((x) => x.basis !== "verified") ? " " + esc(t("mat_legend_judged")) : "");
+  document.getElementById("matFoot").textContent = MAT.counts.credentials
+    ? fill(t("mat_foot"), { n: MAT.counts.credentials }) : "";
+  /* A filter redraws this tab on its own, so the note is replaced, never added again. */
+  const notes = document.getElementById("runNotes");
+  if (notes) {
+    const prior = notes.querySelector(".mat-how");
+    if (prior) prior.remove();
+    notes.insertAdjacentHTML("afterbegin", matHow());
+  }
+
+  const source = MAT.deadline_source || {};
+  let site = source.url || "";
+  try { site = new URL(source.url).hostname; } catch (err) { /* keep the address as given */ }
+  document.getElementById("matDead").innerHTML = (MAT.deadlines || []).length
+    ? `<h3>${esc(t("mat_dead"))}</h3>
+      ${MAT.deadlines.map((d) => {
+        const split = d.named !== undefined || d.by_default !== undefined
+          ? fill(t("mat_dead_split"), { named: d.named || 0, by: d.by_default || 0 }) : "";
+        return `<div class="dl">
+          <div class="dl-row">
+            <span class="dl-date${daysTo(d.date) <= 30 ? " hot" : ""}"><b>${esc(dayText(d.date))}</b> <span class="dl-when">${esc(whenText(d.date))}</span></span>
+            <span class="pair">
+              <span class="pair-now" dir="auto"><code dir="ltr">${esc(d.what)}</code></span>
+              <span class="pair-arrow" aria-hidden="true"></span>
+              <span class="pair-new" dir="auto">${d.replacement ? `<code dir="ltr">${esc(d.replacement)}</code>` : esc(t("none"))}</span>
+            </span>
+            <span class="dl-n">${esc(counted("notebook", d.books))}</span>
+          </div>
+          <details class="ci-more"><summary>${esc(t("mat_more_row"))}</summary>
+            ${agentText(d.why, d.why_ar, "p", "ci-long")}
+            ${split ? `<p class="ci-long">${esc(split)}</p>` : ""}
+          </details>
+        </div>`;
+      }).join("")}
+      ${source.url ? `<p class="dl-src">${fill(esc(t("mat_dead_from")), {
+        site: `<a href="${esc(source.url)}" dir="ltr" target="_blank" rel="noopener">${esc(site)}</a>`,
+        date: esc(dayText(source.read_on)) })}</p>` : ""}`
+    : "";
 
   document.getElementById("matWide").innerHTML = (MAT.course_wide || []).length
     ? `<h3>${esc(t("mat_wide"))}</h3>` + MAT.course_wide.map((w) => `<div class="cw">
-        ${matChip("s", w.status)}
-        <span class="pair">
-          <span class="pair-now">${esc(w.technique)}</span>
-          <span class="pair-arrow" aria-hidden="true"></span>
-          <span class="pair-new">${w.instead ? codeText(w.instead) : esc(t("none"))}</span>
-        </span>
-        <span class="cw-n">${esc(fill(t("mat_wide_row"), { notebooks: w.notebooks,
-          chapters: Array.isArray(w.chapters) ? w.chapters.length : w.chapters }))}</span>
+        <div class="cw-row">
+          <span class="pair">
+            <span class="pair-now" dir="auto">${codeText(w.technique)}</span>
+            <span class="pair-arrow" aria-hidden="true"></span>
+            <span class="pair-new" dir="auto">${w.instead ? codeText(w.instead) : esc(t("none"))}</span>
+          </span>
+          <span class="cw-n">${esc(fill(t("mat_wide_row"), { notebooks: w.notebooks,
+            chapters: Array.isArray(w.chapters) ? w.chapters.length : w.chapters }))}</span>
+        </div>
+        ${w.status === "unsafe" ? `<p class="ci-flag">${esc(t("mat_s_unsafe"))}</p>` : ""}
         <details class="ci-more"><summary>${esc(t("mat_more_row"))}</summary>
-          ${agentText(w.why, w.why_ar, "p", "ci-long")}</details>
+          ${w.status && w.status !== "unsafe" ? `<p class="ci-facts"><span>${esc(t(`mat_s_${w.status}`))}</span></p>` : ""}
+          ${agentText(w.why, w.why_ar, "p", "ci-long")}
+        </details>
       </div>`).join("")
-    : "";
-
-  const lessonAct = { add_new_lesson: "add", add_optional_content: "optional", watch: "watch" };
-  const lessonRow = (l) => `<div class="ls">
-    <span class="chip ${lessonAct[l.act] || "watch"}">${esc(t(l.act))}</span>
-    <b>${esc(l.title)}</b>
-    <span class="ls-term">${l.unstable
-      ? `<span class="ls-unstable">${esc(t("mat_unstable"))}</span>`
-      : `<code dir="ltr">${esc(l.term)}</code>`}
-      <span class="ls-n">${esc(counted("post", l.jobs))}</span>
-      ${l.papers === null || l.papers === undefined ? "" : `<span class="ls-n research">${esc(counted("paper", l.papers))}</span>`}
-      <span class="ls-n">${esc(l.mentioned ? fill(t("mat_seen_n"), { n: counted("notebook", l.mentioned) }) : t("mat_seen_none"))}</span></span>
-    ${agentText(l.why, l.why_ar, "span", "ls-why")}
-  </div>`;
-  const lessons = MAT.lessons || [];
-  const asked = lessons.filter((l) => l.act !== "watch");
-  const watched = lessons.filter((l) => l.act === "watch");
-  document.getElementById("matLessons").innerHTML = lessons.length
-    ? `<h3>${esc(t("mat_lessons"))}</h3>
-       <p class="ls-sub">${esc(fill(t("mat_lessons_sub"), { n: lessons.length, months: MAT.lessons_checked.months,
-          model: MAT.lessons_checked.picked_by, date: MAT.lessons_checked.on,
-          runs: MAT.lessons_checked.runs, held: MAT.lessons_checked.held }))}</p>
-       ${asked.map(lessonRow).join("")}
-       ${watched.length ? `<details class="ls-watch"><summary>${esc(fill(t("mat_watched"), { n: watched.length }))}</summary>
-         ${watched.map(lessonRow).join("")}</details>` : ""}`
     : "";
 
   const filters = [["all", "mat_all"], ["replace", "mat_v_replace"], ["revise", "mat_v_revise"],
@@ -1223,8 +1318,9 @@ function renderMaterial() {
   document.getElementById("matFilters").innerHTML = filters.map(([v, k]) =>
     `<button type="button" data-mat="${v}"${matFilter === v ? ' aria-pressed="true"' : ""}>${esc(t(k))}</button>`).join("");
 
-  /* The first chapter stands open, so a reader lands inside the work rather than on a
-     list of closed drawers. The rest wait to be asked. */
+  /* A chapter is one line with its counts. The first stands open with its first
+     notebook open inside it, so a reader lands on a real change and sees at once what
+     opening one gives them. */
   let html = "", week = null, first = true;
   MAT.chapters.forEach((ch) => {
     const books = ch.books.filter(keeps).filter((b) =>
@@ -1233,25 +1329,46 @@ function renderMaterial() {
     if (!books.length) return;
     if (ch.week !== week) {
       week = ch.week;
-      html += `<div class="weekhead">${lang === "ar" ? "الأسبوع" : "Week"} ${week}</div>`;
+      html += `<h3 class="weekhead">${lang === "ar" ? "الأسبوع" : "Week"} ${week}</h3>`;
     }
-    const tally = {};
-    ch.books.forEach((b) => { if (b.v) tally[b.v] = (tally[b.v] || 0) + 1; });
-    const chapterCells = ch.books.reduce((n, b) => n + (b.cells || []).length, 0);
-    html += `<details class="match"${first ? " open" : ""}>
+    const shown = books.flatMap(matShown);
+    const hot = shown.filter(matUrgent).length;
+    const title = String(ch.title || "").replace(/^week\s*\d+\s*[-:]\s*/i, "");
+    html += `<details class="ch"${first ? " open" : ""}>
       <summary>
-        <span class="cid">${esc(ch.id)}</span>
-        <h3>${esc(ch.title)}</h3>
-        <span class="mc-tally">${Object.keys(tally).length
-          ? Object.entries(tally).map(([v, n]) => `<span class="chip m-${v}">${n} ${esc(t(`mat_v_${v}`))}</span>`).join("")
-          : (chapterCells ? `<span class="mb-cells">${esc(fill(t("mat_cells_n"), { n: chapterCells }))}</span>` : "")}</span>
+        <span class="ch-title" dir="auto">${esc(title)}</span>
+        <span class="ch-meta">${esc(counted("notebook", books.length) + (shown.length ? comma() + counted("change", shown.length) : ""))}${
+          hot ? ` <span class="warn-word">${esc(fill(t("mat_hot_n"), { n: hot }))}</span>` : ""}</span>
       </summary>
-      <div class="mc-body">${books.map(matBook).join("")}</div>
+      <div class="ch-body">${books.map((b, i) => matBook(b, first && i === 0)).join("")}</div>
     </details>`;
     first = false;
   });
   document.getElementById("matList").innerHTML = html;
 
+  const lessonRow = (l) => `<div class="ls">
+    <div class="ls-row">
+      <b dir="auto">${esc(l.title)}</b>
+      <span class="ls-n">${esc(t(l.act) + (l.jobs ? comma() + counted("post", l.jobs) : ""))}</span>
+    </div>
+    <details class="ci-more"><summary>${esc(t("mat_more_row"))}</summary>
+      <p class="ci-facts">${l.unstable
+        ? `<span class="warn-word">${esc(t("mat_unstable"))}</span>`
+        : `<code dir="ltr">${esc(l.term)}</code>`}${
+        l.papers === null || l.papers === undefined ? "" : `<span>${esc(counted("paper", l.papers))}</span>`}<span>${
+        esc(l.mentioned ? fill(t("mat_seen_n"), { n: counted("notebook", l.mentioned) }) : t("mat_seen_none"))}</span></p>
+      ${agentText(l.why, l.why_ar, "p", "ci-long")}
+    </details>
+  </div>`;
+  const lessons = MAT.lessons || [];
+  const asked = lessons.filter((l) => l.act !== "watch");
+  const watched = lessons.filter((l) => l.act === "watch");
+  document.getElementById("matLessons").innerHTML = lessons.length
+    ? `<h3>${esc(t("mat_lessons"))}</h3>
+       ${asked.map(lessonRow).join("")}
+       ${watched.length ? `<details class="ls-watch"><summary>${esc(fill(t("mat_watched"), { n: watched.length }))}</summary>
+         ${watched.map(lessonRow).join("")}</details>` : ""}`
+    : "";
 }
 
 function renderMap() {
@@ -2356,13 +2473,6 @@ if (matFilterBar) matFilterBar.addEventListener("click", (e) => {
   matFilter = b.dataset.mat;
   renderMaterial();
   requestAnimationFrame(revealOnScroll);
-});
-
-document.getElementById("matList").addEventListener("click", (e) => {
-  const b = e.target.closest("button.showall");
-  if (!b) return;
-  b.closest(".matbook").classList.add("all");
-  b.remove();
 });
 
 document.getElementById("evFilters").addEventListener("click", (e) => {

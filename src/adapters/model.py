@@ -58,11 +58,18 @@ MAX_BACKOFF = 30.0
 # Which provider is out, and why. A key is refused per provider, not globally:
 # OpenAI running out of quota should not stop a working Groq key.
 _halted: dict[str, str] = {}
+_unreadable: dict[str, int] = {}
 
 # A provider that times out is not refusing us, so it is worth one more try.
 # A provider that times out twice running is costing the run two timeouts per
 # call and is dropped like a refused one.
 STRIKES = 2
+# An answer we could not read is not a provider that is down. It replied, over a
+# working key, with prose where JSON was asked for. Counting that as a strike drops
+# a live provider after two chatty answers, which is what emptied a whole run:
+# thirty-four unreadable answers took every provider out and eighty-one calls after
+# them were skipped without being tried.
+UNREADABLE_STRIKES = 8
 _strikes: dict[str, int] = {}
 
 # What each provider said it had left, from its rate-limit headers. Groq counts a
@@ -78,6 +85,7 @@ MAX_PACE_WAIT = 65.0
 def reset() -> None:
     """Start of a run: give every provider another chance."""
     _halted.clear()
+    _unreadable.clear()
     _strikes.clear()
     _budget.clear()
 
@@ -194,18 +202,84 @@ def parse_json(text: str) -> dict:
     Asked for one object and nothing else, a reasoning model still sometimes
     says a sentence first or after. Two of those in a row dropped a working
     provider for the end of a run, when the object was right there in the text.
+
+    Anything that is not one object is an answer we cannot read. Every caller reads
+    the answer with .get, so a list or a bare value handed through crashed the stage
+    that asked instead of counting as a bad answer.
     """
     cleaned = FENCE.sub("", text).strip()
 
     try:
-        return json.loads(cleaned)
+        parsed = json.loads(cleaned)
     except json.JSONDecodeError:
-        start, end = cleaned.find("{"), cleaned.rfind("}")
+        parsed = None
 
-        if start == -1 or end <= start:
-            raise
+    if isinstance(parsed, dict):
+        return parsed
 
-        return json.loads(cleaned[start:end + 1])
+    # A sentence around the object, or the object inside a list: read the braces.
+    start, end = cleaned.find("{"), cleaned.rfind("}")
+
+    if start != -1 and end > start:
+        inner = json.loads(cleaned[start:end + 1])
+
+        if isinstance(inner, dict):
+            return inner
+
+    raise json.JSONDecodeError("expected one JSON object", cleaned, 0)
+
+
+def readable(text: str) -> bool:
+    """Whether the answer holds the one object that was asked for."""
+    try:
+        parse_json(text)
+    except ValueError:
+        return False
+
+    return True
+
+
+# What a model calls when it wraps the object we asked for in a tool call of its own,
+# rather than calling one of the agent's tools by name.
+WRAPPERS = {"exec", "execute", "run", "call", "json", "answer", "respond", "response", "final", "output"}
+
+
+def from_tool_call(failed) -> dict | None:
+    """The answer inside a call to a tool we never offered, or None.
+
+    gpt-oss on Groq sometimes answers through its own tool calling. Asked for one JSON
+    object, it calls a tool named "tool.exec" with that object as the arguments, and
+    Groq refuses the call because the request declared no tools (HTTP 400,
+    tool_use_failed), handing back what the model tried to send. Every placement on
+    2026-09-29 was lost that way, with the right answer inside the refusal. The object
+    is the answer, so it is read from there, and whatever checks an answer still checks
+    this one. A call to one of the agent's own tools by name becomes that tool call.
+    """
+    try:
+        call = json.loads(failed) if isinstance(failed, str) else failed
+    except json.JSONDecodeError:
+        return None
+
+    if not isinstance(call, dict):
+        return None
+
+    arguments = call.get("arguments")
+
+    if isinstance(arguments, str):
+        try:
+            arguments = json.loads(arguments)
+        except json.JSONDecodeError:
+            return None
+
+    if not isinstance(arguments, dict):
+        return None
+
+    name = str(call.get("name") or "").rsplit(".", 1)[-1].strip().lower()
+
+    if name in WRAPPERS or not name or "tool" in arguments or "answer" in arguments:
+        return arguments
+
+    return {"tool": name, "args": arguments}
 
 
 def halted() -> str | None:
@@ -219,8 +293,14 @@ def halted() -> str | None:
 
 
 def _call(settings: dict, system: str, user: str, max_tokens: int, timeout: int,
-          action: str) -> tuple[dict | None, str | None, bool]:
-    """One provider, one question. Returns (answer, fatal_reason, rate_limited)."""
+          action: str) -> tuple[dict | None, str | None, bool, bool]:
+    """One provider, one question.
+
+    Returns (answer, fatal_reason, rate_limited, unreadable). The last one says the
+    provider answered and the answer could not be parsed, which is a different thing
+    from the provider failing and is counted separately.
+    """
+    unreadable = False
     body = json.dumps({
         "model": settings["model"],
         "messages": [{"role": "system", "content": system}, {"role": "user", "content": user}],
@@ -252,14 +332,15 @@ def _call(settings: dict, system: str, user: str, max_tokens: int, timeout: int,
             text = choice["message"].get("content") or ""
 
             # A reasoning model bills its thinking against the same ceiling and
-            # can hand back an empty answer having spent all of it. That is not
-            # a broken model, it is too small a budget.
-            if not text.strip() and choice.get("finish_reason") == "length":
+            # can hand back an empty answer having spent all of it, or stop halfway
+            # through the object. Neither is a broken model; both are too small a
+            # budget, and get one more try with room.
+            if choice.get("finish_reason") == "length" and not readable(text):
                 trace.current.record(
                     label, (time.perf_counter() - started) * 1000,
                     tokens_in=(payload.get("usage") or {}).get("prompt_tokens", 0),
                     tokens_out=(payload.get("usage") or {}).get("completion_tokens", 0),
-                    ok=False, note="spent its budget reasoning",
+                    ok=False, note="spent its budget reasoning" if not text.strip() else "cut off at its ceiling",
                 )
 
                 if attempt == 0:
@@ -270,7 +351,7 @@ def _call(settings: dict, system: str, user: str, max_tokens: int, timeout: int,
 
                 # Our ceiling was too low for this model, which is not the
                 # provider failing. Counting it dropped a working key.
-                return None, None, True
+                return None, None, True, False
 
             answer = parse_json(text)
             usage = payload.get("usage") or {}
@@ -279,12 +360,34 @@ def _call(settings: dict, system: str, user: str, max_tokens: int, timeout: int,
                 tokens_in=usage.get("prompt_tokens", 0),
                 tokens_out=usage.get("completion_tokens", 0),
             )
-            return answer, None, False
+            return answer, None, False, False
         except (urllib.error.URLError, TimeoutError, KeyError, ValueError, json.JSONDecodeError) as problem:
             http = isinstance(problem, urllib.error.HTTPError)
             fatal = http and problem.code in FATAL_STATUS
             note = f"HTTP {problem.code}" if http else type(problem).__name__
             wait = 0.0
+            # It replied and we could not read it. That is a bad answer, not a dead key.
+            unreadable = unreadable or (not http and isinstance(problem, (json.JSONDecodeError, KeyError)))
+
+            if http and problem.code == 400:
+                said = {}
+
+                with contextlib.suppress(Exception):
+                    said = json.loads((problem.read() or b"").decode("utf-8", "replace"))
+
+                error = said.get("error") if isinstance(said, dict) and isinstance(said.get("error"), dict) else {}
+                code = str(error.get("code") or "")
+                # Say which refusal it was. "HTTP 400" alone hid this one for a whole run.
+                note = f"HTTP 400 {code}".strip()
+                answer = from_tool_call(error.get("failed_generation")) if code == "tool_use_failed" else None
+
+                if answer is not None:
+                    trace.current.record(label, (time.perf_counter() - started) * 1000,
+                                         note="answered through a tool call; read from the refusal")
+                    return answer, None, False, False
+
+                # It answered, in a shape we could not use: a bad answer, not a dead key.
+                unreadable = unreadable or code == "tool_use_failed"
 
             if http and problem.code == 429:
                 detail = ""
@@ -315,13 +418,13 @@ def _call(settings: dict, system: str, user: str, max_tokens: int, timeout: int,
             )
 
             if fatal:
-                return None, note, False
+                return None, note, False, False
 
             if attempt == 0:
                 time.sleep(wait or 1.5)
                 continue
 
-    return None, None, bool(wait)
+    return None, None, bool(wait), unreadable
 
 
 def ask_json(system: str, user: str, max_tokens: int = 400, timeout: int = 40,
@@ -348,10 +451,11 @@ def ask_json(system: str, user: str, max_tokens: int = 400, timeout: int = 40,
 
     for settings in candidates:
         name = settings["provider"]
-        answer, fatal, rate_limited = _call(settings, system, user, max_tokens, timeout, action)
+        answer, fatal, rate_limited, unreadable = _call(settings, system, user, max_tokens,
+                                                        timeout, action)
 
         if answer is not None:
-            _strikes[name] = 0
+            _strikes[name] = _unreadable[name] = 0
             return answer
 
         # Being told to wait is not the provider failing. Counting it as one
@@ -361,6 +465,18 @@ def ask_json(system: str, user: str, max_tokens: int = 400, timeout: int = 40,
             continue
 
         if fatal is None:
+            # A provider that cannot be reached is dropped after two tries. One that
+            # answers with something we cannot read is given longer, because it is
+            # working and the next question may go better.
+            if unreadable:
+                _unreadable[name] = _unreadable.get(name, 0) + 1
+
+                if _unreadable[name] >= UNREADABLE_STRIKES:
+                    _halted[name] = f"{UNREADABLE_STRIKES} answers running that could not be read"
+                    print(f"{name} keeps answering with something we cannot read; dropped for this run")
+
+                continue
+
             _strikes[name] = _strikes.get(name, 0) + 1
 
             if _strikes[name] >= STRIKES:

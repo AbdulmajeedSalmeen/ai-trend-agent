@@ -73,6 +73,33 @@ def lesson_text(lesson: dict) -> str:
     return " \n".join([lesson["title"], *lesson["covers"]])
 
 
+def why_not(term: str, lesson: dict) -> str | None:
+    """Why a term cannot be counted in job posts, in the words said to whoever proposed
+    it, or None when it can. valid() is this rule, and the lesson agent's complaint reads
+    its words from here, so the rule and what is said about it cannot drift apart."""
+    term = str(term or "").strip()
+
+    if not 2 <= len(term) <= 40:
+        return "is not the length of a name"
+
+    if len(term.split()) > 3:
+        return "is more than three words"
+
+    if term.lower() in GENERIC:
+        return "is a word nearly every AI job post carries"
+
+    if CODE_RE.search(term):
+        return "is written as code; give the name a job post would write"
+
+    if " " not in term and term == term.lower() and not any(character.isdigit() for character in term):
+        return "is one ordinary word in lower case; a name has a capital or a digit, or is a phrase"
+
+    if not named_in(term, lesson_text(lesson)):
+        return "is not in your title or any covers line, letter for letter"
+
+    return None
+
+
 def valid(term: str, lesson: dict) -> bool:
     """A name the lesson itself uses, short enough to be a name, and not a word
     that would match every AI job post.
@@ -81,15 +108,7 @@ def valid(term: str, lesson: dict) -> bool:
     9 posts, about keeping customers and users, none about agent memory. A name has a
     capital or a digit (MCP, OpenTelemetry, LoRA), or is a phrase searched whole
     (prompt injection)."""
-    term = term.strip()
-
-    if not 2 <= len(term) <= 40 or len(term.split()) > 3 or term.lower() in GENERIC or CODE_RE.search(term):
-        return False
-
-    if " " not in term and term == term.lower() and not any(character.isdigit() for character in term):
-        return False
-
-    return named_in(term, lesson_text(lesson))
+    return why_not(term, lesson) is None
 
 
 def offered_terms(answer, number: int, lesson: dict) -> list[str]:

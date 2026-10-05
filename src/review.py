@@ -57,6 +57,20 @@ MODEL_RE = re.compile(r"(?<![\w.-])((?:gpt|chatgpt)-[a-z0-9.\-]*[a-z0-9]|o[1-9](
 BASIS_EN = ("Read and judged by AI reviewers, Claude agents searching the web, with the source they read "
             "beside it. A rule then looked for every quote they gave in the notebook's cells and dropped "
             "what it could not find. This is not one of the checked claims.")
+# The source line the reviewer agent writes into its own review (src/agents/review_run.py),
+# and what the page says about a review written that way.
+AGENT_SOURCE = "the course notebooks, read by the reviewer agent"
+AGENT_BASIS_EN = ("Read and judged by the reviewer agent, which read each notebook and looked up this run's "
+                  "releases and research, with the source it read beside it. A rule then looked for every quote "
+                  "it gave in the notebook's cells and dropped what it could not find. This is not one of the "
+                  "checked claims.")
+
+
+def basis(review: dict) -> tuple[str, str]:
+    """Who read the notebooks, in English and Arabic, from what the review says it is."""
+    if (review or {}).get("source") == AGENT_SOURCE:
+        return AGENT_BASIS_EN, arabic.REVIEW_BASIS_AGENT
+    return BASIS_EN, arabic.REVIEW_BASIS
 
 
 def load(path: Path = REVIEW_PATH) -> dict | None:
@@ -318,6 +332,10 @@ def build(review: dict, curriculum: dict, deadlines: list[dict], retirement_data
             "copy_of": original,
             "act": "watch" if verdict == "keep" else "update_existing_material",
             "e": entry.get("effort") if entry.get("effort") in arabic.REVIEW_EFFORT else "medium",
+            # Whether that effort was judged or assumed, and what the change is worth to a
+            # teacher, when the reviewer agent said; the served review says neither.
+            "es": entry.get("effort_source") if entry.get("effort_source") in ("judged", "default") else None,
+            "w": entry.get("worth") if entry.get("worth") in (1, 2, 3, 4, 5) else None,
             "a": clip(entry.get("action"), 240),
             "n": entry["new_lesson"]["title"] if entry.get("new_lesson") and not original else None,
             "f": [compact(finding, notebook, owned, taught) for finding in shown[:SHOWN_PER_NOTEBOOK]],
@@ -347,8 +365,8 @@ def build(review: dict, curriculum: dict, deadlines: list[dict], retirement_data
         "schema": "material_view/1",
         "read_on": review.get("read_on"),
         "basis": "read_and_judged",
-        "basis_en": BASIS_EN,
-        "basis_ar": arabic.REVIEW_BASIS,
+        "basis_en": basis(review)[0],
+        "basis_ar": basis(review)[1],
         "shown": sum(len(book["f"]) for book in books + unplaced),
         "counts": {
             "notebooks": len(books) + len(unplaced),
@@ -382,7 +400,7 @@ def build(review: dict, curriculum: dict, deadlines: list[dict], retirement_data
         "course_wide": course_wide(counted),
         "chapters": [
             {"id": chapter_id, "title": chapters[chapter_id]["title"], "week": chapters[chapter_id]["week"],
-             "books": sorted(members, key=lambda book: (VERDICTS[book["v"]], book["id"]))}
+             "books": sorted(members, key=lambda book: (VERDICTS[book["v"]], -(book["w"] or 0), book["id"]))}
             for chapter_id, members in sorted(by_chapter.items(),
                                               key=lambda item: (chapters[item[0]]["week"], chapter_order(item[0])))
         ],
